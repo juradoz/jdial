@@ -29,10 +29,7 @@ import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCliente", "ddd", "telefone"})},
-    indexes = {
-        @Index(name = "IX_telefone_idTipoTelefone_ddd_telefone",
-            columnList = "idTipoTelefone, ddd, telefone"),
-        @Index(name = "IX_telefone_ddd_telefone", columnList = "ddd, telefone"),
+    indexes = {@Index(name = "IX_telefone_ddd_telefone", columnList = "ddd, telefone"),
         @Index(name = "IX_telefone_tentativa", columnList = "tentativa")})
 public class Telefone implements DaoObject, Comparable<Telefone> {
   @Id

@@ -14,13 +14,11 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCampanha", "nome"})})
 public class Mailing implements DaoObject {
   @Id
@@ -41,11 +39,11 @@ public class Mailing implements DaoObject {
   private boolean ativo;
 
   @Column
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime dataInicial;
 
   @Column
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime dataFinal;
 
   private String descricao;

@@ -6,9 +6,9 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 public class CriacaoModificacao {
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private final DateTime criacao = new DateTime();
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime modificacao = new DateTime();
 
   @Override

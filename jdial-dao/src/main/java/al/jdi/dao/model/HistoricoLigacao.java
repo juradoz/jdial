@@ -44,14 +44,14 @@ public class HistoricoLigacao implements DaoObject {
   private ResultadoLigacao resultadoLigacao;
 
   @Column(nullable = false)
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime inicio;
 
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime atendimento;
 
   @Column(nullable = false)
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime termino;
 
   private String descricao;
