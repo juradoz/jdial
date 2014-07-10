@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.telephony.JtapiPeer;
@@ -45,7 +44,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 			@Named("serverIp") String serverIp, @Named("port") int port,
 			@Named("service") String service, @Named("login") String login,
 			@Named("password") String password,
-			@Nullable @Named("jtapiPeerName") String jtapiPeerName) {
+			@Named("jtapiPeerName") String jtapiPeerName) {
 		this.engineFactory = engineFactory;
 		try {
 			this.jtapiPeer = JtapiPeerFactory.getJtapiPeer(jtapiPeerName);
