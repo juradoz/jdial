@@ -1,7 +1,5 @@
 package al.jdi.dao.beans;
 
-import javax.inject.Inject;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -26,7 +24,6 @@ class DefaultDaoFactory implements DaoFactory {
   private Session session;
   private Transaction transaction;
 
-  @Inject
   public DefaultDaoFactory(SessionHandler sessionHandler) {
     this.sessionHandler = sessionHandler;
     session = sessionHandler.getSession();
