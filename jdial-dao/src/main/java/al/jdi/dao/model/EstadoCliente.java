@@ -8,22 +8,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
 public class EstadoCliente implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idEstadoCliente;
+  @Column(name = "idEstadoCliente")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
+  @CampoBusca
   @Column(nullable = false)
   private String nome;
 
@@ -41,7 +47,7 @@ public class EstadoCliente implements DaoObject {
     if (!(obj instanceof EstadoCliente))
       return false;
     EstadoCliente other = (EstadoCliente) obj;
-    return new EqualsBuilder().append(idEstadoCliente, other.idEstadoCliente).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   @Override
@@ -53,8 +59,8 @@ public class EstadoCliente implements DaoObject {
     return descricao;
   }
 
-  public Long getIdEstadoCliente() {
-    return idEstadoCliente;
+  public Long getId() {
+    return id;
   }
 
   public String getNome() {
@@ -63,7 +69,7 @@ public class EstadoCliente implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idEstadoCliente).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public boolean isDisponivelDiscagem() {
@@ -78,8 +84,8 @@ public class EstadoCliente implements DaoObject {
     this.disponivelDiscagem = disponivelDiscagem;
   }
 
-  public void setIdEstadoCliente(Long idEstadoCliente) {
-    this.idEstadoCliente = idEstadoCliente;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setNome(String nome) {

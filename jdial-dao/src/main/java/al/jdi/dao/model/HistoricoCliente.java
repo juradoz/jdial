@@ -5,11 +5,8 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -19,15 +16,10 @@ import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCliente"})}, indexes = {
-    @Index(name = "IX_agendamento_idCliente_agendamento", columnList = "idCliente, agendamento"),
-    @Index(name = "IX_agendamento_agente_agendamento", columnList = "idAgente, agendamento"),
-    @Index(name = "IX_agendamento_agente", columnList = "idAgente"),
-    @Index(name = "IX_agendamento_agendamento", columnList = "agendamento")})
-public class Agendamento implements DaoObject {
+public class HistoricoCliente implements DaoObject {
   @Id
   @GeneratedValue
-  @Column(name = "idAgendamento")
+  @Column(name = "idHistoricoCliente")
   private Long id;
 
   @Embedded
@@ -37,13 +29,23 @@ public class Agendamento implements DaoObject {
   @JoinColumn(name = "idCliente", nullable = false)
   private Cliente cliente;
 
-  @Column(nullable = false)
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
-  private DateTime agendamento;
+  @ManyToOne
+  @JoinColumn(name = "idEstadoCliente", nullable = false)
+  private EstadoCliente estadoCliente;
 
   @ManyToOne
   @JoinColumn(name = "idAgente", nullable = true)
   private Agente agente;
+
+  @ManyToOne
+  @JoinColumn(name = "idMotivoFinalizacao", nullable = true)
+  private MotivoFinalizacao motivoFinalizacao;
+
+  @Column(nullable = true)
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  private DateTime agendamento;
+
+  private String descricao;
 
   @Override
   public boolean equals(Object obj) {
@@ -53,8 +55,8 @@ public class Agendamento implements DaoObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Agendamento other = (Agendamento) obj;
-    return new EqualsBuilder().append(agendamento, other.agendamento).isEquals();
+    HistoricoCliente other = (HistoricoCliente) obj;
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public DateTime getAgendamento() {
@@ -74,13 +76,25 @@ public class Agendamento implements DaoObject {
     return criacaoModificacao;
   }
 
+  public String getDescricao() {
+    return descricao;
+  }
+
+  public EstadoCliente getEstadoCliente() {
+    return estadoCliente;
+  }
+
   public Long getId() {
     return id;
   }
 
+  public MotivoFinalizacao getMotivoFinalizacao() {
+    return motivoFinalizacao;
+  }
+
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(agendamento).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public void setAgendamento(DateTime agendamento) {
@@ -95,13 +109,24 @@ public class Agendamento implements DaoObject {
     this.cliente = cliente;
   }
 
+  public void setDescricao(String descricao) {
+    this.descricao = descricao;
+  }
+
+  public void setEstadoCliente(EstadoCliente estadoCliente) {
+    this.estadoCliente = estadoCliente;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
 
+  public void setMotivoFinalizacao(MotivoFinalizacao motivoFinalizacao) {
+    this.motivoFinalizacao = motivoFinalizacao;
+  }
+
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("agendamento",
-        agendamento).toString();
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
   }
 }

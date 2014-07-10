@@ -20,10 +20,10 @@ import al.jdi.dao.beans.Dao.CampoBusca;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
-public class Servico implements DaoObject {
+public class MotivoFinalizacao implements DaoObject {
   @Id
   @GeneratedValue
-  @Column(name = "idServico")
+  @Column(name = "idMotivoFinalizacao")
   private Long id;
 
   @Embedded
@@ -35,9 +35,6 @@ public class Servico implements DaoObject {
 
   private String descricao;
 
-  @Column(nullable = false)
-  private boolean monitoravelQrf = false;
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -46,8 +43,8 @@ public class Servico implements DaoObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Servico other = (Servico) obj;
-    return new EqualsBuilder().append(id, other.id).isEquals();
+    MotivoFinalizacao other = (MotivoFinalizacao) obj;
+    return new EqualsBuilder().append(nome, other.nome).isEquals();
   }
 
   @Override
@@ -69,11 +66,7 @@ public class Servico implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(id).toHashCode();
-  }
-
-  public boolean isMonitoravelQrf() {
-    return monitoravelQrf;
+    return new HashCodeBuilder().append(nome).toHashCode();
   }
 
   public void setDescricao(String descricao) {
@@ -84,17 +77,13 @@ public class Servico implements DaoObject {
     this.id = id;
   }
 
-  public void setMonitoravelQrf(boolean monitoravelQrf) {
-    this.monitoravelQrf = monitoravelQrf;
-  }
-
   public void setNome(String nome) {
     this.nome = nome;
   }
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("nome", nome).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", getNome())
+        .toString();
   }
 }

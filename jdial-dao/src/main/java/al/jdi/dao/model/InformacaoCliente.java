@@ -10,10 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,8 @@ public class InformacaoCliente implements DaoObject {
 
   @Id
   @GeneratedValue
-  private Long idInformacaoCliente;
+  @Column(name = "idInformacaoCliente")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -52,7 +53,7 @@ public class InformacaoCliente implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     InformacaoCliente other = (InformacaoCliente) obj;
-    return new EqualsBuilder().append(idInformacaoCliente, other.idInformacaoCliente).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public int getChave() {
@@ -68,8 +69,8 @@ public class InformacaoCliente implements DaoObject {
     return criacaoModificacao;
   }
 
-  public Long getIdInformacaoCliente() {
-    return idInformacaoCliente;
+  public Long getId() {
+    return id;
   }
 
   public String getInformacoesAdicionais() {
@@ -82,7 +83,7 @@ public class InformacaoCliente implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idInformacaoCliente).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public void setChave(int chave) {
@@ -93,8 +94,8 @@ public class InformacaoCliente implements DaoObject {
     this.cliente = cliente;
   }
 
-  public void setIdInformacaoCliente(Long idInformacaoCliente) {
-    this.idInformacaoCliente = idInformacaoCliente;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setInformacoesAdicionais(String informacoesAdicionais) {

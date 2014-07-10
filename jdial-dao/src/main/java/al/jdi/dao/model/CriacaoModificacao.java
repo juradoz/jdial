@@ -1,14 +1,14 @@
 package al.jdi.dao.model;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 public class CriacaoModificacao {
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private final DateTime criacao = new DateTime();
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime modificacao = new DateTime();
 
   @Override

@@ -1,7 +1,7 @@
 package al.jdi.dao.model;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -20,11 +20,11 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.CompareToBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Cascade;
 
 @Entity
@@ -34,7 +34,8 @@ import org.hibernate.annotations.Cascade;
 public class Telefone implements DaoObject, Comparable<Telefone> {
   @Id
   @GeneratedValue
-  private Long idTelefone;
+  @Column(name = "idTelefone")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -73,7 +74,7 @@ public class Telefone implements DaoObject, Comparable<Telefone> {
 
   @Override
   public int compareTo(Telefone outroTelefone) {
-    return new CompareToBuilder().append(outroTelefone.uniqueString(), uniqueString())
+    return new CompareToBuilder().append(uniqueString(), outroTelefone.uniqueString())
         .toComparison();
   }
 
@@ -110,8 +111,8 @@ public class Telefone implements DaoObject, Comparable<Telefone> {
     return historicoLigacao;
   }
 
-  public Long getIdTelefone() {
-    return idTelefone;
+  public Long getId() {
+    return id;
   }
 
   public String getTelefone() {
@@ -149,8 +150,8 @@ public class Telefone implements DaoObject, Comparable<Telefone> {
     this.ddd = ddd;
   }
 
-  public void setIdTelefone(Long idTelefone) {
-    this.idTelefone = idTelefone;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setTelefone(String telefone) {
@@ -167,8 +168,9 @@ public class Telefone implements DaoObject, Comparable<Telefone> {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idTelefone",
-        idTelefone).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idTelefone", id)
+        .append("chaveTelefone", chaveTelefone).append("ddd", ddd).append("telefone", telefone)
+        .append("idCliente", getCliente().getId()).toString();
   }
 
   String uniqueString() {

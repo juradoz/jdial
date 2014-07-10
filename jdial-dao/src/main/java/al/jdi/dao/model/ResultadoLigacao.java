@@ -8,17 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ResultadoLigacao implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idResultadoLigacao;
+  @Column(name = "idResultadoLigacao")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -92,7 +95,7 @@ public class ResultadoLigacao implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     ResultadoLigacao other = (ResultadoLigacao) obj;
-    return new EqualsBuilder().append(idResultadoLigacao, other.idResultadoLigacao).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public Campanha getCampanha() {
@@ -112,8 +115,8 @@ public class ResultadoLigacao implements DaoObject {
     return descricao;
   }
 
-  public Long getIdResultadoLigacao() {
-    return idResultadoLigacao;
+  public Long getId() {
+    return id;
   }
 
   public int getMotivo() {
@@ -130,7 +133,7 @@ public class ResultadoLigacao implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idResultadoLigacao).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public boolean isVisivelRelatorio() {
@@ -167,8 +170,8 @@ public class ResultadoLigacao implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", nome)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("nome", nome).toString();
   }
 
   public int getIntervaloReagendamento() {
@@ -268,8 +271,8 @@ public class ResultadoLigacao implements DaoObject {
     this.incrementaQtdReag = incrementaQtdReag;
   }
 
-  public void setIdResultadoLigacao(Long idResultadoLigacao) {
-    this.idResultadoLigacao = idResultadoLigacao;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public boolean isFinalizaCliente() {

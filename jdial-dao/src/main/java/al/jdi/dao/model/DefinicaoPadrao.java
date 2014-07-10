@@ -9,10 +9,12 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"propriedade", "valor"})},
@@ -20,11 +22,13 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class DefinicaoPadrao implements DaoObject {
   @Id
   @GeneratedValue
-  private long idDefinicaoPadrao;
+  @Column(name = "idDefinicaoPadrao")
+  private long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
+  @CampoBusca
   @Column(nullable = false)
   private String propriedade;
 
@@ -52,8 +56,8 @@ public class DefinicaoPadrao implements DaoObject {
     return criacaoModificacao;
   }
 
-  public long getIdDefinicaoPadrao() {
-    return idDefinicaoPadrao;
+  public long getId() {
+    return id;
   }
 
   public int getNivelAcessoRequerido() {
@@ -73,8 +77,8 @@ public class DefinicaoPadrao implements DaoObject {
     return new HashCodeBuilder().append(propriedade).append(valor).toHashCode();
   }
 
-  public void setIdDefinicaoPadrao(long idDefinicaoPadrao) {
-    this.idDefinicaoPadrao = idDefinicaoPadrao;
+  public void setId(long id) {
+    this.id = id;
   }
 
   public void setNivelAcessoRequerido(int nivelAcessoRequerido) {
@@ -91,7 +95,7 @@ public class DefinicaoPadrao implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
         .append("propriedade", propriedade).append("valor", valor).toString();
   }
 }
