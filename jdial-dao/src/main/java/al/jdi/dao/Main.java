@@ -19,7 +19,6 @@ public class Main {
 
   @PostConstruct
   public void open() {
-    System.out.println("criando...");
     daoFactory.beginTransaction();
   }
 
@@ -36,7 +35,6 @@ public class Main {
 
   @PreDestroy
   public void close() {
-    System.out.println("destruindo...");
     if (daoFactory.hasTransaction())
       daoFactory.rollback();
     daoFactory.close();
