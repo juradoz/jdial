@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.telephony.JtapiPeer;
 import javax.telephony.JtapiPeerFactory;
 import javax.telephony.Provider;
@@ -21,14 +20,26 @@ import com.avaya.jtapi.tsapi.TsapiPlatformException;
 
 class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 
-	private final static String VERSION = "2.0.8";
+	static class DefaultCtiManagerFactory implements CtiManager.Factory {
+		@Inject
+		private Logger logger;
+		@Inject
+		private Engine.Factory engineFactory;
 
-	@Inject
-	private Logger logger;
+		@Override
+		public CtiManager create(String serverIp, int port, String service,
+				String login, String password, String jtapiPeerName) {
+			return new DefaultCtiManager(logger, engineFactory, serverIp, port,
+					service, login, password, jtapiPeerName);
+		}
+	}
+
+	private final static String VERSION = "2.0.8";
 
 	private final Set<ProviderListener> providerListeners = Collections
 			.synchronizedSet(new HashSet<ProviderListener>());
 
+	private final Logger logger;
 	private final JtapiPeer jtapiPeer;
 	private final Period providerTimeout = Period.seconds(10);
 	private final Engine.Factory engineFactory;
@@ -39,16 +50,13 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 	private boolean shutdown = false;
 	private String providerString;
 
-	@Inject
-	DefaultCtiManager(Engine.Factory engineFactory,
-			@Named("serverIp") String serverIp, @Named("port") int port,
-			@Named("service") String service, @Named("login") String login,
-			@Named("password") String password,
-			@Named("jtapiPeerName") String jtapiPeerName) {
+	DefaultCtiManager(Logger logger, Engine.Factory engineFactory,
+			String serverIp, int port, String service, String login,
+			String password, String jtapiPeerName) {
+		this.logger = logger;
 		this.engineFactory = engineFactory;
 		try {
 			this.jtapiPeer = JtapiPeerFactory.getJtapiPeer(jtapiPeerName);
-
 			providerString = getStringConexao(serverIp, port, service, login,
 					password);
 		} catch (Exception e) {

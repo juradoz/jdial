@@ -9,16 +9,8 @@
 		</layout>
 	</appender>
 	
-	<category name="com.avaya">
-		<priority value="error" />
-	</category>
-
-	<category name="org.jboss.weld">
-		<priority value="error" />
-	</category>
-
 	<root>
-		<priority value="info" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>
 
