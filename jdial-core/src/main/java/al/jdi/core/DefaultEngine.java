@@ -9,12 +9,10 @@ import org.slf4j.Logger;
 class DefaultEngine extends TimerTask implements Engine {
 
 	static class DefaultEngineFactory implements Engine.Factory {
-
 		@Override
 		public Engine create(Runnable owner, Period period, boolean isDaemon) {
 			return new DefaultEngine(owner, period, isDaemon);
 		}
-
 	}
 
 	private Logger logger;
