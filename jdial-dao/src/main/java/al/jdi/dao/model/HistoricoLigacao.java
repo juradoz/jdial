@@ -26,7 +26,8 @@ import org.joda.time.DateTime;
 public class HistoricoLigacao implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idHistoricoLigacao;
+  @Column(name = "idHistoricoLigacao")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -44,14 +45,14 @@ public class HistoricoLigacao implements DaoObject {
   private ResultadoLigacao resultadoLigacao;
 
   @Column(nullable = false)
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime inicio;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime atendimento;
 
   @Column(nullable = false)
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime termino;
 
   private String descricao;
@@ -76,8 +77,8 @@ public class HistoricoLigacao implements DaoObject {
     return descricao;
   }
 
-  public Long getIdHistoricoLigacao() {
-    return idHistoricoLigacao;
+  public Long getId() {
+    return id;
   }
 
   public DateTime getInicio() {
@@ -108,8 +109,8 @@ public class HistoricoLigacao implements DaoObject {
     this.descricao = descricao;
   }
 
-  public void setIdHistoricoLigacao(Long idHistoricoLigacao) {
-    this.idHistoricoLigacao = idHistoricoLigacao;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setInicio(DateTime inicio) {

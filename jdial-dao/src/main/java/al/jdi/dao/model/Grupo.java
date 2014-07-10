@@ -9,23 +9,29 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"codigo"})}, indexes = {@Index(
     name = "IX_grupo_codigo", columnList = "codigo")})
 public class Grupo implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idGrupo;
+  @Column(name = "idGrupo")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
+  @CampoBusca
   @Column(nullable = false)
   private String codigo;
 
@@ -44,7 +50,7 @@ public class Grupo implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Grupo other = (Grupo) obj;
-    return new EqualsBuilder().append(idGrupo, other.idGrupo).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public String getCodigo() {
@@ -60,13 +66,13 @@ public class Grupo implements DaoObject {
     return descricao;
   }
 
-  public Long getIdGrupo() {
-    return idGrupo;
+  public Long getId() {
+    return id;
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idGrupo).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public boolean isSemAgentes() {
@@ -85,8 +91,8 @@ public class Grupo implements DaoObject {
     this.descricao = descricao;
   }
 
-  public void setIdGrupo(Long idGrupo) {
-    this.idGrupo = idGrupo;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setSemAgentes(boolean semAgentes) {
@@ -99,7 +105,7 @@ public class Grupo implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("codigo", codigo)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("codigo", codigo).toString();
   }
 }

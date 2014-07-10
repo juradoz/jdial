@@ -13,17 +13,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"codigo"})})
 public class Agente implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idAgente;
+  @Column(name = "idAgente")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -31,6 +34,7 @@ public class Agente implements DaoObject {
   @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "agente")
   private final Collection<Agendamento> agendamento = new LinkedList<Agendamento>();
 
+  @CampoBusca
   @Column(nullable = false)
   private String codigo;
 
@@ -45,8 +49,7 @@ public class Agente implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Agente other = (Agente) obj;
-    return new EqualsBuilder().append(codigo, other.codigo).append(idAgente, other.idAgente)
-        .isEquals();
+    return new EqualsBuilder().append(codigo, other.codigo).append(id, other.id).isEquals();
   }
 
   public Collection<Agendamento> getAgendamento() {
@@ -62,8 +65,8 @@ public class Agente implements DaoObject {
     return criacaoModificacao;
   }
 
-  public Long getIdAgente() {
-    return idAgente;
+  public Long getId() {
+    return id;
   }
 
   public String getNome() {
@@ -72,15 +75,15 @@ public class Agente implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(codigo).append(idAgente).toHashCode();
+    return new HashCodeBuilder().append(codigo).append(id).toHashCode();
   }
 
   public void setCodigo(String codigo) {
     this.codigo = codigo;
   }
 
-  public void setIdAgente(Long idAgente) {
-    this.idAgente = idAgente;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setNome(String nome) {

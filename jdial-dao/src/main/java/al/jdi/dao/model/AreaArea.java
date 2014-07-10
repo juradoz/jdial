@@ -6,8 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 public class AreaArea implements DaoObject {
@@ -28,6 +30,7 @@ public class AreaArea implements DaoObject {
   @Column(nullable = false)
   private String codigoCnl;
 
+  @CampoBusca
   @Column(nullable = false)
   private String nomeLocalidade;
 

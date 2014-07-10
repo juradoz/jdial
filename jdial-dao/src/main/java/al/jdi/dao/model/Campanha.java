@@ -16,11 +16,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Cascade;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})}, indexes = {@Index(
@@ -28,11 +30,13 @@ import org.hibernate.annotations.Cascade;
 public class Campanha implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idCampanha;
+  @Column(name = "idCampanha")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
+  @CampoBusca
   @Column(nullable = false)
   private String nome;
 
@@ -42,17 +46,22 @@ public class Campanha implements DaoObject {
 
   @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "campanha")
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+  private final Collection<Filtro> filtro = new LinkedList<Filtro>();
+
+  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "campanha")
+  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
   private final Collection<Definicao> definicao = new LinkedList<Definicao>();
 
   @Column(nullable = false)
   private boolean filtroAtivo = false;
 
-  @Column(nullable = false)
-  private int codigoFiltro = 0;
-
   @ManyToOne
   @JoinColumn(name = "idGrupo")
   private Grupo grupo;
+
+  @ManyToOne
+  @JoinColumn(name = "idRota", nullable = false)
+  private Rota rota;
 
   @ManyToOne
   @JoinColumn(name = "idServico", nullable = false)
@@ -60,10 +69,12 @@ public class Campanha implements DaoObject {
 
   private String descricao;
 
+  private boolean limpaMemoria = false;
+
   public Campanha() {}
 
   public Campanha(Long idCampanha) {
-    this.idCampanha = idCampanha;
+    this.id = idCampanha;
   }
 
   @Override
@@ -75,7 +86,7 @@ public class Campanha implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Campanha other = (Campanha) obj;
-    return new EqualsBuilder().append(idCampanha, other.idCampanha).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   @Override
@@ -91,12 +102,16 @@ public class Campanha implements DaoObject {
     return descricao;
   }
 
+  public Collection<Filtro> getFiltro() {
+    return filtro;
+  }
+
   public Grupo getGrupo() {
     return grupo;
   }
 
-  public Long getIdCampanha() {
-    return idCampanha;
+  public Long getId() {
+    return id;
   }
 
   public Collection<Mailing> getMailing() {
@@ -107,13 +122,17 @@ public class Campanha implements DaoObject {
     return nome;
   }
 
+  public Rota getRota() {
+    return rota;
+  }
+
   public Servico getServico() {
     return servico;
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idCampanha).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public boolean isFiltroAtivo() {
@@ -132,12 +151,16 @@ public class Campanha implements DaoObject {
     this.grupo = grupo;
   }
 
-  public void setIdCampanha(Long idCampanha) {
-    this.idCampanha = idCampanha;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setNome(String nome) {
     this.nome = nome;
+  }
+
+  public void setRota(Rota rota) {
+    this.rota = rota;
   }
 
   public void setServico(Servico servico) {
@@ -146,16 +169,16 @@ public class Campanha implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", nome)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("nome", nome).toString();
   }
 
-  public int getCodigoFiltro() {
-    return codigoFiltro;
+  public boolean isLimpaMemoria() {
+    return limpaMemoria;
   }
 
-  public void setCodigoFiltro(int codigoFiltro) {
-    this.codigoFiltro = codigoFiltro;
+  public void setLimpaMemoria(boolean limpaMemoria) {
+    this.limpaMemoria = limpaMemoria;
   }
 
 }

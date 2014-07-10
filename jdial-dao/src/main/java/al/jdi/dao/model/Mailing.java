@@ -1,29 +1,39 @@
 package al.jdi.dao.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
+import al.jdi.dao.beans.Dao.CampoBusca;
+
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCampanha", "nome"})})
 public class Mailing implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idMailing;
+  @Column(name = "idMailing")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -32,6 +42,10 @@ public class Mailing implements DaoObject {
   @JoinColumn(name = "idCampanha", nullable = false)
   private Campanha campanha;
 
+  @ManyToMany(mappedBy = "mailing", fetch = FetchType.EAGER)
+  private final Collection<Filtro> filtro = new LinkedList<Filtro>();
+
+  @CampoBusca
   @Column(nullable = false)
   private String nome;
 
@@ -39,11 +53,11 @@ public class Mailing implements DaoObject {
   private boolean ativo;
 
   @Column
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime dataInicial;
 
   @Column
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime dataFinal;
 
   private String descricao;
@@ -57,7 +71,7 @@ public class Mailing implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Mailing other = (Mailing) obj;
-    return new EqualsBuilder().append(idMailing, other.idMailing).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public Campanha getCampanha() {
@@ -73,8 +87,12 @@ public class Mailing implements DaoObject {
     return descricao;
   }
 
-  public Long getIdMailing() {
-    return idMailing;
+  public Collection<Filtro> getFiltro() {
+    return filtro;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getNome() {
@@ -83,7 +101,7 @@ public class Mailing implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idMailing).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public boolean isAtivo() {
@@ -102,8 +120,8 @@ public class Mailing implements DaoObject {
     this.descricao = descricao;
   }
 
-  public void setIdMailing(Long idMailing) {
-    this.idMailing = idMailing;
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setNome(String nome) {
@@ -112,8 +130,8 @@ public class Mailing implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", nome)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("nome", nome).toString();
   }
 
   public DateTime getDataInicial() {

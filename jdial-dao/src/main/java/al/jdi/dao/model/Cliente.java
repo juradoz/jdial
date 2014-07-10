@@ -1,12 +1,8 @@
 package al.jdi.dao.model;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sort;
-import static org.apache.commons.collections.ComparatorUtils.chainedComparator;
-
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,21 +15,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-
-import ch.lambdaj.function.compare.ArgumentComparator;
 
 @Entity
 public class Cliente implements DaoObject {
   @Id
   @GeneratedValue
-  private Long idCliente;
+  @Column(name = "idCliente")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -54,7 +49,7 @@ public class Cliente implements DaoObject {
 
   @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "cliente")
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-  private final Collection<Telefone> telefones = new LinkedList<Telefone>();
+  private final List<Telefone> telefones = new LinkedList<Telefone>();
 
   @ManyToOne
   @JoinColumn(name = "idEstadoCliente", nullable = false)
@@ -64,16 +59,20 @@ public class Cliente implements DaoObject {
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
   private final Collection<Agendamento> agendamento = new LinkedList<Agendamento>();
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "cliente")
+  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+  private Collection<HistoricoCliente> historicoCliente = new LinkedList<HistoricoCliente>();
+
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime ultimoInicioRodadaTelefones;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime ultimaMudancaEstado = new DateTime();
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime ordemDaFila = new DateTime();
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
   private DateTime disponivelAPartirDe = new DateTime();
 
   @Column(nullable = false)
@@ -91,7 +90,7 @@ public class Cliente implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Cliente other = (Cliente) obj;
-    return new EqualsBuilder().append(idCliente, other.idCliente).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   public void fimDaFila() {
@@ -119,8 +118,12 @@ public class Cliente implements DaoObject {
     return filtro;
   }
 
-  public Long getIdCliente() {
-    return idCliente;
+  public Collection<HistoricoCliente> getHistoricoCliente() {
+    return historicoCliente;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public InformacaoCliente getInformacaoCliente() {
@@ -139,12 +142,8 @@ public class Cliente implements DaoObject {
     return telefone;
   }
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  public Collection<Telefone> getTelefones() {
-    ArgumentComparator byPrioridade = new ArgumentComparator(on(Telefone.class).getPrioridade());
-    ArgumentComparator byId = new ArgumentComparator(on(Telefone.class).getIdTelefone());
-    Comparator orderBy = chainedComparator(byPrioridade, byId);
-    return sort(telefones, on(Telefone.class), orderBy);
+  public List<Telefone> getTelefones() {
+    return telefones;
   }
 
   public DateTime getUltimaMudancaEstado() {
@@ -157,7 +156,7 @@ public class Cliente implements DaoObject {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder().append(idCliente).toHashCode();
+    return new HashCodeBuilder().append(id).toHashCode();
   }
 
   public void setDisponivelAPartirDe(DateTime disponivelAPartirDe) {
@@ -167,6 +166,12 @@ public class Cliente implements DaoObject {
   public void setEstadoCliente(EstadoCliente estadoCliente) {
     if (this.estadoCliente != null && this.estadoCliente.equals(estadoCliente))
       return;
+    // DaoFactory daoFactory = new DaoFactory();
+    // try {
+    // setUltimaMudancaEstado(daoFactory.getDataBanco());
+    // } finally {
+    // daoFactory.close();
+    // }
     setUltimaMudancaEstado(new DateTime());
     this.estadoCliente = estadoCliente;
   }
@@ -175,8 +180,12 @@ public class Cliente implements DaoObject {
     this.filtro = filtro;
   }
 
-  public void setIdCliente(Long idCliente) {
-    this.idCliente = idCliente;
+  public void setHistoricoCliente(Collection<HistoricoCliente> historicoCliente) {
+    this.historicoCliente = historicoCliente;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setInformacaoCliente(InformacaoCliente informacaoCliente) {
@@ -205,8 +214,15 @@ public class Cliente implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idCliente",
-        idCliente).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idCliente", id)
+        .toString();
+  }
+
+  public String toStringFull() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idCliente", getId())
+        .append("chave", getInformacaoCliente().getChave()).append("telefone", getTelefone())
+        .append("ordemDaFila", getOrdemDaFila())
+        .append("providencia", getInformacaoCliente().getProvidenciaTelefone()).toString();
   }
 
   public String getDigitoSaida() {

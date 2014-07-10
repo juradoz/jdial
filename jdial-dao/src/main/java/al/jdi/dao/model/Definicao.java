@@ -11,13 +11,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(
     uniqueConstraints = {@UniqueConstraint(columnNames = {"idCampanha", "propriedade", "valor"})},
     indexes = {@Index(name = "IX_definicao_idCampanha_propriedade",
@@ -25,7 +27,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 public class Definicao implements DaoObject {
   @Id
   @GeneratedValue
-  private long idDefinicao;
+  @Column(name = "idDefinicao")
+  private long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
@@ -39,9 +42,6 @@ public class Definicao implements DaoObject {
 
   @Column(nullable = false)
   private String valor;
-
-  @Column(nullable = false)
-  private int nivelAcessoRequerido;
 
   @Override
   public boolean equals(Object obj) {
@@ -65,12 +65,8 @@ public class Definicao implements DaoObject {
     return criacaoModificacao;
   }
 
-  public long getIdDefinicao() {
-    return idDefinicao;
-  }
-
-  public int getNivelAcessoRequerido() {
-    return nivelAcessoRequerido;
+  public long getId() {
+    return id;
   }
 
   public String getPropriedade() {
@@ -90,12 +86,8 @@ public class Definicao implements DaoObject {
     this.campanha = campanha;
   }
 
-  public void setIdDefinicao(long idDefinicao) {
-    this.idDefinicao = idDefinicao;
-  }
-
-  public void setNivelAcessoRequerido(int nivelAcessoRequerido) {
-    this.nivelAcessoRequerido = nivelAcessoRequerido;
+  public void setId(long id) {
+    this.id = id;
   }
 
   public void setPropriedade(String propriedade) {
@@ -108,7 +100,8 @@ public class Definicao implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("campanha", campanha)
-        .append("propriedade", propriedade).append("valor", valor).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("campanha", campanha).append("propriedade", propriedade).append("valor", valor)
+        .toString();
   }
 }

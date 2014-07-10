@@ -19,11 +19,11 @@ import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
-public class Servico implements DaoObject {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"codigo"})})
+public class Rota implements DaoObject {
   @Id
   @GeneratedValue
-  @Column(name = "idServico")
+  @Column(name = "idRota")
   private Long id;
 
   @Embedded
@@ -31,12 +31,9 @@ public class Servico implements DaoObject {
 
   @CampoBusca
   @Column(nullable = false)
-  private String nome;
+  private String codigo;
 
   private String descricao;
-
-  @Column(nullable = false)
-  private boolean monitoravelQrf = false;
 
   @Override
   public boolean equals(Object obj) {
@@ -46,8 +43,12 @@ public class Servico implements DaoObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Servico other = (Servico) obj;
+    Rota other = (Rota) obj;
     return new EqualsBuilder().append(id, other.id).isEquals();
+  }
+
+  public String getCodigo() {
+    return codigo;
   }
 
   @Override
@@ -63,17 +64,13 @@ public class Servico implements DaoObject {
     return id;
   }
 
-  public String getNome() {
-    return nome;
-  }
-
   @Override
   public int hashCode() {
     return new HashCodeBuilder().append(id).toHashCode();
   }
 
-  public boolean isMonitoravelQrf() {
-    return monitoravelQrf;
+  public void setCodigo(String codigo) {
+    this.codigo = codigo;
   }
 
   public void setDescricao(String descricao) {
@@ -84,17 +81,9 @@ public class Servico implements DaoObject {
     this.id = id;
   }
 
-  public void setMonitoravelQrf(boolean monitoravelQrf) {
-    this.monitoravelQrf = monitoravelQrf;
-  }
-
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
-
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("nome", nome).toString();
+        .append("codigo", codigo).toString();
   }
 }

@@ -1,0 +1,86 @@
+package al.jdi.dao.beans;
+
+import static org.hibernate.criterion.Restrictions.eq;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.hibernate.Session;
+
+import al.jdi.dao.model.Campanha;
+import al.jdi.dao.model.Mailing;
+
+class DefaultMailingDao implements MailingDao {
+
+  private final DefaultDao<Mailing> dao;
+
+  DefaultMailingDao(Session session) {
+    this.dao = new DefaultDao<>(session, Mailing.class);
+  }
+
+  @Override
+  public void adiciona(Mailing mailing) {
+    dao.adiciona(mailing);
+    mailing.getCampanha().getMailing().add(mailing);
+    new DefaultCampanhaDao(dao.getSession()).atualiza(mailing.getCampanha());
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public Collection<Mailing> listaAtivos() {
+    return dao.getSession().createCriteria(Mailing.class).add(eq("ativo", true)).list();
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public List<Mailing> listaTudo(Campanha campanha) {
+    return dao.getSession().createCriteria(Mailing.class).add(eq("campanha", campanha)).list();
+  }
+
+  @Override
+  public Mailing procura(Campanha campanha, String nome) {
+    return (Mailing) dao.getSession().createCriteria(Mailing.class).add(eq("campanha", campanha))
+        .add(eq("nome", nome)).uniqueResult();
+  }
+
+  @Override
+  public void remove(Mailing t) {
+    dao.getSession().createSQLQuery("update Mailing set ativo = 0 where idMailing = :idMailing")
+        .setLong("idMailing", t.getId()).executeUpdate();
+    dao.getSession()
+        .createSQLQuery(
+            "update Cliente inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente inner join Telefone on Cliente.idCliente = Telefone.idCliente set InformacaoCliente.idCliente = 0, Telefone.idCliente = 0 where Cliente.idMailing = :idMailing")
+        .setLong("idMailing", t.getId()).executeUpdate();
+    dao.getSession().createSQLQuery("delete from InformacaoCliente where idCliente = 0")
+        .executeUpdate();
+    dao.getSession().createSQLQuery("delete from Telefone where idCliente = 0").executeUpdate();
+    dao.getSession().createSQLQuery("delete from Cliente where idMailing = :idMailing")
+        .setLong("idMailing", t.getId()).executeUpdate();
+    t.getCampanha().setLimpaMemoria(true);
+    new DefaultCampanhaDao(dao.getSession()).atualiza(t.getCampanha());
+    dao.remove(t);
+  }
+
+  @Override
+  public void atualiza(Mailing t) {
+    t.getCampanha().setLimpaMemoria(true);
+    new DefaultCampanhaDao(dao.getSession()).atualiza(t.getCampanha());
+    dao.atualiza(t);
+  }
+
+  @Override
+  public List<Mailing> listaTudo() {
+    return dao.listaTudo();
+  }
+
+  @Override
+  public Mailing procura(Long id) {
+    return dao.procura(id);
+  }
+
+  @Override
+  public Mailing procura(String s) {
+    return dao.procura(s);
+  }
+
+}

@@ -1,39 +1,42 @@
 package al.jdi.dao.model;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.mindrot.jbcrypt.BCrypt;
+
+import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"login"})}, indexes = {@Index(
     name = "IX_usuario_login", columnList = "login")})
 public class Usuario implements DaoObject {
-  @Transient
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+
+  public enum TipoPerfil {
+    SUPERVISOR, ADMINISTRADOR;
+  }
+
   @Id
   @GeneratedValue
-  private Long idUsuario;
+  @Column(name = "idUsuario")
+  private Long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
+  @CampoBusca
   @Column(nullable = false)
   private String login;
 
@@ -41,6 +44,10 @@ public class Usuario implements DaoObject {
   private String senha;
 
   private String nome;
+
+  @Column(name = "tipoPerfil", nullable = false)
+  @Enumerated(EnumType.ORDINAL)
+  private TipoPerfil tipoPerfil;
 
   @Override
   public boolean equals(Object obj) {
@@ -51,7 +58,7 @@ public class Usuario implements DaoObject {
     if (getClass() != obj.getClass())
       return false;
     Usuario other = (Usuario) obj;
-    return new EqualsBuilder().append(idUsuario, other.idUsuario).isEquals();
+    return new EqualsBuilder().append(id, other.id).isEquals();
   }
 
   @Override
@@ -59,8 +66,8 @@ public class Usuario implements DaoObject {
     return criacaoModificacao;
   }
 
-  public Long getIdUsuario() {
-    return idUsuario;
+  public Long getId() {
+    return id;
   }
 
   public String getLogin() {
@@ -75,13 +82,17 @@ public class Usuario implements DaoObject {
     return senha;
   }
 
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder().append(idUsuario).toHashCode();
+  public TipoPerfil getTipoPerfil() {
+    return tipoPerfil;
   }
 
-  public void setIdUsuario(Long idUsuario) {
-    this.idUsuario = idUsuario;
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder().append(id).toHashCode();
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setLogin(String login) {
@@ -93,20 +104,24 @@ public class Usuario implements DaoObject {
   }
 
   public void setSenha(String senha) {
-    try {
-      MessageDigest digest = MessageDigest.getInstance("MD5");
-      digest.update(senha.getBytes());
+    this.senha = senha;
+  }
 
-      this.senha = Base64.encodeBase64String(digest.digest());
-    } catch (NoSuchAlgorithmException e) {
-      logger.error(e.getMessage(), e);
-      this.senha = senha;
-    }
+  public void setTipoPerfil(TipoPerfil tipoPerfil) {
+    this.tipoPerfil = tipoPerfil;
   }
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("login", login)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("login", login).toString();
+  }
+
+  public String criptografaSenha(String senha) {
+    return BCrypt.hashpw(senha, BCrypt.gensalt());
+  }
+
+  public boolean verificaSenha(String senha) {
+    return BCrypt.checkpw(senha, this.senha);
   }
 }

@@ -16,23 +16,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
-@Table(indexes = {@Index(name = "IX_log_level_campanha_criacao",
-    columnList = "level, idCampanha, criacao")})
-public class Log implements DaoObject {
+@Table(indexes = {@Index(name = "IX_weblog_criacao_usuario", columnList = "criacao, idUsuario")})
+public class WebLog implements DaoObject {
   @Id
   @GeneratedValue
-  @Column(name = "idLog")
+  @Column(name = "idWebLog")
   private long id;
 
   @Embedded
   private CriacaoModificacao criacaoModificacao = new CriacaoModificacao();
 
   @ManyToOne
-  @JoinColumn(name = "idCampanha", nullable = false)
-  private Campanha campanha;
-
-  @Column(nullable = false)
-  private int level;
+  @JoinColumn(name = "idUsuario", nullable = false)
+  private Usuario usuario;
 
   private String message;
 
@@ -44,12 +40,8 @@ public class Log implements DaoObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Log other = (Log) obj;
+    WebLog other = (WebLog) obj;
     return new EqualsBuilder().append(id, other.id).isEquals();
-  }
-
-  public Campanha getCampanha() {
-    return campanha;
   }
 
   @Override
@@ -61,10 +53,6 @@ public class Log implements DaoObject {
     return id;
   }
 
-  public int getLevel() {
-    return level;
-  }
-
   public String getMessage() {
     return message;
   }
@@ -74,16 +62,8 @@ public class Log implements DaoObject {
     return new HashCodeBuilder().append(id).toHashCode();
   }
 
-  public void setCampanha(Campanha campanha) {
-    this.campanha = campanha;
-  }
-
   public void setId(long id) {
     this.id = id;
-  }
-
-  public void setLevel(int level) {
-    this.level = level;
   }
 
   public void setMessage(String message) {
@@ -93,5 +73,13 @@ public class Log implements DaoObject {
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
+  public Usuario getUsuario() {
+    return usuario;
+  }
+
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
   }
 }
