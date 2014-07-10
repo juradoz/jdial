@@ -1,4 +1,4 @@
-package al.jdi.dao;
+package al.jdi.dao.util;
 
 import java.util.List;
 

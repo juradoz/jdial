@@ -9,19 +9,20 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Entity
 @Table(indexes = {@Index(name = "IX_informacaoCliente_chave", columnList = "chave")})
 public class InformacaoCliente implements DaoObject {
 
-  private static final Logger logger = LoggerFactory.getLogger(InformacaoCliente.class);
+  @Transient
+  private Logger logger;
 
   @Id
   @GeneratedValue

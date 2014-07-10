@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
@@ -24,7 +25,8 @@ import al.jdi.dao.model.Telefone;
 
 class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultClienteDaoTsaCRM.class);
+  @Inject
+  private Logger logger;
 
   private final DefaultClienteDao dao;
 
