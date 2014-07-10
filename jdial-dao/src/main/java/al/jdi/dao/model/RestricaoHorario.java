@@ -65,39 +65,39 @@ public class RestricaoHorario implements DaoObject {
   @Column(nullable = false)
   private boolean ativo = true;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioSegunda;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalSegunda;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioTerca;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalTerca;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioQuarta;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalQuarta;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioQuinta;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalQuinta;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioSexta;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalSexta;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioSabado;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalSabado;
 
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaInicioDomingo;
-  @Type(type = "net.danieljurado.dialer.dao.util.PersistentLocalTimeAsTimeNoTZ")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private LocalTime horaFinalDomingo;
 
   public RestricaoHorario() {}
