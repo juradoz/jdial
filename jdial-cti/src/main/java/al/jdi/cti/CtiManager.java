@@ -3,7 +3,9 @@ package al.jdi.cti;
 import javax.telephony.Provider;
 import javax.telephony.ProviderListener;
 
-public interface CtiManager {
+import al.jdi.core.Service;
+
+public interface CtiManager extends Service{
 	
 	boolean gotProvider();
 
@@ -13,6 +15,4 @@ public interface CtiManager {
 
 	Provider getProvider();
 
-	String getVersion();
-	
 }

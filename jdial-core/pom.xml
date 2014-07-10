@@ -20,10 +20,5 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>al.jdi</groupId>
-			<artifactId>jdial-cti</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 </project>

@@ -1,4 +1,4 @@
-package al.jdi.dao.util;
+package al.jdi.core;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
