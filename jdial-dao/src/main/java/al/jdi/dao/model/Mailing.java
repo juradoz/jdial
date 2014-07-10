@@ -53,11 +53,11 @@ public class Mailing implements DaoObject {
   private boolean ativo;
 
   @Column
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime dataInicial;
 
   @Column
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime dataFinal;
 
   private String descricao;

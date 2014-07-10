@@ -63,16 +63,16 @@ public class Cliente implements DaoObject {
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
   private Collection<HistoricoCliente> historicoCliente = new LinkedList<HistoricoCliente>();
 
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime ultimoInicioRodadaTelefones;
 
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime ultimaMudancaEstado = new DateTime();
 
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime ordemDaFila = new DateTime();
 
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime disponivelAPartirDe = new DateTime();
 
   @Column(nullable = false)

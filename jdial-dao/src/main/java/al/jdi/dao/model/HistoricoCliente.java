@@ -42,7 +42,7 @@ public class HistoricoCliente implements DaoObject {
   private MotivoFinalizacao motivoFinalizacao;
 
   @Column(nullable = true)
-  @Type(type = "org.joda.time.contrib.hibernate.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime agendamento;
 
   private String descricao;
