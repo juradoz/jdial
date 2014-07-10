@@ -7,8 +7,6 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
@@ -23,12 +21,11 @@ import al.jdi.dao.model.Telefone;
 
 class DefaultClienteDaoTsa implements ClienteDaoTsa {
 
-  @Inject
-  private Logger logger;
-
+  private final Logger logger;
   private final DefaultClienteDao dao;
 
-  DefaultClienteDaoTsa(Session session) {
+  DefaultClienteDaoTsa(Logger logger, Session session) {
+    this.logger = logger;
     this.dao = new DefaultClienteDao(session);
   }
 

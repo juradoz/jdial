@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
@@ -30,6 +31,8 @@ public class DefaultClienteDaoTsaTest {
   private ResultadoLigacao resultadoLigacao;
   @Mock
   private Cliente cliente;
+  @Mock
+  private Logger logger;
 
   private DefaultClienteDaoTsa defaultClienteDaoTsa;
 
@@ -37,7 +40,7 @@ public class DefaultClienteDaoTsaTest {
   public void setUp() {
     initMocks(this);
     when(session.createSQLQuery(anyString())).thenReturn(query);
-    defaultClienteDaoTsa = new DefaultClienteDaoTsa(session);
+    defaultClienteDaoTsa = new DefaultClienteDaoTsa(logger, session);
   }
 
   @Test

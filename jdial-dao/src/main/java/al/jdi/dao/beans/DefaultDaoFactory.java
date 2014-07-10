@@ -6,6 +6,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.DefinicaoPadrao;
@@ -22,12 +23,14 @@ import al.jdi.dao.model.WebLog;
 
 class DefaultDaoFactory implements DaoFactory {
 
+  private final Logger logger;
   private final SessionHandler sessionHandler;
   private Session session;
   private Transaction transaction;
 
   @Inject
-  public DefaultDaoFactory(SessionHandler sessionHandler) {
+  public DefaultDaoFactory(Logger logger, SessionHandler sessionHandler) {
+    this.logger = logger;
     this.sessionHandler = sessionHandler;
     session = sessionHandler.getSession();
   }
@@ -70,7 +73,7 @@ class DefaultDaoFactory implements DaoFactory {
 
   @Override
   public ClienteDaoTsa getClienteDaoTsa() {
-    return new DefaultClienteDaoTsa(session);
+    return new DefaultClienteDaoTsa(logger, session);
   }
 
   @Override
