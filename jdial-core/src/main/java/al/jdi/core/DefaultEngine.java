@@ -3,30 +3,35 @@ package al.jdi.core;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
 class DefaultEngine extends TimerTask implements Engine {
 
 	static class DefaultEngineFactory implements Engine.Factory {
+		@Inject
+		private Logger logger;
 		@Override
 		public Engine create(Runnable owner, Period period, boolean isDaemon) {
-			return new DefaultEngine(owner, period, isDaemon);
+			return new DefaultEngine(logger, owner, period, isDaemon);
 		}
 	}
 
-	private Logger logger;
-
+	private final Logger logger;
 	private final Runnable owner;
 	private final Timer timer;
 	private final Period period;
 
-	DefaultEngine(Runnable owner, Period period, boolean isDaemon) {
-		this(new Timer("Engine-" + owner.getClass().getSimpleName(), isDaemon),
-				owner, period);
+	DefaultEngine(Logger logger, Runnable owner, Period period, boolean isDaemon) {
+		this(logger, new Timer("Engine-" + owner.getClass().getSimpleName(),
+				isDaemon), owner, period);
 	}
 
-	DefaultEngine(Timer timer, Runnable owner, Period period) {
+	private DefaultEngine(Logger logger, Timer timer, Runnable owner,
+			Period period) {
+		this.logger = logger;
 		this.owner = owner;
 		this.timer = timer;
 		this.period = period;

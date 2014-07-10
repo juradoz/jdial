@@ -1,8 +1,10 @@
 package al.jdi.core.util;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
@@ -17,7 +19,13 @@ public class Main implements Runnable {
 
 	@PostConstruct
 	public void inicia() {
-		factory.create(this, Period.seconds(1), false);
+		logger.info("iniciando...");
+		factory.create(this, Period.seconds(1), false).start();
+		logger.info("iniciado!");
+	}
+	
+	public void teste(@Observes ContainerInitialized event){
+		logger.info("Start!");
 	}
 
 	@Override
