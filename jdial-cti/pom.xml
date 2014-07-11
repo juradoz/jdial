@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>al.jdi</groupId>
-			<artifactId>jdial-core</artifactId>
+			<artifactId>jdial-common</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -12,7 +12,7 @@ import javax.inject.Qualifier;
 import javax.telephony.Provider;
 import javax.telephony.ProviderListener;
 
-import al.jdi.core.Service;
+import org.jdial.common.Service;
 
 public interface CtiManager extends Service {
 

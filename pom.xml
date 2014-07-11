@@ -19,6 +19,7 @@
 		<module>jdial-dao</module>
 		<module>jdial-core</module>
 		<module>jdial-cti</module>
+    <module>jdial-common</module>
   </modules>
 
 	<repositories>

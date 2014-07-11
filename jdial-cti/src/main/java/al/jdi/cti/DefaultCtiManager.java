@@ -12,10 +12,10 @@ import javax.telephony.Provider;
 import javax.telephony.ProviderEvent;
 import javax.telephony.ProviderListener;
 
+import org.jdial.common.Engine;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
-import al.jdi.core.Engine;
 import al.jdi.cti.CtiManager.CtiManagerService;
 
 import com.avaya.jtapi.tsapi.TsapiPlatformException;
