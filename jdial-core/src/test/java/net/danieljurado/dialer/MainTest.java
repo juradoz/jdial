@@ -1,14 +1,14 @@
 package net.danieljurado.dialer;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 public class MainTest {
 
-  private static final String CAMPANHA = "CAMPANHA";
-
   @Test
   public void test() {
-    Guice.createInjector(new DialerModule(CAMPANHA));
+    fail("Need to test this");
   }
 
 }

@@ -44,7 +44,7 @@ import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.Telefone;
 
-abstract class EstoqueImpl implements Estoque, Runnable, Service {
+class EstoqueImpl implements Estoque, Runnable, Service {
 
   @SuppressWarnings("serial")
   public static class ClienteJaEmUsoException extends Exception {

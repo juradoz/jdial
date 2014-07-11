@@ -1,5 +1,6 @@
 package net.danieljurado.dialer.tratadorespecificocliente;
 
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import net.danieljurado.dialer.configuracoes.Configuracoes;
@@ -19,6 +20,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Situacao;
 import al.jdi.dao.model.Telefone;
 
+@Alternative
 class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
 
   private static final Logger logger = LoggerFactory
