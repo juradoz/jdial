@@ -114,7 +114,7 @@ class DefaultClienteDao implements ClienteDao {
             + "  And Agendamento.idAgente is null "
             + "  And Operador.DetCampanha.OperadorCtt in (0, 3) "
             + "  And Operador.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing
-                                                                          // in (:idMailings) : And
+            // in (:idMailings) : And
             // Filtro_Mailing.idMailing in (:idMailings)
             + "%s " // : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
@@ -182,7 +182,7 @@ class DefaultClienteDao implements ClienteDao {
             + "And Cliente.idEstadoCliente = 1 "
             + "And Operador.DetCampanha.OperadorCtt in (0, 3) "
             + "And Operador.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in
-                                                                // (:idMailings) : And
+            // (:idMailings) : And
             // Filtro_Mailing.idMailing in (:idMailings)
             + "%s " // : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";

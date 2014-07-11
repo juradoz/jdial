@@ -10,17 +10,16 @@ import org.junit.Test;
 
 public class DefinicaoTest {
 
-	private Definicao definicao;
+  private Definicao definicao;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(definicao.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(definicao.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		definicao = new Definicao();
-	}
+  @Before
+  public void setUp() {
+    definicao = new Definicao();
+  }
 
 }

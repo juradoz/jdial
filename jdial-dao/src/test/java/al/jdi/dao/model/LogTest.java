@@ -10,17 +10,16 @@ import org.junit.Test;
 
 public class LogTest {
 
-	private Log log;
+  private Log log;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(log.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(log.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		log = new Log();
-	}
+  @Before
+  public void setUp() {
+    log = new Log();
+  }
 
 }

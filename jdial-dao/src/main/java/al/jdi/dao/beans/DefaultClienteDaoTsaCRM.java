@@ -239,7 +239,7 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
             + "  And Agendamento.idAgente is null "
             + "  And %s.DetCampanha.OperadorCtt in (0, :operador) "
             + "  And %s.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing in
-                                                                    // (:idMailings) : And
+            // (:idMailings) : And
             // Filtro_Mailing.idMailing in (:idMailings)
             + "%s "// : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
@@ -293,7 +293,7 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
             + "And Cliente.idEstadoCliente = 1 "
             + "And %s.DetCampanha.OperadorCtt in (0, :operador) "
             + "And %s.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in (:idMailings)
-                                                          // : And
+            // : And
             // Filtro_Mailing.idMailing in (:idMailings)
             + "%s " // : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";

@@ -12,22 +12,22 @@ import javax.inject.Qualifier;
 import javax.telephony.Provider;
 import javax.telephony.ProviderListener;
 
-import al.jdi.core.Service;
+import org.jdial.common.Service;
 
 public interface CtiManager extends Service {
 
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ TYPE, PARAMETER, FIELD })
-	@Qualifier
-	public @interface CtiManagerService {
-	}
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({TYPE, PARAMETER, FIELD})
+  @Qualifier
+  public @interface CtiManagerService {
+  }
 
-	boolean gotProvider();
+  boolean gotProvider();
 
-	void addListener(ProviderListener listener);
+  void addListener(ProviderListener listener);
 
-	void removeListener(ProviderListener listener);
+  void removeListener(ProviderListener listener);
 
-	Provider getProvider();
+  Provider getProvider();
 
 }

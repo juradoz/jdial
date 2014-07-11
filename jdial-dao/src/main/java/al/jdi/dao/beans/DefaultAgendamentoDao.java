@@ -13,8 +13,12 @@ class DefaultAgendamentoDao implements AgendamentoDao {
 
   private final DefaultDao<Agendamento> dao;
 
-  DefaultAgendamentoDao(Session session) {
-    this.dao = new DefaultDao<>(session, Agendamento.class);
+  DefaultAgendamentoDao(DefaultDao<Agendamento> dao) {
+    this.dao = dao;
+  }
+
+  public DefaultAgendamentoDao(Session session) {
+    this(new DefaultDao<Agendamento>(session, Agendamento.class));
   }
 
   @Override
@@ -33,7 +37,7 @@ class DefaultAgendamentoDao implements AgendamentoDao {
   }
 
   private void adicionaCliente(Agendamento agendamento) {
-    if (agendamento.getCliente().getAgendamento().isEmpty())
+    if (!agendamento.getCliente().getAgendamento().isEmpty())
       agendamento.getCliente().getAgendamento().clear();
     agendamento.getCliente().getAgendamento().add(agendamento);
     new DefaultClienteDao(dao.getSession()).atualiza(agendamento.getCliente());
@@ -67,6 +71,6 @@ class DefaultAgendamentoDao implements AgendamentoDao {
 
   @Override
   public Agendamento procura(String s) {
-    return procura(s);
+    return dao.procura(s);
   }
 }

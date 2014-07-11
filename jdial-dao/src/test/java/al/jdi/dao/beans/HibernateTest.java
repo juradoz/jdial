@@ -11,16 +11,16 @@ import org.junit.Test;
 
 public class HibernateTest {
 
-	private Configuration configure;
+  private Configuration configure;
 
-	@Before
-	public void setUp() {
-		configure = new Configuration().configure();
-	}
+  @Before
+  public void setUp() {
+    configure = new Configuration().configure();
+  }
 
-	@Test
-	public void testClearStartup() throws Exception {
-		assertThat(configure, is(not(nullValue(Configuration.class))));
-	}
+  @Test
+  public void testClearStartup() throws Exception {
+    assertThat(configure, is(not(nullValue(Configuration.class))));
+  }
 
 }

@@ -10,17 +10,16 @@ import org.junit.Test;
 
 public class RotaTest {
 
-	private Rota rota;
+  private Rota rota;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(rota.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(rota.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		rota = new Rota();
-	}
+  @Before
+  public void setUp() {
+    rota = new Rota();
+  }
 
 }

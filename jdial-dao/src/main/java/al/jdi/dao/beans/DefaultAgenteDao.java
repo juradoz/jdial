@@ -18,16 +18,20 @@ import al.jdi.dao.model.Agente;
 import al.jdi.dao.model.Mailing;
 
 class DefaultAgenteDao implements AgenteDao {
-  
+
   private final DefaultDao<Agente> dao;
 
-  DefaultAgenteDao(Session session) {
-    this.dao = new DefaultDao<>(session, Agente.class);
+  public DefaultAgenteDao(Session session) {
+    this(new DefaultDao<Agente>(session, Agente.class));
+  }
+
+  DefaultAgenteDao(DefaultDao<Agente> dao) {
+    this.dao = dao;
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Agente> agentesComAgenda(Collection<Mailing> mailings) {
+  public List<Agente> agentesComAgenda(Collection<Mailing> mailings) {
     return dao.getSession().createCriteria(Agente.class).createAlias("c.mailing", "m")
         .add(eq("m.ativo", true)).createAlias("agendamento.cliente", "c")
         .add(in("c.mailing", mailings)).add(isNotNull("c.telefone"))

@@ -10,22 +10,21 @@ import org.junit.Test;
 
 public class FiltroTest {
 
-	private Filtro filtro;
+  private Filtro filtro;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(filtro.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(filtro.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Test
-	public void defaultMailing() {
-		new CollectionTest(filtro.getMailing()).assertNotNullAndEmpty();
-	}
+  @Test
+  public void defaultMailing() {
+    new CollectionTest(filtro.getMailing()).assertNotNullAndEmpty();
+  }
 
-	@Before
-	public void setUp() {
-		filtro = new Filtro();
-	}
+  @Before
+  public void setUp() {
+    filtro = new Filtro();
+  }
 
 }

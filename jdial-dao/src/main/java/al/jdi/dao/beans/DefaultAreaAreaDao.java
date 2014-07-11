@@ -14,8 +14,12 @@ class DefaultAreaAreaDao implements AreaAreaDao {
 
   private final DefaultDao<AreaArea> dao;
 
-  DefaultAreaAreaDao(Session session) {
-    this.dao = new DefaultDao<>(session, AreaArea.class);
+  public DefaultAreaAreaDao(Session session) {
+    this(new DefaultDao<AreaArea>(session, AreaArea.class));
+  }
+
+  DefaultAreaAreaDao(DefaultDao<AreaArea> dao) {
+    this.dao = dao;
   }
 
   @SuppressWarnings("unchecked")

@@ -10,22 +10,22 @@ import javax.inject.Singleton;
 @Singleton
 class ExecutorServiceProvider {
 
-	private final ExecutorService executorService;
+  private final ExecutorService executorService;
 
-	ExecutorServiceProvider() {
-		executorService = Executors.newCachedThreadPool(new ThreadFactory() {
-			@Override
-			public Thread newThread(Runnable r) {
-				Thread thread = new Thread(r, "PredictiveCallRunner");
-				thread.setDaemon(true);
-				return thread;
-			}
-		});
-	}
+  ExecutorServiceProvider() {
+    executorService = Executors.newCachedThreadPool(new ThreadFactory() {
+      @Override
+      public Thread newThread(Runnable r) {
+        Thread thread = new Thread(r, "PredictiveCallRunner");
+        thread.setDaemon(true);
+        return thread;
+      }
+    });
+  }
 
-	@Produces
-	public ExecutorService get() {
-		return executorService;
-	}
+  @Produces
+  public ExecutorService get() {
+    return executorService;
+  }
 
 }
