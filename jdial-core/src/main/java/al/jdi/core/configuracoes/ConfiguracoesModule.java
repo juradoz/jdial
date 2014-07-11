@@ -23,17 +23,19 @@ import al.jdi.dao.model.Definicao;
 public class ConfiguracoesModule {
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface NomeCampanha {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   @interface IntervaloAtualizacao {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, FIELD, TYPE})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
   public @interface ConfiguracoesService {
   }

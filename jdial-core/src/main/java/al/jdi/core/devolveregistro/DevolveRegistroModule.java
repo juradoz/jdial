@@ -28,18 +28,20 @@ import al.jdi.core.modelo.Ligacao;
 public class DevolveRegistroModule {
 
   @Retention(RUNTIME)
-  @Target({PARAMETER})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface DevolvedorRegistroExecutorService {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, FIELD, TYPE})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
   public @interface DevolveRegistroService {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface ThreadCountParameter {
   }
 

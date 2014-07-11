@@ -20,13 +20,13 @@ import org.joda.time.Period;
 public class EstoqueModule {
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, FIELD, METHOD, TYPE})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
   public @interface Agendados {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, FIELD, METHOD, TYPE})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
   public @interface Livres {
   }

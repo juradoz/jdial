@@ -15,13 +15,14 @@ import javax.inject.Qualifier;
 public class DialerModule {
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, FIELD, TYPE})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
   public @interface DialerService {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface Versao {
   }
 
