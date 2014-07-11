@@ -52,7 +52,7 @@ public class DefaultAgendamentoDaoTest {
     when(session.createCriteria(Agendamento.class)).thenReturn(criteria);
     when(criteria.add(Mockito.any(Criterion.class))).thenReturn(criteria);
     when(criteria.uniqueResult()).thenReturn(agendamento);
-    
+
     when(agendamento.getCriacaoModificacao()).thenReturn(criacaoModificacao);
     when(agendamento.getCliente()).thenReturn(cliente);
     when(cliente.getAgendamento()).thenReturn(agendamentos);

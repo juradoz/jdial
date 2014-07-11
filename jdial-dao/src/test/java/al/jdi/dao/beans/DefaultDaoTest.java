@@ -85,7 +85,7 @@ public class DefaultDaoTest {
     dao.remove(agente);
     verify(session).delete(agente);
   }
-  
+
   // TODO: Testar procura(S)
 
 }
