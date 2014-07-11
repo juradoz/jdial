@@ -29,7 +29,7 @@ class DefaultEngine extends TimerTask implements Engine {
 				isDaemon), owner, period);
 	}
 
-	private DefaultEngine(Logger logger, Timer timer, Runnable owner,
+	DefaultEngine(Logger logger, Timer timer, Runnable owner,
 			Period period) {
 		this.logger = logger;
 		this.owner = owner;
@@ -39,14 +39,14 @@ class DefaultEngine extends TimerTask implements Engine {
 
 	@Override
 	public void start() {
-		this.timer.schedule(this, 0,
+		timer.schedule(this, 0,
 				period.toStandardSeconds().getSeconds() * 1000);
 		logger.debug("started engine to {}", owner.getClass().getSimpleName());
 	}
 
 	@Override
 	public void stop() {
-		this.timer.cancel();
+		timer.cancel();
 		logger.debug("stop engine to {}", owner);
 	}
 
