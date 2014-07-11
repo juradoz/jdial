@@ -13,6 +13,13 @@ import org.slf4j.LoggerFactory;
 
 class DefaultSistemaAtivo implements SistemaAtivo {
 
+  static class DefaultSistemaAtivoFactory implements SistemaAtivo.Factory {
+    @Override
+    public SistemaAtivo create(ConfiguracoesImpl configuracoes) {
+      return new DefaultSistemaAtivo(configuracoes);
+    }
+  }
+
   static final String SISTEMA_HORA_INICIO_SABADO = "sistema.horaInicioSabado";
   static final String SISTEMA_HORA_INICIO_SEXTA = "sistema.horaInicioSexta";
   static final String SISTEMA_HORA_INICIO_QUINTA = "sistema.horaInicioQuinta";

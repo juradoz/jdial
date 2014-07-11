@@ -5,7 +5,8 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import net.danieljurado.dialer.DialerModule.VersaoParameter;
+import net.danieljurado.dialer.DialerModule.DialerService;
+import net.danieljurado.dialer.DialerModule.Versao;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
 import net.danieljurado.dialer.estoque.Estoque;
 import net.danieljurado.dialer.estoque.EstoqueModule.Agendados;
@@ -31,6 +32,7 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
+@DialerService
 class DialerImpl implements Service, Runnable {
 
   private static final Logger logger = LoggerFactory.getLogger(DialerImpl.class);
@@ -51,7 +53,7 @@ class DialerImpl implements Service, Runnable {
 
   @Inject
   DialerImpl(Configuracoes configuracoes, Engine.Factory engineFactory,
-      @VersaoParameter String versao, GerenciadorAgentes gerenciadorAgentes,
+      @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
       @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
       Provider<DaoFactory> daoFactoryProvider, TratadorEspecificoCliente tratadorEspecificoCliente,

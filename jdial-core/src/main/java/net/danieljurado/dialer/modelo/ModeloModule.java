@@ -27,10 +27,4 @@ public class ModeloModule {
   public @interface ProvidenciaInvalidaAtualEProximoTelefone {
   }
 
-  protected void configure() {
-    install(new DiscavelModule());
-    install(new ProvidenciaModule());
-    bind(TelefoneSorter.class).to(DefaultTelefoneSorter.class);
-  }
-
 }

@@ -2,6 +2,8 @@ package net.danieljurado.dialer.gerenciadorligacoes;
 
 import javax.inject.Inject;
 
+import net.danieljurado.dialer.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -11,8 +13,11 @@ import al.jdi.cti.PredictiveListener;
 
 class PredictiveListenerImpl implements PredictiveListener {
 
-  public interface Factory {
-    PredictiveListener create(GerenciadorLigacoesImpl owner);
+  static class PredictiveListenerImplFactory implements PredictiveListenerFactory {
+    @Override
+    public PredictiveListener create(GerenciadorLigacoesImpl owner) {
+      return new PredictiveListenerImpl(owner);
+    }
   }
 
   private static final Logger logger = LoggerFactory.getLogger(PredictiveListenerImpl.class);

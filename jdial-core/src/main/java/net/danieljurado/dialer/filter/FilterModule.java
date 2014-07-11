@@ -1,62 +1,48 @@
 package net.danieljurado.dialer.filter;
 
-import java.lang.annotation.ElementType;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.util.Arrays.asList;
+
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.HashSet;
+
+import javax.enterprise.inject.Produces;
 
 public class FilterModule {
 
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.PARAMETER})
+  @Retention(RUNTIME)
+  @Target({PARAMETER, TYPE, METHOD})
   public @interface ClienteSemTelefoneFilter {
   }
 
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.PARAMETER})
+  @Retention(RUNTIME)
+  @Target({PARAMETER, TYPE, METHOD})
   public @interface SomenteCelularFilter {
   }
 
-  protected void configure() {
-    install(new PrivateModule() {
-      @Override
-      protected void configure() {
-        bind(TelefoneFilter.class).to(DefaultTelefoneFilter.class);
-        expose(TelefoneFilter.class);
-        Multibinder<TelefoneUtil> multibinder =
-            Multibinder.newSetBinder(binder(), TelefoneUtil.class);
-        multibinder.addBinding().to(CampoUtil.class);
-        multibinder.addBinding().to(BloqueioCelularUtil.class);
-        multibinder.addBinding().to(RestricaoHorarioUtil.class);
-      }
-    });
+  @Produces
+  public TelefoneFilter getTelefoneFilter(CampoUtil campoUtil,
+      BloqueioCelularUtil bloqueioCelularUtil, RestricaoHorarioUtil restricaoHorarioUtil) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) campoUtil,
+        (TelefoneUtil) bloqueioCelularUtil, (TelefoneUtil) restricaoHorarioUtil)));
+  }
 
-    install(new PrivateModule() {
-      @Override
-      protected void configure() {
-        bind(TelefoneFilter.class).annotatedWith(ClienteSemTelefoneFilter.class).to(
-            DefaultTelefoneFilter.class);
-        expose(TelefoneFilter.class).annotatedWith(ClienteSemTelefoneFilter.class);
-        Multibinder<TelefoneUtil> multibinder =
-            Multibinder.newSetBinder(binder(), TelefoneUtil.class);
-        multibinder.addBinding().to(CampoUtil.class);
-        multibinder.addBinding().to(RestricaoHorarioUtil.class);
-      }
-    });
+  @Produces
+  @ClienteSemTelefoneFilter
+  public TelefoneFilter getTelefoneFilterClienteSemTelefoneFilter(CampoUtil campoUtil,
+      RestricaoHorarioUtil restricaoHorarioUtil) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) campoUtil,
+        (TelefoneUtil) restricaoHorarioUtil)));
+  }
 
-    install(new PrivateModule() {
-      @Override
-      protected void configure() {
-        bind(TelefoneFilter.class).annotatedWith(SomenteCelularFilter.class).to(
-            DefaultTelefoneFilter.class);
-        expose(TelefoneFilter.class).annotatedWith(SomenteCelularFilter.class);
-        Multibinder<TelefoneUtil> multibinder =
-            Multibinder.newSetBinder(binder(), TelefoneUtil.class);
-        multibinder.addBinding().to(BloqueioCelularUtil.class);
-      }
-    });
-
-    bind(CelularChecker.class);
+  @Produces
+  @SomenteCelularFilter
+  public TelefoneFilter getTelefoneFilterSomenteCelular(BloqueioCelularUtil bloqueiaCelular) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) bloqueiaCelular)));
   }
 
 }

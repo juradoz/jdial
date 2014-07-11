@@ -10,8 +10,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import net.danieljurado.dialer.Service;
-import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.IntervaloAtualizacaoParameter;
-import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.NomeCampanhaParameter;
+import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.ConfiguracoesService;
+import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
+import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.NomeCampanha;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -26,6 +27,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 
+@ConfiguracoesService
 class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
 
   private static final String SISTEMA_DETECTA_CAIXA_POSTAL_PELO_TELEFONE =
@@ -115,9 +117,9 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
   private Engine engine;
 
   @Inject
-  ConfiguracoesImpl(@NomeCampanhaParameter String nomeCampanha, Engine.Factory engineFactory,
+  ConfiguracoesImpl(@NomeCampanha String nomeCampanha, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider,
-      @IntervaloAtualizacaoParameter Period intervaloAtualizacao,
+      @IntervaloAtualizacao Period intervaloAtualizacao,
       Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;

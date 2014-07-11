@@ -5,6 +5,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 
 import net.danieljurado.dialer.configuracoes.Configuracoes;
+import net.danieljurado.dialer.estoque.EstoqueModule.Agendados;
 import net.danieljurado.dialer.tratadorespecificocliente.TratadorEspecificoCliente;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 
+@Agendados
 class ClientesAgendados implements ExtraidorClientes {
 
   private final static Logger logger = LoggerFactory.getLogger(ClientesAgendados.class);

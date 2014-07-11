@@ -16,6 +16,7 @@ import net.danieljurado.dialer.Service;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
 import net.danieljurado.dialer.devolveregistro.DevolveRegistro;
 import net.danieljurado.dialer.gerenciadorfatork.GerenciadorFatorK;
+import net.danieljurado.dialer.gerenciadorligacoes.GerenciadorLigacoesModule.GerenciadorLigacoesService;
 import net.danieljurado.dialer.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import net.danieljurado.dialer.modelo.Ligacao;
 
@@ -35,6 +36,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Telefone;
 
+@GerenciadorLigacoesService
 class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service {
 
   private static final Logger logger = LoggerFactory.getLogger(GerenciadorLigacoesImpl.class);

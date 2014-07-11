@@ -12,17 +12,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import net.danieljurado.dialer.Service;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
 import net.danieljurado.dialer.devolveregistro.DevolveRegistro;
-import net.danieljurado.dialer.estoque.EstoqueModule.Agendados;
 import net.danieljurado.dialer.filter.TelefoneFilter;
 import net.danieljurado.dialer.modelo.Discavel;
 import net.danieljurado.dialer.modelo.Ligacao;
-import net.danieljurado.dialer.modelo.ModeloModule.DiscavelTsa;
 import net.danieljurado.dialer.modelo.Providencia;
 import net.danieljurado.dialer.modelo.Providencia.ClienteSemTelefoneException;
 import net.danieljurado.dialer.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
@@ -47,7 +44,7 @@ import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.Telefone;
 
-class EstoqueImpl implements Estoque, Runnable, Service {
+abstract class EstoqueImpl implements Estoque, Runnable, Service {
 
   @SuppressWarnings("serial")
   public static class ClienteJaEmUsoException extends Exception {
@@ -75,12 +72,10 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  @Inject
   EstoqueImpl(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
       DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
-      @DiscavelTsa Discavel.Factory discavelFactory, Engine.Factory engineFactory,
-      Collection<Registro> estoque, ExtraidorClientes extraidorClientes,
-      @Agendados Estoque estoqueAgendados, Period intervaloMonitoracao,
+      Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
+      ExtraidorClientes extraidorClientes, Estoque estoqueAgendados, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;

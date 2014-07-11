@@ -36,4 +36,9 @@ class InvalidaAtualEProximoTelefone implements Providencia {
     return proximoTelefone.getTelefone(daoFactory, cliente);
   }
 
+  @Override
+  public Codigo getCodigo() {
+    return Providencia.Codigo.INVALIDA_ATUAL_E_PROXIMO_TELEFONE;
+  }
+
 }

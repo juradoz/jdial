@@ -1,5 +1,7 @@
 package net.danieljurado.dialer;
 
+import javax.enterprise.event.Observes;
+
 import net.danieljurado.dialer.DialerModule.DialerService;
 import net.danieljurado.dialer.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import net.danieljurado.dialer.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
@@ -11,30 +13,29 @@ import net.danieljurado.dialer.gerenciadorligacoes.GerenciadorLigacoesModule.Ger
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jboss.weld.injection.producer.Injector;
+import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 public class Main {
 
-  public static void main(String[] args) throws InterruptedException {
+  @ConfiguracoesService
+  private static Service configuracoesService;
+  @DevolveRegistroService
+  private static Service devolveRegistroService;
+  @Livres
+  Service estoqueLivresService;
+  @Agendados
+  Service estoqueLivresAgendados;
+  @GerenciadorAgentesService
+  Service gerenciadorAgentesService;
+  @GerenciadorLigacoesService
+  Service gerenciadorLigacoesService;
+  @GerenciadorFatorKService
+  Service gerenciadorFatorKService;
+  @DialerService
+  Service dialerService;
+
+  public void main(@Observes ContainerInitialized event) throws InterruptedException {
     ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
-
-    String campanha = args[0];
-
-    Injector injector = Guice.createInjector(new DialerModule(campanha));
-
-    Service configuracoesService =
-        injector.getInstance(Key.get(Service.class, ConfiguracoesService.class));
-    Service devolveRegistroService =
-        injector.getInstance(Key.get(Service.class, DevolveRegistroService.class));
-    Service estoqueLivresService = injector.getInstance(Key.get(Service.class, Livres.class));
-    Service estoqueLivresAgendados = injector.getInstance(Key.get(Service.class, Agendados.class));
-    Service gerenciadorAgentesService =
-        injector.getInstance(Key.get(Service.class, GerenciadorAgentesService.class));
-    Service gerenciadorLigacoesService =
-        injector.getInstance(Key.get(Service.class, GerenciadorLigacoesService.class));
-    Service gerenciadorFatorKService =
-        injector.getInstance(Key.get(Service.class, GerenciadorFatorKService.class));
-    Service dialerService = injector.getInstance(Key.get(Service.class, DialerService.class));
 
     Runtime.getRuntime().addShutdownHook(
         new Thread(new ShutdownHook(devolveRegistroService, estoqueLivresService,
@@ -49,6 +50,9 @@ public class Main {
     gerenciadorAgentesService.start();
     gerenciadorFatorKService.start();
     dialerService.start();
+
+    while (Thread.currentThread().isAlive())
+      Thread.sleep(100);
   }
 
 }

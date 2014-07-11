@@ -97,4 +97,9 @@ class ProximoTelefone implements Providencia {
     return telefoneDaVez;
   }
 
+  @Override
+  public Codigo getCodigo() {
+    return Providencia.Codigo.PROXIMO_TELEFONE;
+  }
+
 }

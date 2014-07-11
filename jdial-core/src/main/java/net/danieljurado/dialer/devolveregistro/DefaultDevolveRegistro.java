@@ -9,6 +9,7 @@ import javax.inject.Provider;
 
 import net.danieljurado.dialer.Service;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
+import net.danieljurado.dialer.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import net.danieljurado.dialer.devolveregistro.DevolveRegistroModule.ThreadCountParameter;
 import net.danieljurado.dialer.modelo.Ligacao;
 
@@ -22,6 +23,7 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
+@DevolveRegistroService
 class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultDevolveRegistro.class);

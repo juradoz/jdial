@@ -69,4 +69,9 @@ class MantemAtual implements Providencia {
     return result;
   }
 
+  @Override
+  public Codigo getCodigo() {
+    return Providencia.Codigo.MANTEM_ATUAL;
+  }
+
 }

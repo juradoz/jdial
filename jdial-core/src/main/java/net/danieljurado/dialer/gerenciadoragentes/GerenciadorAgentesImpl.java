@@ -7,6 +7,7 @@ import javax.telephony.ProviderListener;
 
 import net.danieljurado.dialer.Service;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
+import net.danieljurado.dialer.gerenciadoragentes.GerenciadorAgentesModule.GerenciadorAgentesService;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +22,7 @@ import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 
+@GerenciadorAgentesService
 class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, ProviderListener {
 
   private static final Logger logger = LoggerFactory.getLogger(GerenciadorAgentesImpl.class);

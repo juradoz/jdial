@@ -2,6 +2,7 @@ package net.danieljurado.dialer.devolveregistro;
 
 import java.util.Set;
 
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import net.danieljurado.dialer.modelo.Ligacao;
@@ -21,7 +22,7 @@ class ModificadorResultado {
   private final Set<ModificadorResultadoFilter> filters;
 
   @Inject
-  ModificadorResultado(Set<ModificadorResultadoFilter> filters) {
+  ModificadorResultado(@Any Set<ModificadorResultadoFilter> filters) {
     this.filters = filters;
   }
 

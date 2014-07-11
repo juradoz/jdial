@@ -11,6 +11,7 @@ import javax.inject.Provider;
 
 import net.danieljurado.dialer.Service;
 import net.danieljurado.dialer.configuracoes.Configuracoes;
+import net.danieljurado.dialer.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.beans.DaoFactory;
 
+@GerenciadorFatorKService
 class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
 
   private static final Logger logger = LoggerFactory.getLogger(GerenciadorFatorKImpl.class);
