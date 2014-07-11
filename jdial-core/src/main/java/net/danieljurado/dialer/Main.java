@@ -1,5 +1,6 @@
 package net.danieljurado.dialer;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 
 import net.danieljurado.dialer.DialerModule.DialerService;
@@ -34,9 +35,8 @@ public class Main {
   @DialerService
   Service dialerService;
 
-  public void main(@Observes ContainerInitialized event) throws InterruptedException {
-    ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
-
+  @PostConstruct
+  public void start() {
     Runtime.getRuntime().addShutdownHook(
         new Thread(new ShutdownHook(devolveRegistroService, estoqueLivresService,
             estoqueLivresAgendados, gerenciadorAgentesService, gerenciadorLigacoesService,
@@ -50,6 +50,10 @@ public class Main {
     gerenciadorAgentesService.start();
     gerenciadorFatorKService.start();
     dialerService.start();
+  }
+
+  public void run(@Observes ContainerInitialized event) throws InterruptedException {
+    ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
 
     while (Thread.currentThread().isAlive())
       Thread.sleep(100);

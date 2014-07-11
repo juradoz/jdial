@@ -33,9 +33,9 @@ import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
 @DialerService
-class DialerImpl implements Service, Runnable {
+class DefaultDialer implements Service, Runnable {
 
-  private static final Logger logger = LoggerFactory.getLogger(DialerImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(DefaultDialer.class);
 
   private final Configuracoes configuracoes;
   private final GerenciadorAgentes gerenciadorAgentes;
@@ -52,7 +52,7 @@ class DialerImpl implements Service, Runnable {
   private Engine engine;
 
   @Inject
-  DialerImpl(Configuracoes configuracoes, Engine.Factory engineFactory,
+  DefaultDialer(Configuracoes configuracoes, Engine.Factory engineFactory,
       @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
       @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
