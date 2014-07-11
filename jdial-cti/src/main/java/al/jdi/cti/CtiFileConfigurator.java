@@ -6,15 +6,15 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
 @Singleton
-class FileConfigurator {
+class CtiFileConfigurator {
 
-	private static final String fileName = "cti.properties";
 	private final String serverIp;
 	private final int port;
 	private final String service;
@@ -22,7 +22,8 @@ class FileConfigurator {
 	private final String password;
 	private final String jtapiPeerName;
 
-	FileConfigurator() {
+	@Inject
+	CtiFileConfigurator(@Named("ctiConfigFileName") String fileName) {
 		InputStream stream = null;
 		ClassLoader classLoader = Thread.currentThread()
 				.getContextClassLoader();
