@@ -48,16 +48,17 @@ public class DefaultAgendamentoDaoTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
+    when(dao.getSession()).thenReturn(session);
+    when(session.createCriteria(Agendamento.class)).thenReturn(criteria);
+    when(criteria.add(Mockito.any(Criterion.class))).thenReturn(criteria);
+    when(criteria.uniqueResult()).thenReturn(agendamento);
+    
     when(agendamento.getCriacaoModificacao()).thenReturn(criacaoModificacao);
     when(agendamento.getCliente()).thenReturn(cliente);
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(cliente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
     when(agente.getAgendamento()).thenReturn(agendamentos);
     when(agente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
-    when(session.createCriteria(Agendamento.class)).thenReturn(criteria);
-    when(criteria.add(Mockito.any(Criterion.class))).thenReturn(criteria);
-    when(criteria.uniqueResult()).thenReturn(agendamento);
-    when(dao.getSession()).thenReturn(session);
     defaultAgendamentoDao = new DefaultAgendamentoDao(dao);
   }
 

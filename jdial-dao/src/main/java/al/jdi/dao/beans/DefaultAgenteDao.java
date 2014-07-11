@@ -31,7 +31,7 @@ class DefaultAgenteDao implements AgenteDao {
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<Agente> agentesComAgenda(Collection<Mailing> mailings) {
+  public List<Agente> agentesComAgenda(Collection<Mailing> mailings) {
     return dao.getSession().createCriteria(Agente.class).createAlias("c.mailing", "m")
         .add(eq("m.ativo", true)).createAlias("agendamento.cliente", "c")
         .add(in("c.mailing", mailings)).add(isNotNull("c.telefone"))
