@@ -10,17 +10,17 @@ import org.junit.Test;
 
 public class AgendamentoTest {
 
-	private Agendamento agendamento;
+  private Agendamento agendamento;
 
-	@Test
-	public void defaultCriacao() {
-		assertThat(agendamento.getCriacaoModificacao(),
-				is(CoreMatchers.not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacao() {
+    assertThat(agendamento.getCriacaoModificacao(),
+        is(CoreMatchers.not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		agendamento = new Agendamento();
-	}
+  @Before
+  public void setUp() {
+    agendamento = new Agendamento();
+  }
 
 }

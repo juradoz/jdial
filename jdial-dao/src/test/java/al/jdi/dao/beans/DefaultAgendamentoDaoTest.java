@@ -24,115 +24,110 @@ import al.jdi.dao.model.CriacaoModificacao;
 
 public class DefaultAgendamentoDaoTest {
 
-	private static final Long ID = 1l;
-	private static final String S = "S";
-	@Mock
-	private Session session;
-	@Mock
-	private Agendamento agendamento;
-	@Mock
-	private CriacaoModificacao criacaoModificacao;
-	@Mock
-	private Cliente cliente;
-	@Mock
-	private List<Agendamento> agendamentos;
-	@Mock
-	private Agente agente;
-	@Mock
-	private Criteria criteria;
-	@Mock
-	private DefaultDao<Agendamento> dao;
+  private static final Long ID = 1l;
+  private static final String S = "S";
+  @Mock
+  private Session session;
+  @Mock
+  private Agendamento agendamento;
+  @Mock
+  private CriacaoModificacao criacaoModificacao;
+  @Mock
+  private Cliente cliente;
+  @Mock
+  private List<Agendamento> agendamentos;
+  @Mock
+  private Agente agente;
+  @Mock
+  private Criteria criteria;
+  @Mock
+  private DefaultDao<Agendamento> dao;
 
-	private DefaultAgendamentoDao defaultAgendamentoDao;
+  private DefaultAgendamentoDao defaultAgendamentoDao;
 
-	@Before
-	public void setUp() throws Exception {
-		initMocks(this);
-		when(agendamento.getCriacaoModificacao())
-				.thenReturn(criacaoModificacao);
-		when(agendamento.getCliente()).thenReturn(cliente);
-		when(cliente.getAgendamento()).thenReturn(agendamentos);
-		when(cliente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
-		when(agente.getAgendamento()).thenReturn(agendamentos);
-		when(agente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
-		when(session.createCriteria(Agendamento.class)).thenReturn(criteria);
-		when(criteria.add(Mockito.any(Criterion.class))).thenReturn(criteria);
-		when(criteria.uniqueResult()).thenReturn(agendamento);
-		when(dao.getSession()).thenReturn(session);
-		defaultAgendamentoDao = new DefaultAgendamentoDao(dao);
-	}
+  @Before
+  public void setUp() throws Exception {
+    initMocks(this);
+    when(agendamento.getCriacaoModificacao()).thenReturn(criacaoModificacao);
+    when(agendamento.getCliente()).thenReturn(cliente);
+    when(cliente.getAgendamento()).thenReturn(agendamentos);
+    when(cliente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
+    when(agente.getAgendamento()).thenReturn(agendamentos);
+    when(agente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
+    when(session.createCriteria(Agendamento.class)).thenReturn(criteria);
+    when(criteria.add(Mockito.any(Criterion.class))).thenReturn(criteria);
+    when(criteria.uniqueResult()).thenReturn(agendamento);
+    when(dao.getSession()).thenReturn(session);
+    defaultAgendamentoDao = new DefaultAgendamentoDao(dao);
+  }
 
-	@Test
-	public void adicionaShouldEmptyPreviousAgendamentos() throws Exception {
-		when(agendamentos.isEmpty()).thenReturn(false);
-		defaultAgendamentoDao.adiciona(agendamento);
-		verify(agendamentos).clear();
+  @Test
+  public void adicionaShouldEmptyPreviousAgendamentos() throws Exception {
+    when(agendamentos.isEmpty()).thenReturn(false);
+    defaultAgendamentoDao.adiciona(agendamento);
+    verify(agendamentos).clear();
 
-	}
+  }
 
-	@Test
-	public void adicionaShouldAddAgendamento() throws Exception {
-		defaultAgendamentoDao.adiciona(agendamento);
-		verify(agendamentos).add(agendamento);
-	}
+  @Test
+  public void adicionaShouldAddAgendamento() throws Exception {
+    defaultAgendamentoDao.adiciona(agendamento);
+    verify(agendamentos).add(agendamento);
+  }
 
-	@Test
-	public void adicionaShouldUpdateCliente() throws Exception {
-		defaultAgendamentoDao.adiciona(agendamento);
-		verify(session).update(cliente);
-	}
+  @Test
+  public void adicionaShouldUpdateCliente() throws Exception {
+    defaultAgendamentoDao.adiciona(agendamento);
+    verify(session).update(cliente);
+  }
 
-	@Test
-	public void adicionaShouldAddAgente() throws Exception {
-		when(agendamento.getAgente()).thenReturn(agente);
-		defaultAgendamentoDao.adiciona(agendamento);
-		verify(dao).adiciona(agendamento);
-	}
+  @Test
+  public void adicionaShouldAddAgente() throws Exception {
+    when(agendamento.getAgente()).thenReturn(agente);
+    defaultAgendamentoDao.adiciona(agendamento);
+    verify(dao).adiciona(agendamento);
+  }
 
-	@Test
-	public void adicionaShouldUpdateAgente() throws Exception {
-		when(agendamento.getAgente()).thenReturn(agente);
-		defaultAgendamentoDao.adiciona(agendamento);
-		verify(session).update(agente);
-	}
+  @Test
+  public void adicionaShouldUpdateAgente() throws Exception {
+    when(agendamento.getAgente()).thenReturn(agente);
+    defaultAgendamentoDao.adiciona(agendamento);
+    verify(session).update(agente);
+  }
 
-	@Test
-	public void procuraShouldLookForAgendamento() throws Exception {
-		assertThat(defaultAgendamentoDao.procura(cliente),
-				is(sameInstance(agendamento)));
-	}
+  @Test
+  public void procuraShouldLookForAgendamento() throws Exception {
+    assertThat(defaultAgendamentoDao.procura(cliente), is(sameInstance(agendamento)));
+  }
 
-	@Test
-	public void atualiza() throws Exception {
-		defaultAgendamentoDao.atualiza(agendamento);
-		verify(dao).atualiza(agendamento);
-	}
+  @Test
+  public void atualiza() throws Exception {
+    defaultAgendamentoDao.atualiza(agendamento);
+    verify(dao).atualiza(agendamento);
+  }
 
-	@Test
-	public void listaTudo() throws Exception {
-		when(dao.listaTudo()).thenReturn(agendamentos);
-		assertThat(defaultAgendamentoDao.listaTudo(),
-				is(sameInstance(agendamentos)));
-	}
+  @Test
+  public void listaTudo() throws Exception {
+    when(dao.listaTudo()).thenReturn(agendamentos);
+    assertThat(defaultAgendamentoDao.listaTudo(), is(sameInstance(agendamentos)));
+  }
 
-	@Test
-	public void procuraId() throws Exception {
-		when(dao.procura(ID)).thenReturn(agendamento);
-		assertThat(defaultAgendamentoDao.procura(ID),
-				is(sameInstance(agendamento)));
-	}
+  @Test
+  public void procuraId() throws Exception {
+    when(dao.procura(ID)).thenReturn(agendamento);
+    assertThat(defaultAgendamentoDao.procura(ID), is(sameInstance(agendamento)));
+  }
 
-	@Test
-	public void remove() throws Exception {
-		defaultAgendamentoDao.remove(agendamento);
-		verify(dao).remove(agendamento);
-	}
+  @Test
+  public void remove() throws Exception {
+    defaultAgendamentoDao.remove(agendamento);
+    verify(dao).remove(agendamento);
+  }
 
-	@Test
-	public void procuraString() throws Exception {
-		when(dao.procura(S)).thenReturn(agendamento);
-		assertThat(defaultAgendamentoDao.procura(S),
-				is(sameInstance(agendamento)));
-	}
+  @Test
+  public void procuraString() throws Exception {
+    when(dao.procura(S)).thenReturn(agendamento);
+    assertThat(defaultAgendamentoDao.procura(S), is(sameInstance(agendamento)));
+  }
 
 }

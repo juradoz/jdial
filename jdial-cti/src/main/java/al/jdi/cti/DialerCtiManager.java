@@ -12,16 +12,16 @@ import javax.inject.Qualifier;
 
 public interface DialerCtiManager extends CtiManager {
 
-	@Retention(RetentionPolicy.RUNTIME)
-	@Target({ TYPE, PARAMETER, FIELD })
-	@Qualifier
-	public @interface DialerCtiManagerService {
-	}
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({TYPE, PARAMETER, FIELD})
+  @Qualifier
+  public @interface DialerCtiManagerService {
+  }
 
-	int getAgentesLivres(String acd);
+  int getAgentesLivres(String acd);
 
-	void makePredictiveCall(String origem, String destino, int maxRings,
-			TratamentoSecretariaEletronica tratamentoSecretariaEletronica,
-			String userInfo, PredictiveListener predictiveListener);
+  void makePredictiveCall(String origem, String destino, int maxRings,
+      TratamentoSecretariaEletronica tratamentoSecretariaEletronica, String userInfo,
+      PredictiveListener predictiveListener);
 
 }

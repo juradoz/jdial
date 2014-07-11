@@ -10,17 +10,16 @@ import org.junit.Test;
 
 public class UsuarioTest {
 
-	private Usuario usuario;
+  private Usuario usuario;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(usuario.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(usuario.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		usuario = new Usuario();
-	}
+  @Before
+  public void setUp() {
+    usuario = new Usuario();
+  }
 
 }

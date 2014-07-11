@@ -12,41 +12,39 @@ import org.junit.Test;
 
 public class CampanhaTest {
 
-	private Campanha campanha;
+  private Campanha campanha;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(campanha.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(campanha.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Test
-	public void defaultDefinicao() {
-		assertThat(campanha.getDefinicao(),
-				is(not(nullValue(Collection.class))));
-		assertThat(campanha.getDefinicao().isEmpty(), is(true));
-	}
+  @Test
+  public void defaultDefinicao() {
+    assertThat(campanha.getDefinicao(), is(not(nullValue(Collection.class))));
+    assertThat(campanha.getDefinicao().isEmpty(), is(true));
+  }
 
-	@Test
-	public void defaultFiltro() {
-		assertThat(campanha.getFiltro(), is(not(nullValue(Collection.class))));
-		assertThat(campanha.getFiltro().isEmpty(), is(true));
-	}
+  @Test
+  public void defaultFiltro() {
+    assertThat(campanha.getFiltro(), is(not(nullValue(Collection.class))));
+    assertThat(campanha.getFiltro().isEmpty(), is(true));
+  }
 
-	@Test
-	public void defaultFiltroAtivo() {
-		assertThat(campanha.isFiltroAtivo(), is(false));
-	}
+  @Test
+  public void defaultFiltroAtivo() {
+    assertThat(campanha.isFiltroAtivo(), is(false));
+  }
 
-	@Test
-	public void defaultMailing() {
-		assertThat(campanha.getMailing(), is(not(nullValue(Collection.class))));
-		assertThat(campanha.getMailing().isEmpty(), is(true));
-	}
+  @Test
+  public void defaultMailing() {
+    assertThat(campanha.getMailing(), is(not(nullValue(Collection.class))));
+    assertThat(campanha.getMailing().isEmpty(), is(true));
+  }
 
-	@Before
-	public void setUp() {
-		campanha = new Campanha();
-	}
+  @Before
+  public void setUp() {
+    campanha = new Campanha();
+  }
 
 }

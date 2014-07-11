@@ -10,27 +10,26 @@ import org.junit.Test;
 
 public class GrupoTest {
 
-	private Grupo grupo;
+  private Grupo grupo;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(grupo.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(grupo.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Test
-	public void defaultSemAgentes() {
-		assertThat(grupo.isSemAgentes(), is(false));
-	}
+  @Test
+  public void defaultSemAgentes() {
+    assertThat(grupo.isSemAgentes(), is(false));
+  }
 
-	@Test
-	public void defaultVisivelOperador() {
-		assertThat(grupo.isVisivelOperador(), is(true));
-	}
+  @Test
+  public void defaultVisivelOperador() {
+    assertThat(grupo.isVisivelOperador(), is(true));
+  }
 
-	@Before
-	public void setUp() {
-		grupo = new Grupo();
-	}
+  @Before
+  public void setUp() {
+    grupo = new Grupo();
+  }
 
 }

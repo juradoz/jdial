@@ -13,26 +13,25 @@ import al.jdi.cti.CtiManager.CtiManagerService;
 
 public class Main {
 
-	private final CtiManager ctiManager;
+  private final CtiManager ctiManager;
 
-	@Inject
-	public Main(@CtiManagerService CtiManager ctiManager) {
-		this.ctiManager = ctiManager;
-	}
+  @Inject
+  public Main(@CtiManagerService CtiManager ctiManager) {
+    this.ctiManager = ctiManager;
+  }
 
-	@PostConstruct
-	public void start() {
-		ctiManager.start();
-	}
+  @PostConstruct
+  public void start() {
+    ctiManager.start();
+  }
 
-	public void main(@Observes ContainerInitialized event)
-			throws InterruptedException {
-		Thread.sleep(Period.seconds(10).toStandardSeconds().getSeconds() * 1000);
-	}
+  public void main(@Observes ContainerInitialized event) throws InterruptedException {
+    Thread.sleep(Period.seconds(10).toStandardSeconds().getSeconds() * 1000);
+  }
 
-	@PreDestroy
-	public void para() {
-		ctiManager.stop();
-	}
+  @PreDestroy
+  public void para() {
+    ctiManager.stop();
+  }
 
 }

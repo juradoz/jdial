@@ -10,7 +10,7 @@ import java.util.List;
 import al.jdi.dao.model.DaoObject;
 
 public interface Dao<T extends DaoObject> {
-  
+
   @Retention(RUNTIME)
   @Target({FIELD})
   public @interface CampoBusca {
@@ -23,7 +23,7 @@ public interface Dao<T extends DaoObject> {
   List<T> listaTudo();
 
   T procura(Long id);
-  
+
   T procura(String s);
 
   void remove(T u);

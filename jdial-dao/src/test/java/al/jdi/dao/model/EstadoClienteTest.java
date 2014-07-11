@@ -10,17 +10,16 @@ import org.junit.Test;
 
 public class EstadoClienteTest {
 
-	private EstadoCliente estadoCliente;
+  private EstadoCliente estadoCliente;
 
-	@Test
-	public void defaultCriacaoModifiacao() {
-		assertThat(estadoCliente.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModifiacao() {
+    assertThat(estadoCliente.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		estadoCliente = new EstadoCliente();
-	}
+  @Before
+  public void setUp() {
+    estadoCliente = new EstadoCliente();
+  }
 
 }

@@ -10,22 +10,21 @@ import org.junit.Test;
 
 public class MailingTest {
 
-	private Mailing mailing;
+  private Mailing mailing;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(mailing.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(mailing.getCriacaoModificacao(), is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Test
-	public void defaultFiltro() {
-		new CollectionTest(mailing.getFiltro()).assertNotNullAndEmpty();
-	}
+  @Test
+  public void defaultFiltro() {
+    new CollectionTest(mailing.getFiltro()).assertNotNullAndEmpty();
+  }
 
-	@Before
-	public void setUp() {
-		mailing = new Mailing();
-	}
+  @Before
+  public void setUp() {
+    mailing = new Mailing();
+  }
 
 }

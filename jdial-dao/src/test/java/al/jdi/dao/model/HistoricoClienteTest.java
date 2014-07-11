@@ -10,17 +10,17 @@ import org.junit.Test;
 
 public class HistoricoClienteTest {
 
-	private HistoricoCliente historicoCliente;
+  private HistoricoCliente historicoCliente;
 
-	@Test
-	public void defaultCriacaoModificacao() {
-		assertThat(historicoCliente.getCriacaoModificacao(),
-				is(not(nullValue(CriacaoModificacao.class))));
-	}
+  @Test
+  public void defaultCriacaoModificacao() {
+    assertThat(historicoCliente.getCriacaoModificacao(),
+        is(not(nullValue(CriacaoModificacao.class))));
+  }
 
-	@Before
-	public void setUp() {
-		historicoCliente = new HistoricoCliente();
-	}
+  @Before
+  public void setUp() {
+    historicoCliente = new HistoricoCliente();
+  }
 
 }
