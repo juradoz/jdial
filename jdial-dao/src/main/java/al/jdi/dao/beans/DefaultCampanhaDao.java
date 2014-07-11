@@ -12,8 +12,12 @@ class DefaultCampanhaDao implements Dao<Campanha> {
 
   private final DefaultDao<Campanha> dao;
 
-  DefaultCampanhaDao(Session session) {
-    this.dao = new DefaultDao<>(session, Campanha.class);
+  public DefaultCampanhaDao(Session session) {
+    this(new DefaultDao<Campanha>(session, Campanha.class));
+  }
+
+  DefaultCampanhaDao(DefaultDao<Campanha> dao) {
+    this.dao = dao;
   }
 
   @Override
