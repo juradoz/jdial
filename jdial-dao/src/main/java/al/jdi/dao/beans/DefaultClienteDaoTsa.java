@@ -11,7 +11,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
@@ -22,11 +21,11 @@ import al.jdi.dao.model.Telefone;
 
 class DefaultClienteDaoTsa implements ClienteDaoTsa {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultClienteDaoTsa.class);
-
+  private final Logger logger;
   private final DefaultClienteDao dao;
 
-  DefaultClienteDaoTsa(Session session) {
+  DefaultClienteDaoTsa(Logger logger, Session session) {
+    this.logger = logger;
     this.dao = new DefaultClienteDao(session);
   }
 

@@ -9,15 +9,7 @@
 		</layout>
 	</appender>
 
-	<category name="com.mchange">
-		<priority value="error" />
-	</category>
-
-	<category name="org.hibernate">
-		<priority value="error" />
-	</category>
-	
-	<category name="org.jboss.weld">
+	<category name="com.avaya">
 		<priority value="error" />
 	</category>
 

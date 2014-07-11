@@ -13,13 +13,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"codigo"})}, indexes = {@Index(
     name = "IX_grupo_codigo", columnList = "codigo")})
 public class Grupo implements DaoObject {

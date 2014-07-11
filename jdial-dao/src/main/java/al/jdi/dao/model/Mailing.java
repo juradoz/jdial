@@ -19,15 +19,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import al.jdi.dao.beans.Dao.CampoBusca;
 
 @Entity
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCampanha", "nome"})})
 public class Mailing implements DaoObject {
   @Id
