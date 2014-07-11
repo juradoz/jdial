@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -26,6 +27,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 
+@Default
 @ConfiguracoesService
 class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
 
@@ -117,8 +119,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
 
   @Inject
   ConfiguracoesImpl(@NomeCampanha String nomeCampanha, Engine.Factory engineFactory,
-      Provider<DaoFactory> daoFactoryProvider,
-      @IntervaloAtualizacao Period intervaloAtualizacao,
+      Provider<DaoFactory> daoFactoryProvider, @IntervaloAtualizacao Period intervaloAtualizacao,
       Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;

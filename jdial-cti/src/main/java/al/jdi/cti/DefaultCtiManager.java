@@ -16,7 +16,7 @@ import org.jdial.common.Engine;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
-import al.jdi.cti.CtiManager.CtiManagerService;
+import al.jdi.cti.CtiManagerModule.CtiManagerService;
 
 import com.avaya.jtapi.tsapi.TsapiPlatformException;
 

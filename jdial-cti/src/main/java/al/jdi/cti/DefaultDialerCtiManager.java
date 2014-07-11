@@ -20,7 +20,8 @@ import javax.telephony.callcontrol.CallControlConnectionListener;
 
 import org.slf4j.Logger;
 
-import al.jdi.cti.DialerCtiManager.DialerCtiManagerService;
+import al.jdi.cti.CtiManagerModule.CtiManagerService;
+import al.jdi.cti.DialerCtiManagerModule.DialerCtiManagerService;
 
 import com.avaya.jtapi.tsapi.LucentAddress;
 import com.avaya.jtapi.tsapi.QueryACDSplitACDAddress;
@@ -37,7 +38,7 @@ class DefaultDialerCtiManager implements DialerCtiManager {
 
   @Inject
   DefaultDialerCtiManager(Logger logger, @CtiManagerService CtiManager ctiManager,
-      ExecutorService executorService,
+      @CtiManagerService ExecutorService executorService,
       DefaultPredictiveCallListener.Factory predictiveCallListenerFactory,
       DefaultPredictiveCallRunner.Factory predictiveCallRunnerFactory) {
     this.logger = logger;

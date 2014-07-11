@@ -9,7 +9,7 @@ import org.jboss.weld.environment.se.events.ContainerInitialized;
 import org.joda.time.Period;
 
 import al.jdi.cti.CtiManager;
-import al.jdi.cti.CtiManager.CtiManagerService;
+import al.jdi.cti.CtiManagerModule.CtiManagerService;
 
 public class Main {
 

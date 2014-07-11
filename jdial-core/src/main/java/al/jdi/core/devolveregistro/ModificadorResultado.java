@@ -1,8 +1,7 @@
 package al.jdi.core.devolveregistro;
 
-import java.util.Set;
-
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -18,10 +17,10 @@ class ModificadorResultado {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final Set<ModificadorResultadoFilter> filters;
+  private final Instance<ModificadorResultadoFilter> filters;
 
   @Inject
-  ModificadorResultado(@Any Set<ModificadorResultadoFilter> filters) {
+  ModificadorResultado(@Any Instance<ModificadorResultadoFilter> filters) {
     this.filters = filters;
   }
 
