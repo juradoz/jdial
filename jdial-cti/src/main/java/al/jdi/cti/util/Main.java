@@ -18,8 +18,7 @@ public class Main {
 	public void teste(@Observes ContainerInitialized event)
 			throws InterruptedException {
 		ctiManager.start();
-		while (true)
-			Thread.sleep(100);
+		Thread.sleep(10000);
 	}
 
 	@PreDestroy
