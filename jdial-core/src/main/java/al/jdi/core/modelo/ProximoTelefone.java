@@ -11,14 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
+import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.ModeloModule.ProvidenciaMantemAtual;
+import al.jdi.core.modelo.ModeloModule.ProvidenciaProximoTelefone;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Telefone;
 
+@ProvidenciaProximoTelefone
 class ProximoTelefone implements Providencia {
 
   private Logger logger = LoggerFactory.getLogger(getClass());

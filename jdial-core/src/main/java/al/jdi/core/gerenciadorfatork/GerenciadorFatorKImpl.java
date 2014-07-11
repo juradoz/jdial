@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -21,6 +22,7 @@ import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 import al.jdi.dao.beans.DaoFactory;
 
+@Default
 @GerenciadorFatorKService
 class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
 

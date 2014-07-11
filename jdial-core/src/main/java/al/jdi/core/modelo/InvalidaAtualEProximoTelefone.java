@@ -5,10 +5,13 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import al.jdi.core.modelo.ModeloModule.ProvidenciaInvalidaAtualEProximoTelefone;
+import al.jdi.core.modelo.ModeloModule.ProvidenciaProximoTelefone;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Telefone;
 
+@ProvidenciaInvalidaAtualEProximoTelefone
 class InvalidaAtualEProximoTelefone implements Providencia {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
@@ -16,7 +19,7 @@ class InvalidaAtualEProximoTelefone implements Providencia {
   private final ProximoTelefone proximoTelefone;
 
   @Inject
-  InvalidaAtualEProximoTelefone(ProximoTelefone proximoTelefone) {
+  InvalidaAtualEProximoTelefone(@ProvidenciaProximoTelefone ProximoTelefone proximoTelefone) {
     this.proximoTelefone = proximoTelefone;
   }
 

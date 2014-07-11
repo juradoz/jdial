@@ -8,11 +8,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,6 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
@@ -67,8 +66,10 @@ public class DevolveRegistroModule {
   }
 
   @Produces
-  public List<ProcessoDevolucao> getProcessosDevolucao(Set<ProcessoDevolucao> set) {
-    LinkedList<ProcessoDevolucao> localList = new LinkedList<ProcessoDevolucao>(set);
+  public List<ProcessoDevolucao> getProcessosDevolucao(@Any Instance<ProcessoDevolucao> processos) {
+    LinkedList<ProcessoDevolucao> localList = new LinkedList<ProcessoDevolucao>();
+    for (ProcessoDevolucao processoDevolucao : processos)
+      localList.add(processoDevolucao);
     Collections.sort(localList);
     return Collections.unmodifiableList(localList);
   }
@@ -77,13 +78,6 @@ public class DevolveRegistroModule {
   @ThreadCountParameter
   public int getThreadCount() {
     return THREAD_COUNT;
-  }
-
-  @Produces
-  public List<ProcessoDevolucao> getProcessosDevolucao(@Any Collection<ProcessoDevolucao> processos) {
-    LinkedList<ProcessoDevolucao> result = new LinkedList<ProcessoDevolucao>(processos);
-    Collections.sort(result);
-    return result;
   }
 
 }

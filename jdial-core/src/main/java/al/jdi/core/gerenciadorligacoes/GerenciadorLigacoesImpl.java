@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -35,6 +36,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Telefone;
 
+@Default
 @GerenciadorLigacoesService
 class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service {
 

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.model.Telefone;
 
+@Alternative
 class DefaultTelefoneFilter implements TelefoneFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultTelefoneFilter.class);

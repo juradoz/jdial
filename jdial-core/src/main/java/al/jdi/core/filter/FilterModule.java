@@ -1,5 +1,6 @@
 package al.jdi.core.filter;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
@@ -11,16 +12,19 @@ import java.lang.annotation.Target;
 import java.util.HashSet;
 
 import javax.enterprise.inject.Produces;
+import javax.inject.Qualifier;
 
 public class FilterModule {
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, TYPE, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface ClienteSemTelefoneFilter {
   }
 
   @Retention(RUNTIME)
-  @Target({PARAMETER, TYPE, METHOD})
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
   public @interface SomenteCelularFilter {
   }
 

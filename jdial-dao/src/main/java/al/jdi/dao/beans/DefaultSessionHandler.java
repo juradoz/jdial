@@ -3,15 +3,12 @@ package al.jdi.dao.beans;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Singleton;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
 
-@Singleton
 class DefaultSessionHandler implements SessionHandler {
 
   private final Map<String, Configuration> configurations = new HashMap<String, Configuration>();

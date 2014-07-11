@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.concurrent.ExecutorService;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
@@ -27,6 +28,7 @@ import com.avaya.jtapi.tsapi.LucentAddress;
 import com.avaya.jtapi.tsapi.QueryACDSplitACDAddress;
 import com.avaya.jtapi.tsapi.TsapiMethodNotSupportedException;
 
+@Default
 @DialerCtiManagerService
 class DefaultDialerCtiManager implements DialerCtiManager {
 

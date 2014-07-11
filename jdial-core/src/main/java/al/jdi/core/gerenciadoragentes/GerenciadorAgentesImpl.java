@@ -1,5 +1,6 @@
 package al.jdi.core.gerenciadoragentes;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.telephony.ProviderEvent;
@@ -21,6 +22,7 @@ import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 
+@Default
 @GerenciadorAgentesService
 class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, ProviderListener {
 

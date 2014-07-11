@@ -1,9 +1,10 @@
 package al.jdi.core.devolveregistro;
 
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 
+import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -22,6 +23,7 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
+@Default
 @DevolveRegistroService
 class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
@@ -33,7 +35,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   private final Provider<ExecutorService> executorServiceProvider;
   private final int threadCount;
   private final ModificadorResultado modificadorResultado;
-  private final List<ProcessoDevolucao> processosDevolucao;
+  private final Instance<ProcessoDevolucao> processosDevolucao;
 
   private ExecutorService executorService;
 
@@ -41,7 +43,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   DefaultDevolveRegistro(Provider<DaoFactory> daoFactoryProvider, Configuracoes configuracoes,
       Provider<ExecutorService> executorServiceProvider, @ThreadCountParameter int threadCount,
       BlockingQueue<Ligacao> ligacoes, ModificadorResultado modificadorResultado,
-      List<ProcessoDevolucao> processosDevolucao) {
+      Instance<ProcessoDevolucao> processosDevolucao) {
     this.daoFactoryProvider = daoFactoryProvider;
     this.configuracoes = configuracoes;
     this.ligacoes = ligacoes;
