@@ -11,62 +11,68 @@ import al.jdi.dao.model.Cliente;
 
 class DefaultAgendamentoDao implements AgendamentoDao {
 
-  private final DefaultDao<Agendamento> dao;
+	private final DefaultDao<Agendamento> dao;
 
-  DefaultAgendamentoDao(Session session) {
-    this.dao = new DefaultDao<>(session, Agendamento.class);
-  }
+	DefaultAgendamentoDao(DefaultDao<Agendamento> dao) {
+		this.dao = dao;
+	}
 
-  @Override
-  public void adiciona(Agendamento agendamento) {
-    dao.adiciona(agendamento);
-    adicionaCliente(agendamento);
-    adicionaAgente(agendamento);
-  }
+	public DefaultAgendamentoDao(Session session) {
+		this(new DefaultDao<Agendamento>(session, Agendamento.class));
+	}
 
-  private void adicionaAgente(Agendamento agendamento) {
-    if (agendamento.getAgente() == null)
-      return;
+	@Override
+	public void adiciona(Agendamento agendamento) {
+		dao.adiciona(agendamento);
+		adicionaCliente(agendamento);
+		adicionaAgente(agendamento);
+	}
 
-    agendamento.getAgente().getAgendamento().add(agendamento);
-    new DefaultAgenteDao(dao.getSession()).atualiza(agendamento.getAgente());
-  }
+	private void adicionaAgente(Agendamento agendamento) {
+		if (agendamento.getAgente() == null)
+			return;
 
-  private void adicionaCliente(Agendamento agendamento) {
-    if (agendamento.getCliente().getAgendamento().isEmpty())
-      agendamento.getCliente().getAgendamento().clear();
-    agendamento.getCliente().getAgendamento().add(agendamento);
-    new DefaultClienteDao(dao.getSession()).atualiza(agendamento.getCliente());
-  }
+		agendamento.getAgente().getAgendamento().add(agendamento);
+		new DefaultAgenteDao(dao.getSession())
+				.atualiza(agendamento.getAgente());
+	}
 
-  @Override
-  public Agendamento procura(Cliente cliente) {
-    return (Agendamento) dao.getSession().createCriteria(Agendamento.class)
-        .add(eq("cliente", cliente)).uniqueResult();
-  }
+	private void adicionaCliente(Agendamento agendamento) {
+		if (!agendamento.getCliente().getAgendamento().isEmpty())
+			agendamento.getCliente().getAgendamento().clear();
+		agendamento.getCliente().getAgendamento().add(agendamento);
+		new DefaultClienteDao(dao.getSession()).atualiza(agendamento
+				.getCliente());
+	}
 
-  @Override
-  public void atualiza(Agendamento t) {
-    dao.atualiza(t);
-  }
+	@Override
+	public Agendamento procura(Cliente cliente) {
+		return (Agendamento) dao.getSession().createCriteria(Agendamento.class)
+				.add(eq("cliente", cliente)).uniqueResult();
+	}
 
-  @Override
-  public List<Agendamento> listaTudo() {
-    return dao.listaTudo();
-  }
+	@Override
+	public void atualiza(Agendamento t) {
+		dao.atualiza(t);
+	}
 
-  @Override
-  public Agendamento procura(Long id) {
-    return dao.procura(id);
-  }
+	@Override
+	public List<Agendamento> listaTudo() {
+		return dao.listaTudo();
+	}
 
-  @Override
-  public void remove(Agendamento u) {
-    dao.remove(u);
-  }
+	@Override
+	public Agendamento procura(Long id) {
+		return dao.procura(id);
+	}
 
-  @Override
-  public Agendamento procura(String s) {
-    return procura(s);
-  }
+	@Override
+	public void remove(Agendamento u) {
+		dao.remove(u);
+	}
+
+	@Override
+	public Agendamento procura(String s) {
+		return dao.procura(s);
+	}
 }
