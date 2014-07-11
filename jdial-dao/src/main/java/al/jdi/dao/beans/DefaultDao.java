@@ -64,7 +64,7 @@ class DefaultDao<T extends DaoObject> implements Dao<T> {
     }
 
     if (field == null)
-      throw new IllegalArgumentException("Nenhum campo anotado em " + classe.getName());
+      throw new IllegalArgumentException("No annotated fields on class " + classe.getName());
 
     return (T) session.createCriteria(classe).add(Restrictions.eq(field.getName(), s))
         .uniqueResult();
