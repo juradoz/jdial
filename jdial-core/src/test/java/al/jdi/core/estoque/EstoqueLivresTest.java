@@ -22,10 +22,6 @@ import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
-import al.jdi.core.estoque.Estoque;
-import al.jdi.core.estoque.EstoqueImpl;
-import al.jdi.core.estoque.ExtraidorClientes;
-import al.jdi.core.estoque.Registro;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Providencia;
@@ -53,8 +49,6 @@ public class EstoqueLivresTest {
   private Engine.Factory engineFactory;
   @Mock
   private ExtraidorClientes extraidorClientes;
-  @Mock
-  private Estoque estoqueAgendados;
   @Mock
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
@@ -103,7 +97,7 @@ public class EstoqueLivresTest {
     estoqueLivres =
         new EstoqueImpl(configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
-            estoqueAgendados, intervaloMonitoracao, providencias, telefoneFilter);
+            intervaloMonitoracao, providencias, telefoneFilter);
   }
 
 }

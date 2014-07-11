@@ -24,15 +24,11 @@ import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
-import al.jdi.core.estoque.Estoque;
-import al.jdi.core.estoque.EstoqueImpl;
-import al.jdi.core.estoque.ExtraidorClientes;
-import al.jdi.core.estoque.Registro;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Discavel;
+import al.jdi.core.modelo.Discavel.Factory;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
-import al.jdi.core.modelo.Discavel.Factory;
 import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.Dao;
@@ -60,8 +56,6 @@ public class EstoqueImplTest {
 
   @Mock
   private ExtraidorClientes extraidorClientes;
-  @Mock
-  private Estoque estoqueAgendados;
   @Mock
   private Map<Codigo, Providencia> providencias;
   @Mock
@@ -104,7 +98,7 @@ public class EstoqueImplTest {
     estoqueImpl =
         new EstoqueImpl(configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
-            estoqueAgendados, INTERVALO_MONITORACAO, providencias, telefoneFilter);
+            INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }
 
   @Test

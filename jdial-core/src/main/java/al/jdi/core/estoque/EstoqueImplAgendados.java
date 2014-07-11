@@ -14,8 +14,8 @@ import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.estoque.EstoqueModule.Agendados;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Discavel;
-import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.ModeloModule.DiscavelTsa;
+import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -28,11 +28,11 @@ class EstoqueImplAgendados extends EstoqueImpl {
       DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
       @DiscavelTsa Discavel.Factory discavelFactory, Engine.Factory engineFactory,
       Collection<Registro> estoque, @Agendados ExtraidorClientes extraidorClientes,
-      @Agendados Estoque estoqueAgendados, @Agendados Period intervaloMonitoracao,
-      Map<Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
+      @Agendados Period intervaloMonitoracao, Map<Codigo, Providencia> providencias,
+      TelefoneFilter telefoneFilter) {
     super(configuracoes, daoFactoryProvider, devolveRegistro, tratadorEspecificoCliente,
-        discavelFactory, engineFactory, estoque, extraidorClientes, estoqueAgendados,
-        intervaloMonitoracao, providencias, telefoneFilter);
+        discavelFactory, engineFactory, estoque, extraidorClientes, intervaloMonitoracao,
+        providencias, telefoneFilter);
   }
 
 }

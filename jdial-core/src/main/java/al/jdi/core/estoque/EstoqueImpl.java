@@ -62,7 +62,6 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   private final Discavel.Factory discavelFactory;
   private final Collection<Registro> estoque;
   private final ExtraidorClientes extraidorClientes;
-  private final Estoque estoqueAgendados;
   private final Engine.Factory engineFactory;
   private final Period intervaloMonitoracao;
   private final Map<Providencia.Codigo, Providencia> providencias;
@@ -74,7 +73,7 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   EstoqueImpl(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
       DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
-      ExtraidorClientes extraidorClientes, Estoque estoqueAgendados, Period intervaloMonitoracao,
+      ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
@@ -83,7 +82,6 @@ class EstoqueImpl implements Estoque, Runnable, Service {
     this.discavelFactory = discavelFactory;
     this.estoque = estoque;
     this.extraidorClientes = extraidorClientes;
-    this.estoqueAgendados = estoqueAgendados;
     this.engineFactory = engineFactory;
     this.intervaloMonitoracao = intervaloMonitoracao;
     this.providencias = providencias;
@@ -302,9 +300,6 @@ class EstoqueImpl implements Estoque, Runnable, Service {
     try {
       Collection<Cliente> clientesDoBanco = extraidorClientes.extrai(daoFactory, quantidade);
       for (Cliente cliente : clientesDoBanco) {
-        if (!this.equals(estoqueAgendados) && estoqueAgendados.contemCliente(cliente))
-          continue;
-
         try {
           daoFactory.beginTransaction();
           try {
