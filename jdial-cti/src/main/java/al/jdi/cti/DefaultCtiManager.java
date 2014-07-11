@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.telephony.JtapiPeer;
 import javax.telephony.JtapiPeerFactory;
 import javax.telephony.Provider;
@@ -15,26 +16,14 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.core.Engine;
+import al.jdi.cti.CtiManager.CtiManagerService;
 
 import com.avaya.jtapi.tsapi.TsapiPlatformException;
 
+@CtiManagerService
 class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 
-	static class DefaultCtiManagerFactory implements CtiManager.Factory {
-		@Inject
-		private Logger logger;
-		@Inject
-		private Engine.Factory engineFactory;
-
-		@Override
-		public CtiManager create(String serverIp, int port, String service,
-				String login, String password, String jtapiPeerName) {
-			return new DefaultCtiManager(logger, engineFactory, serverIp, port,
-					service, login, password, jtapiPeerName);
-		}
-	}
-
-	private final static String VERSION = "2.0.8";
+	private final static String VERSION = "3.0.0";
 
 	private final Set<ProviderListener> providerListeners = Collections
 			.synchronizedSet(new HashSet<ProviderListener>());
@@ -50,9 +39,12 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 	private boolean shutdown = false;
 	private String providerString;
 
+	@Inject
 	DefaultCtiManager(Logger logger, Engine.Factory engineFactory,
-			String serverIp, int port, String service, String login,
-			String password, String jtapiPeerName) {
+			@Named("serverIp") String serverIp, @Named("port") int port,
+			@Named("service") String service, @Named("login") String login,
+			@Named("password") String password,
+			@Named("jtapiPeerName") String jtapiPeerName) {
 		this.logger = logger;
 		this.engineFactory = engineFactory;
 		try {
@@ -211,6 +203,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 			throw new IllegalStateException("Already started");
 
 		engine = engineFactory.create(this, Period.seconds(10), true);
+		engine.start();
 		logger.info("ctimanager-{} started sucessfully", VERSION);
 	}
 

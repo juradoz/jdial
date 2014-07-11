@@ -8,9 +8,13 @@
 			<param name="ConversionPattern" value="%-2d{yyyy-MM-dd HH:mm:ss} [%t] %p %c:%L-%m%n" />
 		</layout>
 	</appender>
-	
+
+	<category name="com.avaya">
+		<priority value="error" />
+	</category>
+
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 
