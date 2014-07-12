@@ -17,10 +17,6 @@
 		<priority value="error" />
 	</category>
 
-	<category name="net.sf.ehcache">
-		<priority value="error" />
-	</category>
-
 	<root>
 		<priority value="info" />
 		<appender-ref ref="console" />

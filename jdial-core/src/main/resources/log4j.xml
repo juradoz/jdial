@@ -21,10 +21,6 @@
 		<priority value="error" />
 	</category>
 
-	<category name="net.sf.ehcache">
-		<priority value="error" />
-	</category>
-
 	<category name="org.jboss.weld">
 		<priority value="error" />
 	</category>
@@ -34,7 +30,7 @@
 	</category>
 
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 
