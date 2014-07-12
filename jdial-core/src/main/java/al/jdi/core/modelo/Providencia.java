@@ -51,7 +51,7 @@ public interface Providencia {
       return codigo;
     }
   }
-  
+
   Providencia.Codigo getCodigo();
 
   Telefone getTelefone(DaoFactory daoFactory, Cliente cliente);

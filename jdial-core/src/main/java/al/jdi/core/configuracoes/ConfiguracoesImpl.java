@@ -351,8 +351,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
   public void start() {
     if (engine != null)
       throw new IllegalStateException();
-    engine = engineFactory.create(this, intervaloAtualizacao, true);
-    engine.start();
+    engine = engineFactory.create(this, intervaloAtualizacao, true, true);
     logger.info("Started successfuly {}", this);
   }
 

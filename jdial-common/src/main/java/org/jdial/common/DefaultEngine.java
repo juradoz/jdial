@@ -18,11 +18,6 @@ class DefaultEngine extends TimerTask implements Engine {
     public Engine create(Runnable owner, Period period, boolean isDaemon, boolean createStarted) {
       return new DefaultEngine(logger, owner, period, isDaemon, createStarted);
     }
-
-    @Override
-    public Engine create(Runnable owner, Period period, boolean isDaemon) {
-      return create(owner, period, isDaemon, false);
-    }
   }
 
   private final Logger logger;

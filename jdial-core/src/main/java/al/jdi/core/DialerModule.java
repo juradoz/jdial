@@ -26,7 +26,7 @@ public class DialerModule {
   public @interface Versao {
   }
 
-  private static final String VERSAO = "4.2.2";
+  private static final String VERSAO = "5.0.0";
 
   @Versao
   @Produces

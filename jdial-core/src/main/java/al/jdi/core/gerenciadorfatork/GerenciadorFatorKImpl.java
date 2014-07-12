@@ -130,8 +130,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
   public void start() {
     if (engine != null)
       throw new IllegalStateException();
-    engine = engineFactory.create(this, Period.minutes(1), true);
-    engine.start();
+    engine = engineFactory.create(this, Period.minutes(1), true, true);
     logger.info("Iniciado {}", this);
   }
 

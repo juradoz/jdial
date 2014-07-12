@@ -154,8 +154,7 @@ class DefaultDialer implements Service, Runnable {
     if (engine != null)
       throw new IllegalStateException("Already started");
 
-    engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false);
-    engine.start();
+    engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false, true);
     logger
         .warn(
             "\n------------------------------------\nIniciado Dialer {}\n------------------------------------",

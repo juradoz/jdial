@@ -266,8 +266,7 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   public void start() {
     if (engine != null)
       throw new IllegalStateException();
-    engine = engineFactory.create(this, intervaloMonitoracao, true);
-    engine.start();
+    engine = engineFactory.create(this, intervaloMonitoracao, true, true);
     logger.info("Iniciado {} para {}...", this, extraidorClientes);
   }
 

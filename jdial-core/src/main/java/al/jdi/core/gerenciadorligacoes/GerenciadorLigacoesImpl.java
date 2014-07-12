@@ -301,8 +301,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
   public void start() {
     if (engine != null)
       throw new IllegalArgumentException();
-    engine = engineFactory.create(this, Period.seconds(5), true);
-    engine.start();
+    engine = engineFactory.create(this, Period.seconds(5), true, true);
     logger.info("Iniciado {}", this);
   }
 

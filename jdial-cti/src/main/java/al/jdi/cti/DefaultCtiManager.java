@@ -201,8 +201,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
     if (engine != null)
       throw new IllegalStateException("Already started");
 
-    engine = engineFactory.create(this, Period.seconds(10), true);
-    engine.start();
+    engine = engineFactory.create(this, Period.seconds(10), true, true);
     logger.info("Started successfuly {}", this);
   }
 

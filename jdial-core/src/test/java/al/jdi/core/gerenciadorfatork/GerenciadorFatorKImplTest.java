@@ -47,7 +47,7 @@ public class GerenciadorFatorKImplTest {
     when(configuracoes.getFatorKMaximo()).thenReturn((int) FATORK_MAXIMO);
     when(
         engineFactory.create(Mockito.any(Runnable.class), Mockito.any(Period.class),
-            Mockito.anyBoolean())).thenReturn(engine);
+            Mockito.anyBoolean(), Mockito.anyBoolean())).thenReturn(engine);
 
     gerenciadorFatorKImpl =
         new GerenciadorFatorKImpl(logger, configuracoes, daoFactoryProvider, engineFactory);

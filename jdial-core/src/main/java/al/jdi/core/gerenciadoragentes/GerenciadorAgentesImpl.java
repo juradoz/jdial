@@ -111,8 +111,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
   public void start() {
     if (engine != null)
       throw new IllegalStateException();
-    engine = engineFactory.create(this, Period.seconds(2), true);
-    engine.start();
+    engine = engineFactory.create(this, Period.seconds(2), true, true);
     logger.info("Iniciado {}", this);
   }
 

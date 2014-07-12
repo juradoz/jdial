@@ -77,7 +77,7 @@ public class EstoqueImplTest {
   private Logger logger;
 
   private Collection<Registro> estoque;
-  
+
 
   private EstoqueImpl estoqueImpl;
 

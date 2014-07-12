@@ -25,7 +25,7 @@ public class GerenciadorLigacoesModule {
   @Qualifier
   public @interface GerenciadorLigacoesService {
   }
-  
+
   public interface PredictiveListenerFactory {
     PredictiveListener create(GerenciadorLigacoesImpl owner);
   }
