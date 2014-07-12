@@ -62,7 +62,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
         String.format("%s;loginID=%s;passwd=%s;servers=%s:%d", service, login, password, serverIp,
             port);
 
-    logger.debug("will connect to {}", string);
+    logger.debug("Vai conectar em {}", string);
 
     return string;
   }
@@ -76,7 +76,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
       synchronized (providerListeners) {
         providerListeners.add(listener);
       }
-      logger.debug("successfully added providerListener {}", listener);
+      logger.debug("Adicionado providerListener {}", listener);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

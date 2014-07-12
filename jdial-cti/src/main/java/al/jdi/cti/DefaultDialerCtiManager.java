@@ -52,7 +52,7 @@ class DefaultDialerCtiManager implements DialerCtiManager {
     this.executorService = executorService;
     this.predictiveCallListenerFactory = predictiveCallListenerFactory;
     this.predictiveCallRunnerFactory = predictiveCallRunnerFactory;
-    logger.debug("Starting {}...", this);
+    logger.debug("Iniciando {}...", this);
   }
 
   @Override

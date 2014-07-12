@@ -116,7 +116,6 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {}...", this);
     if (engine == null)
       throw new IllegalStateException("Already stopped");
     engine.stop();

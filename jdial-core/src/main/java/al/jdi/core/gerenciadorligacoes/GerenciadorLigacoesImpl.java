@@ -306,7 +306,6 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {}...", this);
     if (engine == null)
       throw new IllegalArgumentException("Already stopped");
     engine.stop();

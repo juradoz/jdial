@@ -52,7 +52,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     this.threadCount = threadCount;
     this.modificadorResultado = modificadorResultado;
     this.processosDevolucao = processosDevolucao;
-    logger.debug("Starting {}...", this);
+    logger.debug("Iniciando {}...", this);
   }
 
   @Override
@@ -136,7 +136,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
   @Override
   public void stop() {
-    logger.debug("Stopping {}...", this);
+    logger.debug("Parando {}...", this);
     if (executorService == null)
       throw new IllegalStateException("Already stopped");
     executorService.shutdown();

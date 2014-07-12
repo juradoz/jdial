@@ -130,7 +130,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
     this.sistemaAtivo = sistemaAtivoFactory.create(this);
     this.intervaloAtualizacao = intervaloAtualizacao;
     run();
-    logger.debug("Starting {}...", this);
+    logger.debug("Iniciando {}...", this);
   }
 
   @Override
@@ -356,7 +356,6 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
 
   @Override
   public void stop() {
-    logger.debug("Stopping {}...", this);
     if (engine == null)
       throw new IllegalStateException();
     engine.stop();

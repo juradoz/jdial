@@ -163,7 +163,6 @@ class DefaultDialer implements Service, Runnable {
 
   @Override
   public void stop() {
-    logger.debug("Encerrando Dialer {}...", versao);
     if (engine == null)
       throw new IllegalStateException("Already stopped");
     engine.stop();
