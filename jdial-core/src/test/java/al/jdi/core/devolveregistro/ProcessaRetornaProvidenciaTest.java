@@ -9,8 +9,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaRetornaProvidencia;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.dao.beans.Dao;
@@ -46,6 +46,8 @@ public class ProcessaRetornaProvidenciaTest {
   private ResultadoLigacao resultadoLigacaoSemProximoTelefone;
   @Mock
   private InformacaoCliente informacaoCliente;
+  @Mock
+  private Logger logger;
 
   private ProcessaRetornaProvidencia processaRetornaProvidencia;
 
@@ -60,7 +62,7 @@ public class ProcessaRetornaProvidenciaTest {
         .thenReturn(resultadoLigacaoSemProximoTelefone);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
     when(informacaoCliente.getProvidenciaTelefone()).thenReturn(PROVIDENCIA);
-    processaRetornaProvidencia = new ProcessaRetornaProvidencia();
+    processaRetornaProvidencia = new ProcessaRetornaProvidencia(logger);
   }
 
   @Test

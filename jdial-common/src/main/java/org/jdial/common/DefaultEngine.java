@@ -15,8 +15,13 @@ class DefaultEngine extends TimerTask implements Engine {
     private Logger logger;
 
     @Override
+    public Engine create(Runnable owner, Period period, boolean isDaemon, boolean createStarted) {
+      return new DefaultEngine(logger, owner, period, isDaemon, createStarted);
+    }
+
+    @Override
     public Engine create(Runnable owner, Period period, boolean isDaemon) {
-      return new DefaultEngine(logger, owner, period, isDaemon);
+      return create(owner, period, isDaemon, false);
     }
   }
 
@@ -25,15 +30,20 @@ class DefaultEngine extends TimerTask implements Engine {
   private final Timer timer;
   private final Period period;
 
-  DefaultEngine(Logger logger, Runnable owner, Period period, boolean isDaemon) {
-    this(logger, new Timer("Engine-" + owner.getClass().getSimpleName(), isDaemon), owner, period);
+  DefaultEngine(Logger logger, Runnable owner, Period period, boolean isDaemon,
+      boolean createStarted) {
+    this(logger, new Timer("Engine-" + owner.getClass().getSimpleName(), isDaemon), owner, period,
+        createStarted);
   }
 
-  DefaultEngine(Logger logger, Timer timer, Runnable owner, Period period) {
+  DefaultEngine(Logger logger, Timer timer, Runnable owner, Period period, boolean createStarted) {
     this.logger = logger;
     this.owner = owner;
     this.timer = timer;
     this.period = period;
+    if (!createStarted)
+      return;
+    start();
   }
 
   @Override

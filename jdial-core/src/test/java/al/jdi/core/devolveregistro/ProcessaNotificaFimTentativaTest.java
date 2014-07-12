@@ -10,8 +10,8 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaNotificaFimTentativa;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -40,6 +40,8 @@ public class ProcessaNotificaFimTentativaTest {
   private Telefone telefone;
   @Mock
   private Mailing mailing;
+  @Mock
+  private Logger logger;
 
   private ProcessaNotificaFimTentativa processaNotificaFimTentativa;
   private DateTime dataBanco;
@@ -53,7 +55,8 @@ public class ProcessaNotificaFimTentativaTest {
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.getTelefoneOriginal()).thenReturn(telefone);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_MOTIVO_DIFERENCIADO);
-    processaNotificaFimTentativa = new ProcessaNotificaFimTentativa(tratadorEspecificoCliente);
+    processaNotificaFimTentativa =
+        new ProcessaNotificaFimTentativa(logger, tratadorEspecificoCliente);
   }
 
   @Test

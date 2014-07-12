@@ -11,9 +11,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaCiclaTelefone;
-import al.jdi.core.devolveregistro.ProcessaFimDaFila;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -43,6 +42,8 @@ public class ProcessaCiclaTelefoneTest {
   private InformacaoCliente informacaoCliente;
   @Mock
   private Map<Providencia.Codigo, Providencia> providencias;
+  @Mock
+  private Logger logger;
 
   private ProcessaCiclaTelefone processaCiclaTelefone;
 
@@ -52,7 +53,8 @@ public class ProcessaCiclaTelefoneTest {
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
     processaCiclaTelefone =
-        new ProcessaCiclaTelefone(tratadorEspecificoCliente, processaFimDaFila, providencias);
+        new ProcessaCiclaTelefone(logger, tratadorEspecificoCliente, processaFimDaFila,
+            providencias);
   }
 
   @Test

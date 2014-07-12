@@ -14,11 +14,10 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.Period;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import al.jdi.core.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 import al.jdi.dao.beans.DaoFactory;
@@ -28,9 +27,9 @@ import al.jdi.dao.beans.DaoFactory;
 @GerenciadorFatorKService
 class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
 
-  private static final Logger logger = LoggerFactory.getLogger(GerenciadorFatorKImpl.class);
   private static final int MINUTOS_ACUMULADOS = 10;
 
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Engine.Factory engineFactory;
@@ -44,8 +43,9 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
   private int atendidasDoMinuto;
 
   @Inject
-  GerenciadorFatorKImpl(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      Engine.Factory engineFactory) {
+  GerenciadorFatorKImpl(Logger logger, Configuracoes configuracoes,
+      Provider<DaoFactory> daoFactoryProvider, Engine.Factory engineFactory) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.engineFactory = engineFactory;
@@ -131,6 +131,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, Period.minutes(1), true);
+    engine.start();
     logger.info("Iniciado {}", this);
   }
 
@@ -138,7 +139,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
   public void stop() {
     logger.debug("Encerrando {}...", this);
     if (engine == null)
-      throw new IllegalStateException();
+      throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
     logger.info("Encerrado {}", this);

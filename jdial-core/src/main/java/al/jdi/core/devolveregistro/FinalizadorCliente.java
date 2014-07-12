@@ -3,7 +3,6 @@ package al.jdi.core.devolveregistro;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -21,14 +20,14 @@ class FinalizadorCliente {
     private static final long serialVersionUID = -358709782586621212L;
   }
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
   private final TelefoneFilter telefoneFilter;
 
   @Inject
-  FinalizadorCliente(TratadorEspecificoCliente tratadorEspecificoCliente,
+  FinalizadorCliente(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
       TelefoneFilter telefoneFilter) {
+    this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.telefoneFilter = telefoneFilter;
   }

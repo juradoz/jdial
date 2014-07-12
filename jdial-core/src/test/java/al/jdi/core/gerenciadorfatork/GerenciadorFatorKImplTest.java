@@ -14,9 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.gerenciadorfatork.GerenciadorFatorKImpl;
 import al.jdi.dao.beans.DaoFactory;
 
 public class GerenciadorFatorKImplTest {
@@ -33,6 +33,8 @@ public class GerenciadorFatorKImplTest {
   private Engine engine;
   @Mock
   private DaoFactory daoFactory;
+  @Mock
+  private Logger logger;
 
   private GerenciadorFatorKImpl gerenciadorFatorKImpl;
 
@@ -48,7 +50,7 @@ public class GerenciadorFatorKImplTest {
             Mockito.anyBoolean())).thenReturn(engine);
 
     gerenciadorFatorKImpl =
-        new GerenciadorFatorKImpl(configuracoes, daoFactoryProvider, engineFactory);
+        new GerenciadorFatorKImpl(logger, configuracoes, daoFactoryProvider, engineFactory);
   }
 
   @Test

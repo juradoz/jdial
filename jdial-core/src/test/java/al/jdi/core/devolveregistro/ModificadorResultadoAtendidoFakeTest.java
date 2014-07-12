@@ -9,9 +9,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.devolveregistro.ModificadorResultadoAtendidoFake;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -39,6 +39,8 @@ public class ModificadorResultadoAtendidoFakeTest {
   private ResultadoLigacao resultadoLigacaoInexistente;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Logger logger;
 
   private ModificadorResultadoAtendidoFake modificadorResultadoAtendidoFake;
 
@@ -50,7 +52,7 @@ public class ModificadorResultadoAtendidoFakeTest {
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
     when(ligacao.isAtendida()).thenReturn(true);
-    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake(configuracoes);
+    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake(logger, configuracoes);
   }
 
   @Test

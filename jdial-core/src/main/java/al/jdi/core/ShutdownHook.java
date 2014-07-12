@@ -1,15 +1,31 @@
 package al.jdi.core;
 
+import javax.inject.Inject;
+
+import org.jdial.common.Service;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class ShutdownHook implements Runnable {
 
-  private static final Logger logger = LoggerFactory.getLogger(ShutdownHook.class);
+  interface Factory {
+    ShutdownHook create(Service... services);
+  }
 
+  static class ShutdownHookFactory implements ShutdownHook.Factory {
+    @Inject
+    private Logger logger;
+
+    @Override
+    public ShutdownHook create(Service... services) {
+      return new ShutdownHook(logger, services);
+    }
+  }
+
+  private final Logger logger;
   private final Service[] services;
 
-  ShutdownHook(Service... services) {
+  ShutdownHook(Logger logger, Service... services) {
+    this.logger = logger;
     this.services = services;
   }
 
@@ -17,7 +33,11 @@ class ShutdownHook implements Runnable {
   public void run() {
     for (Service service : services) {
       logger.info("Parando service {}", service);
-      service.stop();
+      try {
+        service.stop();
+      } catch (Exception e) {
+        logger.error(e.getMessage(), e);
+      }
     }
     logger.warn("Aplicacao encerrada.");
   }

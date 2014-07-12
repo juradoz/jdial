@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaIndisponibilizaTemporariamente;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.ClienteDao;
@@ -34,6 +34,8 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   private DaoFactory daoFactory;
   @Mock
   private ClienteDao clienteDao;
+  @Mock
+  private Logger logger;
 
   private ProcessaIndisponibilizaTemporariamente processaIndisponibilizaTemporariamente;
 
@@ -42,7 +44,7 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
     initMocks(this);
     when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
     processaIndisponibilizaTemporariamente =
-        new ProcessaIndisponibilizaTemporariamente(tratadorEspecificoCliente);
+        new ProcessaIndisponibilizaTemporariamente(logger, tratadorEspecificoCliente);
   }
 
   @Test

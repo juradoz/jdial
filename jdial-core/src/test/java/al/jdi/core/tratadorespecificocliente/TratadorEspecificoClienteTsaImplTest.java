@@ -15,11 +15,11 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
-import al.jdi.core.tratadorespecificocliente.TratadorEspecificoClienteTsaImpl;
 import al.jdi.dao.beans.ClienteDaoTsa;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -64,6 +64,8 @@ public class TratadorEspecificoClienteTsaImplTest {
   private Grupo grupo;
   @Mock
   private ResultadoLigacaoDao resultadoLigacaoDao;
+  @Mock
+  private Logger logger;
 
   private TratadorEspecificoClienteTsaImpl tratadorEspecificoClienteTsaImpl;
 
@@ -86,7 +88,7 @@ public class TratadorEspecificoClienteTsaImplTest {
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
     when(clienteDaoTsa.reservaNaBaseDoCliente(cliente, OPERADOR_DISCADOR, NOME_BASE_DADOS))
         .thenReturn(true);
-    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsaImpl(configuracoes);
+    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsaImpl(logger, configuracoes);
   }
 
   @Test

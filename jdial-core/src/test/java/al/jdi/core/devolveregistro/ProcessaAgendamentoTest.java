@@ -20,8 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaAgendamento;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.AgendamentoDao;
@@ -65,6 +65,8 @@ public class ProcessaAgendamentoTest {
   private Agendamento agendamento;
   @Mock
   private EstadoCliente estadoCliente;
+  @Mock
+  private Logger logger;
 
   private ProcessaAgendamento processaAgendamento;
 
@@ -77,7 +79,7 @@ public class ProcessaAgendamentoTest {
     when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(cliente.getEstadoCliente()).thenReturn(estadoCliente);
-    processaAgendamento = new ProcessaAgendamento(tratadorEspecificoCliente);
+    processaAgendamento = new ProcessaAgendamento(logger, tratadorEspecificoCliente);
   }
 
   @Test

@@ -5,7 +5,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
@@ -15,12 +14,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultado {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final Instance<ModificadorResultadoFilter> filters;
 
   @Inject
-  ModificadorResultado(@Any Instance<ModificadorResultadoFilter> filters) {
+  ModificadorResultado(Logger logger, @Any Instance<ModificadorResultadoFilter> filters) {
+    this.logger = logger;
     this.filters = filters;
   }
 

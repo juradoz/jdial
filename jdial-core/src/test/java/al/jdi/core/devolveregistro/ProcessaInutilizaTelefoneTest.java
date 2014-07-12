@@ -11,9 +11,8 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.FinalizadorCliente;
-import al.jdi.core.devolveregistro.ProcessaInutilizaTelefone;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.HistoricoLigacaoDao;
@@ -37,6 +36,8 @@ public class ProcessaInutilizaTelefoneTest {
   private HistoricoLigacaoDao historicoLigacaoDao;
   @Mock
   private HistoricoLigacao historicoLigacao;
+  @Mock
+  private Logger logger;
 
   private ProcessaInutilizaTelefone processaInutilizaTelefone;
 
@@ -46,7 +47,7 @@ public class ProcessaInutilizaTelefoneTest {
     when(daoFactory.getHistoricoLigacaoDao()).thenReturn(historicoLigacaoDao);
     when(historicoLigacaoDao.procura(cliente, resultadoLigacao)).thenReturn(
         Arrays.asList(historicoLigacao));
-    processaInutilizaTelefone = new ProcessaInutilizaTelefone(finalizadorCliente);
+    processaInutilizaTelefone = new ProcessaInutilizaTelefone(logger, finalizadorCliente);
   }
 
   @Test

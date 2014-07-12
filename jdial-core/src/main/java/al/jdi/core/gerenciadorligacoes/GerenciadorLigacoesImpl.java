@@ -17,13 +17,12 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import al.jdi.core.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
@@ -42,8 +41,7 @@ import al.jdi.dao.model.Telefone;
 @GerenciadorLigacoesService
 class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service {
 
-  private static final Logger logger = LoggerFactory.getLogger(GerenciadorLigacoesImpl.class);
-
+  private final Logger logger;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Configuracoes configuracoes;
   private final DialerCtiManager dialerCtiManager;
@@ -56,10 +54,12 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
   private Engine engine;
 
   @Inject
-  GerenciadorLigacoesImpl(Provider<DaoFactory> daoFactoryProvider, Configuracoes configuracoes,
-      DialerCtiManager dialerCtiManager, Map<PredictiveListener, Ligacao> ligacoes,
+  GerenciadorLigacoesImpl(Logger logger, Provider<DaoFactory> daoFactoryProvider,
+      Configuracoes configuracoes, DialerCtiManager dialerCtiManager,
+      Map<PredictiveListener, Ligacao> ligacoes,
       PredictiveListenerFactory predictiveListenerFactory, DevolveRegistro devolveRegistro,
       Engine.Factory engineFactory, GerenciadorFatorK gerenciadorFatorK) {
+    this.logger = logger;
     this.daoFactoryProvider = daoFactoryProvider;
     this.configuracoes = configuracoes;
     this.dialerCtiManager = dialerCtiManager;
@@ -302,6 +302,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
     if (engine != null)
       throw new IllegalArgumentException();
     engine = engineFactory.create(this, Period.seconds(5), true);
+    engine.start();
     logger.info("Iniciado {}", this);
   }
 
@@ -309,7 +310,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
   public void stop() {
     logger.debug("Encerrando {}...", this);
     if (engine == null)
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("Already stopped");
     engine.stop();
     engine = null;
     logger.info("Encerrado {}", this);

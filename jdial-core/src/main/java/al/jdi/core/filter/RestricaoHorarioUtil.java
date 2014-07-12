@@ -12,7 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.DaoFactory;
@@ -24,18 +23,17 @@ import al.jdi.dao.model.Telefone;
 
 class RestricaoHorarioUtil implements TelefoneUtil {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
 
   private final Map<Integer, Method> inicios = new HashMap<Integer, Method>();
   private final Map<Integer, Method> finais = new HashMap<Integer, Method>();
 
-  private DiaSemana annotation;
-
   @Inject
-  RestricaoHorarioUtil(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider) {
+  RestricaoHorarioUtil(Logger logger, Configuracoes configuracoes,
+      Provider<DaoFactory> daoFactoryProvider) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     registraMetodos();
@@ -48,7 +46,7 @@ class RestricaoHorarioUtil implements TelefoneUtil {
           continue;
         if (!method.isAnnotationPresent(DiaSemana.class))
           continue;
-        annotation = method.getAnnotation(DiaSemana.class);
+        DiaSemana annotation = method.getAnnotation(DiaSemana.class);
         inicios.put(annotation.dayOfWeek(), method);
       }
 
@@ -57,7 +55,7 @@ class RestricaoHorarioUtil implements TelefoneUtil {
           continue;
         if (!method.isAnnotationPresent(DiaSemana.class))
           continue;
-        annotation = method.getAnnotation(DiaSemana.class);
+        DiaSemana annotation = method.getAnnotation(DiaSemana.class);
         finais.put(annotation.dayOfWeek(), method);
       }
     } catch (Exception e) {

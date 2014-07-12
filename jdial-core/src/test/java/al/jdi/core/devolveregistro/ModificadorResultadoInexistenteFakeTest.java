@@ -9,9 +9,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.devolveregistro.ModificadorResultadoInexistenteFake;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -39,6 +39,8 @@ public class ModificadorResultadoInexistenteFakeTest {
   private ResultadoLigacao resultadoLigacaoInexistente;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Logger logger;
 
   private ModificadorResultadoInexistenteFake modificadorResultadoInexistenteFake;
 
@@ -48,7 +50,8 @@ public class ModificadorResultadoInexistenteFakeTest {
     when(daoFactory.getResultadoLigacaoDao()).thenReturn(resultadoLigacaoDao);
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
-    modificadorResultadoInexistenteFake = new ModificadorResultadoInexistenteFake(configuracoes);
+    modificadorResultadoInexistenteFake =
+        new ModificadorResultadoInexistenteFake(logger, configuracoes);
   }
 
   @Test

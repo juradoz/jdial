@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.EstoqueModule.Livres;
@@ -18,13 +17,12 @@ import al.jdi.dao.model.Cliente;
 @Livres
 class ClientesLivres implements ExtraidorClientes {
 
-  private static final Logger logger = LoggerFactory.getLogger(ClientesLivres.class);
-
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
   private final Configuracoes configuracoes;
 
   @Inject
-  ClientesLivres(TratadorEspecificoCliente tratadorEspecificoCliente, Configuracoes configuracoes) {
+  ClientesLivres(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
+      Configuracoes configuracoes) {
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.configuracoes = configuracoes;
     logger.debug("Iniciando {}", this);

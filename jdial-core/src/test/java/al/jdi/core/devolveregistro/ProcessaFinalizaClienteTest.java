@@ -9,10 +9,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.FinalizadorCliente;
-import al.jdi.core.devolveregistro.NotificadorCliente;
-import al.jdi.core.devolveregistro.ProcessaFinalizaCliente;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -47,6 +45,8 @@ public class ProcessaFinalizaClienteTest {
   private Mailing mailing;
   @Mock
   private Campanha campanha;
+  @Mock
+  private Logger logger;
 
   private ProcessaFinalizaCliente processaFinalizaCliente;
 
@@ -58,7 +58,8 @@ public class ProcessaFinalizaClienteTest {
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
-    processaFinalizaCliente = new ProcessaFinalizaCliente(finalizadorCliente, notificadorCliente);
+    processaFinalizaCliente =
+        new ProcessaFinalizaCliente(logger, finalizadorCliente, notificadorCliente);
   }
 
   @Test

@@ -19,6 +19,7 @@ import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
@@ -53,6 +54,8 @@ public class EstoqueLivresTest {
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
   private TelefoneFilter telefoneFilter;
+  @Mock
+  private Logger logger;
 
   private Period intervaloMonitoracao = Period.ZERO;
 
@@ -95,7 +98,7 @@ public class EstoqueLivresTest {
     when(registro.getCliente()).thenReturn(cliente);
     estoque = new LinkedList<Registro>(asList(registro, registro));
     estoqueLivres =
-        new EstoqueImpl(configuracoes, daoFactoryProvider, devolveRegistro,
+        new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
             intervaloMonitoracao, providencias, telefoneFilter);
   }

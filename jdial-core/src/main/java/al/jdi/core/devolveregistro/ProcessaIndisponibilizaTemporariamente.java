@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -15,12 +14,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
 
   @Inject
-  ProcessaIndisponibilizaTemporariamente(TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaIndisponibilizaTemporariamente(Logger logger,
+      TratadorEspecificoCliente tratadorEspecificoCliente) {
+    this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
   }
 

@@ -9,8 +9,8 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.NotificadorCliente;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -36,6 +36,8 @@ public class NotificadorClienteTest {
   private Telefone telefoneOriginal;
   @Mock
   private Campanha campanha;
+  @Mock
+  private Logger logger;
 
   private DateTime dataBanco;
   private NotificadorCliente notificadorCliente;
@@ -46,7 +48,7 @@ public class NotificadorClienteTest {
     initMocks(this);
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_DIFERENCIADO);
-    notificadorCliente = new NotificadorCliente(tratadorEspecificoCliente);
+    notificadorCliente = new NotificadorCliente(logger, tratadorEspecificoCliente);
   }
 
   @Test

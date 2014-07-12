@@ -3,23 +3,17 @@ package al.jdi.core.modelo;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
 @Alternative
 class DiscavelFactoryTsaCRMImpl implements Discavel.Factory {
 
-  private static final Logger logger = LoggerFactory.getLogger(DiscavelFactoryTsaCRMImpl.class);
-
   private final Configuracoes configuracoes;
 
   @Inject
   DiscavelFactoryTsaCRMImpl(Configuracoes configuracoes) {
     this.configuracoes = configuracoes;
-    logger.debug("Iniciando {}", this);
   }
 
   @Override

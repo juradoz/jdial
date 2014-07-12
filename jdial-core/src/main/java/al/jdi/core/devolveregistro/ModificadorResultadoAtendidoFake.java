@@ -3,7 +3,6 @@ package al.jdi.core.devolveregistro;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -14,12 +13,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultadoAtendidoFake implements ModificadorResultadoFilter {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
 
   @Inject
-  ModificadorResultadoAtendidoFake(Configuracoes configuracoes) {
+  ModificadorResultadoAtendidoFake(Logger logger, Configuracoes configuracoes) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
   }
 

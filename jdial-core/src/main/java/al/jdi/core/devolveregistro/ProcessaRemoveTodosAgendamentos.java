@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -15,12 +14,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaRemoveTodosAgendamentos implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
 
   @Inject
-  ProcessaRemoveTodosAgendamentos(TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaRemoveTodosAgendamentos(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+    this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
   }
 

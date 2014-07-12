@@ -10,10 +10,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.FinalizadorCliente;
-import al.jdi.core.devolveregistro.NotificadorCliente;
-import al.jdi.core.devolveregistro.ProcessaSemTelefones;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -49,6 +47,8 @@ public class ProcessaSemTelefonesTest {
   private Campanha campanha;
   @Mock
   private Telefone telefone;
+  @Mock
+  private Logger logger;
 
   private ProcessaSemTelefones processaSemTelefones;
 
@@ -60,7 +60,7 @@ public class ProcessaSemTelefonesTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     when(cliente.getTelefone()).thenReturn(telefone);
-    processaSemTelefones = new ProcessaSemTelefones(finalizadorCliente, notificadorCliente);
+    processaSemTelefones = new ProcessaSemTelefones(logger, finalizadorCliente, notificadorCliente);
   }
 
   @Test

@@ -9,8 +9,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaFimDaFila;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.ClienteDao;
@@ -32,6 +32,8 @@ public class ProcessaFimDaFilaTest {
   private DaoFactory daoFactory;
   @Mock
   private ClienteDao clienteDao;
+  @Mock
+  private Logger logger;
 
   private ProcessaFimDaFila processaFimDaFila;
 
@@ -39,7 +41,7 @@ public class ProcessaFimDaFilaTest {
   public void setUp() throws Exception {
     initMocks(this);
     when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
-    processaFimDaFila = new ProcessaFimDaFila(tratadorEspecificoCliente);
+    processaFimDaFila = new ProcessaFimDaFila(logger, tratadorEspecificoCliente);
   }
 
   @Test

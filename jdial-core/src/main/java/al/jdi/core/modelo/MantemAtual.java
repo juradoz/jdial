@@ -7,7 +7,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
@@ -21,18 +20,18 @@ import al.jdi.dao.model.Telefone;
 @ProvidenciaMantemAtual
 class MantemAtual implements Providencia {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TelefoneSorter telefoneSorter;
   private final Instance<Providencia> proximoTelefone;
   private final TelefoneFilter clienteSemTelefoneFilter;
   private final TelefoneFilter somenteCelularFilter;
 
   @Inject
-  MantemAtual(TelefoneSorter telefoneSorter,
+  MantemAtual(Logger logger, TelefoneSorter telefoneSorter,
       @ProvidenciaProximoTelefone Instance<Providencia> proximoTelefone,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelularFilter) {
+    this.logger = logger;
     this.telefoneSorter = telefoneSorter;
     this.proximoTelefone = proximoTelefone;
     this.clienteSemTelefoneFilter = clienteSemTelefoneFilter;

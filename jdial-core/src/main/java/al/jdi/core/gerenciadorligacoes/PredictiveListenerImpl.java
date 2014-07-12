@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.cti.PredictiveListener;
@@ -13,18 +12,21 @@ import al.jdi.cti.PredictiveListener;
 class PredictiveListenerImpl implements PredictiveListener {
 
   static class PredictiveListenerImplFactory implements PredictiveListenerFactory {
+    @Inject
+    private Logger logger;
+
     @Override
     public PredictiveListener create(GerenciadorLigacoesImpl owner) {
-      return new PredictiveListenerImpl(owner);
+      return new PredictiveListenerImpl(logger, owner);
     }
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(PredictiveListenerImpl.class);
-
+  private final Logger logger;
   private final GerenciadorLigacoesImpl owner;
 
   @Inject
-  PredictiveListenerImpl(GerenciadorLigacoesImpl owner) {
+  PredictiveListenerImpl(Logger logger, GerenciadorLigacoesImpl owner) {
+    this.logger = logger;
     this.owner = owner;
     logger.debug("Iniciando {}", this);
   }

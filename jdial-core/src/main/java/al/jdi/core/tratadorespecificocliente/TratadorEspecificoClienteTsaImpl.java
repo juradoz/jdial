@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -20,13 +19,12 @@ import al.jdi.dao.model.Telefone;
 
 class TratadorEspecificoClienteTsaImpl implements TratadorEspecificoCliente {
 
-  private static final Logger logger = LoggerFactory
-      .getLogger(TratadorEspecificoClienteTsaImpl.class);
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
 
   @Inject
-  TratadorEspecificoClienteTsaImpl(Configuracoes configuracoes) {
+  TratadorEspecificoClienteTsaImpl(Logger logger, Configuracoes configuracoes) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     logger.debug("Iniciando {}", this);
   }

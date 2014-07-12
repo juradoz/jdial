@@ -13,8 +13,8 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaRemoveTodosAgendamentos;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.AgendamentoDao;
@@ -42,6 +42,8 @@ public class ProcessaRemoveTodosAgendamentosTest {
   private AgendamentoDao agendamentoDao;
   @Mock
   private ClienteDao clienteDao;
+  @Mock
+  private Logger logger;
 
   private ProcessaRemoveTodosAgendamentos processaRemoveTodosAgendamentos;
   private LinkedList<Agendamento> agendamentos;
@@ -54,7 +56,7 @@ public class ProcessaRemoveTodosAgendamentosTest {
     when(daoFactory.getAgendamentoDao()).thenReturn(agendamentoDao);
     when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
     processaRemoveTodosAgendamentos =
-        new ProcessaRemoveTodosAgendamentos(tratadorEspecificoCliente);
+        new ProcessaRemoveTodosAgendamentos(logger, tratadorEspecificoCliente);
   }
 
   @Test

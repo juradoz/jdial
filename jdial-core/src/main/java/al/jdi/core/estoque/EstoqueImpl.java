@@ -17,13 +17,12 @@ import javax.inject.Provider;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import al.jdi.core.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;
@@ -53,8 +52,7 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   public static class DncException extends Exception {
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(EstoqueImpl.class);
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final DevolveRegistro devolveRegistro;
@@ -70,11 +68,12 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  EstoqueImpl(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+  EstoqueImpl(Logger logger, Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
       DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
       ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.devolveRegistro = devolveRegistro;
@@ -268,6 +267,7 @@ class EstoqueImpl implements Estoque, Runnable, Service {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloMonitoracao, true);
+    engine.start();
     logger.info("Iniciado {} para {}...", this, extraidorClientes);
   }
 
@@ -275,7 +275,7 @@ class EstoqueImpl implements Estoque, Runnable, Service {
   public void stop() {
     logger.debug("Encerrando {} para {}...", this, extraidorClientes);
     if (engine == null)
-      throw new IllegalStateException();
+      throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
     logger.info("Encerrado {} para {}", this, extraidorClientes);

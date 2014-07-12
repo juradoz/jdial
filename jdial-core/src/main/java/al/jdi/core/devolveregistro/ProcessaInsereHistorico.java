@@ -5,7 +5,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
@@ -15,10 +14,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaInsereHistorico implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final Logger logger;
 
   @Inject
-  ProcessaInsereHistorico() {}
+  ProcessaInsereHistorico(Logger logger) {
+    this.logger = logger;
+  }
 
   @Override
   public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,

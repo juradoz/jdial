@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
@@ -24,8 +23,7 @@ import al.jdi.dao.model.Telefone;
 @ProvidenciaProximoTelefone
 class ProximoTelefone implements Providencia {
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final TelefoneSorter telefoneSorter;
   private final Instance<Providencia> mantemAtual;
@@ -33,10 +31,11 @@ class ProximoTelefone implements Providencia {
   private final TelefoneFilter somenteCelulareFilter;
 
   @Inject
-  ProximoTelefone(Configuracoes configuracoes, TelefoneSorter telefoneSorter,
+  ProximoTelefone(Logger logger, Configuracoes configuracoes, TelefoneSorter telefoneSorter,
       @ProvidenciaMantemAtual Instance<Providencia> mantemAtual,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelulareFilter) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.telefoneSorter = telefoneSorter;
     this.mantemAtual = mantemAtual;

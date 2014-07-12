@@ -10,13 +10,12 @@ import javax.telephony.ProviderListener;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import al.jdi.core.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.gerenciadoragentes.GerenciadorAgentesModule.GerenciadorAgentesService;
 import al.jdi.cti.CtiManager;
@@ -28,8 +27,7 @@ import al.jdi.dao.beans.DaoFactory;
 @GerenciadorAgentesService
 class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, ProviderListener {
 
-  private static final Logger logger = LoggerFactory.getLogger(GerenciadorAgentesImpl.class);
-
+  private final Logger logger;
   private final DialerCtiManager dialerCtiManager;
   private final Configuracoes configuracoes;
   private final Engine.Factory engineFactory;
@@ -40,9 +38,10 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
   private boolean inService = false;
 
   @Inject
-  GerenciadorAgentesImpl(DialerCtiManager dialerCtiManager, CtiManager ctiManager,
+  GerenciadorAgentesImpl(Logger logger, DialerCtiManager dialerCtiManager, CtiManager ctiManager,
       Configuracoes configuracoes, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider) {
+    this.logger = logger;
     this.dialerCtiManager = dialerCtiManager;
     this.configuracoes = configuracoes;
     this.engineFactory = engineFactory;
@@ -113,6 +112,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, Period.seconds(2), true);
+    engine.start();
     logger.info("Iniciado {}", this);
   }
 
@@ -120,7 +120,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
   public void stop() {
     logger.debug("Encerrando {}...", this);
     if (engine == null)
-      throw new IllegalStateException();
+      throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
     logger.info("Encerrado {}", this);
@@ -133,21 +133,25 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
 
   @Override
   public void providerEventTransmissionEnded(ProviderEvent event) {
+    logger.debug("providerEventTransmissionEnded");
     inService = false;
   }
 
   @Override
   public void providerInService(ProviderEvent event) {
+    logger.debug("providerInService");
     inService = true;
   }
 
   @Override
   public void providerOutOfService(ProviderEvent event) {
+    logger.debug("providerOutOfService");
     inService = false;
   }
 
   @Override
   public void providerShutdown(ProviderEvent event) {
+    logger.debug("providerShutdown");
     inService = false;
   }
 

@@ -11,8 +11,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
-import al.jdi.core.devolveregistro.ProcessaInsereHistorico;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.HistoricoLigacaoDao;
@@ -32,6 +32,8 @@ public class ProcessaInsereHistoricoTest {
   private DaoFactory daoFactory;
   @Mock
   private HistoricoLigacaoDao historicoLigacaoDao;
+  @Mock
+  private Logger logger;
 
   private ProcessaInsereHistorico processaInsereHistorico;
 
@@ -39,7 +41,7 @@ public class ProcessaInsereHistoricoTest {
   public void setUp() throws Exception {
     initMocks(this);
     when(daoFactory.getHistoricoLigacaoDao()).thenReturn(historicoLigacaoDao);
-    processaInsereHistorico = new ProcessaInsereHistorico();
+    processaInsereHistorico = new ProcessaInsereHistorico(logger);
   }
 
   @Test

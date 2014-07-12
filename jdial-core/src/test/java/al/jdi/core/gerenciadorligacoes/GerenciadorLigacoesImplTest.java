@@ -20,11 +20,11 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
-import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesImpl;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
@@ -82,6 +82,8 @@ public class GerenciadorLigacoesImplTest {
   private Telefone telefone;
   @Mock
   private Servico servico;
+  @Mock
+  private Logger logger;
 
   private GerenciadorLigacoesImpl gerenciadorLigacoesImpl;
 
@@ -109,8 +111,8 @@ public class GerenciadorLigacoesImplTest {
     when(configuracoes.getMinutosExpiracaoChamadasNaoAtendidas()).thenReturn(MINUTOS_EXPIRACAO);
 
     gerenciadorLigacoesImpl =
-        new GerenciadorLigacoesImpl(daoFactoryProvider, configuracoes, dialerCtiManager, ligacoes,
-            predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
+        new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes, dialerCtiManager,
+            ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
 
     when(predictiveListenerFactory.create(gerenciadorLigacoesImpl)).thenReturn(listener);
   }
@@ -293,8 +295,8 @@ public class GerenciadorLigacoesImplTest {
     ligacoes.put(mock(PredictiveListener.class), l3);
 
     gerenciadorLigacoesImpl =
-        new GerenciadorLigacoesImpl(daoFactoryProvider, configuracoes, dialerCtiManager, ligacoes,
-            predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
+        new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes, dialerCtiManager,
+            ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
 
     assertThat(gerenciadorLigacoesImpl.getQuantidadeLigacoesNaoAtendidas(), is(2));
   }
@@ -304,8 +306,8 @@ public class GerenciadorLigacoesImplTest {
     Map<PredictiveListener, Ligacao> ligacoes = new HashMap<PredictiveListener, Ligacao>();
     ligacoes.put(listener, ligacao);
     gerenciadorLigacoesImpl =
-        new GerenciadorLigacoesImpl(daoFactoryProvider, configuracoes, dialerCtiManager, ligacoes,
-            predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
+        new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes, dialerCtiManager,
+            ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
     gerenciadorLigacoesImpl.run();
     assertThat(ligacoes.get(listener), is(sameInstance(ligacao)));
   }
@@ -316,8 +318,8 @@ public class GerenciadorLigacoesImplTest {
     ligacoes.put(listener, ligacao);
     when(ligacao.getCriacao()).thenReturn(new DateTime().minusMinutes(MINUTOS_EXPIRACAO + 1));
     gerenciadorLigacoesImpl =
-        new GerenciadorLigacoesImpl(daoFactoryProvider, configuracoes, dialerCtiManager, ligacoes,
-            predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
+        new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes, dialerCtiManager,
+            ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
     gerenciadorLigacoesImpl.run();
     assertThat(ligacoes.get(listener), is(nullValue(Ligacao.class)));
   }

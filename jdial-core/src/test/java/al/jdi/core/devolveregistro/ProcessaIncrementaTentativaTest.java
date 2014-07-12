@@ -9,11 +9,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.devolveregistro.FinalizadorCliente;
-import al.jdi.core.devolveregistro.NotificadorCliente;
-import al.jdi.core.devolveregistro.ProcessaIncrementaTentativa;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -54,6 +52,8 @@ public class ProcessaIncrementaTentativaTest {
   private Mailing mailing;
   @Mock
   private Campanha campanha;
+  @Mock
+  private Logger logger;
 
   private ProcessaIncrementaTentativa processaIncrementaTentativa;
 
@@ -69,7 +69,8 @@ public class ProcessaIncrementaTentativaTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaIncrementaTentativa =
-        new ProcessaIncrementaTentativa(configuracoes, finalizadorCliente, notificadorCliente);
+        new ProcessaIncrementaTentativa(logger, configuracoes, finalizadorCliente,
+            notificadorCliente);
   }
 
   @Test

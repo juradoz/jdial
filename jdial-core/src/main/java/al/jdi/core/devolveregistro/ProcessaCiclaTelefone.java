@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
@@ -19,15 +18,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaCiclaTelefone implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
   private final ProcessaFimDaFila processaFimDaFila;
   private final Map<Providencia.Codigo, Providencia> providencias;
 
   @Inject
-  ProcessaCiclaTelefone(TratadorEspecificoCliente tratadorEspecificoCliente,
+  ProcessaCiclaTelefone(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
       ProcessaFimDaFila processaFimDaFila, Map<Providencia.Codigo, Providencia> providencias) {
+    this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.processaFimDaFila = processaFimDaFila;
     this.providencias = providencias;

@@ -9,19 +9,18 @@ import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.model.Telefone;
 
 @Alternative
 class DefaultTelefoneFilter implements TelefoneFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultTelefoneFilter.class);
-
+  private final Logger logger;
   private final Set<TelefoneUtil> checkers;
 
   @Inject
-  DefaultTelefoneFilter(Set<TelefoneUtil> checkers) {
+  DefaultTelefoneFilter(Logger logger, Set<TelefoneUtil> checkers) {
+    this.logger = logger;
     this.checkers = checkers;
   }
 

@@ -8,10 +8,10 @@ import javax.inject.Provider;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.DialerModule.DialerService;
 import al.jdi.core.DialerModule.Versao;
@@ -34,8 +34,7 @@ import al.jdi.dao.model.Servico;
 @DialerService
 class DefaultDialer implements Service, Runnable {
 
-  private static final Logger logger = LoggerFactory.getLogger(DefaultDialer.class);
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final GerenciadorAgentes gerenciadorAgentes;
   private final GerenciadorLigacoes gerenciadorLigacoes;
@@ -51,11 +50,13 @@ class DefaultDialer implements Service, Runnable {
   private Engine engine;
 
   @Inject
-  DefaultDialer(Configuracoes configuracoes, Engine.Factory engineFactory, @Versao String versao,
-      GerenciadorAgentes gerenciadorAgentes, GerenciadorLigacoes gerenciadorLigacoes,
-      @Livres Estoque estoqueLivres, @Agendados Estoque estoqueAgendados,
-      @DiscavelTsa Discavel.Factory discavelFactory, Provider<DaoFactory> daoFactoryProvider,
-      TratadorEspecificoCliente tratadorEspecificoCliente, GerenciadorFatorK gerenciadorFatorK) {
+  DefaultDialer(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
+      @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
+      GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
+      @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
+      Provider<DaoFactory> daoFactoryProvider, TratadorEspecificoCliente tratadorEspecificoCliente,
+      GerenciadorFatorK gerenciadorFatorK) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.gerenciadorAgentes = gerenciadorAgentes;
     this.gerenciadorLigacoes = gerenciadorLigacoes;
@@ -137,6 +138,7 @@ class DefaultDialer implements Service, Runnable {
       logger.warn("Sistema inativo");
       return;
     }
+    logger.debug("Sistema ativo!");
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
       rodada(daoFactory, estoqueAgendados);
@@ -150,13 +152,10 @@ class DefaultDialer implements Service, Runnable {
   @Override
   public void start() {
     if (engine != null)
-      throw new IllegalStateException();
-    DaoFactory daoFactory = daoFactoryProvider.get();
-    try {
-      engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false);
-    } finally {
-      daoFactory.close();
-    }
+      throw new IllegalStateException("Already started");
+
+    engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false);
+    engine.start();
     logger
         .warn(
             "\n------------------------------------\nIniciado Dialer {}\n------------------------------------",
@@ -167,7 +166,7 @@ class DefaultDialer implements Service, Runnable {
   public void stop() {
     logger.debug("Encerrando Dialer {}...", versao);
     if (engine == null)
-      throw new IllegalStateException();
+      throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
     limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);

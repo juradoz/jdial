@@ -2,7 +2,6 @@ package al.jdi.core.devolveregistro;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
@@ -13,9 +12,11 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaRetornaProvidencia implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final Logger logger;
 
-  ProcessaRetornaProvidencia() {}
+  ProcessaRetornaProvidencia(Logger logger) {
+    this.logger = logger;
+  }
 
   @Override
   public int compareTo(ProcessoDevolucao o) {

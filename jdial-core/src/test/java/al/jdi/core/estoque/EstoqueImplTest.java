@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
@@ -72,8 +73,11 @@ public class EstoqueImplTest {
   private Discavel discavel;
   @Mock
   private TelefoneFilter telefoneFilter;
+  @Mock
+  private Logger logger;
 
   private Collection<Registro> estoque;
+  
 
   private EstoqueImpl estoqueImpl;
 
@@ -96,7 +100,7 @@ public class EstoqueImplTest {
     estoque = new LinkedList<Registro>(Arrays.asList(registro));
 
     estoqueImpl =
-        new EstoqueImpl(configuracoes, daoFactoryProvider, devolveRegistro,
+        new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
             INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }

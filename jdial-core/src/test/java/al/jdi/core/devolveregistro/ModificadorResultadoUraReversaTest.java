@@ -9,9 +9,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.devolveregistro.ModificadorResultadoUraReversa;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -43,6 +43,8 @@ public class ModificadorResultadoUraReversaTest {
   private ResultadoLigacao resultadoLigacaoAbandonou;
   @Mock
   private ResultadoLigacao resultadoLigacaoSemInteresse;
+  @Mock
+  private Logger logger;
 
   private ModificadorResultadoUraReversa modificadorResultadoUraReversa;
 
@@ -55,7 +57,7 @@ public class ModificadorResultadoUraReversaTest {
     when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
     when(resultadoLigacaoDao.procura(-10, campanha)).thenReturn(resultadoLigacaoAbandonou);
     when(resultadoLigacaoDao.procura(-11, campanha)).thenReturn(resultadoLigacaoSemInteresse);
-    modificadorResultadoUraReversa = new ModificadorResultadoUraReversa(configuracoes);
+    modificadorResultadoUraReversa = new ModificadorResultadoUraReversa(logger, configuracoes);
   }
 
   @Test

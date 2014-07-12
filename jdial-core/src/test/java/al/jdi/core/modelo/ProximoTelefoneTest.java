@@ -20,6 +20,7 @@ import org.joda.time.Period;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
@@ -61,6 +62,8 @@ public class ProximoTelefoneTest {
   private TelefoneFilter clienteSemTelefonesFilter;
   @Mock
   private TelefoneFilter somenteCelularesFilter;
+  @Mock
+  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -86,8 +89,8 @@ public class ProximoTelefoneTest {
     when(somenteCelularesFilter.filter(telefones)).thenReturn(telefones);
 
     proximoTelefone =
-        new ProximoTelefone(configuracoes, telefoneSorter, iMantemAtual, clienteSemTelefonesFilter,
-            somenteCelularesFilter);
+        new ProximoTelefone(logger, configuracoes, telefoneSorter, iMantemAtual,
+            clienteSemTelefonesFilter, somenteCelularesFilter);
   }
 
   @Test

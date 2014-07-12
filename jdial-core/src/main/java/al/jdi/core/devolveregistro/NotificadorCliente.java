@@ -3,7 +3,6 @@ package al.jdi.core.devolveregistro;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -14,12 +13,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Telefone;
 
 class NotificadorCliente {
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
 
   @Inject
-  NotificadorCliente(TratadorEspecificoCliente tratadorEspecificoCliente) {
+  NotificadorCliente(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+    this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
   }
 

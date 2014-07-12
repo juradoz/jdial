@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -17,8 +16,7 @@ import al.jdi.dao.model.Telefone;
 
 class ProcessaIncrementaTentativa implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final Configuracoes configuracoes;
   private final FinalizadorCliente finalizadorCliente;
   private final NotificadorCliente notificadorCliente;
@@ -26,8 +24,9 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
   private ResultadoLigacao resultadoLigacao;
 
   @Inject
-  ProcessaIncrementaTentativa(Configuracoes configuracoes, FinalizadorCliente finalizadorCliente,
-      NotificadorCliente notificadorCliente) {
+  ProcessaIncrementaTentativa(Logger logger, Configuracoes configuracoes,
+      FinalizadorCliente finalizadorCliente, NotificadorCliente notificadorCliente) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     this.finalizadorCliente = finalizadorCliente;
     this.notificadorCliente = notificadorCliente;

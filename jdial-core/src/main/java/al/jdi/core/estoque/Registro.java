@@ -5,14 +5,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.dao.model.Cliente;
 
 class Registro {
-
-  private static final Logger logger = LoggerFactory.getLogger(Registro.class);
 
   private final DateTime criacao;
   private final Cliente cliente;
@@ -24,7 +20,6 @@ class Registro {
   Registro(DateTime criacao, Cliente cliente) {
     this.criacao = criacao;
     this.cliente = cliente;
-    logger.debug("Iniciando {}", this);
   }
 
   @Override

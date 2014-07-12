@@ -8,15 +8,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
 class DiscavelTsaImpl implements Discavel {
-
-  private static final Logger logger = LoggerFactory.getLogger(DiscavelTsaImpl.class);
 
   private final Configuracoes configuracoes;
   private Cliente cliente;
@@ -25,7 +21,6 @@ class DiscavelTsaImpl implements Discavel {
   DiscavelTsaImpl(Configuracoes configuracoes, Cliente cliente) {
     this.configuracoes = configuracoes;
     this.cliente = cliente;
-    logger.debug("Iniciando {}", this);
   }
 
   @Override

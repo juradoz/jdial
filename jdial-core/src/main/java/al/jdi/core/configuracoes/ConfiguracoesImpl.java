@@ -14,12 +14,11 @@ import javax.inject.Singleton;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
+import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import al.jdi.core.Service;
 import al.jdi.core.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
 import al.jdi.core.configuracoes.ConfiguracoesModule.NomeCampanha;
@@ -108,7 +107,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
       "sistema.limiteTentativasPorTelefone";
   private static final String SISTEMA_BLOQUEIA_DDD_POR_PERIODO = "sistema.bloqueiaDddPorPeriodo";
 
-  private static final Logger logger = LoggerFactory.getLogger(ConfiguracoesImpl.class);
+  private final Logger logger;
 
   private final String nomeCampanha;
   private final Engine.Factory engineFactory;
@@ -120,9 +119,10 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
   private Engine engine;
 
   @Inject
-  ConfiguracoesImpl(@NomeCampanha String nomeCampanha, Engine.Factory engineFactory,
+  ConfiguracoesImpl(Logger logger, @NomeCampanha String nomeCampanha, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider, @IntervaloAtualizacao Period intervaloAtualizacao,
       Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
+    this.logger = logger;
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;
@@ -352,6 +352,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloAtualizacao, true);
+    engine.start();
     logger.info("Started successfuly {}", this);
   }
 
@@ -378,7 +379,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
           this.definicoes.put(definicao.getPropriedade(), definicao);
         }
       }
-      logger.debug("Configuracoes para {} recarregadas!", nomeCampanha);
+      logger.info("Configuracoes para {} recarregadas!", nomeCampanha);
     } finally {
       daoFactory.close();
     }

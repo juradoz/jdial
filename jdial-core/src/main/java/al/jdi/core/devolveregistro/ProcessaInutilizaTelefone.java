@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
@@ -13,12 +12,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaInutilizaTelefone implements ProcessoDevolucao {
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final FinalizadorCliente finalizadorCliente;
 
   @Inject
-  ProcessaInutilizaTelefone(FinalizadorCliente finalizadorCliente) {
+  ProcessaInutilizaTelefone(Logger logger, FinalizadorCliente finalizadorCliente) {
+    this.logger = logger;
     this.finalizadorCliente = finalizadorCliente;
   }
 

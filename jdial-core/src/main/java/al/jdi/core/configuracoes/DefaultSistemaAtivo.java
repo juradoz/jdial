@@ -9,14 +9,16 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class DefaultSistemaAtivo implements SistemaAtivo {
 
   static class DefaultSistemaAtivoFactory implements SistemaAtivo.Factory {
+    @Inject
+    private Logger logger;
+
     @Override
     public SistemaAtivo create(ConfiguracoesImpl configuracoes) {
-      return new DefaultSistemaAtivo(configuracoes);
+      return new DefaultSistemaAtivo(logger, configuracoes);
     }
   }
 
@@ -35,14 +37,14 @@ class DefaultSistemaAtivo implements SistemaAtivo {
   static final String SISTEMA_HORA_FINAL_SEGUNDA = "sistema.horaFinalSegunda";
   static final String SISTEMA_HORA_FINAL_DOMINGO = "sistema.horaFinalDomingo";
 
-  private Logger logger = LoggerFactory.getLogger(getClass());
-
+  private final Logger logger;
   private final ConfiguracoesImpl configuracoes;
   private final Map<Integer, String> constInicios = new HashMap<Integer, String>();
   private final Map<Integer, String> constTerminos = new HashMap<Integer, String>();
 
   @Inject
-  DefaultSistemaAtivo(ConfiguracoesImpl configuracoes) {
+  DefaultSistemaAtivo(Logger logger, ConfiguracoesImpl configuracoes) {
+    this.logger = logger;
     this.configuracoes = configuracoes;
     registraConstInicios();
     registraConstTerminos();

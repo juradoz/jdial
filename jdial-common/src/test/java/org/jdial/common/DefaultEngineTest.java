@@ -1,6 +1,7 @@
 package org.jdial.common;
 
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -27,7 +28,20 @@ public class DefaultEngineTest {
   @Before
   public void setUp() {
     initMocks(this);
-    defaultEngine = new DefaultEngine(logger, timer, owner, period);
+    defaultEngine = new DefaultEngine(logger, timer, owner, period, false);
+  }
+
+  @Test
+  public void createShouldNotStart() throws Exception {
+    defaultEngine = new DefaultEngine(logger, timer, owner, period, false);
+    verify(timer, never()).schedule(defaultEngine, 0,
+        period.toStandardSeconds().getSeconds() * 1000);
+  }
+
+  @Test
+  public void createShouldStart() throws Exception {
+    defaultEngine = new DefaultEngine(logger, timer, owner, period, true);
+    verify(timer).schedule(defaultEngine, 0, period.toStandardSeconds().getSeconds() * 1000);
   }
 
   @Test

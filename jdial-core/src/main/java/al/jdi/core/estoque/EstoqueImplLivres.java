@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import org.jdial.common.Engine;
 import org.joda.time.Period;
+import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
@@ -26,13 +27,14 @@ import al.jdi.dao.beans.DaoFactory;
 class EstoqueImplLivres extends EstoqueImpl {
 
   @Inject
-  EstoqueImplLivres(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
+  EstoqueImplLivres(Logger logger, Configuracoes configuracoes,
+      Provider<DaoFactory> daoFactoryProvider, DevolveRegistro devolveRegistro,
+      TratadorEspecificoCliente tratadorEspecificoCliente,
       @DiscavelTsa Discavel.Factory discavelFactory, Engine.Factory engineFactory,
       Collection<Registro> estoque, @Livres ExtraidorClientes extraidorClientes,
       @Livres Period intervaloMonitoracao, Map<Codigo, Providencia> providencias,
       TelefoneFilter telefoneFilter) {
-    super(configuracoes, daoFactoryProvider, devolveRegistro, tratadorEspecificoCliente,
+    super(logger, configuracoes, daoFactoryProvider, devolveRegistro, tratadorEspecificoCliente,
         discavelFactory, engineFactory, estoque, extraidorClientes, intervaloMonitoracao,
         providencias, telefoneFilter);
   }

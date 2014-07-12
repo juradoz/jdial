@@ -6,8 +6,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.EstoqueModule.Agendados;
@@ -18,8 +16,6 @@ import al.jdi.dao.model.Cliente;
 @Agendados
 class ClientesAgendados implements ExtraidorClientes {
 
-  private final static Logger logger = LoggerFactory.getLogger(ClientesAgendados.class);
-
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
   private final Configuracoes configuracoes;
 
@@ -27,7 +23,6 @@ class ClientesAgendados implements ExtraidorClientes {
   ClientesAgendados(TratadorEspecificoCliente tratadorEspecificoCliente, Configuracoes configuracoes) {
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.configuracoes = configuracoes;
-    logger.debug("Iniciado {}", this);
   }
 
   @Override

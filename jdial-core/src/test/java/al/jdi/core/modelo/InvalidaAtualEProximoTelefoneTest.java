@@ -12,6 +12,7 @@ import javax.enterprise.inject.Instance;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.slf4j.Logger;
 
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
@@ -38,6 +39,8 @@ public class InvalidaAtualEProximoTelefoneTest {
   private ClienteDao clienteDao;
   @Mock
   private TelefoneDao telefoneDao;
+  @Mock
+  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -47,7 +50,7 @@ public class InvalidaAtualEProximoTelefoneTest {
     when(proximoTelefone.getTelefone(daoFactory, cliente)).thenReturn(telefone2);
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
     when(daoFactory.getTelefoneDao()).thenReturn(telefoneDao);
-    invalidaAtualEProximoTelefone = new InvalidaAtualEProximoTelefone(iProximoTelefone);
+    invalidaAtualEProximoTelefone = new InvalidaAtualEProximoTelefone(logger, iProximoTelefone);
   }
 
   @Test

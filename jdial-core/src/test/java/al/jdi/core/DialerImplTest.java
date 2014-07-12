@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
-import al.jdi.core.DefaultDialer;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
 import al.jdi.core.gerenciadoragentes.GerenciadorAgentes;
@@ -84,6 +84,8 @@ public class DialerImplTest {
   private Discavel discavel;
   @Mock
   private Servico servico;
+  @Mock
+  private Logger logger;
 
   private DefaultDialer dialerImpl;
 
@@ -118,7 +120,7 @@ public class DialerImplTest {
     when(discavelFactory.create(cliente)).thenReturn(discavel);
 
     dialerImpl =
-        new DefaultDialer(configuracoes, engineFactory, versao, gerenciadorAgentes,
+        new DefaultDialer(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
             daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK);
   }
