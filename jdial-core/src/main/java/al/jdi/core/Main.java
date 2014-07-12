@@ -2,6 +2,7 @@ package al.jdi.core;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -16,24 +17,34 @@ import al.jdi.core.gerenciadoragentes.GerenciadorAgentesModule.GerenciadorAgente
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.GerenciadorLigacoesService;
 
-public class Main {
+class Main {
 
-  @ConfiguracoesService
-  private static Service configuracoesService;
-  @DevolveRegistroService
-  private static Service devolveRegistroService;
-  @Livres
-  Service estoqueLivresService;
-  @Agendados
-  Service estoqueLivresAgendados;
-  @GerenciadorAgentesService
-  Service gerenciadorAgentesService;
-  @GerenciadorLigacoesService
-  Service gerenciadorLigacoesService;
-  @GerenciadorFatorKService
-  Service gerenciadorFatorKService;
-  @DialerService
-  Service dialerService;
+  private final Service configuracoesService;
+  private final Service devolveRegistroService;
+  private final Service estoqueLivresService;
+  private final Service estoqueLivresAgendados;
+  private final Service gerenciadorAgentesService;
+  private final Service gerenciadorLigacoesService;
+  private final Service gerenciadorFatorKService;
+  private final Service dialerService;
+
+  @Inject
+  Main(@ConfiguracoesService Service configuracoesService,
+      @DevolveRegistroService Service devolveRegistroService, @Livres Service estoqueLivresService,
+      @Agendados Service estoqueLivresAgendados,
+      @GerenciadorAgentesService Service gerenciadorAgentesService,
+      @GerenciadorLigacoesService Service gerenciadorLigacoesService,
+      @GerenciadorFatorKService Service gerenciadorFatorKService,
+      @DialerService Service dialerService) {
+    this.configuracoesService = configuracoesService;
+    this.devolveRegistroService = devolveRegistroService;
+    this.estoqueLivresService = estoqueLivresService;
+    this.estoqueLivresAgendados = estoqueLivresAgendados;
+    this.gerenciadorAgentesService = gerenciadorAgentesService;
+    this.gerenciadorLigacoesService = gerenciadorLigacoesService;
+    this.gerenciadorFatorKService = gerenciadorFatorKService;
+    this.dialerService = dialerService;
+  }
 
   @PostConstruct
   public void start() {
@@ -43,13 +54,13 @@ public class Main {
             dialerService, configuracoesService, gerenciadorFatorKService), "EventoShutdown"));
 
     configuracoesService.start();
-//    devolveRegistroService.start();
-//    estoqueLivresService.start();
-//    estoqueLivresAgendados.start();
-//    gerenciadorLigacoesService.start();
-//    gerenciadorAgentesService.start();
-//    gerenciadorFatorKService.start();
-//    dialerService.start();
+    // devolveRegistroService.start();
+    // estoqueLivresService.start();
+    // estoqueLivresAgendados.start();
+    // gerenciadorLigacoesService.start();
+    // gerenciadorAgentesService.start();
+    // gerenciadorFatorKService.start();
+    // dialerService.start();
   }
 
   public void run(@Observes ContainerInitialized event) throws InterruptedException {
