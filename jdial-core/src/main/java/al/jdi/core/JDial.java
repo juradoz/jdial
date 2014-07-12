@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.common.Service;
-import al.jdi.core.DialerModule.DialerService;
-import al.jdi.core.DialerModule.Versao;
+import al.jdi.core.JDialModule.JDialService;
+import al.jdi.core.JDialModule.Versao;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
 import al.jdi.core.estoque.EstoqueModule.Agendados;
@@ -34,8 +34,8 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
-@DialerService
-class DefaultDialer implements Service, Runnable, ProviderListener {
+@JDialService
+class JDial implements Service, Runnable, ProviderListener {
 
   private final Logger logger;
   private final Configuracoes configuracoes;
@@ -54,7 +54,7 @@ class DefaultDialer implements Service, Runnable, ProviderListener {
   private boolean inService = false;
 
   @Inject
-  DefaultDialer(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
+  JDial(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
       @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
       @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
@@ -73,7 +73,7 @@ class DefaultDialer implements Service, Runnable, ProviderListener {
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.versao = versao;
     dialerCtiManager.addListener(this);
-    logger.info("Iniciando Dialer {}...", this.versao);
+    logger.info("Iniciando jDial {}...", this.versao);
 
     limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
   }
@@ -168,7 +168,7 @@ class DefaultDialer implements Service, Runnable, ProviderListener {
     engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false, true);
     logger
         .warn(
-            "\n------------------------------------\nIniciado Dialer {}\n------------------------------------",
+            "\n------------------------------------\nIniciado jDial {}\n------------------------------------",
             versao);
   }
 

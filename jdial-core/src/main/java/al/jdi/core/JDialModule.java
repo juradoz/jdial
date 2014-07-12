@@ -12,12 +12,12 @@ import java.lang.annotation.Target;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
-public class DialerModule {
+public class JDialModule {
 
   @Retention(RUNTIME)
   @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
-  public @interface DialerService {
+  public @interface JDialService {
   }
 
   @Retention(RUNTIME)

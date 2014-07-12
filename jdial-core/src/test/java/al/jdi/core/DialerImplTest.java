@@ -90,7 +90,7 @@ public class DialerImplTest {
   @Mock
   private DialerCtiManager dialerCtiManager;
 
-  private DefaultDialer dialerImpl;
+  private JDial dialerImpl;
 
   @Before
   public void setUp() throws Exception {
@@ -123,7 +123,7 @@ public class DialerImplTest {
     when(discavelFactory.create(cliente)).thenReturn(discavel);
 
     dialerImpl =
-        new DefaultDialer(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
+        new JDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
             daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
   }

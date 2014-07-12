@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 import al.jdi.common.Service;
-import al.jdi.core.DialerModule.DialerService;
+import al.jdi.core.JDialModule.JDialService;
 import al.jdi.core.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.estoque.EstoqueModule.Agendados;
@@ -40,7 +40,7 @@ class Main {
       @GerenciadorAgentesService Service gerenciadorAgentesService,
       @GerenciadorLigacoesService Service gerenciadorLigacoesService,
       @GerenciadorFatorKService Service gerenciadorFatorKService,
-      @DialerService Service dialerService, ShutdownHook.Factory shutdownHookFactory) {
+      @JDialService Service dialerService, ShutdownHook.Factory shutdownHookFactory) {
     this.configuracoesService = configuracoesService;
     this.devolveRegistroService = devolveRegistroService;
     this.estoqueLivresService = estoqueLivresService;
