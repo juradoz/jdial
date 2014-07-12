@@ -23,6 +23,9 @@ public class GerenciadorFatorKImplTest {
 
   private static final double FATORK_MAXIMO = 5;
   private static final double FATORK_MINIMO = 3;
+
+  private GerenciadorFatorKImpl gerenciadorFatorKImpl;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -35,8 +38,6 @@ public class GerenciadorFatorKImplTest {
   private DaoFactory daoFactory;
   @Mock
   private Logger logger;
-
-  private GerenciadorFatorKImpl gerenciadorFatorKImpl;
 
   @Before
   public void setUp() throws Exception {

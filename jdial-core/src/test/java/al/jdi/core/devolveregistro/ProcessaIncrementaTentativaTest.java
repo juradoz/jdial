@@ -25,6 +25,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaIncrementaTentativaTest {
 
+  private ProcessaIncrementaTentativa processaIncrementaTentativa;
+
   private static final Long TELEFONE_ID = 1l;
   @Mock
   private Configuracoes configuracoes;
@@ -54,8 +56,6 @@ public class ProcessaIncrementaTentativaTest {
   private Campanha campanha;
   @Mock
   private Logger logger;
-
-  private ProcessaIncrementaTentativa processaIncrementaTentativa;
 
   @Before
   public void setUp() throws Exception {

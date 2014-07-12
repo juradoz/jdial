@@ -26,6 +26,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaRemoveTodosAgendamentosTest {
 
+  private ProcessaRemoveTodosAgendamentos processaRemoveTodosAgendamentos;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -45,7 +47,6 @@ public class ProcessaRemoveTodosAgendamentosTest {
   @Mock
   private Logger logger;
 
-  private ProcessaRemoveTodosAgendamentos processaRemoveTodosAgendamentos;
   private LinkedList<Agendamento> agendamentos;
 
   @Before

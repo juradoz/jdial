@@ -26,6 +26,9 @@ public class DefaultAgendamentoDaoTest {
 
   private static final Long ID = 1l;
   private static final String S = "S";
+
+  private DefaultAgendamentoDao defaultAgendamentoDao;
+
   @Mock
   private Session session;
   @Mock
@@ -42,8 +45,6 @@ public class DefaultAgendamentoDaoTest {
   private Criteria criteria;
   @Mock
   private DefaultDao<Agendamento> dao;
-
-  private DefaultAgendamentoDao defaultAgendamentoDao;
 
   @Before
   public void setUp() throws Exception {

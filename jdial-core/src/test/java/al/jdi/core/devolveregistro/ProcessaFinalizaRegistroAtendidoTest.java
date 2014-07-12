@@ -24,6 +24,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaFinalizaRegistroAtendidoTest {
 
+  private ProcessaFinalizaRegistroAtendido processaFinalizaRegistroAtendido;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -50,8 +52,6 @@ public class ProcessaFinalizaRegistroAtendidoTest {
   private Telefone telefone;
   @Mock
   private Logger logger;
-
-  private ProcessaFinalizaRegistroAtendido processaFinalizaRegistroAtendido;
 
   @Before
   public void setUp() throws Exception {

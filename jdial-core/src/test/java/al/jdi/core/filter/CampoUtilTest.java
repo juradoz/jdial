@@ -13,10 +13,10 @@ import al.jdi.dao.model.Telefone;
 
 public class CampoUtilTest {
 
+  private CampoUtil campoUtil;
+
   @Mock
   private Telefone telefone;
-
-  private CampoUtil campoUtil;
 
   @Before
   public void setUp() throws Exception {

@@ -37,8 +37,8 @@ public class ProximoTelefoneTest {
 
   private static final Period INTERVALO_RODADA_TELEFONE = Period.hours(1);
   private static final DateTime DATA_BANCO = new DateTime();
+
   private ProximoTelefone proximoTelefone;
-  private List<Telefone> telefones;
 
   @Mock
   private DaoFactory daoFactory;
@@ -64,6 +64,8 @@ public class ProximoTelefoneTest {
   private TelefoneFilter somenteCelularesFilter;
   @Mock
   private Logger logger;
+
+  private List<Telefone> telefones;
 
   @Before
   public void setUp() throws Exception {

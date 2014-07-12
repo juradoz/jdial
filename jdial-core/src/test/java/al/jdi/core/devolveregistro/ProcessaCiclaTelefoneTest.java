@@ -24,6 +24,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaCiclaTelefoneTest {
 
+  private ProcessaCiclaTelefone processaCiclaTelefone;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -44,8 +46,6 @@ public class ProcessaCiclaTelefoneTest {
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
   private Logger logger;
-
-  private ProcessaCiclaTelefone processaCiclaTelefone;
 
   @Before
   public void setUp() throws Exception {

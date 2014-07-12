@@ -42,6 +42,9 @@ public class EstoqueImplTest {
   private static final String CAMPANHA = "CAMPANHA";
   private static final DateTime DATA_BANCO = new DateTime();
   private static final Period INTERVALO_MONITORACAO = Period.seconds(5);
+
+  private EstoqueImpl estoqueImpl;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -54,7 +57,6 @@ public class EstoqueImplTest {
   private Factory discavelFactory;
   @Mock
   private Engine.Factory engineFactory;
-
   @Mock
   private ExtraidorClientes extraidorClientes;
   @Mock
@@ -77,9 +79,6 @@ public class EstoqueImplTest {
   private Logger logger;
 
   private Collection<Registro> estoque;
-
-
-  private EstoqueImpl estoqueImpl;
 
   @Before
   public void setUp() throws Exception {

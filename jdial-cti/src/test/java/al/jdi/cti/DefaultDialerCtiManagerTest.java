@@ -35,6 +35,8 @@ public class DefaultDialerCtiManagerTest {
   private static final String ORIGEM = "ORIGEM";
   private static final String ACD = "ACD";
 
+  private DefaultDialerCtiManager dialerCtiManagerImpl;
+
   @Mock
   private CtiManager ctiManager;
   @Mock
@@ -59,8 +61,6 @@ public class DefaultDialerCtiManagerTest {
   private DefaultPredictiveCallRunner.Factory predictiveCallRunnerFactory;
   @Mock
   private Logger logger;
-
-  private DefaultDialerCtiManager dialerCtiManagerImpl;
 
   @Before
   public void setUp() throws InvalidArgumentException, MethodNotSupportedException,

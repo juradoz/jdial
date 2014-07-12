@@ -25,6 +25,9 @@ public class DefaultAreaAreaDaoTest {
 
   private static final Long ID = 1l;
   private static final String S = "S";
+
+  private DefaultAreaAreaDao defaultAreaAreaDao;
+
   @Mock
   private DefaultDao<AreaArea> dao;
   @Mock
@@ -39,9 +42,6 @@ public class DefaultAreaAreaDaoTest {
   private AreaArea areaArea;
   @Mock
   private CriacaoModificacao criacaoModificacao;
-
-  private DefaultAreaAreaDao defaultAreaAreaDao;
-
 
   @Before
   public void setUp() throws Exception {

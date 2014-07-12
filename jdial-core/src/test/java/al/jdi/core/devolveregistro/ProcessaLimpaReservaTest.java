@@ -23,6 +23,9 @@ public class ProcessaLimpaReservaTest {
 
   private static final Integer OPERADOR = 3;
   private static final String NOME_BASE_DADOS = "BASE";
+
+  private ProcessaLimpaReserva processaLimpaReserva;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -39,8 +42,6 @@ public class ProcessaLimpaReservaTest {
   private ClienteDao clienteDao;
   @Mock
   private Logger logger;
-
-  private ProcessaLimpaReserva processaLimpaReserva;
 
   @Before
   public void setUp() throws Exception {

@@ -22,6 +22,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaInsereHistoricoTest {
 
+  private ProcessaInsereHistorico processaInsereHistorico;
+
   @Mock
   private Ligacao ligacao;
   @Mock
@@ -34,8 +36,6 @@ public class ProcessaInsereHistoricoTest {
   private HistoricoLigacaoDao historicoLigacaoDao;
   @Mock
   private Logger logger;
-
-  private ProcessaInsereHistorico processaInsereHistorico;
 
   @Before
   public void setUp() throws Exception {

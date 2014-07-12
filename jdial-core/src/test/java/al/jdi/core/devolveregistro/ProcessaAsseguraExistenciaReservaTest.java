@@ -19,6 +19,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaAsseguraExistenciaReservaTest {
 
+  private ProcessaAsseguraExistenciaReserva processaAsseguraExistenciaReserva;
+
   @Mock
   private Ligacao ligacao;
   @Mock
@@ -35,8 +37,6 @@ public class ProcessaAsseguraExistenciaReservaTest {
   private Dao<EstadoCliente> estadoClienteDao;
   @Mock
   private Logger logger;
-
-  private ProcessaAsseguraExistenciaReserva processaAsseguraExistenciaReserva;
 
   @Before
   public void setUp() throws Exception {

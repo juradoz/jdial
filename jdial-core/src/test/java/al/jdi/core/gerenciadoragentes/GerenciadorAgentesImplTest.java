@@ -32,6 +32,9 @@ public class GerenciadorAgentesImplTest {
   private static final String GRUPO = "GRUPO";
   private static final Integer LIVRES = 5;
   private static final Integer SIMULTANEOS = 50;
+
+  private GerenciadorAgentesImpl gerenciadorAgentesImpl;
+
   @Mock
   private DialerCtiManager dialerCtiManager;
   @Mock
@@ -52,8 +55,6 @@ public class GerenciadorAgentesImplTest {
   private CtiManager ctiManager;
   @Mock
   private Logger logger;
-
-  private GerenciadorAgentesImpl gerenciadorAgentesImpl;
 
   @Before
   public void setUp() throws Exception {

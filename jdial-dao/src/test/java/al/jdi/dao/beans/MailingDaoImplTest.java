@@ -17,6 +17,8 @@ import al.jdi.dao.model.Mailing;
 
 public class MailingDaoImplTest {
 
+  private DefaultMailingDao defaultMailingDao;
+
   @Mock
   private Session session;
   @Mock
@@ -27,8 +29,6 @@ public class MailingDaoImplTest {
   private SQLQuery query;
   @Mock
   private CriacaoModificacao criacaoModificacao;
-
-  private DefaultMailingDao defaultMailingDao;
 
   @Before
   public void setUp() throws Exception {

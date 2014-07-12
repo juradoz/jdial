@@ -39,6 +39,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaAgendamentoTest {
 
+  private ProcessaAgendamento processaAgendamento;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -67,8 +69,6 @@ public class ProcessaAgendamentoTest {
   private EstadoCliente estadoCliente;
   @Mock
   private Logger logger;
-
-  private ProcessaAgendamento processaAgendamento;
 
   @Before
   public void setUp() throws Exception {

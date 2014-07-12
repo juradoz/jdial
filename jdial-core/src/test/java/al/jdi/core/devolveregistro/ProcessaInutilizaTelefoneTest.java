@@ -22,6 +22,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaInutilizaTelefoneTest {
 
+  private ProcessaInutilizaTelefone processaInutilizaTelefone;
+
   @Mock
   private FinalizadorCliente finalizadorCliente;
   @Mock
@@ -38,8 +40,6 @@ public class ProcessaInutilizaTelefoneTest {
   private HistoricoLigacao historicoLigacao;
   @Mock
   private Logger logger;
-
-  private ProcessaInutilizaTelefone processaInutilizaTelefone;
 
   @Before
   public void setUp() throws Exception {

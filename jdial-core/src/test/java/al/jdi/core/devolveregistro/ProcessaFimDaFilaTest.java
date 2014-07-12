@@ -20,6 +20,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaFimDaFilaTest {
 
+  private ProcessaFimDaFila processaFimDaFila;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -34,8 +36,6 @@ public class ProcessaFimDaFilaTest {
   private ClienteDao clienteDao;
   @Mock
   private Logger logger;
-
-  private ProcessaFimDaFila processaFimDaFila;
 
   @Before
   public void setUp() throws Exception {

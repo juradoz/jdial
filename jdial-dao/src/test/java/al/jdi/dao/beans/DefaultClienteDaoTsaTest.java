@@ -23,6 +23,9 @@ public class DefaultClienteDaoTsaTest {
   private static final int motivoFinalizacao = 0;
   private static final int operador = 0;
   private static final int codDetCamp = 0;
+
+  private DefaultClienteDaoTsa defaultClienteDaoTsa;
+
   @Mock
   private Session session;
   @Mock
@@ -33,8 +36,6 @@ public class DefaultClienteDaoTsaTest {
   private Cliente cliente;
   @Mock
   private Logger logger;
-
-  private DefaultClienteDaoTsa defaultClienteDaoTsa;
 
   @Before
   public void setUp() {

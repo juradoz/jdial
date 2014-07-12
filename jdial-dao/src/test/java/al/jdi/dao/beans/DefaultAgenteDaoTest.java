@@ -27,6 +27,9 @@ public class DefaultAgenteDaoTest {
 
   private static final Long ID = 1l;
   private static final String S = "S";
+
+  private DefaultAgenteDao defaultAgenteDao;
+
   @Mock
   private DefaultDao<Agente> dao;
   @Mock
@@ -41,9 +44,6 @@ public class DefaultAgenteDaoTest {
   private Agente agente;
   @Mock
   private CriacaoModificacao criacaoModificacao;
-
-  private DefaultAgenteDao defaultAgenteDao;
-
 
   @Before
   public void setUp() throws Exception {

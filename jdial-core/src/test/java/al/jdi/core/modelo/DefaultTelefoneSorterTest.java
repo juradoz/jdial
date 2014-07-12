@@ -21,6 +21,8 @@ import al.jdi.dao.model.Telefone;
 
 public class DefaultTelefoneSorterTest {
 
+  private DefaultTelefoneSorter defaultTelefoneSorter;
+  
   @Mock
   private Configuracoes configuracoes;
 
@@ -28,7 +30,6 @@ public class DefaultTelefoneSorterTest {
   private Telefone t2;
   private Telefone t3;
   private LinkedList<Telefone> telefones;
-  private DefaultTelefoneSorter defaultTelefoneSorter;
 
   @Before
   public void setUp() throws Exception {

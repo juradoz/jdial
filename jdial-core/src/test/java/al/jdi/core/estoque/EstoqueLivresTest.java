@@ -31,6 +31,8 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 
 public class EstoqueLivresTest {
+  
+  private EstoqueImpl estoqueLivres;
 
   @Mock
   private Registro registro;
@@ -58,9 +60,7 @@ public class EstoqueLivresTest {
   private Logger logger;
 
   private Period intervaloMonitoracao = Period.ZERO;
-
   private Collection<Registro> estoque;
-  private EstoqueImpl estoqueLivres;
 
   @Test
   public void contemClienteDeveriaEncontrar() {

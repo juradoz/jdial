@@ -36,6 +36,9 @@ public class DiscavelTsaCRMImplTest {
   private static final int CHAVE = 1234;
   private static final long CHAVE_TELEFONE = 1l;
   private static final int FILTRO = 2;
+
+  private DiscavelTsaCRMImpl discavelTsaCRMImpl;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -48,8 +51,6 @@ public class DiscavelTsaCRMImplTest {
   private Mailing mailing;
   @Mock
   private Campanha campanha;
-
-  private DiscavelTsaCRMImpl discavelTsaCRMImpl;
 
   @Before
   public void setUp() throws Exception {

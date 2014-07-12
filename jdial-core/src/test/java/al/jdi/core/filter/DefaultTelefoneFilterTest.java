@@ -19,6 +19,8 @@ import al.jdi.dao.model.Telefone;
 
 public class DefaultTelefoneFilterTest {
 
+  private DefaultTelefoneFilter defaultTelefoneFilter;
+
   @Mock
   private TelefoneUtil checker1;
   @Mock
@@ -33,7 +35,6 @@ public class DefaultTelefoneFilterTest {
   private Logger logger;
 
   private HashSet<TelefoneUtil> checkers;
-  private DefaultTelefoneFilter defaultTelefoneFilter;
 
   @Before
   public void setUp() throws Exception {

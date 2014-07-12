@@ -21,6 +21,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoAtendidoFakeTest {
 
+  private ModificadorResultadoAtendidoFake modificadorResultadoAtendidoFake;
+  
   @Mock
   private DaoFactory daoFactory;
   @Mock
@@ -41,8 +43,6 @@ public class ModificadorResultadoAtendidoFakeTest {
   private Configuracoes configuracoes;
   @Mock
   private Logger logger;
-
-  private ModificadorResultadoAtendidoFake modificadorResultadoAtendidoFake;
 
   @Before
   public void setUp() throws Exception {

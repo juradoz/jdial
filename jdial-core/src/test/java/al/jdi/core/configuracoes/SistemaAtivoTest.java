@@ -27,13 +27,14 @@ public class SistemaAtivoTest {
   private final static LocalTime INICIO = new DateTime().withTime(8, 0, 0, 0).toLocalTime();
   private final static LocalTime TERMINO = new DateTime().withTime(17, 59, 59, 0).toLocalTime();
 
+  private SistemaAtivo sistemaAtivo;
+  
   @Mock
   private ConfiguracoesImpl configuracoes;
   @Mock
   private Logger logger;
 
   private Integer dayOfWeek;
-  private SistemaAtivo sistemaAtivo;
 
   @Parameters
   public static Collection<Object[]> dayOfWeeks() {

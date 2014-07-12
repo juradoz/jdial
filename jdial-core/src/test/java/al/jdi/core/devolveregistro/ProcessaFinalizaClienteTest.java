@@ -23,6 +23,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaFinalizaClienteTest {
 
+  private ProcessaFinalizaCliente processaFinalizaCliente;
+
   @Mock
   private FinalizadorCliente finalizadorCliente;
   @Mock
@@ -47,8 +49,6 @@ public class ProcessaFinalizaClienteTest {
   private Campanha campanha;
   @Mock
   private Logger logger;
-
-  private ProcessaFinalizaCliente processaFinalizaCliente;
 
   @Before
   public void setUp() throws Exception {

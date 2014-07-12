@@ -23,6 +23,7 @@ import al.jdi.dao.model.Telefone;
 public class InvalidaAtualEProximoTelefoneTest {
 
   private InvalidaAtualEProximoTelefone invalidaAtualEProximoTelefone;
+
   @Mock
   private DaoFactory daoFactory;
   @Mock

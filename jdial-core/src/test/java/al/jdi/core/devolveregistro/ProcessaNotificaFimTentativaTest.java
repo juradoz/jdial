@@ -23,6 +23,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaNotificaFimTentativaTest {
 
+  private ProcessaNotificaFimTentativa processaNotificaFimTentativa;
+
   private static final boolean INUTILIZA_MOTIVO_DIFERENCIADO = false;
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
@@ -43,7 +45,6 @@ public class ProcessaNotificaFimTentativaTest {
   @Mock
   private Logger logger;
 
-  private ProcessaNotificaFimTentativa processaNotificaFimTentativa;
   private DateTime dataBanco;
 
   @Before

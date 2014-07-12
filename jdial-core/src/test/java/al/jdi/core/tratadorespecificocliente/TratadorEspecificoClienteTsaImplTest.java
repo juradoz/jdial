@@ -42,6 +42,9 @@ public class TratadorEspecificoClienteTsaImplTest {
   private static final int OPERADOR_DISCADOR = 3;
   private static final DateTime DATA_BANCO = new DateTime();
   private static final int MOTIVO_CAMPANHA = 0;
+
+  private TratadorEspecificoClienteTsaImpl tratadorEspecificoClienteTsaImpl;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -66,8 +69,6 @@ public class TratadorEspecificoClienteTsaImplTest {
   private ResultadoLigacaoDao resultadoLigacaoDao;
   @Mock
   private Logger logger;
-
-  private TratadorEspecificoClienteTsaImpl tratadorEspecificoClienteTsaImpl;
 
   @Before
   public void setUp() throws Exception {

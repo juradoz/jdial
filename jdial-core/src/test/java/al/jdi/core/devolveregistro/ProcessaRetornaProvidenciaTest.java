@@ -26,6 +26,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 public class ProcessaRetornaProvidenciaTest {
 
   private static final Integer PROVIDENCIA = 0;
+
+  private ProcessaRetornaProvidencia processaRetornaProvidencia;
   @Mock
   private Ligacao ligacao;
   @Mock
@@ -48,8 +50,6 @@ public class ProcessaRetornaProvidenciaTest {
   private InformacaoCliente informacaoCliente;
   @Mock
   private Logger logger;
-
-  private ProcessaRetornaProvidencia processaRetornaProvidencia;
 
   @Before
   public void setUp() throws Exception {

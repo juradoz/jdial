@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import al.jdi.common.Service;
 
 public class MainTest {
+  
+  private Main main;
 
   @Mock
   private Service configuracoesService;
@@ -31,8 +33,6 @@ public class MainTest {
   private ShutdownHook.Factory shutdownHookFactory;
   @Mock
   private Service dialerCtiManagerService;
-
-  private Main main;
 
   @Before
   public void setUp() {

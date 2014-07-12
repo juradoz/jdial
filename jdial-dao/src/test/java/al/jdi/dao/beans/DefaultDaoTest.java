@@ -23,6 +23,9 @@ import al.jdi.dao.model.CriacaoModificacao;
 public class DefaultDaoTest {
 
   private static final Long ID = 1l;
+
+  private DefaultDao<Agente> dao;
+
   @Mock
   private Session session;
   @Mock
@@ -33,9 +36,6 @@ public class DefaultDaoTest {
   private Criteria criteria;
   @Mock
   private List<Agente> agentes;
-
-  private DefaultDao<Agente> dao;
-
 
   @Before
   public void setUp() throws Exception {

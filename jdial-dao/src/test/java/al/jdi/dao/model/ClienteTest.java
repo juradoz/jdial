@@ -16,10 +16,10 @@ import org.mockito.Mock;
 
 public class ClienteTest {
 
+  private Cliente cliente;
+
   @Mock
   private EstadoCliente estadoCliente;
-
-  private Cliente cliente;
 
   @Test
   public void defaultAgendamento() {

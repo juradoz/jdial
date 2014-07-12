@@ -14,14 +14,14 @@ import al.jdi.dao.model.Telefone;
 
 public class BloqueiaCelularUtilTest {
 
+  private BloqueioCelularUtil bloqueiaCelularUtil;
+
   @Mock
   private CelularChecker telefoneCelularChecker;
   @Mock
   private Configuracoes configuracoes;
   @Mock
   private Telefone telefone;
-
-  private BloqueioCelularUtil bloqueiaCelularUtil;
 
   @Before
   public void setUp() throws Exception {

@@ -27,6 +27,9 @@ public class DefaultCampanhaDaoTest {
 
   private static final Long ID = 1l;
   private static final String S = "S";
+
+  private DefaultCampanhaDao defaultCampanhaDao;
+
   @Mock
   private DefaultDao<Campanha> dao;
   @Mock
@@ -45,8 +48,6 @@ public class DefaultCampanhaDaoTest {
   private List<Campanha> campanhas;
 
   private List<DefinicaoPadrao> definicaoPadraos;
-  private DefaultCampanhaDao defaultCampanhaDao;
-
 
   @Before
   public void setUp() throws Exception {

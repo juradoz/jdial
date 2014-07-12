@@ -20,6 +20,8 @@ import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoSemAgentesFakeTest {
+  
+  private ModificadorResultadoSemAgentesFake modificadorResultadoSemAgentesFake;
 
   @Mock
   private Configuracoes configuracoes;
@@ -41,8 +43,6 @@ public class ModificadorResultadoSemAgentesFakeTest {
   private ResultadoLigacao resultadoLigacaoSemAgentes;
   @Mock
   private Logger logger;
-
-  private ModificadorResultadoSemAgentesFake modificadorResultadoSemAgentesFake;
 
   @Before
   public void setUp() throws Exception {

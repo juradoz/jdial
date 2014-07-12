@@ -33,7 +33,6 @@ public class MantemAtualTest {
   private static final DateTime DATA_BANCO = new DateTime();
 
   private MantemAtual mantemAtual;
-  private List<Telefone> telefones;
 
   @Mock
   private TelefoneSorter telefoneSorter;
@@ -57,6 +56,8 @@ public class MantemAtualTest {
   private TelefoneFilter somenteCelulareFilter;
   @Mock
   private Logger logger;
+
+  private List<Telefone> telefones;
 
   @Before
   public void setUp() throws Exception {

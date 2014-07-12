@@ -21,6 +21,8 @@ import al.jdi.dao.model.Telefone;
 
 public class NotificadorClienteTest {
 
+  private NotificadorCliente notificadorCliente;
+
   private static final boolean INUTILIZA_DIFERENCIADO = false;
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
@@ -40,7 +42,6 @@ public class NotificadorClienteTest {
   private Logger logger;
 
   private DateTime dataBanco;
-  private NotificadorCliente notificadorCliente;
 
   @Before
   public void setUp() throws Exception {

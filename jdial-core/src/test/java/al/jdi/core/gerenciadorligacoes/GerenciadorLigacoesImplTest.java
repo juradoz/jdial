@@ -50,6 +50,9 @@ public class GerenciadorLigacoesImplTest {
   private static final String CHAVE = "CHAVE";
   private static final DateTime CRIACAO = new DateTime();
   private static final Integer MINUTOS_EXPIRACAO = 5;
+
+  private GerenciadorLigacoesImpl gerenciadorLigacoesImpl;
+
   @Mock
   private Provider<DaoFactory> daoFactoryProvider;
   @Mock
@@ -84,8 +87,6 @@ public class GerenciadorLigacoesImplTest {
   private Servico servico;
   @Mock
   private Logger logger;
-
-  private GerenciadorLigacoesImpl gerenciadorLigacoesImpl;
 
   @Before
   public void setUp() throws Exception {

@@ -25,6 +25,8 @@ import al.jdi.dao.model.Telefone;
 
 public class ProcessaSemTelefonesTest {
 
+  private ProcessaSemTelefones processaSemTelefones;
+
   @Mock
   private FinalizadorCliente finalizadorCliente;
   @Mock
@@ -49,8 +51,6 @@ public class ProcessaSemTelefonesTest {
   private Telefone telefone;
   @Mock
   private Logger logger;
-
-  private ProcessaSemTelefones processaSemTelefones;
 
   @Before
   public void setUp() throws Exception {

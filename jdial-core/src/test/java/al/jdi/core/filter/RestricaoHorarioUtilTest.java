@@ -60,6 +60,8 @@ public class RestricaoHorarioUtilTest {
 
   private static final DateTime DATA_BANCO = new DateTime();
 
+  private RestricaoHorarioUtil restricaoHorarioUtil;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
@@ -74,9 +76,6 @@ public class RestricaoHorarioUtilTest {
   private RestricaoHorario restricaoHorario;
   @Mock
   private Logger logger;
-
-  private RestricaoHorarioUtil restricaoHorarioUtil;
-
 
   @Before
   public void setUp() throws Exception {

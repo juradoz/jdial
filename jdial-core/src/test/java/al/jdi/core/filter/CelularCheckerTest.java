@@ -14,10 +14,10 @@ import al.jdi.dao.model.Telefone;
 
 public class CelularCheckerTest {
 
+  private CelularChecker celularChecker;
+
   @Mock
   private Telefone telefone;
-
-  private CelularChecker celularChecker;
 
   @Before
   public void setUp() throws Exception {

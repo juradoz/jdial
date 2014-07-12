@@ -38,7 +38,7 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
-public class DialerImplTest {
+public class JDialTest {
 
   private static final String CAMPANHA = "CAMPANHA";
   private static final String NOME_BASE_DADOS = "NOME_BASE_DADOS";
@@ -50,6 +50,8 @@ public class DialerImplTest {
   private static final Integer QTD_LIGACOES_NAO_ATENDIDAS = 0;
   private static final DateTime DATA_BANCO = new DateTime();
   private final String versao = "VERSAO";
+  
+  private JDial jDial;
 
   @Mock
   private Configuracoes configuracoes;
@@ -90,8 +92,6 @@ public class DialerImplTest {
   @Mock
   private DialerCtiManager dialerCtiManager;
 
-  private JDial dialerImpl;
-
   @Before
   public void setUp() throws Exception {
     initMocks(this);
@@ -122,7 +122,7 @@ public class DialerImplTest {
 
     when(discavelFactory.create(cliente)).thenReturn(discavel);
 
-    dialerImpl =
+    jDial =
         new JDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
             daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
@@ -130,26 +130,26 @@ public class DialerImplTest {
 
   @Test
   public void limpaReservaDeveriaLimar() throws Exception {
-    dialerImpl.limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
+    jDial.limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
     verify(clienteDao, times(2)).limpaReservas(campanha, NOME_BASE_DADOS, NOME_BASE, OPERADOR);
   }
 
   @Test
   public void rodadaNaoDeveriaObterClientesSemAgentes() throws Exception {
     when(gerenciadorAgentes.getLivres()).thenReturn(0);
-    dialerImpl.rodada(daoFactory, estoqueLivres);
+    jDial.rodada(daoFactory, estoqueLivres);
     verify(estoqueLivres, never()).obtemRegistros(Mockito.anyInt());
   }
 
   @Test
   public void rodadaDeveriaObterCliente() throws Exception {
-    dialerImpl.rodada(daoFactory, estoqueLivres);
+    jDial.rodada(daoFactory, estoqueLivres);
     verify(estoqueLivres).obtemRegistros(1);
   }
 
   @Test
   public void rodadaDeveriaDiscar() throws Exception {
-    dialerImpl.rodada(daoFactory, estoqueLivres);
+    jDial.rodada(daoFactory, estoqueLivres);
     ArgumentCaptor<Ligacao> captor = ArgumentCaptor.forClass(Ligacao.class);
     verify(gerenciadorLigacoes).disca(captor.capture(), Mockito.eq(servico));
     assertThat(captor.getValue().getDiscavel(), is(sameInstance(discavel)));
@@ -159,14 +159,14 @@ public class DialerImplTest {
   @Test
   public void runNaoDeveriaExecutar() throws Exception {
     when(configuracoes.getSistemaAtivo()).thenReturn(false);
-    dialerImpl.run();
+    jDial.run();
     verify(daoFactoryProvider, times(1)).get();
   }
 
   @Test
   public void runDeveriaExecutar() throws Exception {
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
-    dialerImpl.run();
+    jDial.run();
     verify(daoFactoryProvider, times(2)).get();
   }
 

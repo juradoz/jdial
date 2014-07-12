@@ -13,10 +13,10 @@ public class LigacaoTest {
 
   private static final String AGENTE = "AGENTE";
 
+  private Ligacao ligacao;
+
   @Mock
   private Discavel discavel;
-
-  private Ligacao ligacao;
 
   @Before
   public void setUp() throws Exception {

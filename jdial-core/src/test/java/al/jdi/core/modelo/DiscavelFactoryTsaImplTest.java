@@ -15,12 +15,12 @@ import al.jdi.dao.model.Cliente;
 
 public class DiscavelFactoryTsaImplTest {
 
+  private DiscavelFactoryTsaImpl discavelFactoryTsaImpl;
+
   @Mock
   private Configuracoes configuracoes;
   @Mock
   private Cliente cliente;
-
-  private DiscavelFactoryTsaImpl discavelFactoryTsaImpl;
 
   @Before
   public void setUp() throws Exception {

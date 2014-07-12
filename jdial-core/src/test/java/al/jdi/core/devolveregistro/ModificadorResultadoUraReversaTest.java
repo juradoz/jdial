@@ -21,6 +21,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoUraReversaTest {
 
+  private ModificadorResultadoUraReversa modificadorResultadoUraReversa;
+
   @Mock
   private DaoFactory daoFactory;
   @Mock
@@ -45,8 +47,6 @@ public class ModificadorResultadoUraReversaTest {
   private ResultadoLigacao resultadoLigacaoSemInteresse;
   @Mock
   private Logger logger;
-
-  private ModificadorResultadoUraReversa modificadorResultadoUraReversa;
 
   @Before
   public void setUp() throws Exception {

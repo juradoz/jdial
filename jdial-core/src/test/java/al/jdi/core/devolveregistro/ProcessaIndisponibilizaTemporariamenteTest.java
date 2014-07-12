@@ -22,6 +22,8 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public class ProcessaIndisponibilizaTemporariamenteTest {
 
+  private ProcessaIndisponibilizaTemporariamente processaIndisponibilizaTemporariamente;
+
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
@@ -36,8 +38,6 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   private ClienteDao clienteDao;
   @Mock
   private Logger logger;
-
-  private ProcessaIndisponibilizaTemporariamente processaIndisponibilizaTemporariamente;
 
   @Before
   public void setUp() throws Exception {
