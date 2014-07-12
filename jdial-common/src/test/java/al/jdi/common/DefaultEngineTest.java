@@ -1,4 +1,4 @@
-package org.jdial.common;
+package al.jdi.common;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;

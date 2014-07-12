@@ -1,4 +1,4 @@
-package org.jdial.common;
+package al.jdi.common;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,13 +44,13 @@ class DefaultEngine extends TimerTask implements Engine {
   @Override
   public void start() {
     timer.schedule(this, 0, period.toStandardSeconds().getSeconds() * 1000);
-    logger.debug("started engine to {}", owner.getClass().getSimpleName());
+    logger.info("Iniciado engine para {}", owner);
   }
 
   @Override
   public void stop() {
     timer.cancel();
-    logger.debug("stop engine to {}", owner);
+    logger.info("Parado engine para {}", owner);
   }
 
   @Override

@@ -3,7 +3,7 @@ package al.jdi.cti;
 import javax.telephony.Provider;
 import javax.telephony.ProviderListener;
 
-import org.jdial.common.Service;
+import al.jdi.common.Service;
 
 public interface CtiManager extends Service {
 

@@ -11,9 +11,9 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jdial.common.Service;
 import org.slf4j.Logger;
 
+import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.ThreadCountParameter;
@@ -132,7 +132,6 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     executorService = executorServiceProvider.get();
     for (int i = 0; i < threadCount; i++)
       executorService.execute(this);
-    logger.info("Started successfuly {}", this);
   }
 
   @Override
@@ -142,7 +141,6 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
       throw new IllegalStateException("Already stopped");
     executorService.shutdown();
     executorService = null;
-    logger.info("Stopped successfuly {}", this);
   }
 
   @Override

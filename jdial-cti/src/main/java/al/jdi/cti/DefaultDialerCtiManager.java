@@ -131,7 +131,6 @@ class DefaultDialerCtiManager implements DialerCtiManager {
   @Override
   public void start() {
     ctiManager.start();
-    logger.info("Started successfuly {}", this);
   }
 
   @Override

@@ -13,11 +13,11 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jdial.common.Engine;
-import org.jdial.common.Service;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
+import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 import al.jdi.dao.beans.DaoFactory;
@@ -131,7 +131,6 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, Period.minutes(1), true, true);
-    logger.info("Iniciado {}", this);
   }
 
   @Override
@@ -141,7 +140,6 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
       throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
-    logger.info("Encerrado {}", this);
 
   }
 

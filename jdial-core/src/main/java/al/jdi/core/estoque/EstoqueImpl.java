@@ -16,13 +16,13 @@ import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.jdial.common.Engine;
-import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
+import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;

@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.modelo.DiscavelTsaCRMImpl;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.InformacaoCliente;

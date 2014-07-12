@@ -7,12 +7,12 @@ import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jdial.common.Engine;
-import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
+import al.jdi.common.Service;
 import al.jdi.core.DialerModule.DialerService;
 import al.jdi.core.DialerModule.Versao;
 import al.jdi.core.configuracoes.Configuracoes;
@@ -169,7 +169,6 @@ class DefaultDialer implements Service, Runnable {
     engine.stop();
     engine = null;
     limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
-    logger.info("Encerrado Dialer {}", versao);
   }
 
   @Override

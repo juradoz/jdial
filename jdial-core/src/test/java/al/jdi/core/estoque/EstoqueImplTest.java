@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.inject.Provider;
 
-import org.jdial.common.Engine;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.junit.Before;
@@ -23,6 +22,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;

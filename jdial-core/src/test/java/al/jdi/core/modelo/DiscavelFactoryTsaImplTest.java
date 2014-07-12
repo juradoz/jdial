@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.modelo.Discavel;
-import al.jdi.core.modelo.DiscavelFactoryTsaImpl;
 import al.jdi.dao.model.Cliente;
 
 public class DiscavelFactoryTsaImplTest {

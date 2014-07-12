@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.modelo.DefaultTelefoneSorter;
 import al.jdi.dao.model.Telefone;
 
 public class DefaultTelefoneSorterTest {

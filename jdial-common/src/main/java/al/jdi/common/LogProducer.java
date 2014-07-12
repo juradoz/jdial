@@ -1,4 +1,4 @@
-package org.jdial.common;
+package al.jdi.common;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;

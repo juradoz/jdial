@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
-import org.jdial.common.Engine;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.estoque.EstoqueModule.Livres;

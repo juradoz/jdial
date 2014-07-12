@@ -13,12 +13,12 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jdial.common.Engine;
-import org.jdial.common.Service;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
+import al.jdi.common.Service;
 import al.jdi.core.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
 import al.jdi.core.configuracoes.ConfiguracoesModule.NomeCampanha;
@@ -352,7 +352,6 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloAtualizacao, true, true);
-    logger.info("Started successfuly {}", this);
   }
 
   @Override
@@ -362,7 +361,6 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
       throw new IllegalStateException();
     engine.stop();
     engine = null;
-    logger.info("Stopped successfuly {}", this);
   }
 
   @Override

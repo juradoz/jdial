@@ -28,7 +28,7 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
   TratadorEspecificoClienteTsaCRMImpl(Logger logger, Configuracoes configuracoes) {
     this.logger = logger;
     this.configuracoes = configuracoes;
-    logger.info("Iniciando {}", this);
+    logger.debug("Iniciando {}", this);
   }
 
   @Override

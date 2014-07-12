@@ -10,8 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.filter.BloqueioCelularUtil;
-import al.jdi.core.filter.CelularChecker;
 import al.jdi.dao.model.Telefone;
 
 public class BloqueiaCelularUtilTest {

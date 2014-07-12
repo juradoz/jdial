@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import al.jdi.core.modelo.Providencia;
-
 public class ProvidenciaTest {
 
   @Test

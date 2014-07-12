@@ -1,4 +1,4 @@
-package org.jdial.common;
+package al.jdi.common;
 
 import org.joda.time.Period;
 

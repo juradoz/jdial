@@ -9,9 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import al.jdi.core.modelo.Discavel;
-import al.jdi.core.modelo.Ligacao;
-
 public class LigacaoTest {
 
   private static final String AGENTE = "AGENTE";

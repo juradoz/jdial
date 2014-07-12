@@ -15,10 +15,10 @@ import javax.telephony.ProviderListener;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jdial.common.Engine;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
 import al.jdi.cti.CtiManagerModule.CtiManagerService;
 
 import com.avaya.jtapi.tsapi.TsapiPlatformException;
@@ -202,7 +202,6 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
       throw new IllegalStateException("Already started");
 
     engine = engineFactory.create(this, Period.seconds(10), true, true);
-    logger.info("Started successfuly {}", this);
   }
 
   @Override

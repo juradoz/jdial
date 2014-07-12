@@ -2,8 +2,9 @@ package al.jdi.core;
 
 import javax.inject.Inject;
 
-import org.jdial.common.Service;
 import org.slf4j.Logger;
+
+import al.jdi.common.Service;
 
 class ShutdownHook implements Runnable {
 

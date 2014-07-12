@@ -11,12 +11,12 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import javax.inject.Provider;
 
-import org.jdial.common.Engine;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;

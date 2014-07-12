@@ -7,9 +7,9 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
-import org.jdial.common.Service;
 import org.joda.time.Period;
 
+import al.jdi.common.Service;
 import al.jdi.core.DialerModule.DialerService;
 import al.jdi.core.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
