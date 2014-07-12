@@ -30,6 +30,7 @@ import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
+import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -86,6 +87,8 @@ public class DialerImplTest {
   private Servico servico;
   @Mock
   private Logger logger;
+  @Mock
+  private DialerCtiManager dialerCtiManager;
 
   private DefaultDialer dialerImpl;
 
@@ -122,7 +125,7 @@ public class DialerImplTest {
     dialerImpl =
         new DefaultDialer(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
-            daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK);
+            daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
   }
 
   @Test

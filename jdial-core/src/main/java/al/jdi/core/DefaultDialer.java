@@ -4,6 +4,8 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.telephony.ProviderEvent;
+import javax.telephony.ProviderListener;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -26,13 +28,14 @@ import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.ModeloModule.DiscavelTsa;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
+import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
 @DialerService
-class DefaultDialer implements Service, Runnable {
+class DefaultDialer implements Service, Runnable, ProviderListener {
 
   private final Logger logger;
   private final Configuracoes configuracoes;
@@ -48,6 +51,7 @@ class DefaultDialer implements Service, Runnable {
   private final String versao;
 
   private Engine engine;
+  private boolean inService = false;
 
   @Inject
   DefaultDialer(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
@@ -55,7 +59,7 @@ class DefaultDialer implements Service, Runnable {
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
       @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
       Provider<DaoFactory> daoFactoryProvider, TratadorEspecificoCliente tratadorEspecificoCliente,
-      GerenciadorFatorK gerenciadorFatorK) {
+      GerenciadorFatorK gerenciadorFatorK, DialerCtiManager dialerCtiManager) {
     this.logger = logger;
     this.configuracoes = configuracoes;
     this.gerenciadorAgentes = gerenciadorAgentes;
@@ -68,6 +72,7 @@ class DefaultDialer implements Service, Runnable {
     this.gerenciadorFatorK = gerenciadorFatorK;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.versao = versao;
+    dialerCtiManager.addListener(this);
     logger.info("Iniciando Dialer {}...", this.versao);
 
     limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
@@ -138,6 +143,12 @@ class DefaultDialer implements Service, Runnable {
       logger.warn("Sistema inativo");
       return;
     }
+
+    if (!inService) {
+      logger.warn("Fora de servico.");
+      return;
+    }
+
     logger.debug("Sistema ativo!");
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
@@ -174,4 +185,29 @@ class DefaultDialer implements Service, Runnable {
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
   }
+
+  @Override
+  public void providerEventTransmissionEnded(ProviderEvent event) {
+    logger.debug("providerEventTransmissionEnded");
+    inService = false;
+  }
+
+  @Override
+  public void providerInService(ProviderEvent event) {
+    logger.debug("providerInService");
+    inService = true;
+  }
+
+  @Override
+  public void providerOutOfService(ProviderEvent event) {
+    logger.debug("providerOutOfService");
+    inService = false;
+  }
+
+  @Override
+  public void providerShutdown(ProviderEvent event) {
+    logger.debug("providerShutdown");
+    inService = false;
+  }
+
 }

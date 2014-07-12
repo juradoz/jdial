@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jboss.weld.environment.se.events.ContainerInitialized;
-import org.joda.time.Period;
 
 import al.jdi.common.Service;
 import al.jdi.core.DialerModule.DialerService;
@@ -56,6 +55,7 @@ class Main {
 
   @PostConstruct
   public void start() {
+    ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
     Runtime.getRuntime().addShutdownHook(
         new Thread(shutdownHookFactory.create(devolveRegistroService, estoqueLivresService,
             estoqueLivresAgendados, dialerCtiManagerService, gerenciadorAgentesService,
@@ -73,12 +73,6 @@ class Main {
     dialerService.start();
   }
 
-  public void run(@Observes ContainerInitialized event) throws InterruptedException {
-    ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
-
-    Thread.sleep(Period.seconds(10).toStandardSeconds().getSeconds() * 1000);
-    // while (Thread.currentThread().isAlive())
-    // Thread.sleep(100);
-  }
+  public void run(@Observes ContainerInitialized event) {}
 
 }

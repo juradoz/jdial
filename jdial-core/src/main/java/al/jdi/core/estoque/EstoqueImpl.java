@@ -247,8 +247,10 @@ class EstoqueImpl implements Estoque, Runnable, Service {
       return;
     }
 
+    daoFactory.beginTransaction();
     campanha.setLimpaMemoria(false);
     campanhaDao.atualiza(campanha);
+    daoFactory.commit();
 
     logger.warn("Limpeza de memoria solicitada!");
     DateTime instante = daoFactory.getDataBanco();
