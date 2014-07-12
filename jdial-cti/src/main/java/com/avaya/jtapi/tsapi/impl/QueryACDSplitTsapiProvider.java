@@ -302,7 +302,7 @@ public class QueryACDSplitTsapiProvider implements ITsapiProviderEx, PrivateData
   }
 
   @Override
-  public final String requestPrivileges() throws TsapiInvalidArgumentException {
+  public final String requestPrivileges() {
     return tsapiProvider.requestPrivileges();
   }
 

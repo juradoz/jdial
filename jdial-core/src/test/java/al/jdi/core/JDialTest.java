@@ -12,6 +12,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.util.Arrays;
 
 import javax.inject.Provider;
+import javax.telephony.ProviderEvent;
 
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class JDialTest {
   private static final Integer QTD_LIGACOES_NAO_ATENDIDAS = 0;
   private static final DateTime DATA_BANCO = new DateTime();
   private final String versao = "VERSAO";
-  
+
   private JDial jDial;
 
   @Mock
@@ -91,6 +92,8 @@ public class JDialTest {
   private Logger logger;
   @Mock
   private DialerCtiManager dialerCtiManager;
+  @Mock
+  private ProviderEvent event;
 
   @Before
   public void setUp() throws Exception {
@@ -166,6 +169,7 @@ public class JDialTest {
   @Test
   public void runDeveriaExecutar() throws Exception {
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
+    jDial.providerInService(event);
     jDial.run();
     verify(daoFactoryProvider, times(2)).get();
   }
