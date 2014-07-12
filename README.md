@@ -1,4 +1,4 @@
 jdial
 =====
 
-Java Predictive Dialer based on CTI integration
+Java Predictive Dialer based on Avaya JTAPI CTI integration
