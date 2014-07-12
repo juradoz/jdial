@@ -9,6 +9,7 @@ import java.util.List;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -23,6 +24,7 @@ import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKSe
 import al.jdi.dao.beans.DaoFactory;
 
 @Default
+@Singleton
 @GerenciadorFatorKService
 class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
 

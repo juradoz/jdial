@@ -24,8 +24,12 @@
 	<category name="net.sf.ehcache">
 		<priority value="error" />
 	</category>
-	
+
 	<category name="org.jboss.weld">
+		<priority value="error" />
+	</category>
+
+	<category name="org.jboss.logging">
 		<priority value="error" />
 	</category>
 
