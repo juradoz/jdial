@@ -53,7 +53,7 @@ class Main {
             estoqueLivresAgendados, gerenciadorAgentesService, gerenciadorLigacoesService,
             dialerService, configuracoesService, gerenciadorFatorKService), "EventoShutdown"));
 
-    configuracoesService.start();
+    // configuracoesService.start();
     // devolveRegistroService.start();
     // estoqueLivresService.start();
     // estoqueLivresAgendados.start();

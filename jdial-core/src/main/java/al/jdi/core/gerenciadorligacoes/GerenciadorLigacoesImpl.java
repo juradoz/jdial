@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -37,6 +38,7 @@ import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Telefone;
 
 @Default
+@Singleton
 @GerenciadorLigacoesService
 class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service {
 

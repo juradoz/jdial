@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.jdial.common.Engine;
 import org.joda.time.Period;
@@ -21,6 +22,7 @@ import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 
 @Agendados
+@Singleton
 class EstoqueImplAgendados extends EstoqueImpl {
 
   @Inject

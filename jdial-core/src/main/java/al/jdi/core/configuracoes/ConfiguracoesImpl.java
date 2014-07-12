@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -27,6 +28,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 
+@Singleton
 @Default
 @ConfiguracoesService
 class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
@@ -128,7 +130,7 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
     this.sistemaAtivo = sistemaAtivoFactory.create(this);
     this.intervaloAtualizacao = intervaloAtualizacao;
     run();
-    logger.debug("Iniciando {}...", this);
+    logger.debug("Starting {}...", this);
   }
 
   @Override
@@ -350,17 +352,17 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloAtualizacao, true);
-    logger.info("Iniciado {}", this);
+    logger.info("Started successfuly {}", this);
   }
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {}...", this);
+    logger.debug("Stopping {}...", this);
     if (engine == null)
       throw new IllegalStateException();
     engine.stop();
     engine = null;
-    logger.info("Encerrado {}", this);
+    logger.info("Stopped successfuly {}", this);
   }
 
   @Override

@@ -6,12 +6,15 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.telephony.JtapiPeer;
 import javax.telephony.JtapiPeerFactory;
 import javax.telephony.Provider;
 import javax.telephony.ProviderEvent;
 import javax.telephony.ProviderListener;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.jdial.common.Engine;
 import org.joda.time.Period;
 import org.slf4j.Logger;
@@ -20,10 +23,9 @@ import al.jdi.cti.CtiManagerModule.CtiManagerService;
 
 import com.avaya.jtapi.tsapi.TsapiPlatformException;
 
+@Singleton
 @CtiManagerService
 class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
-
-  private final static String VERSION = "3.0.0";
 
   private final Set<ProviderListener> providerListeners = Collections
       .synchronizedSet(new HashSet<ProviderListener>());
@@ -49,6 +51,7 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
     try {
       this.jtapiPeer = JtapiPeerFactory.getJtapiPeer(jtapiPeerName);
       providerString = getStringConexao(serverIp, port, service, login, password);
+      logger.debug("Iniciando {}...", this);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -200,7 +203,12 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 
     engine = engineFactory.create(this, Period.seconds(10), true);
     engine.start();
-    logger.info("ctimanager-{} started sucessfully", VERSION);
+    logger.info("Started successfuly {}", this);
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
   }
 
 }

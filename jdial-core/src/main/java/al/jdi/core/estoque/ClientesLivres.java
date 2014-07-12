@@ -27,7 +27,7 @@ class ClientesLivres implements ExtraidorClientes {
   ClientesLivres(TratadorEspecificoCliente tratadorEspecificoCliente, Configuracoes configuracoes) {
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
     this.configuracoes = configuracoes;
-    logger.info("Iniciando {}", this);
+    logger.debug("Iniciando {}", this);
   }
 
   @Override

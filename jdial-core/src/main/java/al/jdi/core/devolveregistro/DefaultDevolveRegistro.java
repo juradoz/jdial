@@ -7,6 +7,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,6 +25,7 @@ import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
 @Default
+@Singleton
 @DevolveRegistroService
 class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
@@ -51,7 +53,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     this.threadCount = threadCount;
     this.modificadorResultado = modificadorResultado;
     this.processosDevolucao = processosDevolucao;
-    logger.debug("Iniciando {}...", this);
+    logger.debug("Starting {}...", this);
   }
 
   @Override
@@ -131,17 +133,17 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     executorService = executorServiceProvider.get();
     for (int i = 0; i < threadCount; i++)
       executorService.execute(this);
-    logger.info("Iniciado {}", this);
+    logger.info("Started successfuly {}", this);
   }
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {}...", this);
+    logger.debug("Stopping {}...", this);
     if (executorService == null)
       throw new IllegalStateException();
     executorService.shutdown();
     executorService = null;
-    logger.info("Encerrado {}", this);
+    logger.info("Stopped successfuly {}", this);
   }
 
   @Override

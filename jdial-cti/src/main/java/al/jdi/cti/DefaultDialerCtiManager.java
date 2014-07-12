@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
 import javax.telephony.MethodNotSupportedException;
@@ -19,6 +20,8 @@ import javax.telephony.callcenter.Agent;
 import javax.telephony.callcenter.CallCenterCall;
 import javax.telephony.callcontrol.CallControlConnectionListener;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import al.jdi.cti.CtiManagerModule.CtiManagerService;
@@ -28,6 +31,7 @@ import com.avaya.jtapi.tsapi.LucentAddress;
 import com.avaya.jtapi.tsapi.QueryACDSplitACDAddress;
 import com.avaya.jtapi.tsapi.TsapiMethodNotSupportedException;
 
+@Singleton
 @Default
 @DialerCtiManagerService
 class DefaultDialerCtiManager implements DialerCtiManager {
@@ -48,6 +52,7 @@ class DefaultDialerCtiManager implements DialerCtiManager {
     this.executorService = executorService;
     this.predictiveCallListenerFactory = predictiveCallListenerFactory;
     this.predictiveCallRunnerFactory = predictiveCallRunnerFactory;
+    logger.debug("Starting {}...", this);
   }
 
   @Override
@@ -126,11 +131,17 @@ class DefaultDialerCtiManager implements DialerCtiManager {
   @Override
   public void start() {
     ctiManager.start();
+    logger.info("Started successfuly {}", this);
   }
 
   @Override
   public void stop() {
     ctiManager.stop();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
   }
 
 }

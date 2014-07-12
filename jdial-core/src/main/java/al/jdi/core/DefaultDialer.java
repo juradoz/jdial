@@ -51,12 +51,11 @@ class DefaultDialer implements Service, Runnable {
   private Engine engine;
 
   @Inject
-  DefaultDialer(Configuracoes configuracoes, Engine.Factory engineFactory,
-      @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
-      GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
-      @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
-      Provider<DaoFactory> daoFactoryProvider, TratadorEspecificoCliente tratadorEspecificoCliente,
-      GerenciadorFatorK gerenciadorFatorK) {
+  DefaultDialer(Configuracoes configuracoes, Engine.Factory engineFactory, @Versao String versao,
+      GerenciadorAgentes gerenciadorAgentes, GerenciadorLigacoes gerenciadorLigacoes,
+      @Livres Estoque estoqueLivres, @Agendados Estoque estoqueAgendados,
+      @DiscavelTsa Discavel.Factory discavelFactory, Provider<DaoFactory> daoFactoryProvider,
+      TratadorEspecificoCliente tratadorEspecificoCliente, GerenciadorFatorK gerenciadorFatorK) {
     this.configuracoes = configuracoes;
     this.gerenciadorAgentes = gerenciadorAgentes;
     this.gerenciadorLigacoes = gerenciadorLigacoes;
@@ -78,13 +77,15 @@ class DefaultDialer implements Service, Runnable {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
       Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
-      logger.info("Limpando reservas para campanha {}...", campanha.getNome());
+      logger.debug("Limpando reservas para campanha {}...", campanha.getNome());
+      DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
       tratadorEspecificoCliente.obtemClienteDao(daoFactory).limpaReservas(campanha,
           configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
           configuracoes.getOperador());
       daoFactory.commit();
-      logger.info("Limpou reservas para campanha {}", campanha.getNome());
+      logger.info("Limpou reservas para campanha {}. Demorou {}ms", campanha.getNome(),
+          new Duration(inicio, new DateTime()).getMillis());
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     } finally {
