@@ -3,6 +3,7 @@ package al.jdi.core.modelo;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -23,13 +24,13 @@ class MantemAtual implements Providencia {
   private Logger logger = LoggerFactory.getLogger(getClass());
 
   private final TelefoneSorter telefoneSorter;
-  private final Providencia proximoTelefone;
+  private final Instance<Providencia> proximoTelefone;
   private final TelefoneFilter clienteSemTelefoneFilter;
   private final TelefoneFilter somenteCelularFilter;
 
   @Inject
   MantemAtual(TelefoneSorter telefoneSorter,
-      @ProvidenciaProximoTelefone Providencia proximoTelefone,
+      @ProvidenciaProximoTelefone Instance<Providencia> proximoTelefone,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelularFilter) {
     this.telefoneSorter = telefoneSorter;
@@ -63,7 +64,7 @@ class MantemAtual implements Providencia {
     if (!telefones.contains(result)) {
       logger.warn("Telefone {} nao esta contido na relacao de telefones uteis cliente {}", result,
           cliente);
-      return proximoTelefone.getTelefone(daoFactory, cliente);
+      return proximoTelefone.get().getTelefone(daoFactory, cliente);
     }
     logger.debug("Mantendo telefone atual para cliente {} Id {} DDD {} TEL {}", new Object[] {
         cliente, result, result.getDdd(), result.getTelefone()});

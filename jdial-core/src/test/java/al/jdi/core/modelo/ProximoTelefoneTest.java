@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
+
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.junit.Before;
@@ -21,9 +23,6 @@ import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
-import al.jdi.core.modelo.MantemAtual;
-import al.jdi.core.modelo.ProximoTelefone;
-import al.jdi.core.modelo.TelefoneSorter;
 import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
 import al.jdi.core.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
 import al.jdi.core.modelo.Providencia.SemProximoTelefoneException;
@@ -53,7 +52,9 @@ public class ProximoTelefoneTest {
   @Mock
   private TelefoneSorter telefoneSorter;
   @Mock
-  private MantemAtual mantemAtual;
+  private Instance<Providencia> iMantemAtual;
+  @Mock
+  private Providencia mantemAtual;
   @Mock
   private ClienteDao clienteDao;
   @Mock
@@ -66,6 +67,7 @@ public class ProximoTelefoneTest {
     initMocks(this);
     telefones = new LinkedList<Telefone>(asList(telefone1, telefone2));
 
+    when(iMantemAtual.get()).thenReturn(mantemAtual);
     when(mantemAtual.getTelefone(daoFactory, cliente)).thenReturn(telefone1);
 
     when(cliente.getTelefone()).thenReturn(telefone1);
@@ -84,7 +86,7 @@ public class ProximoTelefoneTest {
     when(somenteCelularesFilter.filter(telefones)).thenReturn(telefones);
 
     proximoTelefone =
-        new ProximoTelefone(configuracoes, telefoneSorter, mantemAtual, clienteSemTelefonesFilter,
+        new ProximoTelefone(configuracoes, telefoneSorter, iMantemAtual, clienteSemTelefonesFilter,
             somenteCelularesFilter);
   }
 

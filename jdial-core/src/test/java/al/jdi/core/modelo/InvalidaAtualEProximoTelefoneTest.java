@@ -7,12 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+import javax.enterprise.inject.Instance;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import al.jdi.core.modelo.InvalidaAtualEProximoTelefone;
-import al.jdi.core.modelo.ProximoTelefone;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.TelefoneDao;
@@ -31,6 +31,8 @@ public class InvalidaAtualEProximoTelefoneTest {
   @Mock
   private Telefone telefone2;
   @Mock
+  private Instance<ProximoTelefone> iProximoTelefone;
+  @Mock
   private ProximoTelefone proximoTelefone;
   @Mock
   private ClienteDao clienteDao;
@@ -41,10 +43,11 @@ public class InvalidaAtualEProximoTelefoneTest {
   public void setUp() throws Exception {
     initMocks(this);
     when(cliente.getTelefone()).thenReturn(telefone1);
+    when(iProximoTelefone.get()).thenReturn(proximoTelefone);
     when(proximoTelefone.getTelefone(daoFactory, cliente)).thenReturn(telefone2);
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
     when(daoFactory.getTelefoneDao()).thenReturn(telefoneDao);
-    invalidaAtualEProximoTelefone = new InvalidaAtualEProximoTelefone(proximoTelefone);
+    invalidaAtualEProximoTelefone = new InvalidaAtualEProximoTelefone(iProximoTelefone);
   }
 
   @Test

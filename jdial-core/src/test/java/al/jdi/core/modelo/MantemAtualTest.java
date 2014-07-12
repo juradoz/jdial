@@ -12,15 +12,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
+
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.filter.TelefoneFilter;
-import al.jdi.core.modelo.MantemAtual;
-import al.jdi.core.modelo.ProximoTelefone;
-import al.jdi.core.modelo.TelefoneSorter;
 import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
 import al.jdi.core.modelo.Providencia.SomenteCelularException;
 import al.jdi.dao.beans.ClienteDao;
@@ -48,11 +47,14 @@ public class MantemAtualTest {
   @Mock
   private ClienteDao clienteDao;
   @Mock
-  private ProximoTelefone proximoTelefone;
+  private Instance<Providencia> iProximoTelefone;
+  @Mock
+  private Providencia proximoTelefone;
   @Mock
   private TelefoneFilter clienteSemTelefonesFilter;
   @Mock
   private TelefoneFilter somenteCelulareFilter;
+
 
   @Before
   public void setUp() throws Exception {
@@ -64,11 +66,12 @@ public class MantemAtualTest {
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getTelefones()).thenReturn(telefones);
     when(telefoneSorter.sort(telefones)).thenReturn(telefones);
+    when(iProximoTelefone.get()).thenReturn(proximoTelefone);
     when(proximoTelefone.getTelefone(daoFactory, cliente)).thenReturn(telefone2);
     when(clienteSemTelefonesFilter.filter(telefones)).thenReturn(telefones);
     when(somenteCelulareFilter.filter(telefones)).thenReturn(telefones);
     mantemAtual =
-        new MantemAtual(telefoneSorter, proximoTelefone, clienteSemTelefonesFilter,
+        new MantemAtual(telefoneSorter, iProximoTelefone, clienteSemTelefonesFilter,
             somenteCelulareFilter);
   }
 

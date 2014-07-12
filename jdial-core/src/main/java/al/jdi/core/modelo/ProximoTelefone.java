@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
@@ -27,13 +28,13 @@ class ProximoTelefone implements Providencia {
 
   private final Configuracoes configuracoes;
   private final TelefoneSorter telefoneSorter;
-  private final Providencia mantemAtual;
+  private final Instance<Providencia> mantemAtual;
   private final TelefoneFilter clienteSemTelefonesFilter;
   private final TelefoneFilter somenteCelulareFilter;
 
   @Inject
   ProximoTelefone(Configuracoes configuracoes, TelefoneSorter telefoneSorter,
-      @ProvidenciaMantemAtual Providencia mantemAtual,
+      @ProvidenciaMantemAtual Instance<Providencia> mantemAtual,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelulareFilter) {
     this.configuracoes = configuracoes;
@@ -47,7 +48,7 @@ class ProximoTelefone implements Providencia {
   public Telefone getTelefone(DaoFactory daoFactory, Cliente cliente) {
     final Telefone result = cliente.getTelefone();
     if (result == null)
-      return mantemAtual.getTelefone(daoFactory, cliente);
+      return mantemAtual.get().getTelefone(daoFactory, cliente);
 
     List<Telefone> telefones = new LinkedList<Telefone>(cliente.getTelefones());
     if (telefones.isEmpty())

@@ -1,5 +1,6 @@
 package al.jdi.core.modelo;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -16,10 +17,11 @@ class InvalidaAtualEProximoTelefone implements Providencia {
 
   private Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final ProximoTelefone proximoTelefone;
+  private final Instance<ProximoTelefone> proximoTelefone;
 
   @Inject
-  InvalidaAtualEProximoTelefone(@ProvidenciaProximoTelefone ProximoTelefone proximoTelefone) {
+  InvalidaAtualEProximoTelefone(
+      @ProvidenciaProximoTelefone Instance<ProximoTelefone> proximoTelefone) {
     this.proximoTelefone = proximoTelefone;
   }
 
@@ -29,14 +31,14 @@ class InvalidaAtualEProximoTelefone implements Providencia {
     Telefone result = cliente.getTelefone();
     if (result == null) {
       logger.debug("Cliente {} nao possuia telefone atual", cliente);
-      return proximoTelefone.getTelefone(daoFactory, cliente);
+      return proximoTelefone.get().getTelefone(daoFactory, cliente);
     }
     logger.debug("Vai efetivamente invalidar para cliente {} Id {} DDD {} TEL {}", new Object[] {
         cliente, result, result.getDdd(), result.getTelefone()});
     result.setUtil(false);
     daoFactory.getTelefoneDao().atualiza(result);
     daoFactory.getClienteDao().atualiza(cliente);
-    return proximoTelefone.getTelefone(daoFactory, cliente);
+    return proximoTelefone.get().getTelefone(daoFactory, cliente);
   }
 
   @Override
