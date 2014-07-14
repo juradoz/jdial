@@ -70,6 +70,16 @@ public class Campanha implements DaoObject {
   private String descricao;
 
   private boolean limpaMemoria = false;
+  
+  private boolean ativa = false;
+
+  public boolean isAtiva() {
+    return ativa;
+  }
+
+  public void setAtiva(boolean ativa) {
+    this.ativa = ativa;
+  }
 
   public Campanha() {}
 
