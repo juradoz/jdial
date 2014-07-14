@@ -2,7 +2,6 @@ package al.jdi.dao.beans;
 
 import org.joda.time.DateTime;
 
-import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.DefinicaoPadrao;
 import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.Filtro;
@@ -29,7 +28,7 @@ public interface DaoFactory {
 
   AreaAreaDao getAreaAreaDao();
 
-  Dao<Campanha> getCampanhaDao();
+  CampanhaDao getCampanhaDao();
 
   ClienteDao getClienteDao();
 

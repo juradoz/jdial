@@ -32,7 +32,7 @@ import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
-import al.jdi.dao.beans.Dao;
+import al.jdi.dao.beans.CampanhaDao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
@@ -64,7 +64,7 @@ public class EstoqueImplTest {
   @Mock
   private DaoFactory daoFactory;
   @Mock
-  private Dao<Campanha> campanhaDao;
+  private CampanhaDao campanhaDao;
   @Mock
   private Campanha campanha;
   @Mock

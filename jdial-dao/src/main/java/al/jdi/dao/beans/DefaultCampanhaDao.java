@@ -3,12 +3,13 @@ package al.jdi.dao.beans;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 import al.jdi.dao.model.DefinicaoPadrao;
 
-class DefaultCampanhaDao implements Dao<Campanha> {
+class DefaultCampanhaDao implements CampanhaDao {
 
   private final DefaultDao<Campanha> dao;
 
@@ -57,6 +58,13 @@ class DefaultCampanhaDao implements Dao<Campanha> {
   @Override
   public void remove(Campanha u) {
     dao.remove(u);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Campanha> listaAtivas() {
+    return (List<Campanha>) dao.getSession().createCriteria(Campanha.class)
+        .add(Restrictions.eq("ativa", true));
   }
 
 }

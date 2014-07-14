@@ -32,8 +32,8 @@ import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.cti.DialerCtiManager;
+import al.jdi.dao.beans.CampanhaDao;
 import al.jdi.dao.beans.ClienteDao;
-import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
@@ -77,7 +77,7 @@ public class JDialTest {
   @Mock
   private DaoFactory daoFactory;
   @Mock
-  private Dao<Campanha> campanhaDao;
+  private CampanhaDao campanhaDao;
   @Mock
   private Campanha campanha;
   @Mock

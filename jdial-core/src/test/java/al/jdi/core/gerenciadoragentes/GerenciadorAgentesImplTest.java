@@ -20,7 +20,7 @@ import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;
-import al.jdi.dao.beans.Dao;
+import al.jdi.dao.beans.CampanhaDao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Grupo;
@@ -46,7 +46,7 @@ public class GerenciadorAgentesImplTest {
   @Mock
   private DaoFactory daoFactory;
   @Mock
-  private Dao<Campanha> campanhaDao;
+  private CampanhaDao campanhaDao;
   @Mock
   private Campanha campanha;
   @Mock
@@ -70,8 +70,8 @@ public class GerenciadorAgentesImplTest {
     assertThat(LIVRES, is(not(equalTo(SIMULTANEOS))));
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
     gerenciadorAgentesImpl =
-        new GerenciadorAgentesImpl(logger, dialerCtiManager, ctiManager, configuracoes,
-            engineFactory, daoFactoryProvider);
+        new GerenciadorAgentesImpl(logger, dialerCtiManager, configuracoes, engineFactory,
+            daoFactoryProvider);
   }
 
   @Test

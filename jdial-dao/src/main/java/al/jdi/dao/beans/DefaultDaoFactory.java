@@ -8,7 +8,6 @@ import org.hibernate.Transaction;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
-import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.DefinicaoPadrao;
 import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.Filtro;
@@ -62,7 +61,7 @@ class DefaultDaoFactory implements DaoFactory {
   }
 
   @Override
-  public Dao<Campanha> getCampanhaDao() {
+  public CampanhaDao getCampanhaDao() {
     return new DefaultCampanhaDao(session);
   }
 

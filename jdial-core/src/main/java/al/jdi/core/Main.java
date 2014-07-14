@@ -10,20 +10,23 @@ import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 import al.jdi.common.Service;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
+import al.jdi.core.tenant.TenantModule.TenantService;
 import al.jdi.cti.DialerCtiManagerModule.DialerCtiManagerService;
 
 class Main {
 
   private final Service devolveRegistroService;
   private final Service dialerCtiManagerService;
+  private final Service tenantService;
   private final ShutdownHook.Factory shutdownHookFactory;
 
   @Inject
   Main(@DevolveRegistroService Service devolveRegistroService,
       @DialerCtiManagerService Service dialerCtiManagerService,
-      ShutdownHook.Factory shutdownHookFactory) {
+      @TenantService Service tenantService, ShutdownHook.Factory shutdownHookFactory) {
     this.devolveRegistroService = devolveRegistroService;
     this.dialerCtiManagerService = dialerCtiManagerService;
+    this.tenantService = tenantService;
     this.shutdownHookFactory = shutdownHookFactory;
   }
 
@@ -31,11 +34,12 @@ class Main {
   public void start() {
     ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
     Runtime.getRuntime().addShutdownHook(
-        new Thread(shutdownHookFactory.create(devolveRegistroService, dialerCtiManagerService),
-            "EventoShutdown"));
+        new Thread(shutdownHookFactory.create(devolveRegistroService, dialerCtiManagerService,
+            tenantService), "EventoShutdown"));
 
     devolveRegistroService.start();
     dialerCtiManagerService.start();
+    tenantService.start();
   }
 
   public void run(@Observes ContainerInitialized event) {}
