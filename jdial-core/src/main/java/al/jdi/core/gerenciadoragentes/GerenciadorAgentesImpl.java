@@ -1,9 +1,7 @@
 package al.jdi.core.gerenciadoragentes;
 
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 import javax.telephony.ProviderEvent;
 import javax.telephony.ProviderListener;
 
@@ -15,17 +13,28 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.gerenciadoragentes.GerenciadorAgentesModule.GerenciadorAgentesService;
-import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 
-@Default
-@Singleton
-@GerenciadorAgentesService
-class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, ProviderListener {
+class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, ProviderListener {
+
+  static class GerenciadorAgentesFactory implements GerenciadorAgentes.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private DialerCtiManager dialerCtiManager;
+    @Inject
+    private Engine.Factory engineFactory;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+
+    @Override
+    public GerenciadorAgentes create(Configuracoes configuracoes) {
+      return new GerenciadorAgentesImpl(logger, dialerCtiManager, configuracoes, engineFactory,
+          daoFactoryProvider);
+    }
+  }
 
   private final Logger logger;
   private final DialerCtiManager dialerCtiManager;
@@ -37,8 +46,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
   private int livres;
   private boolean inService = false;
 
-  @Inject
-  GerenciadorAgentesImpl(Logger logger, DialerCtiManager dialerCtiManager, CtiManager ctiManager,
+  GerenciadorAgentesImpl(Logger logger, DialerCtiManager dialerCtiManager,
       Configuracoes configuracoes, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider) {
     this.logger = logger;
@@ -46,7 +54,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, Service, P
     this.configuracoes = configuracoes;
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;
-    ctiManager.addListener(this);
+    dialerCtiManager.addListener(this);
     logger.debug("Iniciando {}...", this);
   }
 
