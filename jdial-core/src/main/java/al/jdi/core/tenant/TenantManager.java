@@ -5,8 +5,10 @@ import al.jdi.dao.model.Campanha;
 
 public interface TenantManager extends Service {
 
-  public abstract void addTenant(Campanha campanha);
+  void addTenant(Campanha campanha);
 
-  public abstract void removeTenant(Campanha campanha);
+  void removeTenant(Campanha campanha);
+
+  Tenant get(Campanha campanha);
 
 }

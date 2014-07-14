@@ -53,11 +53,6 @@ class DefaultTenantManager implements TenantManager {
     }
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see al.jdi.core.tenant.TenantService#addTenant(al.jdi.dao.model.Campanha)
-   */
   @Override
   public void addTenant(Campanha campanha) {
     logger.debug("Trying to add tenant {}", campanha);
@@ -69,11 +64,6 @@ class DefaultTenantManager implements TenantManager {
     logger.debug("Successfuly added tenant {}", campanha);
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see al.jdi.core.tenant.TenantService#removeTenant(al.jdi.dao.model.Campanha)
-   */
   @Override
   public void removeTenant(Campanha campanha) {
     logger.debug("Trying to remove tenant {}", campanha);
@@ -87,6 +77,14 @@ class DefaultTenantManager implements TenantManager {
     }
     tenant.stop();
     logger.info("Successfuly remove tenant {}", campanha);
+  }
+
+
+  @Override
+  public Tenant get(Campanha campanha) {
+    synchronized (tenants) {
+      return tenants.get(campanha);
+    }
   }
 
 }
