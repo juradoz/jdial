@@ -29,12 +29,6 @@ public class DevolveRegistroModule {
   @Retention(RUNTIME)
   @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
-  public @interface DevolvedorRegistroExecutorService {
-  }
-
-  @Retention(RUNTIME)
-  @Target({METHOD, FIELD, PARAMETER, TYPE})
-  @Qualifier
   public @interface DevolveRegistroService {
   }
 

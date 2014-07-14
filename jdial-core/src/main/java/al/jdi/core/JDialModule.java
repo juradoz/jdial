@@ -17,12 +17,6 @@ public class JDialModule {
   @Retention(RUNTIME)
   @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
-  public @interface JDialService {
-  }
-
-  @Retention(RUNTIME)
-  @Target({METHOD, FIELD, PARAMETER, TYPE})
-  @Qualifier
   public @interface Versao {
   }
 

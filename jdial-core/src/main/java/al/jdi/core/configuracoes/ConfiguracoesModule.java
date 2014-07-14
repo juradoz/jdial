@@ -34,12 +34,6 @@ public class ConfiguracoesModule {
   @interface IntervaloAtualizacao {
   }
 
-  @Retention(RUNTIME)
-  @Target({METHOD, FIELD, PARAMETER, TYPE})
-  @Qualifier
-  public @interface ConfiguracoesService {
-  }
-
   @Produces
   public Map<String, Definicao> get() {
     return Collections.synchronizedMap(new HashMap<String, Definicao>());
