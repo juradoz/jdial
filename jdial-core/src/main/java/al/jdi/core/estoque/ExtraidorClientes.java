@@ -5,6 +5,6 @@ import java.util.Collection;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 
-interface ExtraidorClientes {
+public interface ExtraidorClientes {
   Collection<Cliente> extrai(DaoFactory daoFactory, int quantidade);
 }

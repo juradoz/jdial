@@ -1,8 +1,11 @@
 package al.jdi.core.tenant;
 
+import org.joda.time.Period;
+
 import al.jdi.core.JDial;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
+import al.jdi.core.estoque.ExtraidorClientes;
 import al.jdi.core.gerenciadoragentes.GerenciadorAgentes;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
@@ -26,9 +29,17 @@ class DefaultTenant implements Tenant {
     }
   }
 
-  DefaultTenant(Campanha campanha, Configuracoes.Factory configuracoesFactory) {
+  DefaultTenant(Campanha campanha, Configuracoes.Factory configuracoesFactory,
+      ExtraidorClientes extraidorClientesLivres, Period intervaloMonitoracaoLivres,
+      ExtraidorClientes extraidorClientesAgendados, Period intervaloMonitoracaoAgendados,
+      Estoque.Factory estoqueFactory) {
     this.campanha = campanha;
     this.configuracoes = configuracoesFactory.create(campanha.getNome());
+    this.estoqueLivres =
+        estoqueFactory.create(configuracoes, extraidorClientesLivres, intervaloMonitoracaoLivres);
+    this.estoqueAgendados =
+        estoqueFactory.create(configuracoes, extraidorClientesAgendados,
+            intervaloMonitoracaoAgendados);
   }
 
   @Override
@@ -69,5 +80,17 @@ class DefaultTenant implements Tenant {
   @Override
   public JDial getJdial() {
     return jdial;
+  }
+
+  @Override
+  public void start() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void stop() {
+    // TODO Auto-generated method stub
+
   }
 }

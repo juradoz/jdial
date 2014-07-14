@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -22,7 +23,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;
@@ -30,6 +30,7 @@ import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
+import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
 import al.jdi.core.modelo.Providencia.SemProximoTelefoneException;
 import al.jdi.core.modelo.Providencia.SomenteCelularException;
@@ -42,7 +43,36 @@ import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.Telefone;
 
-class EstoqueImpl implements Estoque, Runnable, Service {
+class EstoqueImpl implements Estoque, Runnable {
+
+  static class EstoqueImplFactory implements Estoque.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    private DevolveRegistro devolveRegistro;
+    @Inject
+    private TratadorEspecificoCliente tratadorEspecificoCliente;
+    @Inject
+    private Discavel.Factory discavelFactory;
+    @Inject
+    private Engine.Factory engineFactory;
+    @Inject
+    private Collection<Registro> estoque;
+    @Inject
+    private Map<Codigo, Providencia> providencias;
+    @Inject
+    private TelefoneFilter telefoneFilter;
+
+    @Override
+    public Estoque create(Configuracoes configuracoes, ExtraidorClientes extraidorClientes,
+        Period intervaloMonitoracao) {
+      return new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
+          tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
+          intervaloMonitoracao, providencias, telefoneFilter);
+    }
+  }
 
   @SuppressWarnings("serial")
   public static class ClienteJaEmUsoException extends Exception {

@@ -3,9 +3,7 @@ package al.jdi.core.estoque;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.joda.time.Period;
 import org.slf4j.Logger;
@@ -22,11 +20,8 @@ import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 
-@Agendados
-@Singleton
 class EstoqueImplAgendados extends EstoqueImpl {
 
-  @Inject
   EstoqueImplAgendados(Logger logger, Configuracoes configuracoes,
       Provider<DaoFactory> daoFactoryProvider, DevolveRegistro devolveRegistro,
       TratadorEspecificoCliente tratadorEspecificoCliente,
