@@ -42,7 +42,6 @@ class DefaultSistemaAtivo implements SistemaAtivo {
   private final Map<Integer, String> constInicios = new HashMap<Integer, String>();
   private final Map<Integer, String> constTerminos = new HashMap<Integer, String>();
 
-  @Inject
   DefaultSistemaAtivo(Logger logger, DefaultConfiguracoes configuracoes) {
     this.logger = logger;
     this.configuracoes = configuracoes;

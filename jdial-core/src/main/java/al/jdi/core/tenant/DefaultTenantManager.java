@@ -9,11 +9,13 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 
 import al.jdi.core.tenant.Tenant.Factory;
+import al.jdi.core.tenant.TenantModule.TenantManagerService;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 
 @Singleton
-class DefaultTenantService implements TenantService {
+@TenantManagerService
+class DefaultTenantManager implements TenantManager {
 
   private final Logger logger;
   private final Map<Campanha, Tenant> tenants;
@@ -21,7 +23,7 @@ class DefaultTenantService implements TenantService {
   private final Provider<DaoFactory> daoFactoryProvider;
 
   @Inject
-  DefaultTenantService(Logger logger, Map<Campanha, Tenant> tenants, Factory tenantFactory,
+  DefaultTenantManager(Logger logger, Map<Campanha, Tenant> tenants, Factory tenantFactory,
       Provider<DaoFactory> daoFactoryProvider) {
     this.logger = logger;
     this.tenants = tenants;

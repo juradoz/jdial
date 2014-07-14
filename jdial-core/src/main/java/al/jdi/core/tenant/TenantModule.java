@@ -22,7 +22,7 @@ public class TenantModule {
   @Retention(RUNTIME)
   @Target({METHOD, FIELD, PARAMETER, TYPE})
   @Qualifier
-  public @interface TenantService {
+  public @interface TenantManagerService {
   }
 
   @Produces

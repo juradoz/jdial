@@ -24,7 +24,6 @@ class PredictiveListenerImpl implements PredictiveListener {
   private final Logger logger;
   private final GerenciadorLigacoesImpl owner;
 
-  @Inject
   PredictiveListenerImpl(Logger logger, GerenciadorLigacoesImpl owner) {
     this.logger = logger;
     this.owner = owner;

@@ -10,7 +10,7 @@ import org.jboss.weld.environment.se.events.ContainerInitialized;
 
 import al.jdi.common.Service;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
-import al.jdi.core.tenant.TenantModule.TenantService;
+import al.jdi.core.tenant.TenantModule.TenantManagerService;
 import al.jdi.cti.DialerCtiManagerModule.DialerCtiManagerService;
 
 class Main {
@@ -23,7 +23,7 @@ class Main {
   @Inject
   Main(@DevolveRegistroService Service devolveRegistroService,
       @DialerCtiManagerService Service dialerCtiManagerService,
-      @TenantService Service tenantService, ShutdownHook.Factory shutdownHookFactory) {
+      @TenantManagerService Service tenantService, ShutdownHook.Factory shutdownHookFactory) {
     this.devolveRegistroService = devolveRegistroService;
     this.dialerCtiManagerService = dialerCtiManagerService;
     this.tenantService = tenantService;
