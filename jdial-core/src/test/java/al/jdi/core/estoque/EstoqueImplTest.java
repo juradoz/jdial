@@ -123,7 +123,7 @@ public class EstoqueImplTest {
     when(campanha.isLimpaMemoria()).thenReturn(true);
     estoqueImpl.limpaMemoriaPorSolicitacao(daoFactory);
     ArgumentCaptor<Ligacao> captor = ArgumentCaptor.forClass(Ligacao.class);
-    verify(devolveRegistro).devolveLigacao(captor.capture());
+    verify(devolveRegistro).devolveLigacao(configuracoes, captor.capture());
     Ligacao ligacao = captor.getValue();
     assertThat(ligacao.getDiscavel(), is(sameInstance(discavel)));
   }

@@ -2,8 +2,6 @@ package al.jdi.core.modelo;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import javax.inject.Inject;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,7 +15,6 @@ class DiscavelTsaCRMImpl implements Discavel {
   private final Configuracoes configuracoes;
   private Cliente cliente;
 
-  @Inject
   DiscavelTsaCRMImpl(Configuracoes configuracoes, Cliente cliente) {
     this.configuracoes = configuracoes;
     this.cliente = cliente;

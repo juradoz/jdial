@@ -134,7 +134,7 @@ class EstoqueImpl implements Estoque, Runnable {
     Ligacao ligacao =
         new Ligacao.Builder(discavelFactory.create(cliente), instante).setInicio(instante)
             .setTermino(instante).setMotivoFinalizacao(motivoSistema.getCodigo()).build();
-    devolveRegistro.devolveLigacao(ligacao);
+    devolveRegistro.devolveLigacao(configuracoes, ligacao);
   }
 
   @Override

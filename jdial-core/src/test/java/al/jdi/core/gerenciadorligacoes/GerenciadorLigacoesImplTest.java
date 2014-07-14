@@ -156,7 +156,7 @@ public class GerenciadorLigacoesImplTest {
     gerenciadorLigacoesImpl.chamadaEncerrada(listener, CALL_ID, CAUSA);
     verify(ligacao, never()).setTermino(DATA_BANCO);
     verify(ligacao, never()).setMotivoFinalizacao(CAUSA);
-    verify(devolveRegistro, never()).devolveLigacao(ligacao);
+    verify(devolveRegistro, never()).devolveLigacao(configuracoes, ligacao);
   }
 
   @Test
@@ -174,7 +174,7 @@ public class GerenciadorLigacoesImplTest {
   @Test
   public void chamadaEncerradaDeveriaDevolver() throws Exception {
     gerenciadorLigacoesImpl.chamadaEncerrada(listener, CALL_ID, CAUSA);
-    verify(devolveRegistro).devolveLigacao(ligacao);
+    verify(devolveRegistro).devolveLigacao(configuracoes, ligacao);
   }
 
   @Test
@@ -193,7 +193,7 @@ public class GerenciadorLigacoesImplTest {
   @Test
   public void chamadaErroDeveriaDevolver() throws Exception {
     gerenciadorLigacoesImpl.chamadaErro(listener, e);
-    verify(devolveRegistro).devolveLigacao(ligacao);
+    verify(devolveRegistro).devolveLigacao(configuracoes, ligacao);
   }
 
   @Test
@@ -215,7 +215,7 @@ public class GerenciadorLigacoesImplTest {
     gerenciadorLigacoesImpl.chamadaInvalida(listener, CALL_ID, CAUSA);
     verify(ligacao, never()).setTermino(DATA_BANCO);
     verify(ligacao, never()).setMotivoFinalizacao(CAUSA);
-    verify(devolveRegistro, never()).devolveLigacao(ligacao);
+    verify(devolveRegistro, never()).devolveLigacao(configuracoes, ligacao);
   }
 
   @Test
@@ -233,7 +233,7 @@ public class GerenciadorLigacoesImplTest {
   @Test
   public void chamadaInvalidaDeveriaDevolver() throws Exception {
     gerenciadorLigacoesImpl.chamadaInvalida(listener, CALL_ID, CAUSA);
-    verify(devolveRegistro).devolveLigacao(ligacao);
+    verify(devolveRegistro).devolveLigacao(configuracoes, ligacao);
   }
 
   @Test

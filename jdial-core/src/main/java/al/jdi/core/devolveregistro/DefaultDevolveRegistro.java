@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import al.jdi.common.Service;
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.ThreadCountParameter;
 import al.jdi.core.modelo.Ligacao;
@@ -27,9 +28,27 @@ import al.jdi.dao.model.ResultadoLigacao;
 @DevolveRegistroService
 class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
+  static class Bean {
+    private final Configuracoes configuracoes;
+    private final Ligacao ligacao;
+
+    public Bean(Configuracoes configuracoes, Ligacao ligacao) {
+      this.configuracoes = configuracoes;
+      this.ligacao = ligacao;
+    }
+
+    public Configuracoes getConfiguracoes() {
+      return configuracoes;
+    }
+
+    public Ligacao getLigacao() {
+      return ligacao;
+    }
+  }
+
   private final Logger logger;
   private final Provider<DaoFactory> daoFactoryProvider;
-  private final BlockingQueue<Ligacao> ligacoes;
+  private final BlockingQueue<Bean> ligacoes;
   private final Provider<ExecutorService> executorServiceProvider;
   private final int threadCount;
   private final ModificadorResultado modificadorResultado;
@@ -40,7 +59,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   @Inject
   DefaultDevolveRegistro(Logger logger, Provider<DaoFactory> daoFactoryProvider,
       Provider<ExecutorService> executorServiceProvider, @ThreadCountParameter int threadCount,
-      BlockingQueue<Ligacao> ligacoes, ModificadorResultado modificadorResultado,
+      BlockingQueue<Bean> ligacoes, ModificadorResultado modificadorResultado,
       Instance<ProcessoDevolucao> processosDevolucao) {
     this.logger = logger;
     this.daoFactoryProvider = daoFactoryProvider;
@@ -53,11 +72,12 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   }
 
   @Override
-  public void devolveLigacao(Ligacao ligacao) {
-    ligacoes.offer(ligacao);
+  public void devolveLigacao(Configuracoes configuracoes, Ligacao ligacao) {
+    ligacoes.offer(new Bean(configuracoes, ligacao));
   }
 
-  private void localDevolveLigacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente) {
+  private void localDevolveLigacao(Configuracoes configuracoes, DaoFactory daoFactory,
+      Ligacao ligacao, Cliente cliente) {
 
     Campanha campanha =
         daoFactory.getCampanhaDao().procura(cliente.getMailing().getCampanha().getId());
@@ -79,12 +99,12 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     logger.info("Devolvendo com motivo {} {}", resultadoLigacao, cliente);
 
     for (ProcessoDevolucao processo : processosDevolucao) {
-      if (!processo.accept(ligacao, cliente, resultadoLigacao, daoFactory)) {
+      if (!processo.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory)) {
         continue;
       }
 
       try {
-        if (!processo.executa(ligacao, cliente, resultadoLigacao, daoFactory)) {
+        if (!processo.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory)) {
           break;
         }
       } catch (Exception e) {
@@ -97,21 +117,22 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   public void run() {
     logger.debug("Iniciando {}", Thread.currentThread().getName());
     while (Thread.currentThread().isAlive()) {
-      Ligacao ligacao;
+      Bean bean;
       try {
-        ligacao = ligacoes.take();
+        bean = ligacoes.take();
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
 
-      Long idCliente = ligacao.getDiscavel().getCliente().getId();
+      Long idCliente = bean.getLigacao().getDiscavel().getCliente().getId();
 
       DaoFactory daoFactory = daoFactoryProvider.get();
       try {
         daoFactory.beginTransaction();
         Cliente cliente = daoFactory.getClienteDao().procura(idCliente);
-        logger.info("Devolvendo ligacao motivo {} {}", ligacao.getMotivoFinalizacao(), cliente);
-        localDevolveLigacao(daoFactory, ligacao, cliente);
+        logger.info("Devolvendo ligacao motivo {} {}", bean.getLigacao().getMotivoFinalizacao(),
+            cliente);
+        localDevolveLigacao(bean.getConfiguracoes(), daoFactory, bean.getLigacao(), cliente);
         daoFactory.commit();
       } catch (Throwable e) {
         logger.error("Erro na devolucao de {}:{}", new Object[] {idCliente, e.getMessage()}, e);

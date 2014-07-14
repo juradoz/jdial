@@ -155,7 +155,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
     }
     ligacao.setTermino(dataBanco);
     ligacao.setMotivoFinalizacao(causa);
-    devolveRegistro.devolveLigacao(ligacao);
+    devolveRegistro.devolveLigacao(configuracoes, ligacao);
   }
 
   void chamadaErro(PredictiveListener listener, Exception e) {
@@ -180,7 +180,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
       daoFactory.close();
     }
     ligacao.setTermino(dataBanco);
-    devolveRegistro.devolveLigacao(ligacao);
+    devolveRegistro.devolveLigacao(configuracoes, ligacao);
   }
 
   void chamadaIniciada(PredictiveListener listener, int callId) {
@@ -222,7 +222,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
     }
     ligacao.setTermino(dataBanco);
     ligacao.setMotivoFinalizacao(causa);
-    devolveRegistro.devolveLigacao(ligacao);
+    devolveRegistro.devolveLigacao(configuracoes, ligacao);
   }
 
   void chamadaNoAgente(PredictiveListener listener, int callId, String agente) {
@@ -311,7 +311,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
           .getDiscavel().getCliente(), new Duration(ligacao.getCriacao(), new DateTime())
           .getStandardSeconds());
       ligacao.setMotivoFinalizacao(0);
-      devolveRegistro.devolveLigacao(ligacao);
+      devolveRegistro.devolveLigacao(configuracoes, ligacao);
     }
   }
 

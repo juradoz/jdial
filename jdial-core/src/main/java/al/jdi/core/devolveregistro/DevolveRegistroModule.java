@@ -22,7 +22,7 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
-import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.devolveregistro.DefaultDevolveRegistro.Bean;
 
 public class DevolveRegistroModule {
 
@@ -55,8 +55,8 @@ public class DevolveRegistroModule {
   }
 
   @Produces
-  public BlockingQueue<Ligacao> getBlockingQueue() {
-    return new LinkedBlockingQueue<Ligacao>();
+  public BlockingQueue<Bean> getBlockingQueue() {
+    return new LinkedBlockingQueue<Bean>();
   }
 
   @Produces
