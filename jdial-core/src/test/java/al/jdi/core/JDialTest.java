@@ -52,7 +52,7 @@ public class JDialTest {
   private static final DateTime DATA_BANCO = new DateTime();
   private final String versao = "VERSAO";
 
-  private JDial jDial;
+  private DefaultJDial jDial;
 
   @Mock
   private Configuracoes configuracoes;
@@ -126,7 +126,7 @@ public class JDialTest {
     when(discavelFactory.create(cliente)).thenReturn(discavel);
 
     jDial =
-        new JDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
+        new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
             daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
   }

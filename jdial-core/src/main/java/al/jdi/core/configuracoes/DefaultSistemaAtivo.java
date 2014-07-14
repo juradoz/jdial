@@ -17,7 +17,7 @@ class DefaultSistemaAtivo implements SistemaAtivo {
     private Logger logger;
 
     @Override
-    public SistemaAtivo create(ConfiguracoesImpl configuracoes) {
+    public SistemaAtivo create(DefaultConfiguracoes configuracoes) {
       return new DefaultSistemaAtivo(logger, configuracoes);
     }
   }
@@ -38,12 +38,12 @@ class DefaultSistemaAtivo implements SistemaAtivo {
   static final String SISTEMA_HORA_FINAL_DOMINGO = "sistema.horaFinalDomingo";
 
   private final Logger logger;
-  private final ConfiguracoesImpl configuracoes;
+  private final DefaultConfiguracoes configuracoes;
   private final Map<Integer, String> constInicios = new HashMap<Integer, String>();
   private final Map<Integer, String> constTerminos = new HashMap<Integer, String>();
 
   @Inject
-  DefaultSistemaAtivo(Logger logger, ConfiguracoesImpl configuracoes) {
+  DefaultSistemaAtivo(Logger logger, DefaultConfiguracoes configuracoes) {
     this.logger = logger;
     this.configuracoes = configuracoes;
     registraConstInicios();

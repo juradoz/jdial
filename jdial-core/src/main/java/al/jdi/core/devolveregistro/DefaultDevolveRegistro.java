@@ -14,7 +14,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import al.jdi.common.Service;
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.ThreadCountParameter;
 import al.jdi.core.modelo.Ligacao;
@@ -30,7 +29,6 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
   private final Logger logger;
   private final Provider<DaoFactory> daoFactoryProvider;
-  private final Configuracoes configuracoes;
   private final BlockingQueue<Ligacao> ligacoes;
   private final Provider<ExecutorService> executorServiceProvider;
   private final int threadCount;
@@ -41,12 +39,11 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
   @Inject
   DefaultDevolveRegistro(Logger logger, Provider<DaoFactory> daoFactoryProvider,
-      Configuracoes configuracoes, Provider<ExecutorService> executorServiceProvider,
-      @ThreadCountParameter int threadCount, BlockingQueue<Ligacao> ligacoes,
-      ModificadorResultado modificadorResultado, Instance<ProcessoDevolucao> processosDevolucao) {
+      Provider<ExecutorService> executorServiceProvider, @ThreadCountParameter int threadCount,
+      BlockingQueue<Ligacao> ligacoes, ModificadorResultado modificadorResultado,
+      Instance<ProcessoDevolucao> processosDevolucao) {
     this.logger = logger;
     this.daoFactoryProvider = daoFactoryProvider;
-    this.configuracoes = configuracoes;
     this.ligacoes = ligacoes;
     this.executorServiceProvider = executorServiceProvider;
     this.threadCount = threadCount;
@@ -62,7 +59,8 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
   private void localDevolveLigacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente) {
 
-    Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
+    Campanha campanha =
+        daoFactory.getCampanhaDao().procura(cliente.getMailing().getCampanha().getId());
 
     int motivoFinalizacao = ligacao.getMotivoFinalizacao();
 

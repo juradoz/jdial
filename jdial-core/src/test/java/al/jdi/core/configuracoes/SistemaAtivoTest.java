@@ -30,7 +30,7 @@ public class SistemaAtivoTest {
   private SistemaAtivo sistemaAtivo;
   
   @Mock
-  private ConfiguracoesImpl configuracoes;
+  private DefaultConfiguracoes configuracoes;
   @Mock
   private Logger logger;
 

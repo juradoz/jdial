@@ -6,10 +6,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -18,8 +16,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
-import al.jdi.core.configuracoes.ConfiguracoesModule.ConfiguracoesService;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
 import al.jdi.core.configuracoes.ConfiguracoesModule.NomeCampanha;
 import al.jdi.cti.TratamentoSecretariaEletronica;
@@ -27,10 +23,29 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 
-@Singleton
-@Default
-@ConfiguracoesService
-class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
+class DefaultConfiguracoes implements Configuracoes, Runnable {
+
+  static class DefaultConfiguracoesFactory implements Configuracoes.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private Engine.Factory engineFactory;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    @IntervaloAtualizacao
+    private Period intervaloAtualizacao;
+    @Inject
+    private Map<String, Definicao> definicoes;
+    @Inject
+    private SistemaAtivo.Factory sistemaAtivoFactory;
+
+    @Override
+    public Configuracoes create(String nomeCampanha) {
+      return new DefaultConfiguracoes(logger, nomeCampanha, engineFactory, daoFactoryProvider,
+          intervaloAtualizacao, definicoes, sistemaAtivoFactory);
+    }
+  }
 
   private static final String SISTEMA_DETECTA_CAIXA_POSTAL_PELO_TELEFONE =
       "sistema.detectaCaixaPostalPeloTelefone";
@@ -119,9 +134,10 @@ class ConfiguracoesImpl implements Configuracoes, Service, Runnable {
   private Engine engine;
 
   @Inject
-  ConfiguracoesImpl(Logger logger, @NomeCampanha String nomeCampanha, Engine.Factory engineFactory,
-      Provider<DaoFactory> daoFactoryProvider, @IntervaloAtualizacao Period intervaloAtualizacao,
-      Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
+  DefaultConfiguracoes(Logger logger, @NomeCampanha String nomeCampanha,
+      Engine.Factory engineFactory, Provider<DaoFactory> daoFactoryProvider,
+      @IntervaloAtualizacao Period intervaloAtualizacao, Map<String, Definicao> definicoes,
+      SistemaAtivo.Factory sistemaAtivoFactory) {
     this.logger = logger;
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;
