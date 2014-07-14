@@ -6,10 +6,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,15 +15,24 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
-import al.jdi.core.gerenciadorfatork.GerenciadorFatorKModule.GerenciadorFatorKService;
 import al.jdi.dao.beans.DaoFactory;
 
-@Default
-@Singleton
-@GerenciadorFatorKService
-class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
+class GerenciadorFatorKImpl implements GerenciadorFatorK, Runnable {
+
+  static class GerenciadorFatorKImplFactory implements GerenciadorFatorK.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    private Engine.Factory engineFactory;
+
+    @Override
+    public GerenciadorFatorK create(Configuracoes configuracoes) {
+      return new GerenciadorFatorKImpl(logger, configuracoes, daoFactoryProvider, engineFactory);
+    }
+  }
 
   private static final int MINUTOS_ACUMULADOS = 10;
 
@@ -42,7 +49,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Service, Runnable {
   private int iniciadasDoMinuto;
   private int atendidasDoMinuto;
 
-  @Inject
+
   GerenciadorFatorKImpl(Logger logger, Configuracoes configuracoes,
       Provider<DaoFactory> daoFactoryProvider, Engine.Factory engineFactory) {
     this.logger = logger;

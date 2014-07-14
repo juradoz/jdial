@@ -14,8 +14,6 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
-import al.jdi.core.JDialModule.JDialService;
 import al.jdi.core.JDialModule.Versao;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
@@ -34,8 +32,34 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
-@JDialService
-class DefaultJDial implements Service, Runnable, ProviderListener, JDial {
+class DefaultJDial implements Runnable, ProviderListener, JDial {
+
+  static class DefaultJDialFactory implements JDial.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private Engine.Factory engineFactory;
+    @Inject
+    private @Versao
+    String versao;
+    @Inject
+    private Discavel.Factory discavelFactory;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    private TratadorEspecificoCliente tratadorEspecificoCliente;
+    @Inject
+    private DialerCtiManager dialerCtiManager;
+
+    @Override
+    public JDial create(Configuracoes configuracoes, GerenciadorAgentes gerenciadorAgentes,
+        GerenciadorLigacoes gerenciadorLigacoes, Estoque estoqueLivres, Estoque estoqueAgendados,
+        GerenciadorFatorK gerenciadorFatorK) {
+      return new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
+          gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
+          daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
+    }
+  }
 
   private final Logger logger;
   private final Configuracoes configuracoes;
@@ -53,7 +77,6 @@ class DefaultJDial implements Service, Runnable, ProviderListener, JDial {
   private Engine engine;
   private boolean inService = false;
 
-  @Inject
   DefaultJDial(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
       @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
