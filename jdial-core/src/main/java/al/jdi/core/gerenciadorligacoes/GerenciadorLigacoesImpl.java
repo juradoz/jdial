@@ -9,10 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -22,11 +20,9 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
-import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.GerenciadorLigacoesService;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.cti.DialerCtiManager;
@@ -36,10 +32,33 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Telefone;
 
-@Default
-@Singleton
-@GerenciadorLigacoesService
-class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service {
+class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
+
+  static class GerenciadorLigacoesImplFactory implements GerenciadorLigacoes.Factory {
+    @Inject
+    private Logger logger;
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    private DialerCtiManager dialerCtiManager;
+    @Inject
+    private Map<PredictiveListener, Ligacao> ligacoes;
+    @Inject
+    private PredictiveListenerFactory predictiveListenerFactory;
+    @Inject
+    private DevolveRegistro devolveRegistro;
+    @Inject
+    private Engine.Factory engineFactory;
+
+    @Override
+    public GerenciadorLigacoes create(Configuracoes configuracoes,
+        GerenciadorFatorK gerenciadorFatorK) {
+      return new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes,
+          dialerCtiManager, ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory,
+          gerenciadorFatorK);
+    }
+
+  }
 
   private final Logger logger;
   private final Provider<DaoFactory> daoFactoryProvider;
@@ -53,7 +72,6 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable, Service 
 
   private Engine engine;
 
-  @Inject
   GerenciadorLigacoesImpl(Logger logger, Provider<DaoFactory> daoFactoryProvider,
       Configuracoes configuracoes, DialerCtiManager dialerCtiManager,
       Map<PredictiveListener, Ligacao> ligacoes,

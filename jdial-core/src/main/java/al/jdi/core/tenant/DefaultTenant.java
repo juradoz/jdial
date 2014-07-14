@@ -32,7 +32,8 @@ class DefaultTenant implements Tenant {
   DefaultTenant(Campanha campanha, Configuracoes.Factory configuracoesFactory,
       ExtraidorClientes extraidorClientesLivres, Period intervaloMonitoracaoLivres,
       ExtraidorClientes extraidorClientesAgendados, Period intervaloMonitoracaoAgendados,
-      Estoque.Factory estoqueFactory, GerenciadorAgentes.Factory gerenciadorAgentesFactory) {
+      Estoque.Factory estoqueFactory, GerenciadorAgentes.Factory gerenciadorAgentesFactory,
+      GerenciadorLigacoes.Factory gerenciadorLigacoesFactory) {
     this.campanha = campanha;
     this.configuracoes = configuracoesFactory.create(campanha.getNome());
     this.estoqueLivres =
@@ -41,6 +42,8 @@ class DefaultTenant implements Tenant {
         estoqueFactory.create(configuracoes, extraidorClientesAgendados,
             intervaloMonitoracaoAgendados);
     this.gerenciadorAgentes = gerenciadorAgentesFactory.create(configuracoes);
+
+    this.gerenciadorLigacoes = gerenciadorLigacoesFactory.create(configuracoes, gerenciadorFatorK);
   }
 
   @Override
