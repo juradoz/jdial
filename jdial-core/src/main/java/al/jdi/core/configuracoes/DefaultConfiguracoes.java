@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
-import al.jdi.core.configuracoes.ConfiguracoesModule.NomeCampanha;
 import al.jdi.cti.TratamentoSecretariaEletronica;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
@@ -133,11 +132,9 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   private Engine engine;
 
-  @Inject
-  DefaultConfiguracoes(Logger logger, @NomeCampanha String nomeCampanha,
-      Engine.Factory engineFactory, Provider<DaoFactory> daoFactoryProvider,
-      @IntervaloAtualizacao Period intervaloAtualizacao, Map<String, Definicao> definicoes,
-      SistemaAtivo.Factory sistemaAtivoFactory) {
+  DefaultConfiguracoes(Logger logger, String nomeCampanha, Engine.Factory engineFactory,
+      Provider<DaoFactory> daoFactoryProvider, Period intervaloAtualizacao,
+      Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
     this.logger = logger;
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;

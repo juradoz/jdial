@@ -15,18 +15,11 @@ import java.util.Map;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
-import org.jboss.weld.environment.se.StartMain;
 import org.joda.time.Period;
 
 import al.jdi.dao.model.Definicao;
 
 public class ConfiguracoesModule {
-
-  @Retention(RUNTIME)
-  @Target({METHOD, FIELD, PARAMETER, TYPE})
-  @Qualifier
-  public @interface NomeCampanha {
-  }
 
   @Retention(RUNTIME)
   @Target({METHOD, FIELD, PARAMETER, TYPE})
@@ -37,12 +30,6 @@ public class ConfiguracoesModule {
   @Produces
   public Map<String, Definicao> get() {
     return Collections.synchronizedMap(new HashMap<String, Definicao>());
-  }
-
-  @NomeCampanha
-  @Produces
-  public String getCampanha() {
-    return StartMain.getParameters()[0];
   }
 
   @IntervaloAtualizacao
