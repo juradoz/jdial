@@ -13,6 +13,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
@@ -21,6 +22,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, ProviderLi
 
   static class GerenciadorAgentesFactory implements GerenciadorAgentes.Factory {
     @Inject
+    @LogClass(clazz = GerenciadorAgentes.class)
     private Logger logger;
     @Inject
     private DialerCtiManager dialerCtiManager;

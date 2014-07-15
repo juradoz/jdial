@@ -8,10 +8,13 @@ import javax.inject.Inject;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
+import al.jdi.common.LogProducer.LogClass;
+
 class DefaultEngine extends TimerTask implements Engine {
 
   static class DefaultEngineFactory implements Engine.Factory {
     @Inject
+    @LogClass(clazz = Engine.class)
     private Logger logger;
 
     @Override

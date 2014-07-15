@@ -10,10 +10,13 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 
+import al.jdi.common.LogProducer.LogClass;
+
 class DefaultSistemaAtivo implements SistemaAtivo {
 
   static class DefaultSistemaAtivoFactory implements SistemaAtivo.Factory {
     @Inject
+    @LogClass(clazz = SistemaAtivo.class)
     private Logger logger;
 
     @Override

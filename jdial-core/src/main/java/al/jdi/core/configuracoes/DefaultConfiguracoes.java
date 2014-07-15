@@ -16,6 +16,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
 import al.jdi.cti.TratamentoSecretariaEletronica;
 import al.jdi.dao.beans.DaoFactory;
@@ -26,6 +27,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   static class DefaultConfiguracoesFactory implements Configuracoes.Factory {
     @Inject
+    @LogClass(clazz = Configuracoes.class)
     private Logger logger;
     @Inject
     private Engine.Factory engineFactory;

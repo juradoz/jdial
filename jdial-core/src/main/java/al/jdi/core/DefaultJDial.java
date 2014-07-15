@@ -14,6 +14,7 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.JDialModule.Versao;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
@@ -36,6 +37,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
   static class DefaultJDialFactory implements JDial.Factory {
     @Inject
+    @LogClass(clazz = JDial.class)
     private Logger logger;
     @Inject
     private Engine.Factory engineFactory;
@@ -191,8 +193,8 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false, true);
     logger
         .warn(
-            "\n------------------------------------\nIniciado jDial {}\n------------------------------------",
-            versao);
+            "\n------------------------------------\nIniciado jDial {} {}\n------------------------------------",
+            configuracoes.getNomeCampanha(), versao);
   }
 
   @Override

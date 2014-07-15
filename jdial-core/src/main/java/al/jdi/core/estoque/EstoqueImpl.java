@@ -23,6 +23,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;
@@ -47,6 +48,7 @@ class EstoqueImpl implements Estoque, Runnable {
 
   static class EstoqueImplFactory implements Estoque.Factory {
     @Inject
+    @LogClass(clazz = Estoque.class)
     private Logger logger;
     @Inject
     private Provider<DaoFactory> daoFactoryProvider;

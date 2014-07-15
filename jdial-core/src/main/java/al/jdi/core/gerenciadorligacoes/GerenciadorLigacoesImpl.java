@@ -20,6 +20,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
@@ -36,6 +37,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
 
   static class GerenciadorLigacoesImplFactory implements GerenciadorLigacoes.Factory {
     @Inject
+    @LogClass(clazz = GerenciadorLigacoes.class)
     private Logger logger;
     @Inject
     private Provider<DaoFactory> daoFactoryProvider;

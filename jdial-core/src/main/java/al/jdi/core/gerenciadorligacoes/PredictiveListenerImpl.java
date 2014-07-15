@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.cti.PredictiveListener;
 
@@ -13,6 +14,7 @@ class PredictiveListenerImpl implements PredictiveListener {
 
   static class PredictiveListenerImplFactory implements PredictiveListenerFactory {
     @Inject
+    @LogClass(clazz = PredictiveListener.class)
     private Logger logger;
 
     @Override

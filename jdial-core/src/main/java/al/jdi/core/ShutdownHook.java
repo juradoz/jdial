@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.common.Service;
 
 class ShutdownHook implements Runnable {
@@ -14,6 +15,7 @@ class ShutdownHook implements Runnable {
 
   static class ShutdownHookFactory implements ShutdownHook.Factory {
     @Inject
+    @LogClass(clazz = ShutdownHook.class)
     private Logger logger;
 
     @Override

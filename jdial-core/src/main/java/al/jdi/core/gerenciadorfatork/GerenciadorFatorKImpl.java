@@ -15,6 +15,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
+import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.DaoFactory;
 
@@ -22,6 +23,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Runnable {
 
   static class GerenciadorFatorKImplFactory implements GerenciadorFatorK.Factory {
     @Inject
+    @LogClass(clazz = GerenciadorFatorK.class)
     private Logger logger;
     @Inject
     private Provider<DaoFactory> daoFactoryProvider;
