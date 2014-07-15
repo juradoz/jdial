@@ -1,7 +1,5 @@
 package al.jdi.core.modelo;
 
-import javax.inject.Inject;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,15 +8,8 @@ import al.jdi.dao.model.Cliente;
 
 class DiscavelFactoryTsaImpl implements Discavel.Factory {
 
-  private final Configuracoes configuracoes;
-
-  @Inject
-  DiscavelFactoryTsaImpl(Configuracoes configuracoes) {
-    this.configuracoes = configuracoes;
-  }
-
   @Override
-  public Discavel create(Cliente cliente) {
+  public Discavel create(Configuracoes configuracoes, Cliente cliente) {
     return new DiscavelTsaImpl(configuracoes, cliente);
   }
 

@@ -73,7 +73,7 @@ public class ProximoTelefoneTest {
     telefones = new LinkedList<Telefone>(asList(telefone1, telefone2));
 
     when(iMantemAtual.get()).thenReturn(mantemAtual);
-    when(mantemAtual.getTelefone(daoFactory, cliente)).thenReturn(telefone1);
+    when(mantemAtual.getTelefone(configuracoes, daoFactory, cliente)).thenReturn(telefone1);
 
     when(cliente.getTelefone()).thenReturn(telefone1);
     when(cliente.getTelefones()).thenReturn(telefones);
@@ -85,25 +85,27 @@ public class ProximoTelefoneTest {
     when(daoFactory.getDataBanco()).thenReturn(DATA_BANCO);
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
 
-    when(telefoneSorter.sort(telefones)).thenReturn(telefones);
+    when(telefoneSorter.sort(configuracoes, telefones)).thenReturn(telefones);
 
-    when(clienteSemTelefonesFilter.filter(telefones)).thenReturn(telefones);
-    when(somenteCelularesFilter.filter(telefones)).thenReturn(telefones);
+    when(clienteSemTelefonesFilter.filter(configuracoes, telefones)).thenReturn(telefones);
+    when(somenteCelularesFilter.filter(configuracoes, telefones)).thenReturn(telefones);
 
     proximoTelefone =
-        new ProximoTelefone(logger, configuracoes, telefoneSorter, iMantemAtual,
-            clienteSemTelefonesFilter, somenteCelularesFilter);
+        new ProximoTelefone(logger, telefoneSorter, iMantemAtual, clienteSemTelefonesFilter,
+            somenteCelularesFilter);
   }
 
   @Test
   public void deveriaRetornarProximo() throws Exception {
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone2)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaRetornarAtual() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone1)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone1)));
   }
 
   @Test(expected = NaoPodeReiniciarRodadaTelefoneException.class)
@@ -111,60 +113,67 @@ public class ProximoTelefoneTest {
     when(cliente.getTelefone()).thenReturn(telefone2);
     when(cliente.getUltimoInicioRodadaTelefones()).thenReturn(
         DATA_BANCO.minus(INTERVALO_RODADA_TELEFONE).plusMinutes(1));
-    proximoTelefone.getTelefone(daoFactory, cliente);
+    proximoTelefone.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test
   public void deveriaRetornarCiclarDeVoltaPrimeiroTelefone() throws Exception {
     when(cliente.getTelefone()).thenReturn(telefone2);
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone1)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone1)));
   }
 
   @Test(expected = SemProximoTelefoneException.class)
   public void deveriaLancarSemProximoSeSomente1Telefone() throws Exception {
     List<Telefone> list = asList(telefone1);
-    when(clienteSemTelefonesFilter.filter(telefones)).thenReturn(new LinkedList<Telefone>(list));
-    when(somenteCelularesFilter.filter(list)).thenReturn(list);
-    when(telefoneSorter.sort(list)).thenReturn(list);
-    proximoTelefone.getTelefone(daoFactory, cliente);
+    when(clienteSemTelefonesFilter.filter(configuracoes, telefones)).thenReturn(
+        new LinkedList<Telefone>(list));
+    when(somenteCelularesFilter.filter(configuracoes, list)).thenReturn(list);
+    when(telefoneSorter.sort(configuracoes, list)).thenReturn(list);
+    proximoTelefone.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test
   public void deveriaNaoAtualizarDataRodadaSePassarProximo() throws Exception {
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone2)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone2)));
     verify(cliente, never()).setUltimoInicioRodadaTelefones(DATA_BANCO);
   }
 
   @Test
   public void deveriaSetarInicioRodadaCiclarDeVoltaPrimeiroTelefone() throws Exception {
     when(cliente.getTelefone()).thenReturn(telefone2);
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone1)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone1)));
     verify(cliente).setUltimoInicioRodadaTelefones(DATA_BANCO);
   }
 
   @Test
   public void deveriaAtualizarInicioRodadaSeDeVoltaPrimeiroTelefone() throws Exception {
     when(cliente.getTelefone()).thenReturn(telefone2);
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone1)));
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone1)));
     verify(cliente).setUltimoInicioRodadaTelefones(DATA_BANCO);
   }
 
   @Test(expected = ClienteSemTelefoneException.class)
   public void deveriaLancarSemTelefonesException() throws Exception {
     telefones.clear();
-    proximoTelefone.getTelefone(daoFactory, cliente);
+    proximoTelefone.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test(expected = SomenteCelularException.class)
   public void deveriaLancarSomenteCelularesException() throws Exception {
-    when(somenteCelularesFilter.filter(telefones)).thenReturn(Collections.<Telefone>emptyList());
-    proximoTelefone.getTelefone(daoFactory, cliente);
+    when(somenteCelularesFilter.filter(configuracoes, telefones)).thenReturn(
+        Collections.<Telefone>emptyList());
+    proximoTelefone.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test
   public void deveriaOrdenar() throws Exception {
-    assertThat(proximoTelefone.getTelefone(daoFactory, cliente), is(sameInstance(telefone2)));
-    verify(telefoneSorter).sort(telefones);
+    assertThat(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone2)));
+    verify(telefoneSorter).sort(configuracoes, telefones);
   }
 
 }

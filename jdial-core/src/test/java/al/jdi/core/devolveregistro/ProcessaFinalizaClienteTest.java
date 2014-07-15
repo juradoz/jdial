@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -49,6 +50,8 @@ public class ProcessaFinalizaClienteTest {
   private Campanha campanha;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -70,29 +73,29 @@ public class ProcessaFinalizaClienteTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isFinalizaCliente()).thenReturn(true);
-    assertThat(processaFinalizaCliente.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaFinalizaCliente.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isFinalizaCliente()).thenReturn(false);
-    assertThat(processaFinalizaCliente.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaFinalizaCliente.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(false));
   }
 
   @Test
   public void executaDeveriaFinalizar() throws Exception {
-    assertThat(processaFinalizaCliente.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
-    verify(finalizadorCliente).finaliza(daoFactory, cliente, motivoFinalizacao);
+    assertThat(processaFinalizaCliente.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(false));
+    verify(finalizadorCliente).finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
   }
 
   @Test
   public void executaDeveriaNotificar() throws Exception {
-    assertThat(processaFinalizaCliente.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
-    verify(notificadorCliente).notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefone, false, campanha);
+    assertThat(processaFinalizaCliente.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(false));
+    verify(notificadorCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefone, false, campanha);
   }
 }

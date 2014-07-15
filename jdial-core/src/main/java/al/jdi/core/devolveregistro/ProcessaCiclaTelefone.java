@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
@@ -33,8 +34,8 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     ligacao.setTelefoneOriginal(cliente.getTelefone());
     if (!resultadoLigacao.isCiclaTelefone()) {
       logger.info("Nao vai ciclar telefone {}", cliente);
@@ -44,8 +45,8 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Ciclando telefone {}", cliente);
     Providencia.Codigo codigo =
         Providencia.Codigo.fromValue(cliente.getInformacaoCliente().getProvidenciaTelefone());
@@ -55,16 +56,16 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
     Providencia providencia = providencias.get(codigo);
 
     try {
-      cliente.setTelefone(providencia.getTelefone(daoFactory, cliente));
+      cliente.setTelefone(providencia.getTelefone(configuracoes, daoFactory, cliente));
     } catch (NaoPodeReiniciarRodadaTelefoneException e) {
       logger.info("Nao pode passar pro proximotelefone ainda {}", cliente);
-      processaFimDaFila.executa(ligacao, cliente, null, daoFactory);
+      processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     } catch (SemProximoTelefoneException e) {
       logger.info("Nao possui proximo telefone {}", cliente);
-      processaFimDaFila.executa(ligacao, cliente, null, daoFactory);
+      processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     }
     logger.info("Consegui ciclar telefone {}", cliente);
-    tratadorEspecificoCliente.obtemClienteDao(daoFactory).atualiza(cliente);
+    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
     return true;
   }
 

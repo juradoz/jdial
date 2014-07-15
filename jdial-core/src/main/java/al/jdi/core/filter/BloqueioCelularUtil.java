@@ -11,16 +11,14 @@ import al.jdi.dao.model.Telefone;
 class BloqueioCelularUtil implements TelefoneUtil {
 
   private final CelularChecker telefoneCelularChecker;
-  private final Configuracoes configuracoes;
 
   @Inject
-  BloqueioCelularUtil(CelularChecker telefoneCelularChecker, Configuracoes configuracoes) {
+  BloqueioCelularUtil(CelularChecker telefoneCelularChecker) {
     this.telefoneCelularChecker = telefoneCelularChecker;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean isUtil(Telefone telefone) {
+  public boolean isUtil(Configuracoes configuracoes, Telefone telefone) {
     return !(configuracoes.bloqueiaCelular() && telefoneCelularChecker.isCelular(telefone));
   }
 

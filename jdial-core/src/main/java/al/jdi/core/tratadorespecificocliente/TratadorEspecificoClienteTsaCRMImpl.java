@@ -22,12 +22,10 @@ import al.jdi.dao.model.Telefone;
 class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  TratadorEspecificoClienteTsaCRMImpl(Logger logger, Configuracoes configuracoes) {
+  TratadorEspecificoClienteTsaCRMImpl(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
     logger.debug("Iniciando {}", this);
   }
 
@@ -37,9 +35,10 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public void notificaFimTentativa(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado) {
+  public void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory,
+      Ligacao ligacao, Cliente cliente, Campanha campanha, DateTime dataBanco,
+      Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
           daoFactory.getResultadoLigacaoDao().procura(23, campanha);
@@ -70,9 +69,10 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public void notificaFinalizacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado) {
+  public void notificaFinalizacao(Configuracoes configuracoes, DaoFactory daoFactory,
+      Ligacao ligacao, Cliente cliente, Campanha campanha, DateTime dataBanco,
+      Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
           daoFactory.getResultadoLigacaoDao().procura(23, campanha);
@@ -102,12 +102,13 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public ClienteDao obtemClienteDao(DaoFactory daoFactory) {
+  public ClienteDao obtemClienteDao(Configuracoes configuracoes, DaoFactory daoFactory) {
     return daoFactory.getClienteDaoTsaCRM();
   }
 
   @Override
-  public boolean reservaNaBaseDoCliente(DaoFactory daoFactory, Cliente cliente) {
+  public boolean reservaNaBaseDoCliente(Configuracoes configuracoes, DaoFactory daoFactory,
+      Cliente cliente) {
     return daoFactory.getClienteDaoTsaCRM().reservaNaBaseDoCliente(cliente,
         configuracoes.getOperador(), configuracoes.getNomeBaseDados());
   }

@@ -14,17 +14,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ModificadorResultadoInexistenteFake implements ModificadorResultadoFilter {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  ModificadorResultadoInexistenteFake(Logger logger, Configuracoes configuracoes) {
+  ModificadorResultadoInexistenteFake(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean accept(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao, Ligacao ligacao,
-      Cliente cliente, Campanha campanha) {
+  public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     if (configuracoes.isUraReversa())
       return false;
     ResultadoLigacao resultadoLigacaoAtendida =
@@ -33,8 +31,8 @@ class ModificadorResultadoInexistenteFake implements ModificadorResultadoFilter 
   }
 
   @Override
-  public ResultadoLigacao modifica(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao, Cliente cliente, Campanha campanha) {
+  public ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     logger.info("Alterando resultado por inexistenteFake {}", cliente);
     return daoFactory.getResultadoLigacaoDao().procura(13, campanha);
   }

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
 import al.jdi.core.filter.TelefoneFilter;
@@ -39,20 +40,20 @@ class MantemAtual implements Providencia {
   }
 
   @Override
-  public Telefone getTelefone(DaoFactory daoFactory, Cliente cliente) {
+  public Telefone getTelefone(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente) {
     List<Telefone> telefones = new LinkedList<Telefone>(cliente.getTelefones());
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = clienteSemTelefoneFilter.filter(telefones);
+    telefones = clienteSemTelefoneFilter.filter(configuracoes, telefones);
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = somenteCelularFilter.filter(telefones);
+    telefones = somenteCelularFilter.filter(configuracoes, telefones);
     if (telefones.isEmpty())
       throw new SomenteCelularException();
 
-    telefones = telefoneSorter.sort(telefones);
+    telefones = telefoneSorter.sort(configuracoes, telefones);
 
     Telefone result = cliente.getTelefone();
     if (result == null) {
@@ -63,7 +64,7 @@ class MantemAtual implements Providencia {
     if (!telefones.contains(result)) {
       logger.warn("Telefone {} nao esta contido na relacao de telefones uteis cliente {}", result,
           cliente);
-      return proximoTelefone.get().getTelefone(daoFactory, cliente);
+      return proximoTelefone.get().getTelefone(configuracoes, daoFactory, cliente);
     }
     logger.debug("Mantendo telefone atual para cliente {} Id {} DDD {} TEL {}", new Object[] {
         cliente, result, result.getDdd(), result.getTelefone()});

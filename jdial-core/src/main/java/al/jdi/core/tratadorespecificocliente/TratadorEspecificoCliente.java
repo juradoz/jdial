@@ -2,6 +2,7 @@ package al.jdi.core.tratadorespecificocliente;
 
 import org.joda.time.DateTime;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
@@ -14,16 +15,16 @@ public interface TratadorEspecificoCliente {
 
   boolean isDnc(DaoFactory daoFactory, Cliente cliente, String baseDados);
 
-  void notificaFimTentativa(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
+  void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+      Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
       ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
 
-  void notificaFinalizacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
+  void notificaFinalizacao(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+      Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
       ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
 
-  ClienteDao obtemClienteDao(DaoFactory daoFactory);
+  ClienteDao obtemClienteDao(Configuracoes configuracoes, DaoFactory daoFactory);
 
-  boolean reservaNaBaseDoCliente(DaoFactory daoFactory, Cliente cliente);
+  boolean reservaNaBaseDoCliente(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente);
 
 }

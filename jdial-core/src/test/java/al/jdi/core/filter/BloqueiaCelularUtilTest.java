@@ -28,25 +28,25 @@ public class BloqueiaCelularUtilTest {
     initMocks(this);
     when(configuracoes.bloqueiaCelular()).thenReturn(true);
     when(telefoneCelularChecker.isCelular(telefone)).thenReturn(true);
-    bloqueiaCelularUtil = new BloqueioCelularUtil(telefoneCelularChecker, configuracoes);
+    bloqueiaCelularUtil = new BloqueioCelularUtil(telefoneCelularChecker);
   }
 
   @Test
   public void isUtilDeveriaRetornarFalse() throws Exception {
-    assertThat(bloqueiaCelularUtil.isUtil(telefone), is(false));
+    assertThat(bloqueiaCelularUtil.isUtil(configuracoes, telefone), is(false));
   }
 
   @Test
   public void isUtilDeveriaRetornarTrueConfiguracoes() throws Exception {
     when(configuracoes.bloqueiaCelular()).thenReturn(false);
     when(telefoneCelularChecker.isCelular(telefone)).thenReturn(true);
-    assertThat(bloqueiaCelularUtil.isUtil(telefone), is(true));
+    assertThat(bloqueiaCelularUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
   public void isUtilDeveriaRetornarTrueChecker() throws Exception {
     when(telefoneCelularChecker.isCelular(telefone)).thenReturn(false);
-    assertThat(bloqueiaCelularUtil.isUtil(telefone), is(true));
+    assertThat(bloqueiaCelularUtil.isUtil(configuracoes, telefone), is(true));
   }
 
 }

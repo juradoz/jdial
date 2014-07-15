@@ -14,17 +14,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ModificadorResultadoUraReversa implements ModificadorResultadoFilter {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  ModificadorResultadoUraReversa(Logger logger, Configuracoes configuracoes) {
+  ModificadorResultadoUraReversa(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean accept(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao, Ligacao ligacao,
-      Cliente cliente, Campanha campanha) {
+  public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     if (!configuracoes.isUraReversa())
       return false;
 
@@ -46,8 +44,8 @@ class ModificadorResultadoUraReversa implements ModificadorResultadoFilter {
   }
 
   @Override
-  public ResultadoLigacao modifica(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao, Cliente cliente, Campanha campanha) {
+  public ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     if (ligacao.isFoiPraFila()) {
       logger.info("Alterando resultado por abandono Ura reversa {}", cliente);
       return daoFactory.getResultadoLigacaoDao().procura(-10, campanha);

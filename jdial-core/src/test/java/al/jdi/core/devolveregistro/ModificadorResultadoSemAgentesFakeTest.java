@@ -20,7 +20,7 @@ import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoSemAgentesFakeTest {
-  
+
   private ModificadorResultadoSemAgentesFake modificadorResultadoSemAgentesFake;
 
   @Mock
@@ -50,40 +50,39 @@ public class ModificadorResultadoSemAgentesFakeTest {
     when(daoFactory.getResultadoLigacaoDao()).thenReturn(resultadoLigacaoDao);
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
-    modificadorResultadoSemAgentesFake =
-        new ModificadorResultadoSemAgentesFake(logger, configuracoes);
+    modificadorResultadoSemAgentesFake = new ModificadorResultadoSemAgentesFake(logger);
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(modificadorResultadoSemAgentesFake.accept(daoFactory, resultadoLigacaoAtendida,
-        ligacao, cliente, campanha), is(true));
+    assertThat(modificadorResultadoSemAgentesFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(true);
-    assertThat(modificadorResultadoSemAgentesFake.accept(daoFactory, resultadoLigacaoAtendida,
-        ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoSemAgentesFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
-    assertThat(modificadorResultadoSemAgentesFake.accept(daoFactory, resultadoLigacao, ligacao,
-        cliente, campanha), is(false));
+    assertThat(modificadorResultadoSemAgentesFake.accept(configuracoes, daoFactory,
+        resultadoLigacao, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseNoAgente() throws Exception {
     when(ligacao.isNoAgente()).thenReturn(true);
-    assertThat(modificadorResultadoSemAgentesFake.accept(daoFactory, resultadoLigacaoAtendida,
-        ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoSemAgentesFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarSemAgentes() throws Exception {
-    assertThat(modificadorResultadoSemAgentesFake.modifica(daoFactory, resultadoLigacao, ligacao,
-        cliente, campanha), is(sameInstance(resultadoLigacaoSemAgentes)));
+    assertThat(modificadorResultadoSemAgentesFake.modifica(configuracoes, daoFactory,
+        resultadoLigacao, ligacao, cliente, campanha), is(sameInstance(resultadoLigacaoSemAgentes)));
   }
 
 }

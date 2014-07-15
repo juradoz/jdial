@@ -16,28 +16,25 @@ class ProcessaLimpaReserva implements ProcessoDevolucao {
 
   private final Logger logger;
   private final TratadorEspecificoCliente tratadorEspecificoCliente;
-  private final Configuracoes configuracoes;
 
   @Inject
-  ProcessaLimpaReserva(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
-      Configuracoes configuracoes) {
+  ProcessaLimpaReserva(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
     this.logger = logger;
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     return true;
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Vai limpar reserva {}", cliente);
 
-    tratadorEspecificoCliente.obtemClienteDao(daoFactory).limpaReserva(cliente,
+    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpaReserva(cliente,
         configuracoes.getOperador(), configuracoes.getNomeBaseDados());
     return true;
   }

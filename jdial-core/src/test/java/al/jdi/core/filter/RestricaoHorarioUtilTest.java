@@ -105,19 +105,19 @@ public class RestricaoHorarioUtilTest {
 
     when(daoFactory.getDataBanco()).thenReturn(DATA_BANCO);
 
-    restricaoHorarioUtil = new RestricaoHorarioUtil(logger, configuracoes, daoFactoryProvider);
+    restricaoHorarioUtil = new RestricaoHorarioUtil(logger, daoFactoryProvider);
   }
 
   @Test
   public void isUtilDeveriaRetornarTrueConfig() throws Exception {
     when(configuracoes.isBloqueiaDddPorPeriodo()).thenReturn(false);
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(true));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
   public void isUtilDeveriaRetornarTrueDddForaDaLista() throws Exception {
     when(restricaoHorarioDao.procura(DDD)).thenReturn(null);
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(true));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
@@ -127,7 +127,7 @@ public class RestricaoHorarioUtilTest {
         DATA_SEGUNDA.plusMinutes(1).toLocalTime());
     when(restricaoHorario.getHoraFinalSegunda()).thenReturn(
         DATA_SEGUNDA.plusMinutes(2).toLocalTime());
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(true));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
@@ -136,7 +136,7 @@ public class RestricaoHorarioUtilTest {
     when(restricaoHorario.getHoraInicioSegunda()).thenReturn(null);
     when(restricaoHorario.getHoraFinalSegunda()).thenReturn(
         DATA_SEGUNDA.plusMinutes(1).toLocalTime());
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(true));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
@@ -145,7 +145,7 @@ public class RestricaoHorarioUtilTest {
     when(restricaoHorario.getHoraInicioSegunda()).thenReturn(
         DATA_SEGUNDA.minusHours(1).toLocalTime());
     when(restricaoHorario.getHoraFinalSegunda()).thenReturn(null);
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(true));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(true));
   }
 
   @Test
@@ -155,7 +155,7 @@ public class RestricaoHorarioUtilTest {
         DATA_SEGUNDA.minusMinutes(1).toLocalTime());
     when(restricaoHorario.getHoraFinalSegunda()).thenReturn(
         DATA_SEGUNDA.plusMinutes(1).toLocalTime());
-    assertThat(restricaoHorarioUtil.isUtil(telefone), is(false));
+    assertThat(restricaoHorarioUtil.isUtil(configuracoes, telefone), is(false));
   }
 
   @Test

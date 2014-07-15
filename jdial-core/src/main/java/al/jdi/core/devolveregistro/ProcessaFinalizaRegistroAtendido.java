@@ -15,33 +15,31 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaFinalizaRegistroAtendido implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
   private final FinalizadorCliente finalizadorCliente;
   private final NotificadorCliente notificadorCliente;
 
   @Inject
-  ProcessaFinalizaRegistroAtendido(Logger logger, Configuracoes configuracoes,
-      FinalizadorCliente finalizadorCliente, NotificadorCliente notificadorCliente) {
+  ProcessaFinalizaRegistroAtendido(Logger logger, FinalizadorCliente finalizadorCliente,
+      NotificadorCliente notificadorCliente) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
     this.finalizadorCliente = finalizadorCliente;
     this.notificadorCliente = notificadorCliente;
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     return configuracoes.getFinalizaRegistroAtendido() && ligacao.isAtendida();
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     MotivoFinalizacao motivo = daoFactory.getMotivoFinalizacaoDao().procura("Atendimento");
-    finalizadorCliente.finaliza(daoFactory, cliente, motivo);
+    finalizadorCliente.finaliza(configuracoes, daoFactory, cliente, motivo);
     logger.info("Finalizado {}", cliente);
-    notificadorCliente.notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        cliente.getTelefone(), false, cliente.getMailing().getCampanha());
+    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, cliente.getTelefone(), false, cliente.getMailing().getCampanha());
     return false;
   }
 

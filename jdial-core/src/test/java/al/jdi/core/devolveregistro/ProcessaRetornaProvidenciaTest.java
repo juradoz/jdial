@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.dao.beans.Dao;
@@ -50,6 +51,8 @@ public class ProcessaRetornaProvidenciaTest {
   private InformacaoCliente informacaoCliente;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -72,31 +75,33 @@ public class ProcessaRetornaProvidenciaTest {
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaRetornaProvidencia.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(ligacao, cliente,
+    assertThat(processaRetornaProvidencia.accept(configuracoes, ligacao, cliente,
         resultadoLigacaoSemProximoTelefone, daoFactory), is(true));
   }
 
   @Test
   public void processaDeveriaRetornarProvidencia() throws Exception {
-    processaRetornaProvidencia.executa(ligacao, cliente, resultadoLigacao, daoFactory);
+    processaRetornaProvidencia.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory);
     verify(informacaoCliente).setProvidenciaTelefone(Providencia.Codigo.MANTEM_ATUAL.getCodigo());
   }
 
   @Test
   public void processaDeveriaAtualizarInformacaoCliente() throws Exception {
-    processaRetornaProvidencia.executa(ligacao, cliente, resultadoLigacao, daoFactory);
+    processaRetornaProvidencia.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory);
     verify(informacaoClienteDao).atualiza(informacaoCliente);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaRetornaProvidencia.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 }

@@ -94,7 +94,8 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     }
 
     resultadoLigacao =
-        modificadorResultado.modifica(daoFactory, resultadoLigacao, ligacao, cliente, campanha);
+        modificadorResultado.modifica(configuracoes, daoFactory, resultadoLigacao, ligacao,
+            cliente, campanha);
 
     logger.info("Devolvendo com motivo {} {}", resultadoLigacao, cliente);
 

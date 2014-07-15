@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.TelefoneDao;
@@ -42,13 +43,16 @@ public class InvalidaAtualEProximoTelefoneTest {
   private TelefoneDao telefoneDao;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
+
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
     when(cliente.getTelefone()).thenReturn(telefone1);
     when(iProximoTelefone.get()).thenReturn(proximoTelefone);
-    when(proximoTelefone.getTelefone(daoFactory, cliente)).thenReturn(telefone2);
+    when(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente)).thenReturn(telefone2);
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
     when(daoFactory.getTelefoneDao()).thenReturn(telefoneDao);
     invalidaAtualEProximoTelefone = new InvalidaAtualEProximoTelefone(logger, iProximoTelefone);
@@ -56,34 +60,34 @@ public class InvalidaAtualEProximoTelefoneTest {
 
   @Test
   public void deveriaRetornarProximo() throws Exception {
-    assertThat(invalidaAtualEProximoTelefone.getTelefone(daoFactory, cliente),
+    assertThat(invalidaAtualEProximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
         is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaRetornarProximoSeNaoTiverTelefoneAtual() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    assertThat(invalidaAtualEProximoTelefone.getTelefone(daoFactory, cliente),
+    assertThat(invalidaAtualEProximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
         is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaInvalidar() throws Exception {
-    assertThat(invalidaAtualEProximoTelefone.getTelefone(daoFactory, cliente),
+    assertThat(invalidaAtualEProximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
         is(sameInstance(telefone2)));
     verify(telefone1).setUtil(false);
   }
 
   @Test
   public void deveriaAtualizarCliente() throws Exception {
-    assertThat(invalidaAtualEProximoTelefone.getTelefone(daoFactory, cliente),
+    assertThat(invalidaAtualEProximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
         is(sameInstance(telefone2)));
     verify(clienteDao).atualiza(cliente);
   }
 
   @Test
   public void deveriaAtualizarTelefone() throws Exception {
-    assertThat(invalidaAtualEProximoTelefone.getTelefone(daoFactory, cliente),
+    assertThat(invalidaAtualEProximoTelefone.getTelefone(configuracoes, daoFactory, cliente),
         is(sameInstance(telefone2)));
     verify(telefoneDao).atualiza(telefone1);
   }

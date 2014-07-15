@@ -24,18 +24,18 @@ public class DiscavelFactoryTsaImplTest {
 
   @Before
   public void setUp() throws Exception {
-    discavelFactoryTsaImpl = new DiscavelFactoryTsaImpl(configuracoes);
+    discavelFactoryTsaImpl = new DiscavelFactoryTsaImpl();
   }
 
   @Test
   public void createDeveriaCriarDiscavel() {
-    Discavel discavel = discavelFactoryTsaImpl.create(cliente);
+    Discavel discavel = discavelFactoryTsaImpl.create(configuracoes, cliente);
     assertThat(discavel, is(not(nullValue(Discavel.class))));
   }
 
   @Test
   public void createDeveriaCriarDiscavelComCliente() {
-    Discavel discavel = discavelFactoryTsaImpl.create(cliente);
+    Discavel discavel = discavelFactoryTsaImpl.create(configuracoes, cliente);
     assertThat(discavel.getCliente(), is(sameInstance(cliente)));
   }
 

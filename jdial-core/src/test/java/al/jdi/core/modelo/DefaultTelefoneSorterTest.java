@@ -22,7 +22,7 @@ import al.jdi.dao.model.Telefone;
 public class DefaultTelefoneSorterTest {
 
   private DefaultTelefoneSorter defaultTelefoneSorter;
-  
+
   @Mock
   private Configuracoes configuracoes;
 
@@ -55,13 +55,13 @@ public class DefaultTelefoneSorterTest {
 
     telefones = new LinkedList<Telefone>(Arrays.asList(t3, t2, t1));
 
-    defaultTelefoneSorter = new DefaultTelefoneSorter(configuracoes);
+    defaultTelefoneSorter = new DefaultTelefoneSorter();
   }
 
   @Test
   public void sortDeveriaOrdenarOrdenacaoSimples() throws Exception {
     when(configuracoes.isPriorizaCelular()).thenReturn(true);
-    List<Telefone> result = defaultTelefoneSorter.sort(telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
     assertThat(result.get(0), is(sameInstance(t1)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t3)));
@@ -69,7 +69,7 @@ public class DefaultTelefoneSorterTest {
 
   @Test
   public void sortDeveriaOrdenarPrioridade() throws Exception {
-    List<Telefone> result = defaultTelefoneSorter.sort(telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
     assertThat(result.get(0), is(sameInstance(t3)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t1)));
@@ -78,7 +78,7 @@ public class DefaultTelefoneSorterTest {
   @Test
   public void sortDeveriaOrdenarId() throws Exception {
     forEach(telefones).setPrioridade(0);
-    List<Telefone> result = defaultTelefoneSorter.sort(telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
     assertThat(result.get(0), is(sameInstance(t1)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t3)));

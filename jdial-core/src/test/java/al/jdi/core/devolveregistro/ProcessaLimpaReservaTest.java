@@ -46,12 +46,12 @@ public class ProcessaLimpaReservaTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
+    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
+        clienteDao);
     when(configuracoes.getOperador()).thenReturn(OPERADOR);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
 
-    processaLimpaReserva =
-        new ProcessaLimpaReserva(logger, tratadorEspecificoCliente, configuracoes);
+    processaLimpaReserva = new ProcessaLimpaReserva(logger, tratadorEspecificoCliente);
   }
 
   @Test
@@ -61,20 +61,22 @@ public class ProcessaLimpaReservaTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaLimpaReserva.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaLimpaReserva.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
 
   }
 
   @Test
   public void executaDeveriaLimpar() throws Exception {
-    processaLimpaReserva.executa(ligacao, cliente, resultadoLigacao, daoFactory);
+    processaLimpaReserva.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory);
     verify(clienteDao).limpaReserva(cliente, OPERADOR, NOME_BASE_DADOS);
   }
 
   @Test
   public void executaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaLimpaReserva.executa(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaLimpaReserva.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
   }
 

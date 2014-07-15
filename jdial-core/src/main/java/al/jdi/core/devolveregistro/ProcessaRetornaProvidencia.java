@@ -3,6 +3,7 @@ package al.jdi.core.devolveregistro;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.dao.beans.DaoFactory;
@@ -29,8 +30,8 @@ class ProcessaRetornaProvidencia implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     ResultadoLigacao resultadoSemProximoTelefone =
         daoFactory.getResultadoLigacaoDao().procura(MotivoSistema.SEM_PROXIMO_TELEFONE.getCodigo(),
             cliente.getMailing().getCampanha());
@@ -45,8 +46,8 @@ class ProcessaRetornaProvidencia implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Retornando providencia de {} {}", cliente.getInformacaoCliente()
         .getProvidenciaTelefone(), cliente);
     cliente.getInformacaoCliente().setProvidenciaTelefone(

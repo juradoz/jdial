@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
 import al.jdi.core.modelo.Providencia.SomenteCelularException;
@@ -56,8 +57,11 @@ public class MantemAtualTest {
   private TelefoneFilter somenteCelulareFilter;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   private List<Telefone> telefones;
+
 
   @Before
   public void setUp() throws Exception {
@@ -68,11 +72,11 @@ public class MantemAtualTest {
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getTelefones()).thenReturn(telefones);
-    when(telefoneSorter.sort(telefones)).thenReturn(telefones);
+    when(telefoneSorter.sort(configuracoes, telefones)).thenReturn(telefones);
     when(iProximoTelefone.get()).thenReturn(proximoTelefone);
-    when(proximoTelefone.getTelefone(daoFactory, cliente)).thenReturn(telefone2);
-    when(clienteSemTelefonesFilter.filter(telefones)).thenReturn(telefones);
-    when(somenteCelulareFilter.filter(telefones)).thenReturn(telefones);
+    when(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente)).thenReturn(telefone2);
+    when(clienteSemTelefonesFilter.filter(configuracoes, telefones)).thenReturn(telefones);
+    when(somenteCelulareFilter.filter(configuracoes, telefones)).thenReturn(telefones);
     mantemAtual =
         new MantemAtual(logger, telefoneSorter, iProximoTelefone, clienteSemTelefonesFilter,
             somenteCelulareFilter);
@@ -80,44 +84,48 @@ public class MantemAtualTest {
 
   @Test
   public void deveriaRetornarMesmoTelefone() throws Exception {
-    assertThat(mantemAtual.getTelefone(daoFactory, cliente), is(sameInstance(telefone)));
+    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone)));
   }
 
   @Test(expected = ClienteSemTelefoneException.class)
   public void deveriaLancarSemTelefonesException() throws Exception {
     telefones.clear();
-    mantemAtual.getTelefone(daoFactory, cliente);
+    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test(expected = SomenteCelularException.class)
   public void deveriaLancarSomenteCelularesException() throws Exception {
-    when(somenteCelulareFilter.filter(telefones)).thenReturn(Collections.<Telefone>emptyList());
-    mantemAtual.getTelefone(daoFactory, cliente);
+    when(somenteCelulareFilter.filter(configuracoes, telefones)).thenReturn(
+        Collections.<Telefone>emptyList());
+    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
   }
 
   @Test
   public void deveriaRetornarProximoTelefoneSeAtualNaoContido() throws Exception {
     telefones.remove(telefone);
-    assertThat(mantemAtual.getTelefone(daoFactory, cliente), is(sameInstance(telefone2)));
+    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaOrdenar() throws Exception {
-    when(telefoneSorter.sort(telefones)).thenReturn(asList(telefone2));
-    assertThat(mantemAtual.getTelefone(daoFactory, cliente), is(sameInstance(telefone2)));
+    when(telefoneSorter.sort(configuracoes, telefones)).thenReturn(asList(telefone2));
+    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
+        is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaSetarHorarioSeTelNull() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    mantemAtual.getTelefone(daoFactory, cliente);
+    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
     verify(cliente).setUltimoInicioRodadaTelefones(DATA_BANCO);
   }
 
   @Test
   public void deveriaAtualizarClienteSeTelNull() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    mantemAtual.getTelefone(daoFactory, cliente);
+    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
     verify(clienteDao).atualiza(cliente);
   }
 

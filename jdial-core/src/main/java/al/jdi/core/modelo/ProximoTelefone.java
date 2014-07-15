@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
 import al.jdi.core.filter.TelefoneFilter;
@@ -41,24 +42,24 @@ class ProximoTelefone implements Providencia {
   }
 
   @Override
-  public Telefone getTelefone(DaoFactory daoFactory, Cliente cliente) {
+  public Telefone getTelefone(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente) {
     final Telefone result = cliente.getTelefone();
     if (result == null)
-      return mantemAtual.get().getTelefone(daoFactory, cliente);
+      return mantemAtual.get().getTelefone(configuracoes, daoFactory, cliente);
 
     List<Telefone> telefones = new LinkedList<Telefone>(cliente.getTelefones());
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = clienteSemTelefonesFilter.filter(telefones);
+    telefones = clienteSemTelefonesFilter.filter(configuracoes, telefones);
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = somenteCelulareFilter.filter(telefones);
+    telefones = somenteCelulareFilter.filter(configuracoes, telefones);
     if (telefones.isEmpty())
       throw new SomenteCelularException();
 
-    telefones = telefoneSorter.sort(telefones);
+    telefones = telefoneSorter.sort(configuracoes, telefones);
 
     Telefone telefoneDaVez = null;
     for (Iterator<Telefone> it = telefones.iterator(); it.hasNext();) {

@@ -132,8 +132,9 @@ class EstoqueImpl implements Estoque, Runnable {
 
   private void devolveCliente(DateTime instante, Cliente cliente, MotivoSistema motivoSistema) {
     Ligacao ligacao =
-        new Ligacao.Builder(discavelFactory.create(cliente), instante).setInicio(instante)
-            .setTermino(instante).setMotivoFinalizacao(motivoSistema.getCodigo()).build();
+        new Ligacao.Builder(discavelFactory.create(configuracoes, cliente), instante)
+            .setInicio(instante).setTermino(instante)
+            .setMotivoFinalizacao(motivoSistema.getCodigo()).build();
     devolveRegistro.devolveLigacao(configuracoes, ligacao);
   }
 
@@ -162,8 +163,8 @@ class EstoqueImpl implements Estoque, Runnable {
     Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
     logger.info("Limpeza temporaria para campanha {}", campanha);
     int registrosLimpos =
-        tratadorEspecificoCliente.obtemClienteDao(daoFactory).limpezaTemporaria(campanha,
-            configuracoes.getNomeBaseDados(), configuracoes.getNomeBase());
+        tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpezaTemporaria(
+            campanha, configuracoes.getNomeBaseDados(), configuracoes.getNomeBase());
     logger.info("Foram limpos {} registros", registrosLimpos);
   }
 
@@ -208,7 +209,7 @@ class EstoqueImpl implements Estoque, Runnable {
     Providencia.Codigo codigo =
         Providencia.Codigo.fromValue(cliente.getInformacaoCliente().getProvidenciaTelefone());
     Providencia providencia = providencias.get(codigo);
-    cliente.setTelefone(providencia.getTelefone(daoFactory, cliente));
+    cliente.setTelefone(providencia.getTelefone(configuracoes, daoFactory, cliente));
 
     cliente.getInformacaoCliente().setProvidenciaTelefone(
         Providencia.Codigo.MANTEM_ATUAL.getCodigo());
@@ -221,16 +222,16 @@ class EstoqueImpl implements Estoque, Runnable {
     cliente.getTelefone().setConurbada(isConurbada);
 
     String digitoSaida =
-        configuracoes.isDigitoSaidaDoBanco() ? tratadorEspecificoCliente
-            .obtemClienteDao(daoFactory).getDigitoSaida(cliente) : EMPTY;
+        configuracoes.isDigitoSaidaDoBanco() ? tratadorEspecificoCliente.obtemClienteDao(
+            configuracoes, daoFactory).getDigitoSaida(cliente) : EMPTY;
 
     cliente.setDigitoSaida(digitoSaida);
 
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     cliente.setEstadoCliente(estadoCliente);
-    tratadorEspecificoCliente.obtemClienteDao(daoFactory).atualiza(cliente);
-    if (!tratadorEspecificoCliente.reservaNaBaseDoCliente(daoFactory, cliente))
+    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    if (!tratadorEspecificoCliente.reservaNaBaseDoCliente(configuracoes, daoFactory, cliente))
       throw new ClienteJaEmUsoException();
     logger.debug("Cliente {} reservado!", cliente);
   }
@@ -257,7 +258,7 @@ class EstoqueImpl implements Estoque, Runnable {
       for (Iterator<Registro> it = estoque.iterator(); it.hasNext();) {
         Cliente cliente = it.next().getCliente();
         Telefone telefone = cliente.getTelefone();
-        List<Telefone> telefonesFiltrados = telefoneFilter.filter(asList(telefone));
+        List<Telefone> telefonesFiltrados = telefoneFilter.filter(configuracoes, asList(telefone));
         if (!telefonesFiltrados.isEmpty()) {
           logger.debug("Telefone ainda bom na memoria {} {}", telefone, cliente);
           continue;
@@ -329,7 +330,8 @@ class EstoqueImpl implements Estoque, Runnable {
     int quantidade = configuracoes.getMaximoEstoque() - size;
 
     try {
-      Collection<Cliente> clientesDoBanco = extraidorClientes.extrai(daoFactory, quantidade);
+      Collection<Cliente> clientesDoBanco =
+          extraidorClientes.extrai(configuracoes, daoFactory, quantidade);
       for (Cliente cliente : clientesDoBanco) {
         try {
           daoFactory.beginTransaction();

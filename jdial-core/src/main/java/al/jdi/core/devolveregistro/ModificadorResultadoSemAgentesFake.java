@@ -14,17 +14,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  ModificadorResultadoSemAgentesFake(Logger logger, Configuracoes configuracoes) {
+  ModificadorResultadoSemAgentesFake(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean accept(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao, Ligacao ligacao,
-      Cliente cliente, Campanha campanha) {
+  public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     if (configuracoes.isUraReversa())
       return false;
     ResultadoLigacao resultadoLigacaoAtendida =
@@ -33,8 +31,8 @@ class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
   }
 
   @Override
-  public ResultadoLigacao modifica(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao, Cliente cliente, Campanha campanha) {
+  public ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     logger.info("Alterando resultado por semAgentesFake {}", cliente);
     return daoFactory.getResultadoLigacaoDao().procura(23, campanha);
   }

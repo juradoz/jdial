@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -26,19 +27,19 @@ class ProcessaSemTelefones implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     return ligacao.getMotivoFinalizacao() == MotivoSistema.SEM_TELEFONES.getCodigo();
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Finalizando por sem telefones {}", cliente);
-    finalizadorCliente.finaliza(daoFactory, cliente,
-        daoFactory.getMotivoFinalizacaoDao().procura("Sem telefones"));
-    notificadorCliente.notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        cliente.getTelefone(), false, cliente.getMailing().getCampanha());
+    finalizadorCliente.finaliza(configuracoes, daoFactory, cliente, daoFactory
+        .getMotivoFinalizacaoDao().procura("Sem telefones"));
+    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, cliente.getTelefone(), false, cliente.getMailing().getCampanha());
     return false;
   }
 

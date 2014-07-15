@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Telefone;
 
 public class DefaultTelefoneFilterTest {
@@ -33,6 +34,8 @@ public class DefaultTelefoneFilterTest {
   private Telefone t3;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   private HashSet<TelefoneUtil> checkers;
 
@@ -40,25 +43,25 @@ public class DefaultTelefoneFilterTest {
   public void setUp() throws Exception {
     initMocks(this);
     checkers = new HashSet<TelefoneUtil>(asList(checker1, checker2));
-    when(checker1.isUtil(t1)).thenReturn(true);
-    when(checker1.isUtil(t2)).thenReturn(true);
-    when(checker1.isUtil(t3)).thenReturn(true);
-    when(checker2.isUtil(t1)).thenReturn(true);
-    when(checker2.isUtil(t2)).thenReturn(true);
-    when(checker2.isUtil(t3)).thenReturn(true);
+    when(checker1.isUtil(configuracoes, t1)).thenReturn(true);
+    when(checker1.isUtil(configuracoes, t2)).thenReturn(true);
+    when(checker1.isUtil(configuracoes, t3)).thenReturn(true);
+    when(checker2.isUtil(configuracoes, t1)).thenReturn(true);
+    when(checker2.isUtil(configuracoes, t2)).thenReturn(true);
+    when(checker2.isUtil(configuracoes, t3)).thenReturn(true);
     defaultTelefoneFilter = new DefaultTelefoneFilter(logger, checkers);
   }
 
   @Test
   public void filterNaoDeveriaRemoverNenhum() throws Exception {
-    List<Telefone> list = defaultTelefoneFilter.filter(asList(t1, t2, t3));
+    List<Telefone> list = defaultTelefoneFilter.filter(configuracoes, asList(t1, t2, t3));
     assertThat(list.containsAll(asList(t1, t2, t3)), is(true));
   }
 
   @Test
   public void filterDeveriaFiltrart1() throws Exception {
-    when(checker1.isUtil(t1)).thenReturn(false);
-    List<Telefone> list = defaultTelefoneFilter.filter(asList(t1, t2, t3));
+    when(checker1.isUtil(configuracoes, t1)).thenReturn(false);
+    List<Telefone> list = defaultTelefoneFilter.filter(configuracoes, asList(t1, t2, t3));
     assertThat(list.contains(t1), is(false));
     assertThat(list.contains(t2), is(true));
     assertThat(list.contains(t3), is(true));
@@ -66,8 +69,8 @@ public class DefaultTelefoneFilterTest {
 
   @Test
   public void filterDeveriaFiltrart2() throws Exception {
-    when(checker1.isUtil(t2)).thenReturn(false);
-    List<Telefone> list = defaultTelefoneFilter.filter(asList(t1, t2, t3));
+    when(checker1.isUtil(configuracoes, t2)).thenReturn(false);
+    List<Telefone> list = defaultTelefoneFilter.filter(configuracoes, asList(t1, t2, t3));
     assertThat(list.contains(t1), is(true));
     assertThat(list.contains(t2), is(false));
     assertThat(list.contains(t3), is(true));
@@ -75,8 +78,8 @@ public class DefaultTelefoneFilterTest {
 
   @Test
   public void filterDeveriaFiltrart3() throws Exception {
-    when(checker1.isUtil(t3)).thenReturn(false);
-    List<Telefone> list = defaultTelefoneFilter.filter(asList(t1, t2, t3));
+    when(checker1.isUtil(configuracoes, t3)).thenReturn(false);
+    List<Telefone> list = defaultTelefoneFilter.filter(configuracoes, asList(t1, t2, t3));
     assertThat(list.contains(t1), is(true));
     assertThat(list.contains(t2), is(true));
     assertThat(list.contains(t3), is(false));
@@ -84,8 +87,8 @@ public class DefaultTelefoneFilterTest {
 
   @Test
   public void filterDeveriaFiltrarTudo() throws Exception {
-    when(checker1.isUtil(Mockito.any(Telefone.class))).thenReturn(false);
-    List<Telefone> list = defaultTelefoneFilter.filter(asList(t1, t2, t3));
+    when(checker1.isUtil(Mockito.eq(configuracoes), Mockito.any(Telefone.class))).thenReturn(false);
+    List<Telefone> list = defaultTelefoneFilter.filter(configuracoes, asList(t1, t2, t3));
     assertThat(list.isEmpty(), is(true));
   }
 

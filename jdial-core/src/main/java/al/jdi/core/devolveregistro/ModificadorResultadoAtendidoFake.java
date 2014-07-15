@@ -14,17 +14,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ModificadorResultadoAtendidoFake implements ModificadorResultadoFilter {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  ModificadorResultadoAtendidoFake(Logger logger, Configuracoes configuracoes) {
+  ModificadorResultadoAtendidoFake(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
   }
 
   @Override
-  public boolean accept(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao, Ligacao ligacao,
-      Cliente cliente, Campanha campanha) {
+  public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     ResultadoLigacao resultadoLigacaoInexistente =
         daoFactory.getResultadoLigacaoDao().procura(13, campanha);
     return !configuracoes.isUraReversa() && resultadoLigacao.equals(resultadoLigacaoInexistente)
@@ -32,8 +30,8 @@ class ModificadorResultadoAtendidoFake implements ModificadorResultadoFilter {
   }
 
   @Override
-  public ResultadoLigacao modifica(DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao, Cliente cliente, Campanha campanha) {
+  public ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
     logger.info("Alterando resultado por atendidoFake {}", cliente);
     return daoFactory.getResultadoLigacaoDao().procura(-1, campanha);
   }

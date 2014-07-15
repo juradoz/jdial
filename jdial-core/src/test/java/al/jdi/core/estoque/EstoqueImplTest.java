@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
@@ -91,7 +92,7 @@ public class EstoqueImplTest {
     when(daoFactory.getCampanhaDao()).thenReturn(campanhaDao);
     when(campanhaDao.procura(CAMPANHA)).thenReturn(campanha);
 
-    when(discavelFactory.create(cliente)).thenReturn(discavel);
+    when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
 
     when(registro.getCliente()).thenReturn(cliente);
     when(discavel.getCliente()).thenReturn(cliente);
@@ -123,7 +124,7 @@ public class EstoqueImplTest {
     when(campanha.isLimpaMemoria()).thenReturn(true);
     estoqueImpl.limpaMemoriaPorSolicitacao(daoFactory);
     ArgumentCaptor<Ligacao> captor = ArgumentCaptor.forClass(Ligacao.class);
-    verify(devolveRegistro).devolveLigacao(configuracoes, captor.capture());
+    verify(devolveRegistro).devolveLigacao(Mockito.eq(configuracoes), captor.capture());
     Ligacao ligacao = captor.getValue();
     assertThat(ligacao.getDiscavel(), is(sameInstance(discavel)));
   }

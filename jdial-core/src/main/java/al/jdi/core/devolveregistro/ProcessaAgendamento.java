@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -27,8 +28,8 @@ class ProcessaAgendamento implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     if (resultadoLigacao == null || resultadoLigacao.getIntervaloReagendamento() <= 0) {
       logger.info("Nao vai agendar {}", cliente);
       return false;
@@ -37,15 +38,15 @@ class ProcessaAgendamento implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     DateTime cal =
         new DateTime().minusMinutes(resultadoLigacao.getIntervaloDesteResultadoReagenda());
 
     if (daoFactory.getHistoricoLigacaoDao().procura(cliente, resultadoLigacao, cal).size() > 1) {
       logger.info("Nao vai agendar por ja ter resultado no intervalo {}", cliente);
       cliente.getAgendamento().clear();
-      tratadorEspecificoCliente.obtemClienteDao(daoFactory).atualiza(cliente);
+      tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
       return true;
     }
 

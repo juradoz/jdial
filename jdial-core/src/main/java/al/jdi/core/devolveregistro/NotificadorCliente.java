@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -22,21 +23,22 @@ class NotificadorCliente {
     this.tratadorEspecificoCliente = tratadorEspecificoCliente;
   }
 
-  void notificaFimTentativa(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, Telefone telefoneOriginal, Campanha campanha) {
+  void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+      Cliente cliente, ResultadoLigacao resultadoLigacao, Telefone telefoneOriginal,
+      Campanha campanha) {
     if (!resultadoLigacao.isNotificaFimTentativa()) {
       logger.info("Nao vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
       return;
     }
 
     logger.info("Vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
-    tratadorEspecificoCliente.notificaFimTentativa(daoFactory, ligacao, cliente, campanha,
-        daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
+    tratadorEspecificoCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
+        campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
         ligacao.isInutilizaComMotivoDiferenciado());
   }
 
-  void notificaFinalizacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, Telefone telefoneOriginal,
+  void notificaFinalizacao(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+      Cliente cliente, ResultadoLigacao resultadoLigacao, Telefone telefoneOriginal,
       boolean inutilizaComMotivoDiferenciado, Campanha campanha) {
     if (!resultadoLigacao.isNotificaFimTentativa()) {
       logger.info("Nao vai notificar finalizacao motivo {} {}", resultadoLigacao, cliente);
@@ -44,8 +46,8 @@ class NotificadorCliente {
     }
 
     logger.info("Vai notificar finalizacao motivo {} {} ", resultadoLigacao, cliente);
-    tratadorEspecificoCliente.notificaFinalizacao(daoFactory, ligacao, cliente, campanha,
-        daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
+    tratadorEspecificoCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
         inutilizaComMotivoDiferenciado);
   }
 }

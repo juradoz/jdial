@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.HistoricoLigacaoDao;
@@ -40,6 +41,8 @@ public class ProcessaInutilizaTelefoneTest {
   private HistoricoLigacao historicoLigacao;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -58,40 +61,40 @@ public class ProcessaInutilizaTelefoneTest {
   @Test
   public void acceptDeveriaRetornarFalsePorResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
-    assertThat(processaInutilizaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaInutilizaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarTruePorResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(true);
-    assertThat(processaInutilizaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaInutilizaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarTruePorQtd() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
     when(resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone()).thenReturn(1);
-    assertThat(processaInutilizaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaInutilizaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(true));
   }
 
   @Test
   public void executaDeveriaFinalizarPeloResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(true);
-    assertThat(processaInutilizaTelefone.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
-    verify(finalizadorCliente).finalizaPorInutilizacaoSimples(daoFactory, cliente);
+    assertThat(processaInutilizaTelefone.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(true));
+    verify(finalizadorCliente).finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
   }
 
   @Test
   public void executaDeveriaFinalizarPeloHistorico() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
     when(resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone()).thenReturn(1);
-    assertThat(processaInutilizaTelefone.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
-    verify(finalizadorCliente).finalizaPorInutilizacaoSimples(daoFactory, cliente);
+    assertThat(processaInutilizaTelefone.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory), is(true));
+    verify(finalizadorCliente).finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
   }
 
 }

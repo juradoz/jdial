@@ -62,8 +62,7 @@ public class ProcessaFinalizaRegistroAtendidoTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaFinalizaRegistroAtendido =
-        new ProcessaFinalizaRegistroAtendido(logger, configuracoes, finalizadorCliente,
-            notificadorCliente);
+        new ProcessaFinalizaRegistroAtendido(logger, finalizadorCliente, notificadorCliente);
   }
 
   @Test
@@ -75,44 +74,39 @@ public class ProcessaFinalizaRegistroAtendidoTest {
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(true);
     when(ligacao.isAtendida()).thenReturn(true);
-    assertThat(
-        processaFinalizaRegistroAtendido.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaFinalizaRegistroAtendido.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseConfig() throws Exception {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(false);
     when(ligacao.isAtendida()).thenReturn(true);
-    assertThat(
-        processaFinalizaRegistroAtendido.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaFinalizaRegistroAtendido.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseLigacao() throws Exception {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(true);
     when(ligacao.isAtendida()).thenReturn(false);
-    assertThat(
-        processaFinalizaRegistroAtendido.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaFinalizaRegistroAtendido.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
   }
 
   @Test
   public void executaDeveriaFinalizar() throws Exception {
-    assertThat(
-        processaFinalizaRegistroAtendido.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
-    verify(finalizadorCliente).finaliza(daoFactory, cliente, motivoFinalizacao);
+    assertThat(processaFinalizaRegistroAtendido.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
+    verify(finalizadorCliente).finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
   }
 
   @Test
   public void executaDeveriaNotificar() throws Exception {
-    assertThat(
-        processaFinalizaRegistroAtendido.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
-    verify(notificadorCliente).notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefone, false, campanha);
+    assertThat(processaFinalizaRegistroAtendido.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
+    verify(notificadorCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefone, false, campanha);
   }
 
 }

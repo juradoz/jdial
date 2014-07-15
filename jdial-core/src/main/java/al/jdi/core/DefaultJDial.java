@@ -109,7 +109,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       logger.debug("Limpando reservas para campanha {}...", campanha.getNome());
       DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
-      tratadorEspecificoCliente.obtemClienteDao(daoFactory).limpaReservas(campanha,
+      tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpaReservas(campanha,
           configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
           configuracoes.getOperador());
       daoFactory.commit();
@@ -152,7 +152,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     Servico servico = campanha.getServico();
 
     for (Cliente cliente : clientesAgendados) {
-      Discavel discavel = discavelFactory.create(cliente);
+      Discavel discavel = discavelFactory.create(configuracoes, cliente);
       Ligacao ligacao = new Ligacao.Builder(discavel).setInicio(dataBanco).build();
       DateTime inicio = new DateTime();
       gerenciadorLigacoes.disca(ligacao, servico);

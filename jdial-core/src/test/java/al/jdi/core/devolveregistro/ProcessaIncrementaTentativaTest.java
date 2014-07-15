@@ -69,7 +69,7 @@ public class ProcessaIncrementaTentativaTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaIncrementaTentativa =
-        new ProcessaIncrementaTentativa(logger, configuracoes, finalizadorCliente,
+        new ProcessaIncrementaTentativa(logger, finalizadorCliente,
             notificadorCliente);
   }
 
@@ -81,27 +81,27 @@ public class ProcessaIncrementaTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(true);
-    assertThat(processaIncrementaTentativa.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(false);
-    assertThat(processaIncrementaTentativa.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(false));
   }
 
   @Test
   public void executaDeveriaIncrementar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
     verify(telefone).incTentativa();
   }
 
   @Test
   public void executaDeveriaAtualizar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
     verify(telefoneDao).atualiza(telefone);
   }

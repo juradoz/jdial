@@ -20,12 +20,10 @@ import al.jdi.dao.model.Telefone;
 class TratadorEspecificoClienteTsaImpl implements TratadorEspecificoCliente {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
 
   @Inject
-  TratadorEspecificoClienteTsaImpl(Logger logger, Configuracoes configuracoes) {
+  TratadorEspecificoClienteTsaImpl(Logger logger) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
     logger.debug("Iniciando {}", this);
   }
 
@@ -35,9 +33,10 @@ class TratadorEspecificoClienteTsaImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public void notificaFimTentativa(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado) {
+  public void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory,
+      Ligacao ligacao, Cliente cliente, Campanha campanha, DateTime dataBanco,
+      Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
           daoFactory.getResultadoLigacaoDao().procura(23, campanha);
@@ -68,9 +67,10 @@ class TratadorEspecificoClienteTsaImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public void notificaFinalizacao(DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado) {
+  public void notificaFinalizacao(Configuracoes configuracoes, DaoFactory daoFactory,
+      Ligacao ligacao, Cliente cliente, Campanha campanha, DateTime dataBanco,
+      Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
           daoFactory.getResultadoLigacaoDao().procura(23, campanha);
@@ -101,12 +101,13 @@ class TratadorEspecificoClienteTsaImpl implements TratadorEspecificoCliente {
   }
 
   @Override
-  public ClienteDao obtemClienteDao(DaoFactory daoFactory) {
+  public ClienteDao obtemClienteDao(Configuracoes configuracoes, DaoFactory daoFactory) {
     return daoFactory.getClienteDaoTsa();
   }
 
   @Override
-  public boolean reservaNaBaseDoCliente(DaoFactory daoFactory, Cliente cliente) {
+  public boolean reservaNaBaseDoCliente(Configuracoes configuracoes, DaoFactory daoFactory,
+      Cliente cliente) {
     return daoFactory.getClienteDaoTsa().reservaNaBaseDoCliente(cliente,
         configuracoes.getOperador(), configuracoes.getNomeBaseDados());
   }

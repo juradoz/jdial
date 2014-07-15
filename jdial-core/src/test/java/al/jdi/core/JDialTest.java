@@ -105,7 +105,8 @@ public class JDialTest {
     when(campanhaDao.procura(CAMPANHA)).thenReturn(campanha);
     when(campanha.getNome()).thenReturn(CAMPANHA);
     when(campanha.getServico()).thenReturn(servico);
-    when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
+    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
+        clienteDao);
 
     when(configuracoes.getNomeCampanha()).thenReturn(CAMPANHA);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
@@ -123,7 +124,7 @@ public class JDialTest {
     when(estoqueAgendados.obtemRegistros((int) (FATOR_K * QTD_LIVRES) - QTD_LIGACOES_NAO_ATENDIDAS))
         .thenReturn(Arrays.asList(cliente));
 
-    when(discavelFactory.create(cliente)).thenReturn(discavel);
+    when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
 
     jDial =
         new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,

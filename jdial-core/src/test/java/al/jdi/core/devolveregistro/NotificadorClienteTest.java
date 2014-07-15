@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -40,8 +41,11 @@ public class NotificadorClienteTest {
   private Campanha campanha;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   private DateTime dataBanco;
+
 
   @Before
   public void setUp() throws Exception {
@@ -55,37 +59,39 @@ public class NotificadorClienteTest {
   @Test
   public void notificaFimTentativaNaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    notificadorCliente.notificaFimTentativa(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(daoFactory, ligacao, cliente,
-        campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefoneOriginal, campanha);
+    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(configuracoes, daoFactory,
+        ligacao, cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao,
+        INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFimTentativaDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    notificadorCliente.notificaFimTentativa(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(daoFactory, ligacao, cliente, campanha,
-        dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefoneOriginal, campanha);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(configuracoes, daoFactory, ligacao,
+        cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFinalizacaoNaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    notificadorCliente.notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(daoFactory, ligacao, cliente,
-        campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
+    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(configuracoes, daoFactory,
+        ligacao, cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao,
+        INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFinalizacaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    notificadorCliente.notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente).notificaFinalizacao(daoFactory, ligacao, cliente, campanha,
-        dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
+    verify(tratadorEspecificoCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao,
+        cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
 }

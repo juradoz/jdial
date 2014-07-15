@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -46,6 +47,8 @@ public class ProcessaCiclaTelefoneTest {
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -65,24 +68,25 @@ public class ProcessaCiclaTelefoneTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(true);
-    assertThat(processaCiclaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(false);
-    assertThat(processaCiclaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(false));
   }
 
   @Test
   public void acceptDeveriaSetarTelOriginal() throws Exception {
-    assertThat(processaCiclaTelefone.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(false));
     verify(ligacao).setTelefoneOriginal(telefone);
   }
-
-  // TODO : Extrair impl de Providencia para classes regulares
 
 }

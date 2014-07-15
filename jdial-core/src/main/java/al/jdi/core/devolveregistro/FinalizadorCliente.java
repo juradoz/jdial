@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -32,12 +33,13 @@ class FinalizadorCliente {
     this.telefoneFilter = telefoneFilter;
   }
 
-  void finaliza(DaoFactory daoFactory, Cliente cliente, MotivoFinalizacao motivoFinalizacao) {
+  void finaliza(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente,
+      MotivoFinalizacao motivoFinalizacao) {
     EstadoCliente estadoCliente = daoFactory.getEstadoClienteDao().procura("Finalizado");
     cliente.setEstadoCliente(estadoCliente);
 
     cliente.getAgendamento().clear();
-    tratadorEspecificoCliente.obtemClienteDao(daoFactory).atualiza(cliente);
+    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
 
     HistoricoCliente historicoCliente = new HistoricoCliente();
     historicoCliente.setCliente(cliente);
@@ -48,13 +50,13 @@ class FinalizadorCliente {
     daoFactory.getHistoricoClienteDao().adiciona(historicoCliente);
   }
 
-  void finalizaPorInutilizacaoSimples(DaoFactory daoFactory, Cliente cliente)
-      throws ClienteFinalizadoException {
+  void finalizaPorInutilizacaoSimples(Configuracoes configuracoes, DaoFactory daoFactory,
+      Cliente cliente) throws ClienteFinalizadoException {
     TelefoneDao telefoneDao = daoFactory.getTelefoneDao();
     Telefone telefone = telefoneDao.procura(cliente.getTelefone().getId());
     telefone.setUtil(false);
     telefoneDao.atualiza(telefone);
-    if (telefoneFilter.filter(cliente.getTelefones()).size() > 0) {
+    if (telefoneFilter.filter(configuracoes, cliente.getTelefones()).size() > 0) {
       logger.info(
           "Nao vai finalizar por inutilizacao simples pois ainda possui outros telefones {}",
           cliente);
@@ -64,7 +66,7 @@ class FinalizadorCliente {
     MotivoFinalizacao motivoFinalizacao =
         daoFactory.getMotivoFinalizacaoDao().procura("Sem telefones");
 
-    finaliza(daoFactory, cliente, motivoFinalizacao);
+    finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
 
     throw new ClienteFinalizadoException();
   }

@@ -22,7 +22,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 public class ModificadorResultadoAtendidoFakeTest {
 
   private ModificadorResultadoAtendidoFake modificadorResultadoAtendidoFake;
-  
+
   @Mock
   private DaoFactory daoFactory;
   @Mock
@@ -52,39 +52,39 @@ public class ModificadorResultadoAtendidoFakeTest {
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
     when(ligacao.isAtendida()).thenReturn(true);
-    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake(logger, configuracoes);
+    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake(logger);
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.accept(daoFactory, resultadoLigacaoInexistente,
-        ligacao, cliente, campanha), is(true));
+    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(true);
-    assertThat(modificadorResultadoAtendidoFake.accept(daoFactory, resultadoLigacaoInexistente,
-        ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.accept(daoFactory, resultadoLigacaoAtendida,
-        ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseAtendida() throws Exception {
     when(ligacao.isAtendida()).thenReturn(false);
-    assertThat(modificadorResultadoAtendidoFake.accept(daoFactory, resultadoLigacaoInexistente,
-        ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
+        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarAtendida() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.modifica(daoFactory, resultadoLigacao, ligacao,
-        cliente, campanha), is(sameInstance(resultadoLigacaoAtendida)));
+    assertThat(modificadorResultadoAtendidoFake.modifica(configuracoes, daoFactory,
+        resultadoLigacao, ligacao, cliente, campanha), is(sameInstance(resultadoLigacaoAtendida)));
   }
 
 }

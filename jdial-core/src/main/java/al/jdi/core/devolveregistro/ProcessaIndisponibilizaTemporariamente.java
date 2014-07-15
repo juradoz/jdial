@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -25,21 +26,21 @@ class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     return true;
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Indisponibilizando por {} minutos {}",
         resultadoLigacao.getIntervaloIndisponivel(), cliente);
 
     cliente.setDisponivelAPartirDe(resultadoLigacao.getIntervaloIndisponivel() <= 0 ? null
         : new DateTime().plusMinutes(resultadoLigacao.getIntervaloIndisponivel()));
 
-    tratadorEspecificoCliente.obtemClienteDao(daoFactory).atualiza(cliente);
+    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
     return true;
   }
 

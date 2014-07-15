@@ -24,17 +24,14 @@ import al.jdi.dao.model.Telefone;
 class RestricaoHorarioUtil implements TelefoneUtil {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
 
   private final Map<Integer, Method> inicios = new HashMap<Integer, Method>();
   private final Map<Integer, Method> finais = new HashMap<Integer, Method>();
 
   @Inject
-  RestricaoHorarioUtil(Logger logger, Configuracoes configuracoes,
-      Provider<DaoFactory> daoFactoryProvider) {
+  RestricaoHorarioUtil(Logger logger, Provider<DaoFactory> daoFactoryProvider) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     registraMetodos();
   }
@@ -64,7 +61,7 @@ class RestricaoHorarioUtil implements TelefoneUtil {
   }
 
   @Override
-  public boolean isUtil(Telefone telefone) {
+  public boolean isUtil(Configuracoes configuracoes, Telefone telefone) {
     if (!configuracoes.isBloqueiaDddPorPeriodo())
       return true;
     DaoFactory daoFactory = daoFactoryProvider.get();

@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -22,8 +23,8 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     if (cliente.getEstadoCliente().equals(estadoCliente)) {
@@ -34,8 +35,8 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     int motivoFinalizacao = ligacao.getMotivoFinalizacao();
     if (motivoFinalizacao == MotivoSistema.LEI_NAO_PERTURBE.getCodigo()
         || motivoFinalizacao == MotivoSistema.SEM_TELEFONES.getCodigo()) {

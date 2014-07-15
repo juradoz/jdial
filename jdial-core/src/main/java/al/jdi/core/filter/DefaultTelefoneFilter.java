@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Telefone;
 
 @Alternative
@@ -25,12 +26,12 @@ class DefaultTelefoneFilter implements TelefoneFilter {
   }
 
   @Override
-  public List<Telefone> filter(List<Telefone> telefones) {
+  public List<Telefone> filter(Configuracoes configuracoes, List<Telefone> telefones) {
     List<Telefone> result = new LinkedList<Telefone>(telefones);
     for (Iterator<Telefone> it = result.iterator(); it.hasNext();) {
       Telefone telefone = it.next();
       for (TelefoneUtil checker : checkers) {
-        if (!checker.isUtil(telefone)) {
+        if (!checker.isUtil(configuracoes, telefone)) {
           logger.info("Excluindo telefone inutil {} por {}", telefone, checker);
           it.remove();
           break;

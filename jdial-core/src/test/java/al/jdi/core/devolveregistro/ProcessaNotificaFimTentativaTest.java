@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
@@ -44,6 +45,8 @@ public class ProcessaNotificaFimTentativaTest {
   private Mailing mailing;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   private DateTime dataBanco;
 
@@ -68,29 +71,29 @@ public class ProcessaNotificaFimTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    assertThat(processaNotificaFimTentativa.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaNotificaFimTentativa.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    assertThat(processaNotificaFimTentativa.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaNotificaFimTentativa.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
   }
 
   @Test
   public void processaDeveriaNotificar() throws Exception {
-    processaNotificaFimTentativa.executa(ligacao, cliente, resultadoLigacao, daoFactory);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(daoFactory, ligacao, cliente, campanha,
-        dataBanco, telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
+    processaNotificaFimTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao,
+        daoFactory);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(configuracoes, daoFactory, ligacao,
+        cliente, campanha, dataBanco, telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(
-        processaNotificaFimTentativa.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaNotificaFimTentativa.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
 }

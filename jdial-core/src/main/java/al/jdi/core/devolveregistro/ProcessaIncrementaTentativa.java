@@ -17,24 +17,22 @@ import al.jdi.dao.model.Telefone;
 class ProcessaIncrementaTentativa implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final Configuracoes configuracoes;
   private final FinalizadorCliente finalizadorCliente;
   private final NotificadorCliente notificadorCliente;
 
   private ResultadoLigacao resultadoLigacao;
 
   @Inject
-  ProcessaIncrementaTentativa(Logger logger, Configuracoes configuracoes,
-      FinalizadorCliente finalizadorCliente, NotificadorCliente notificadorCliente) {
+  ProcessaIncrementaTentativa(Logger logger, FinalizadorCliente finalizadorCliente,
+      NotificadorCliente notificadorCliente) {
     this.logger = logger;
-    this.configuracoes = configuracoes;
     this.finalizadorCliente = finalizadorCliente;
     this.notificadorCliente = notificadorCliente;
   }
 
   @Override
-  public boolean accept(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     if (!resultadoLigacao.isIncrementaTentativa()) {
       logger.info("Nao vai incrementar tentativa {}", cliente);
       return false;
@@ -43,8 +41,8 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Ligacao ligacao, Cliente cliente, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Incrementando tentativa {}", cliente);
 
     TelefoneDao telefoneDao = daoFactory.getTelefoneDao();
@@ -52,14 +50,14 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
     telefone.incTentativa();
     telefoneDao.atualiza(telefone);
     if (configuracoes.getLimiteTentativasPorTelefone()) {
-      return limitaTentativasPorTelefone(daoFactory, cliente, telefoneDao);
+      return limitaTentativasPorTelefone(configuracoes, daoFactory, cliente, telefoneDao);
     }
 
-    return limitaTentativasPorCliente(daoFactory, cliente, telefoneDao, ligacao);
+    return limitaTentativasPorCliente(configuracoes, daoFactory, cliente, telefoneDao, ligacao);
   }
 
-  private boolean limitaTentativasPorTelefone(DaoFactory daoFactory, Cliente cliente,
-      TelefoneDao telefoneDao) {
+  private boolean limitaTentativasPorTelefone(Configuracoes configuracoes, DaoFactory daoFactory,
+      Cliente cliente, TelefoneDao telefoneDao) {
     int limiteTentativas = configuracoes.getLimiteTentativas();
     int totalTentativas = cliente.getTelefone().getTentativa();
     if (totalTentativas < limiteTentativas) {
@@ -70,12 +68,12 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
 
     logger.info("Finalizando por excesso de tentativas tentativas telefone {}: {} de {} {}",
         new Object[] {cliente.getTelefone(), totalTentativas, limiteTentativas, cliente});
-    finalizadorCliente.finalizaPorInutilizacaoSimples(daoFactory, cliente);
+    finalizadorCliente.finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
     return true;
   }
 
-  private boolean limitaTentativasPorCliente(DaoFactory daoFactory, Cliente cliente,
-      TelefoneDao telefoneDao, Ligacao ligacao) {
+  private boolean limitaTentativasPorCliente(Configuracoes configuracoes, DaoFactory daoFactory,
+      Cliente cliente, TelefoneDao telefoneDao, Ligacao ligacao) {
     int limiteTentativas = configuracoes.getLimiteTentativas();
     int totalTentativas = telefoneDao.totalTentativas(configuracoes.bloqueiaCelular(), cliente);
     if (totalTentativas < limiteTentativas) {
@@ -90,10 +88,10 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
     MotivoFinalizacao motivoFinalizacao =
         daoFactory.getMotivoFinalizacaoDao().procura("Excesso tentativas");
 
-    finalizadorCliente.finaliza(daoFactory, cliente, motivoFinalizacao);
+    finalizadorCliente.finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
     logger.info("Finalizado {}", cliente);
-    notificadorCliente.notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        cliente.getTelefone(), false, cliente.getMailing().getCampanha());
+    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, cliente.getTelefone(), false, cliente.getMailing().getCampanha());
     return true;
   }
 

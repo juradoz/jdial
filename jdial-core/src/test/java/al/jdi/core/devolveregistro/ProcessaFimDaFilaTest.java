@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.ClienteDao;
@@ -36,11 +37,14 @@ public class ProcessaFimDaFilaTest {
   private ClienteDao clienteDao;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoCliente.obtemClienteDao(daoFactory)).thenReturn(clienteDao);
+    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
+        clienteDao);
     processaFimDaFila = new ProcessaFimDaFila(logger, tratadorEspecificoCliente);
   }
 
@@ -52,24 +56,32 @@ public class ProcessaFimDaFilaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isVaiParaOFimDaFila()).thenReturn(true);
-    assertThat(processaFimDaFila.accept(ligacao, cliente, resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaFimDaFila.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+        is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isVaiParaOFimDaFila()).thenReturn(false);
-    assertThat(processaFimDaFila.accept(ligacao, cliente, resultadoLigacao, daoFactory), is(false));
+    assertThat(
+        processaFimDaFila.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+        is(false));
   }
 
   @Test
   public void executaDeveriaFimDaFila() throws Exception {
-    assertThat(processaFimDaFila.executa(ligacao, cliente, resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaFimDaFila.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+        is(true));
     verify(cliente).fimDaFila();
   }
 
   @Test
   public void executaDeveriaAtualizarCliente() throws Exception {
-    assertThat(processaFimDaFila.executa(ligacao, cliente, resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaFimDaFila.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+        is(true));
     verify(clienteDao).atualiza(cliente);
   }
 

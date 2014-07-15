@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -51,6 +52,8 @@ public class ProcessaSemTelefonesTest {
   private Telefone telefone;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -71,33 +74,36 @@ public class ProcessaSemTelefonesTest {
   @Test
   public void acceptNaoDeveriaRetornarFalse() {
     when(ligacao.getMotivoFinalizacao()).thenReturn(MotivoSistema.ATENDIDA.getCodigo());
-    assertThat(processaSemTelefones.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaSemTelefones.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(false));
   }
 
   @Test
   public void acceptNaoDeveriaRetornarTrue() {
     when(ligacao.getMotivoFinalizacao()).thenReturn(MotivoSistema.SEM_TELEFONES.getCodigo());
-    assertThat(processaSemTelefones.accept(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaSemTelefones.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(true));
   }
 
   @Test
   public void processaDeveriaFinalizar() throws Exception {
-    processaSemTelefones.executa(ligacao, cliente, resultadoLigacao, daoFactory);
-    verify(finalizadorCliente).finaliza(daoFactory, cliente, motivoFinalizacao);
+    processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory);
+    verify(finalizadorCliente).finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
   }
 
   @Test
   public void processaDeveriaNotificar() throws Exception {
-    processaSemTelefones.executa(ligacao, cliente, resultadoLigacao, daoFactory);
-    verify(notificadorCliente).notificaFinalizacao(daoFactory, ligacao, cliente, resultadoLigacao,
-        telefone, false, campanha);
+    processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory);
+    verify(notificadorCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+        resultadoLigacao, telefone, false, campanha);
   }
 
   @Test
   public void processaDeveriaRetornarFalse() throws Exception {
-    assertThat(processaSemTelefones.executa(ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(
+        processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
         is(false));
   }
 

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
+import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -37,6 +38,8 @@ public class ProcessaAsseguraExistenciaReservaTest {
   private Dao<EstadoCliente> estadoClienteDao;
   @Mock
   private Logger logger;
+  @Mock
+  private Configuracoes configuracoes;
 
   @Before
   public void setUp() throws Exception {
@@ -54,24 +57,21 @@ public class ProcessaAsseguraExistenciaReservaTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(
-        processaAsseguraExistenciaReserva.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaAsseguraExistenciaReserva.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(cliente.getEstadoCliente()).thenReturn(estadoClienteReservado);
-    assertThat(
-        processaAsseguraExistenciaReserva.accept(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaAsseguraExistenciaReserva.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
   }
 
   @Test
   public void executaDeveriaRetornarTrue() throws Exception {
-    assertThat(
-        processaAsseguraExistenciaReserva.executa(ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaAsseguraExistenciaReserva.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
 }
