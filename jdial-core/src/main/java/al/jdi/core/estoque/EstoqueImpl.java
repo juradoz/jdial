@@ -55,7 +55,7 @@ class EstoqueImpl implements Estoque, Runnable {
     @Inject
     private DevolveRegistro devolveRegistro;
     @Inject
-    private TratadorEspecificoCliente tratadorEspecificoCliente;
+    private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
     @Inject
     private Discavel.Factory discavelFactory;
     @Inject
@@ -71,8 +71,8 @@ class EstoqueImpl implements Estoque, Runnable {
     public Estoque create(Configuracoes configuracoes, ExtraidorClientes extraidorClientes,
         Period intervaloMonitoracao) {
       return new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
-          tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
-          intervaloMonitoracao, providencias, telefoneFilter);
+          tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
+          extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
     }
   }
 
@@ -88,7 +88,7 @@ class EstoqueImpl implements Estoque, Runnable {
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final DevolveRegistro devolveRegistro;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final Discavel.Factory discavelFactory;
   private final Collection<Registro> estoque;
   private final ExtraidorClientes extraidorClientes;
@@ -101,7 +101,8 @@ class EstoqueImpl implements Estoque, Runnable {
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
   EstoqueImpl(Logger logger, Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      DevolveRegistro devolveRegistro, TratadorEspecificoCliente tratadorEspecificoCliente,
+      DevolveRegistro devolveRegistro,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
       ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
@@ -109,7 +110,7 @@ class EstoqueImpl implements Estoque, Runnable {
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.devolveRegistro = devolveRegistro;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.discavelFactory = discavelFactory;
     this.estoque = estoque;
     this.extraidorClientes = extraidorClientes;
@@ -165,8 +166,11 @@ class EstoqueImpl implements Estoque, Runnable {
     Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
     logger.info("Limpeza temporaria para campanha {}", campanha);
     int registrosLimpos =
-        tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpezaTemporaria(
-            campanha, configuracoes.getNomeBaseDados(), configuracoes.getNomeBase());
+        tratadorEspecificoClienteFactory
+            .create(configuracoes, daoFactory)
+            .obtemClienteDao()
+            .limpezaTemporaria(campanha, configuracoes.getNomeBaseDados(),
+                configuracoes.getNomeBase());
     logger.info("Foram limpos {} registros", registrosLimpos);
   }
 
@@ -216,7 +220,7 @@ class EstoqueImpl implements Estoque, Runnable {
     cliente.getInformacaoCliente().setProvidenciaTelefone(
         Providencia.Codigo.MANTEM_ATUAL.getCodigo());
 
-    if (tratadorEspecificoCliente.isDnc(daoFactory, cliente, configuracoes.getNomeBaseDados()))
+    if (tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).isDnc(cliente))
       throw new DncException();
 
     boolean isConurbada = daoFactory.getAreaAreaDao().isConurbada(cliente.getTelefone());
@@ -224,16 +228,18 @@ class EstoqueImpl implements Estoque, Runnable {
     cliente.getTelefone().setConurbada(isConurbada);
 
     String digitoSaida =
-        configuracoes.isDigitoSaidaDoBanco() ? tratadorEspecificoCliente.obtemClienteDao(
-            configuracoes, daoFactory).getDigitoSaida(cliente) : EMPTY;
+        configuracoes.isDigitoSaidaDoBanco() ? tratadorEspecificoClienteFactory
+            .create(configuracoes, daoFactory).obtemClienteDao().getDigitoSaida(cliente) : EMPTY;
 
     cliente.setDigitoSaida(digitoSaida);
 
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     cliente.setEstadoCliente(estadoCliente);
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
-    if (!tratadorEspecificoCliente.reservaNaBaseDoCliente(configuracoes, daoFactory, cliente))
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
+    if (!tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).reservaNaBaseDoCliente(
+        cliente))
       throw new ClienteJaEmUsoException();
     logger.debug("Cliente {} reservado!", cliente);
   }

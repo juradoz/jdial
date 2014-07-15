@@ -28,6 +28,8 @@ public class ProcessaCiclaTelefoneTest {
   private ProcessaCiclaTelefone processaCiclaTelefone;
 
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
   private ProcessaFimDaFila processaFimDaFila;
@@ -55,8 +57,10 @@ public class ProcessaCiclaTelefoneTest {
     initMocks(this);
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
     processaCiclaTelefone =
-        new ProcessaCiclaTelefone(logger, tratadorEspecificoCliente, processaFimDaFila,
+        new ProcessaCiclaTelefone(logger, tratadorEspecificoClienteFactory, processaFimDaFila,
             providencias);
   }
 

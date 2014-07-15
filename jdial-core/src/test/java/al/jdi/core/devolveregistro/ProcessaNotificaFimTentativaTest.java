@@ -30,6 +30,8 @@ public class ProcessaNotificaFimTentativaTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Ligacao ligacao;
   @Mock
   private Cliente cliente;
@@ -59,8 +61,10 @@ public class ProcessaNotificaFimTentativaTest {
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.getTelefoneOriginal()).thenReturn(telefone);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_MOTIVO_DIFERENCIADO);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
     processaNotificaFimTentativa =
-        new ProcessaNotificaFimTentativa(logger, tratadorEspecificoCliente);
+        new ProcessaNotificaFimTentativa(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test
@@ -86,8 +90,8 @@ public class ProcessaNotificaFimTentativaTest {
   public void processaDeveriaNotificar() throws Exception {
     processaNotificaFimTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao,
         daoFactory);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, dataBanco, telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(ligacao, cliente, campanha, dataBanco,
+        telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
   }
 
   @Test

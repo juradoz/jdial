@@ -26,6 +26,8 @@ public class NotificadorClienteTest {
 
   private static final boolean INUTILIZA_DIFERENCIADO = false;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
   private DaoFactory daoFactory;
@@ -53,7 +55,9 @@ public class NotificadorClienteTest {
     initMocks(this);
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_DIFERENCIADO);
-    notificadorCliente = new NotificadorCliente(logger, tratadorEspecificoCliente);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    notificadorCliente = new NotificadorCliente(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test
@@ -61,9 +65,8 @@ public class NotificadorClienteTest {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
     notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
         resultadoLigacao, telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(configuracoes, daoFactory,
-        ligacao, cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao,
-        INUTILIZA_DIFERENCIADO);
+    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(ligacao, cliente, campanha,
+        dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
@@ -71,8 +74,8 @@ public class NotificadorClienteTest {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
     notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
         resultadoLigacao, telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(ligacao, cliente, campanha, dataBanco,
+        telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
@@ -80,9 +83,8 @@ public class NotificadorClienteTest {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
     notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
         resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(configuracoes, daoFactory,
-        ligacao, cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao,
-        INUTILIZA_DIFERENCIADO);
+    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(ligacao, cliente, campanha,
+        dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
@@ -90,8 +92,8 @@ public class NotificadorClienteTest {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
     notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
         resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
+    verify(tratadorEspecificoCliente).notificaFinalizacao(ligacao, cliente, campanha, dataBanco,
+        telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
 }

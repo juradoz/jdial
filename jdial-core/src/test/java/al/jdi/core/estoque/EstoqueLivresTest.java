@@ -31,7 +31,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 
 public class EstoqueLivresTest {
-  
+
   private EstoqueImpl estoqueLivres;
 
   @Mock
@@ -47,6 +47,8 @@ public class EstoqueLivresTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Discavel.Factory discavelFactory;
   @Mock
   private Engine.Factory engineFactory;
@@ -58,9 +60,12 @@ public class EstoqueLivresTest {
   private TelefoneFilter telefoneFilter;
   @Mock
   private Logger logger;
+  @Mock
+  private DaoFactory daoFactory;
 
   private Period intervaloMonitoracao = Period.ZERO;
   private Collection<Registro> estoque;
+
 
   @Test
   public void contemClienteDeveriaEncontrar() {
@@ -96,11 +101,13 @@ public class EstoqueLivresTest {
   public void setUp() {
     initMocks(this);
     when(registro.getCliente()).thenReturn(cliente);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
     estoque = new LinkedList<Registro>(asList(registro, registro));
     estoqueLivres =
         new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
-            tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
-            intervaloMonitoracao, providencias, telefoneFilter);
+            tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
+            extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
   }
 
 }

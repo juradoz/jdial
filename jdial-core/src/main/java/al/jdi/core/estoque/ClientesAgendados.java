@@ -16,19 +16,23 @@ import al.jdi.dao.model.Cliente;
 @Agendados
 class ClientesAgendados implements ExtraidorClientes {
 
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ClientesAgendados(TratadorEspecificoCliente tratadorEspecificoCliente) {
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+  ClientesAgendados(TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
   public Collection<Cliente> extrai(Configuracoes configuracoes, DaoFactory daoFactory,
       int quantidade) {
-    return tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).obtemAGGs(
-        quantidade, daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()),
-        configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(), configuracoes.getOperador());
+    return tratadorEspecificoClienteFactory
+        .create(configuracoes, daoFactory)
+        .obtemClienteDao()
+        .obtemAGGs(quantidade,
+            daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()),
+            configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
+            configuracoes.getOperador());
   }
 
   @Override

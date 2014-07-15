@@ -22,14 +22,15 @@ class FinalizadorCliente {
   }
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final TelefoneFilter telefoneFilter;
 
   @Inject
-  FinalizadorCliente(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
+  FinalizadorCliente(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       TelefoneFilter telefoneFilter) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.telefoneFilter = telefoneFilter;
   }
 
@@ -39,7 +40,8 @@ class FinalizadorCliente {
     cliente.setEstadoCliente(estadoCliente);
 
     cliente.getAgendamento().clear();
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
 
     HistoricoCliente historicoCliente = new HistoricoCliente();
     historicoCliente.setCliente(cliente);

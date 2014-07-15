@@ -43,6 +43,8 @@ public class ProcessaAgendamentoTest {
   private ProcessaAgendamento processaAgendamento;
 
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
   private Ligacao ligacao;
@@ -79,11 +81,12 @@ public class ProcessaAgendamentoTest {
     when(daoFactory.getHistoricoLigacaoDao()).thenReturn(historicoLigacaoDao);
     when(daoFactory.getAgendamentoDao()).thenReturn(agendamentoDao);
     when(daoFactory.getHistoricoClienteDao()).thenReturn(historicoClienteDao);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(cliente.getEstadoCliente()).thenReturn(estadoCliente);
-    processaAgendamento = new ProcessaAgendamento(logger, tratadorEspecificoCliente);
+    processaAgendamento = new ProcessaAgendamento(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test

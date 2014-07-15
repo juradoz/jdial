@@ -71,6 +71,8 @@ public class JDialTest {
   @Mock
   private Provider<DaoFactory> daoFactoryProvider;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
   private GerenciadorFatorK gerenciadorFatorK;
@@ -105,8 +107,9 @@ public class JDialTest {
     when(campanhaDao.procura(CAMPANHA)).thenReturn(campanha);
     when(campanha.getNome()).thenReturn(CAMPANHA);
     when(campanha.getServico()).thenReturn(servico);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
 
     when(configuracoes.getNomeCampanha()).thenReturn(CAMPANHA);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
@@ -129,12 +132,13 @@ public class JDialTest {
     jDial =
         new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
-            daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
+            daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK,
+            dialerCtiManager);
   }
 
   @Test
   public void limpaReservaDeveriaLimar() throws Exception {
-    jDial.limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
+    jDial.limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
     verify(clienteDao, times(2)).limpaReservas(campanha, NOME_BASE_DADOS, NOME_BASE, OPERADOR);
   }
 

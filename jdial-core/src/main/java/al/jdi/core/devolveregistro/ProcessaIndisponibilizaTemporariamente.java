@@ -16,13 +16,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
   ProcessaIndisponibilizaTemporariamente(Logger logger,
-      TratadorEspecificoCliente tratadorEspecificoCliente) {
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -40,7 +40,8 @@ class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
     cliente.setDisponivelAPartirDe(resultadoLigacao.getIntervaloIndisponivel() <= 0 ? null
         : new DateTime().plusMinutes(resultadoLigacao.getIntervaloIndisponivel()));
 
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
     return true;
   }
 

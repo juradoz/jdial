@@ -15,12 +15,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaFimDaFila implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaFimDaFila(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaFimDaFila(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -39,7 +40,8 @@ class ProcessaFimDaFila implements ProcessoDevolucao {
     logger.info("Fim da fila {}", cliente);
 
     cliente.fimDaFila();
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
     return true;
   }
 

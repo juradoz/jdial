@@ -28,6 +28,8 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Ligacao ligacao;
   @Mock
   private Cliente cliente;
@@ -45,10 +47,11 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
     processaIndisponibilizaTemporariamente =
-        new ProcessaIndisponibilizaTemporariamente(logger, tratadorEspecificoCliente);
+        new ProcessaIndisponibilizaTemporariamente(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test

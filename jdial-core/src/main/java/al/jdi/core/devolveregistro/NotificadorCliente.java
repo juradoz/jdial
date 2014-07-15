@@ -15,12 +15,13 @@ import al.jdi.dao.model.Telefone;
 
 class NotificadorCliente {
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  NotificadorCliente(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  NotificadorCliente(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
@@ -32,8 +33,8 @@ class NotificadorCliente {
     }
 
     logger.info("Vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
-    tratadorEspecificoCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
-        campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).notificaFimTentativa(
+        ligacao, cliente, campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
         ligacao.isInutilizaComMotivoDiferenciado());
   }
 
@@ -46,8 +47,8 @@ class NotificadorCliente {
     }
 
     logger.info("Vai notificar finalizacao motivo {} {} ", resultadoLigacao, cliente);
-    tratadorEspecificoCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
-        campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).notificaFinalizacao(ligacao,
+        cliente, campanha, daoFactory.getDataBanco(), telefoneOriginal, resultadoLigacao,
         inutilizaComMotivoDiferenciado);
   }
 }

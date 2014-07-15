@@ -15,12 +15,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaNotificaFimTentativa(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaNotificaFimTentativa(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -47,10 +48,10 @@ class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
   public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
       ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
-    tratadorEspecificoCliente
-        .notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente, cliente.getMailing()
-            .getCampanha(), daoFactory.getDataBanco(), ligacao.getTelefoneOriginal(),
-            resultadoLigacao, ligacao.isInutilizaComMotivoDiferenciado());
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)
+        .notificaFimTentativa(ligacao, cliente, cliente.getMailing().getCampanha(),
+            daoFactory.getDataBanco(), ligacao.getTelefoneOriginal(), resultadoLigacao,
+            ligacao.isInutilizaComMotivoDiferenciado());
     return true;
   }
 

@@ -19,12 +19,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaAgendamento implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaAgendamento(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaAgendamento(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -46,7 +47,8 @@ class ProcessaAgendamento implements ProcessoDevolucao {
     if (daoFactory.getHistoricoLigacaoDao().procura(cliente, resultadoLigacao, cal).size() > 1) {
       logger.info("Nao vai agendar por ja ter resultado no intervalo {}", cliente);
       cliente.getAgendamento().clear();
-      tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+      tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+          .atualiza(cliente);
       return true;
     }
 

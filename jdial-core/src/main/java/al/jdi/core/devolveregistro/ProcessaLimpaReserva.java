@@ -15,12 +15,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaLimpaReserva implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaLimpaReserva(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaLimpaReserva(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -34,8 +35,8 @@ class ProcessaLimpaReserva implements ProcessoDevolucao {
       ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
     logger.info("Vai limpar reserva {}", cliente);
 
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpaReserva(cliente,
-        configuracoes.getOperador(), configuracoes.getNomeBaseDados());
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .limpaReserva(cliente, configuracoes.getOperador(), configuracoes.getNomeBaseDados());
     return true;
   }
 

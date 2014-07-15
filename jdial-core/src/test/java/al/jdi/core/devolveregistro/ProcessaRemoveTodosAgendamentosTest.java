@@ -32,6 +32,8 @@ public class ProcessaRemoveTodosAgendamentosTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Ligacao ligacao;
   @Mock
   private Cliente cliente;
@@ -58,10 +60,11 @@ public class ProcessaRemoveTodosAgendamentosTest {
     agendamentos = new LinkedList<Agendamento>(asList(agendamento));
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(daoFactory.getAgendamentoDao()).thenReturn(agendamentoDao);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
     processaRemoveTodosAgendamentos =
-        new ProcessaRemoveTodosAgendamentos(logger, tratadorEspecificoCliente);
+        new ProcessaRemoveTodosAgendamentos(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test

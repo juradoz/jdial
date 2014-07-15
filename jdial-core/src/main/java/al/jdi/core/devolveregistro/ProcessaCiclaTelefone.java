@@ -20,15 +20,16 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaCiclaTelefone implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final ProcessaFimDaFila processaFimDaFila;
   private final Map<Providencia.Codigo, Providencia> providencias;
 
   @Inject
-  ProcessaCiclaTelefone(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente,
+  ProcessaCiclaTelefone(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       ProcessaFimDaFila processaFimDaFila, Map<Providencia.Codigo, Providencia> providencias) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.processaFimDaFila = processaFimDaFila;
     this.providencias = providencias;
   }
@@ -65,7 +66,8 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
       processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     }
     logger.info("Consegui ciclar telefone {}", cliente);
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
     return true;
   }
 

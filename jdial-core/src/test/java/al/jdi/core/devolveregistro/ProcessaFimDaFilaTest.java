@@ -24,6 +24,8 @@ public class ProcessaFimDaFilaTest {
   private ProcessaFimDaFila processaFimDaFila;
 
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
   private Ligacao ligacao;
@@ -43,9 +45,10 @@ public class ProcessaFimDaFilaTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
-    processaFimDaFila = new ProcessaFimDaFila(logger, tratadorEspecificoCliente);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
+    processaFimDaFila = new ProcessaFimDaFila(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test

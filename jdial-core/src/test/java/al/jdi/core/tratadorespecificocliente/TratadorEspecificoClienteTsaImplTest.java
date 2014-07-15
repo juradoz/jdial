@@ -89,35 +89,35 @@ public class TratadorEspecificoClienteTsaImplTest {
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
     when(clienteDaoTsa.reservaNaBaseDoCliente(cliente, OPERADOR_DISCADOR, NOME_BASE_DADOS))
         .thenReturn(true);
-    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsaImpl(logger);
+    when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
+    tratadorEspecificoClienteTsaImpl =
+        new TratadorEspecificoClienteTsaImpl(logger, configuracoes, daoFactory);
   }
 
   @Test
   public void isDncDeveriaRetornarTrueSeClienteDaoTsaMandar() {
-    boolean isDnc = tratadorEspecificoClienteTsaImpl.isDnc(daoFactory, cliente, NOME_BASE_DADOS);
+    boolean isDnc = tratadorEspecificoClienteTsaImpl.isDnc(cliente);
     assertThat(isDnc, is(true));
   }
 
   @Test
   public void isDncDeveriaRetornarFalseSeClienteDaoTsaMandar() {
     when(clienteDaoTsa.isDnc(cliente, NOME_BASE_DADOS)).thenReturn(false);
-    boolean isDnc = tratadorEspecificoClienteTsaImpl.isDnc(daoFactory, cliente, NOME_BASE_DADOS);
+    boolean isDnc = tratadorEspecificoClienteTsaImpl.isDnc(cliente);
     assertThat(isDnc, is(false));
   }
 
   @Test
   public void notificaFimTentativaDeveriaLiberarNaBaseSempre() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).liberaNaBaseDoCliente(cliente, NOME_BASE_DADOS, OPERADOR_DISCADOR);
   }
 
   @Test
   public void notificaFimTentativaDeveriaNotificarComLigacaoNaoAtendida() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_TENTATIVA, MOTIVO, MOTIVO_FINALIZACAO, NOME_BASE_DADOS, OPERADOR_DISCADOR,
         MOTIVO_CAMPANHA);
@@ -126,8 +126,8 @@ public class TratadorEspecificoClienteTsaImplTest {
 
   @Test
   public void notificaFimTentativaDeveriaNotificarComLigacaoNaoAtendidaMotivoDiferenciado() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao, true);
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, true);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_TENTATIVA, MOTIVO_POR_QUANTIDADE, MOTIVO_FINALIZACAO, NOME_BASE_DADOS,
         OPERADOR_DISCADOR, MOTIVO_CAMPANHA);
@@ -137,9 +137,8 @@ public class TratadorEspecificoClienteTsaImplTest {
   @Test
   public void notificaFimTentativaNaoDeveriaNotificarComLigacaoAtendida() {
     when(ligacao.isAtendida()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa, never()).insereResultadoTsa(any(Cliente.class),
         any(ResultadoLigacao.class), any(Telefone.class), any(DateTime.class), any(Situacao.class),
         anyInt(), anyInt(), anyString(), anyInt(), anyInt());
@@ -150,17 +149,15 @@ public class TratadorEspecificoClienteTsaImplTest {
 
   @Test
   public void notificaFinalizacaoDeveriaLiberarNaBaseSempre() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).liberaNaBaseDoCliente(cliente, NOME_BASE_DADOS, OPERADOR_DISCADOR);
   }
 
   @Test
   public void notificaFinalizacaoDeveriaNotificarComLigacaoNaoAtendida() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_FINALIZACAO, MOTIVO, MOTIVO_FINALIZACAO, NOME_BASE_DADOS, OPERADOR_DISCADOR,
         MOTIVO_CAMPANHA);
@@ -169,8 +166,8 @@ public class TratadorEspecificoClienteTsaImplTest {
 
   @Test
   public void notificaFinalizacaoDeveriaNotificarComLigacaoNaoAtendidaMotivoDiferenciado() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao, true);
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, true);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_FINALIZACAO, MOTIVO_POR_QUANTIDADE, MOTIVO_FINALIZACAO, NOME_BASE_DADOS,
         OPERADOR_DISCADOR, MOTIVO_CAMPANHA);
@@ -180,9 +177,8 @@ public class TratadorEspecificoClienteTsaImplTest {
   @Test
   public void notificaFinalizacaoNaoDeveriaNotificarComLigacaoAtendida() {
     when(ligacao.isAtendida()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa, never()).insereResultadoTsa(any(Cliente.class),
         any(ResultadoLigacao.class), any(Telefone.class), any(DateTime.class), any(Situacao.class),
         anyInt(), anyInt(), anyString(), anyInt(), anyInt());
@@ -194,9 +190,8 @@ public class TratadorEspecificoClienteTsaImplTest {
     when(ligacao.isAtendida()).thenReturn(true);
     when(campanha.getGrupo()).thenReturn(null);
     when(configuracoes.isUraReversa()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(configuracoes, daoFactory, ligacao,
-        cliente, campanha, DATA_BANCO, telefone, resultadoLigacao,
-        INUTILIZA_COM_MOTIVO_DIFERENCIADO);
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+        telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(any(Cliente.class), any(ResultadoLigacao.class),
         any(Telefone.class), any(DateTime.class), any(Situacao.class), anyInt(), anyInt(),
         anyString(), anyInt(), anyInt());
@@ -205,15 +200,14 @@ public class TratadorEspecificoClienteTsaImplTest {
 
   @Test
   public void obtemClienteDaoDeveriaRetornarClienteDaoTsa() {
-    ClienteDaoTsa clienteDao =
-        (ClienteDaoTsa) tratadorEspecificoClienteTsaImpl.obtemClienteDao(configuracoes, daoFactory);
+    ClienteDaoTsa clienteDao = (ClienteDaoTsa) tratadorEspecificoClienteTsaImpl.obtemClienteDao();
     assertThat(clienteDao, is(sameInstance(clienteDaoTsa)));
   }
 
   @Test
   public void reservaNaBaseDoClienteDeveriaRetornarTrueSeClienteDaoTsaMandar() {
     boolean reservaNaBaseDoCliente =
-        tratadorEspecificoClienteTsaImpl.reservaNaBaseDoCliente(configuracoes, daoFactory, cliente);
+        tratadorEspecificoClienteTsaImpl.reservaNaBaseDoCliente(cliente);
     assertThat(reservaNaBaseDoCliente, is(true));
   }
 
@@ -222,7 +216,7 @@ public class TratadorEspecificoClienteTsaImplTest {
     when(clienteDaoTsa.reservaNaBaseDoCliente(cliente, OPERADOR_DISCADOR, NOME_BASE_DADOS))
         .thenReturn(false);
     boolean reservaNaBaseDoCliente =
-        tratadorEspecificoClienteTsaImpl.reservaNaBaseDoCliente(configuracoes, daoFactory, cliente);
+        tratadorEspecificoClienteTsaImpl.reservaNaBaseDoCliente(cliente);
     assertThat(reservaNaBaseDoCliente, is(false));
   }
 

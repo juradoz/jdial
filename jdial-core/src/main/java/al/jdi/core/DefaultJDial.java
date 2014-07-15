@@ -49,7 +49,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     @Inject
     private Provider<DaoFactory> daoFactoryProvider;
     @Inject
-    private TratadorEspecificoCliente tratadorEspecificoCliente;
+    private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
     @Inject
     private DialerCtiManager dialerCtiManager;
 
@@ -59,7 +59,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
         GerenciadorFatorK gerenciadorFatorK) {
       return new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
           gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
-          daoFactoryProvider, tratadorEspecificoCliente, gerenciadorFatorK, dialerCtiManager);
+          daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK, dialerCtiManager);
     }
   }
 
@@ -73,7 +73,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
   private final Engine.Factory engineFactory;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final GerenciadorFatorK gerenciadorFatorK;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final String versao;
 
   private Engine engine;
@@ -83,7 +83,8 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
       GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
       @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
-      Provider<DaoFactory> daoFactoryProvider, TratadorEspecificoCliente tratadorEspecificoCliente,
+      Provider<DaoFactory> daoFactoryProvider,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       GerenciadorFatorK gerenciadorFatorK, DialerCtiManager dialerCtiManager) {
     this.logger = logger;
     this.configuracoes = configuracoes;
@@ -95,25 +96,27 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;
     this.gerenciadorFatorK = gerenciadorFatorK;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.versao = versao;
     dialerCtiManager.addListener(this);
     logger.info("Iniciando jDial {}...", this.versao);
 
-    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
+    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
   }
 
   void limpaReservas(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      TratadorEspecificoCliente tratadorEspecificoCliente) {
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
       Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
       logger.debug("Limpando reservas para campanha {}...", campanha.getNome());
       DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
-      tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).limpaReservas(campanha,
-          configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
-          configuracoes.getOperador());
+      tratadorEspecificoClienteFactory
+          .create(configuracoes, daoFactory)
+          .obtemClienteDao()
+          .limpaReservas(campanha, configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
+              configuracoes.getOperador());
       daoFactory.commit();
       logger.info("Limpou reservas para campanha {}. Demorou {}ms", campanha.getNome(),
           new Duration(inicio, new DateTime()).getMillis());
@@ -203,7 +206,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
-    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoCliente);
+    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
   }
 
   @Override

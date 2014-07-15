@@ -17,20 +17,24 @@ import al.jdi.dao.model.Cliente;
 @Livres
 class ClientesLivres implements ExtraidorClientes {
 
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ClientesLivres(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+  ClientesLivres(Logger logger, TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     logger.debug("Iniciando {}", this);
   }
 
   @Override
   public Collection<Cliente> extrai(Configuracoes configuracoes, DaoFactory daoFactory,
       int quantidade) {
-    return tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).obtemLivres(
-        quantidade, daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()),
-        configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(), configuracoes.getOperador());
+    return tratadorEspecificoClienteFactory
+        .create(configuracoes, daoFactory)
+        .obtemClienteDao()
+        .obtemLivres(quantidade,
+            daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()),
+            configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
+            configuracoes.getOperador());
   }
 
   @Override

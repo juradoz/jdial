@@ -29,6 +29,8 @@ public class ProcessaLimpaReservaTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Configuracoes configuracoes;
   @Mock
   private Ligacao ligacao;
@@ -46,12 +48,13 @@ public class ProcessaLimpaReservaTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory)).thenReturn(
-        clienteDao);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
     when(configuracoes.getOperador()).thenReturn(OPERADOR);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
 
-    processaLimpaReserva = new ProcessaLimpaReserva(logger, tratadorEspecificoCliente);
+    processaLimpaReserva = new ProcessaLimpaReserva(logger, tratadorEspecificoClienteFactory);
   }
 
   @Test

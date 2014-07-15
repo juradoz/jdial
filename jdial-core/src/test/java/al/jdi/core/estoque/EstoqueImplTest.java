@@ -55,6 +55,8 @@ public class EstoqueImplTest {
   @Mock
   private TratadorEspecificoCliente tratadorEspecificoCliente;
   @Mock
+  private TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  @Mock
   private Factory discavelFactory;
   @Mock
   private Engine.Factory engineFactory;
@@ -97,12 +99,15 @@ public class EstoqueImplTest {
     when(registro.getCliente()).thenReturn(cliente);
     when(discavel.getCliente()).thenReturn(cliente);
 
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+
     estoque = new LinkedList<Registro>(Arrays.asList(registro));
 
     estoqueImpl =
         new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
-            tratadorEspecificoCliente, discavelFactory, engineFactory, estoque, extraidorClientes,
-            INTERVALO_MONITORACAO, providencias, telefoneFilter);
+            tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
+            extraidorClientes, INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }
 
   @Test

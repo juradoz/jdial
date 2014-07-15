@@ -16,12 +16,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 class ProcessaRemoveTodosAgendamentos implements ProcessoDevolucao {
 
   private final Logger logger;
-  private final TratadorEspecificoCliente tratadorEspecificoCliente;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaRemoveTodosAgendamentos(Logger logger, TratadorEspecificoCliente tratadorEspecificoCliente) {
+  ProcessaRemoveTodosAgendamentos(Logger logger,
+      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.logger = logger;
-    this.tratadorEspecificoCliente = tratadorEspecificoCliente;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
   @Override
@@ -41,7 +42,8 @@ class ProcessaRemoveTodosAgendamentos implements ProcessoDevolucao {
     for (Agendamento agendamento : cliente.getAgendamento())
       daoFactory.getAgendamentoDao().remove(agendamento);
     cliente.getAgendamento().clear();
-    tratadorEspecificoCliente.obtemClienteDao(configuracoes, daoFactory).atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+        .atualiza(cliente);
     return true;
   }
 

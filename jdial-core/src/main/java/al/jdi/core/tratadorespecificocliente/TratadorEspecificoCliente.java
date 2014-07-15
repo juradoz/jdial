@@ -13,18 +13,22 @@ import al.jdi.dao.model.Telefone;
 
 public interface TratadorEspecificoCliente {
 
-  boolean isDnc(DaoFactory daoFactory, Cliente cliente, String baseDados);
+  public interface Factory {
+    TratadorEspecificoCliente create(Configuracoes configuracoes, DaoFactory daoFactory);
+  }
 
-  void notificaFimTentativa(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+  boolean isDnc(Cliente cliente);
+
+  void notificaFimTentativa(Ligacao ligacao,
       Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
       ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
 
-  void notificaFinalizacao(Configuracoes configuracoes, DaoFactory daoFactory, Ligacao ligacao,
+  void notificaFinalizacao(Ligacao ligacao,
       Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
       ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
 
-  ClienteDao obtemClienteDao(Configuracoes configuracoes, DaoFactory daoFactory);
+  ClienteDao obtemClienteDao();
 
-  boolean reservaNaBaseDoCliente(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente);
+  boolean reservaNaBaseDoCliente(Cliente cliente);
 
 }
