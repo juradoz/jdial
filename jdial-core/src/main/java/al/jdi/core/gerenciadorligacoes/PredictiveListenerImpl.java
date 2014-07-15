@@ -18,15 +18,15 @@ class PredictiveListenerImpl implements PredictiveListener {
     private Logger logger;
 
     @Override
-    public PredictiveListener create(GerenciadorLigacoesImpl owner) {
+    public PredictiveListener create(DefaultGerenciadorLigacoes owner) {
       return new PredictiveListenerImpl(logger, owner);
     }
   }
 
   private final Logger logger;
-  private final GerenciadorLigacoesImpl owner;
+  private final DefaultGerenciadorLigacoes owner;
 
-  PredictiveListenerImpl(Logger logger, GerenciadorLigacoesImpl owner) {
+  PredictiveListenerImpl(Logger logger, DefaultGerenciadorLigacoes owner) {
     this.logger = logger;
     this.owner = owner;
     logger.debug("Iniciando {}", this);

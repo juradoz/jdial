@@ -39,7 +39,7 @@ import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Servico;
 
-public class JDialTest {
+public class DefaultJDialTest {
 
   private static final String CAMPANHA = "CAMPANHA";
   private static final String NOME_BASE_DADOS = "NOME_BASE_DADOS";

@@ -19,7 +19,7 @@ import al.jdi.dao.model.InformacaoCliente;
 import al.jdi.dao.model.Mailing;
 import al.jdi.dao.model.Telefone;
 
-public class DiscavelTsaCRMImplTest {
+public class DiscavelTsaTest {
 
   private static final String DIGITO_SAIDA_PADRAO_FIXO_LOCAL = "DIGITO_SAIDA_PADRAO_FIXO_LOCAL";
   private static final String DIGITO_SAIDA_PADRAO_CELULAR_LOCAL =
@@ -28,16 +28,14 @@ public class DiscavelTsaCRMImplTest {
   private static final String DIGITO_SAIDA_PADRAO_CELULAR_DDD = "DIGITO_SAIDA_PADRAO_CELULAR_DDD";
   private static final String DIGITO_SAIDA_CUSTOM_PREFIXO_DDD = "DIGITO_SAIDA_CUSTOM_PREFIXO_DDD";
   private static final String DDD_LOCALIDADE = "DDD_LOCALIDADE";
-  private static final String DIGITO_SAIDA = "DIGITO";
+  private static final String DIGITO_SAIDA = "DIGITO_SAIDA";
   private static final String TELEFONE = "TELEFONE";
   private static final String DDD = "DDD";
-  private static final int ID_CAMPANHA = 2222;
-  private static final int ID_CLIENTE = 3333;
   private static final int CHAVE = 1234;
   private static final long CHAVE_TELEFONE = 1l;
   private static final int FILTRO = 2;
 
-  private DiscavelTsaCRMImpl discavelTsaCRMImpl;
+  private DiscavelTsa discavelTsaImpl;
 
   @Mock
   private Configuracoes configuracoes;
@@ -57,17 +55,15 @@ public class DiscavelTsaCRMImplTest {
     initMocks(this);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
     when(informacaoCliente.getChave()).thenReturn(CHAVE);
-    when(informacaoCliente.getSplitCodCampanha()).thenReturn(ID_CAMPANHA);
-    when(informacaoCliente.getSplitCodCliente()).thenReturn(ID_CLIENTE);
     when(cliente.getTelefone()).thenReturn(telefone);
     when(telefone.getChaveTelefone()).thenReturn(CHAVE_TELEFONE);
     when(cliente.getMailing()).thenReturn(mailing);
+    when(cliente.getDigitoSaida()).thenReturn(DIGITO_SAIDA);
     when(mailing.getCampanha()).thenReturn(campanha);
     when(campanha.isFiltroAtivo()).thenReturn(true);
     when(cliente.getFiltro()).thenReturn(FILTRO);
     when(telefone.getDdd()).thenReturn(DDD);
     when(telefone.getTelefone()).thenReturn(TELEFONE);
-    when(cliente.getDigitoSaida()).thenReturn(DIGITO_SAIDA);
 
     when(configuracoes.digitoSaidaPadraoFixoLocal()).thenReturn(DIGITO_SAIDA_PADRAO_FIXO_LOCAL);
     when(configuracoes.digitoSaidaPadraoCelularLocal()).thenReturn(
@@ -77,46 +73,45 @@ public class DiscavelTsaCRMImplTest {
     when(configuracoes.dddLocalidade()).thenReturn(DDD_LOCALIDADE);
     when(configuracoes.digitoSaidaCustomPrefixoDDD()).thenReturn(DIGITO_SAIDA_CUSTOM_PREFIXO_DDD);
 
-    discavelTsaCRMImpl = new DiscavelTsaCRMImpl(configuracoes, cliente);
+    discavelTsaImpl = new DiscavelTsa(configuracoes, cliente);
   }
 
   @Test
   public void getChaveDeveriaRetornarChaveEsperada() {
-    String chave = discavelTsaCRMImpl.getChave();
-    assertThat(chave, is(equalTo(String.format("Preditivo#%d#%d#%d#%d#%d", ID_CAMPANHA, ID_CLIENTE,
-        CHAVE, CHAVE_TELEFONE, FILTRO))));
-
+    String chave = discavelTsaImpl.getChave();
+    assertThat(chave,
+        is(equalTo(CHAVE + "#" + String.valueOf(CHAVE_TELEFONE) + "#" + String.valueOf(FILTRO))));
   }
 
   @Test
   public void getChaveDeveriaRetornarChaveEsperadaFiltroPadrao() {
     when(campanha.isFiltroAtivo()).thenReturn(false);
-    String chave = discavelTsaCRMImpl.getChave();
-    assertThat(chave, is(equalTo(String.format("Preditivo#%d#%d#%d#%d#%d", ID_CAMPANHA, ID_CLIENTE,
-        CHAVE, CHAVE_TELEFONE, 0))));
+    String chave = discavelTsaImpl.getChave();
+    assertThat(chave,
+        is(equalTo(CHAVE + "#" + String.valueOf(CHAVE_TELEFONE) + "#" + String.valueOf(0))));
   }
 
   @Test
   public void getClienteDeveriaRetornar() {
-    Cliente cliente = discavelTsaCRMImpl.getCliente();
+    Cliente cliente = discavelTsaImpl.getCliente();
     assertThat(cliente, is(sameInstance(this.cliente)));
   }
 
   @Test
   public void getDddDeveriaRetornar() {
-    String ddd = discavelTsaCRMImpl.getCliente().getTelefone().getDdd();
+    String ddd = discavelTsaImpl.getCliente().getTelefone().getDdd();
     assertThat(ddd, is(equalTo(DDD)));
   }
 
   @Test
   public void getTelefoneDeveriaRetornar() {
-    String telefone = discavelTsaCRMImpl.getCliente().getTelefone().getTelefone();
+    String telefone = discavelTsaImpl.getCliente().getTelefone().getTelefone();
     assertThat(telefone, is(equalTo(TELEFONE)));
   }
 
   @Test
   public void getDigitoSaidaDeveriaRetornar() {
-    String digitoSaida = discavelTsaCRMImpl.getCliente().getDigitoSaida();
+    String digitoSaida = discavelTsaImpl.getCliente().getDigitoSaida();
     assertThat(digitoSaida, is(equalTo(DIGITO_SAIDA)));
   }
 
@@ -124,7 +119,7 @@ public class DiscavelTsaCRMImplTest {
   public void getDestinoDeveriaRetornarDestinoPadraoFixoLocal() throws Exception {
     when(cliente.getDigitoSaida()).thenReturn(EMPTY);
     when(telefone.getDdd()).thenReturn(DDD_LOCALIDADE);
-    assertThat(discavelTsaCRMImpl.getDestino(), is(DIGITO_SAIDA_PADRAO_FIXO_LOCAL.concat(TELEFONE)));
+    assertThat(discavelTsaImpl.getDestino(), is(DIGITO_SAIDA_PADRAO_FIXO_LOCAL.concat(TELEFONE)));
   }
 
   @Test
@@ -132,15 +127,14 @@ public class DiscavelTsaCRMImplTest {
     when(cliente.getDigitoSaida()).thenReturn(EMPTY);
     when(telefone.isCelular()).thenReturn(true);
     when(telefone.getDdd()).thenReturn(DDD_LOCALIDADE);
-    assertThat(discavelTsaCRMImpl.getDestino(),
-        is(DIGITO_SAIDA_PADRAO_CELULAR_LOCAL.concat(TELEFONE)));
+    assertThat(discavelTsaImpl.getDestino(), is(DIGITO_SAIDA_PADRAO_CELULAR_LOCAL.concat(TELEFONE)));
   }
 
   @Test
   public void getDestinoDeveriaRetornarDestinoPadraoFixoDdd() throws Exception {
     when(cliente.getDigitoSaida()).thenReturn(EMPTY);
     when(telefone.getDdd()).thenReturn(DDD);
-    assertThat(discavelTsaCRMImpl.getDestino(),
+    assertThat(discavelTsaImpl.getDestino(),
         is(DIGITO_SAIDA_PADRAO_FIXO_DDD.concat(DDD).concat(TELEFONE)));
   }
 
@@ -149,21 +143,21 @@ public class DiscavelTsaCRMImplTest {
     when(cliente.getDigitoSaida()).thenReturn(EMPTY);
     when(telefone.isCelular()).thenReturn(true);
     when(telefone.getDdd()).thenReturn(DDD);
-    assertThat(discavelTsaCRMImpl.getDestino(), is(DIGITO_SAIDA_PADRAO_CELULAR_DDD.concat(DDD)
-        .concat(TELEFONE)));
+    assertThat(discavelTsaImpl.getDestino(),
+        is(DIGITO_SAIDA_PADRAO_CELULAR_DDD.concat(DDD).concat(TELEFONE)));
   }
 
   @Test
   public void getDestinoDeveriaRetornarDestinoCustomLocal() throws Exception {
     when(telefone.getDdd()).thenReturn(DDD_LOCALIDADE);
-    assertThat(discavelTsaCRMImpl.getDestino(), is(DIGITO_SAIDA.concat(TELEFONE)));
+    assertThat(discavelTsaImpl.getDestino(), is(DIGITO_SAIDA.concat(TELEFONE)));
   }
 
   @Test
   public void getDestinoDeveriaRetornarDestinoCustomDdd() throws Exception {
     when(telefone.getDdd()).thenReturn(DDD);
-    assertThat(discavelTsaCRMImpl.getDestino(),
-        is(DIGITO_SAIDA.concat(DIGITO_SAIDA_CUSTOM_PREFIXO_DDD).concat(DDD).concat(TELEFONE)));
+    assertThat(discavelTsaImpl.getDestino(), is(DIGITO_SAIDA
+        .concat(DIGITO_SAIDA_CUSTOM_PREFIXO_DDD).concat(DDD).concat(TELEFONE)));
   }
 
 }

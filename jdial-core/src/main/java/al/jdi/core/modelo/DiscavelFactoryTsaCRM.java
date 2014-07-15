@@ -6,11 +6,11 @@ import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
 @Alternative
-class DiscavelFactoryTsaCRMImpl implements Discavel.Factory {
+class DiscavelFactoryTsaCRM implements Discavel.Factory {
 
   @Override
   public Discavel create(Configuracoes configuracoes, Cliente cliente) {
-    return new DiscavelTsaCRMImpl(configuracoes, cliente);
+    return new DiscavelTsaCRM(configuracoes, cliente);
   }
 
 }

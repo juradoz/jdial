@@ -25,7 +25,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Grupo;
 
-public class GerenciadorAgentesImplTest {
+public class DefaultGerenciadorAgentesTest {
 
   private static final Integer RESERVADOS = 10;
   private static final String CAMPANHA = "CAMPANHA";
@@ -33,7 +33,7 @@ public class GerenciadorAgentesImplTest {
   private static final Integer LIVRES = 5;
   private static final Integer SIMULTANEOS = 50;
 
-  private GerenciadorAgentesImpl gerenciadorAgentesImpl;
+  private DefaultGerenciadorAgentes gerenciadorAgentesImpl;
 
   @Mock
   private DialerCtiManager dialerCtiManager;
@@ -70,7 +70,7 @@ public class GerenciadorAgentesImplTest {
     assertThat(LIVRES, is(not(equalTo(SIMULTANEOS))));
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
     gerenciadorAgentesImpl =
-        new GerenciadorAgentesImpl(logger, dialerCtiManager, configuracoes, engineFactory,
+        new DefaultGerenciadorAgentes(logger, dialerCtiManager, configuracoes, engineFactory,
             daoFactoryProvider);
   }
 

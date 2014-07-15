@@ -44,7 +44,7 @@ import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.Telefone;
 
-class EstoqueImpl implements Estoque, Runnable {
+class DefaultEstoque implements Estoque, Runnable {
 
   static class EstoqueImplFactory implements Estoque.Factory {
     @Inject
@@ -70,7 +70,7 @@ class EstoqueImpl implements Estoque, Runnable {
     @Override
     public Estoque create(Configuracoes configuracoes, ExtraidorClientes extraidorClientes,
         Period intervaloMonitoracao) {
-      return new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
+      return new DefaultEstoque(logger, configuracoes, daoFactoryProvider, devolveRegistro,
           tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
           extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
     }
@@ -100,7 +100,7 @@ class EstoqueImpl implements Estoque, Runnable {
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  EstoqueImpl(Logger logger, Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+  DefaultEstoque(Logger logger, Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
       DevolveRegistro devolveRegistro,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
@@ -149,7 +149,7 @@ class EstoqueImpl implements Estoque, Runnable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    EstoqueImpl other = (EstoqueImpl) obj;
+    DefaultEstoque other = (DefaultEstoque) obj;
     return new EqualsBuilder().append(extraidorClientes, other.extraidorClientes).isEquals();
   }
 

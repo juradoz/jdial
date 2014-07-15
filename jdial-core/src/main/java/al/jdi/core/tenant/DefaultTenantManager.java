@@ -79,12 +79,4 @@ class DefaultTenantManager implements TenantManager {
     logger.info("Successfuly remove tenant {}", campanha);
   }
 
-
-  @Override
-  public Tenant get(Campanha campanha) {
-    synchronized (tenants) {
-      return tenants.get(campanha);
-    }
-  }
-
 }

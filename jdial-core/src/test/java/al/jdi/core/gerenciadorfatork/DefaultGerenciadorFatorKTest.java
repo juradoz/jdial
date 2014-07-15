@@ -19,12 +19,12 @@ import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.DaoFactory;
 
-public class GerenciadorFatorKImplTest {
+public class DefaultGerenciadorFatorKTest {
 
   private static final double FATORK_MAXIMO = 5;
   private static final double FATORK_MINIMO = 3;
 
-  private GerenciadorFatorKImpl gerenciadorFatorKImpl;
+  private DefaultGerenciadorFatorK gerenciadorFatorKImpl;
 
   @Mock
   private Configuracoes configuracoes;
@@ -51,7 +51,7 @@ public class GerenciadorFatorKImplTest {
             Mockito.anyBoolean(), Mockito.anyBoolean())).thenReturn(engine);
 
     gerenciadorFatorKImpl =
-        new GerenciadorFatorKImpl(logger, configuracoes, daoFactoryProvider, engineFactory);
+        new DefaultGerenciadorFatorK(logger, configuracoes, daoFactoryProvider, engineFactory);
   }
 
   @Test

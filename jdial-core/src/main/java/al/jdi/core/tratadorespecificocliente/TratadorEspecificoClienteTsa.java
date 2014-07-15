@@ -1,6 +1,5 @@
 package al.jdi.core.tratadorespecificocliente;
 
-import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,29 +18,24 @@ import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Situacao;
 import al.jdi.dao.model.Telefone;
 
-@Alternative
-class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
+class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
 
-  @Alternative
-  static class TratadorEspecificoClienteTsaCRMImplFactory implements
-      TratadorEspecificoCliente.Factory {
+  static class TratadorEspecificoClienteTsaImplFactory implements TratadorEspecificoCliente.Factory {
     @Inject
-    @LogClass(clazz = TratadorEspecificoClienteTsaCRMImpl.class)
+    @LogClass(clazz = TratadorEspecificoClienteTsa.class)
     private Logger logger;
 
     @Override
     public TratadorEspecificoCliente create(Configuracoes configuracoes, DaoFactory daoFactory) {
-      return new TratadorEspecificoClienteTsaCRMImpl(logger, configuracoes, daoFactory);
+      return new TratadorEspecificoClienteTsa(logger, configuracoes, daoFactory);
     }
-
   }
 
   private final Logger logger;
   private final Configuracoes configuracoes;
   private final DaoFactory daoFactory;
 
-  TratadorEspecificoClienteTsaCRMImpl(Logger logger, Configuracoes configuracoes,
-      DaoFactory daoFactory) {
+  TratadorEspecificoClienteTsa(Logger logger, Configuracoes configuracoes, DaoFactory daoFactory) {
     this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactory = daoFactory;
@@ -50,7 +44,7 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
 
   @Override
   public boolean isDnc(Cliente cliente) {
-    return daoFactory.getClienteDaoTsaCRM().isDnc(cliente, configuracoes.getNomeBaseDados());
+    return daoFactory.getClienteDaoTsa().isDnc(cliente, configuracoes.getNomeBaseDados());
   }
 
   @Override
@@ -70,7 +64,7 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
 
       logger.info("Efetivamente notificando tentativa para {}", ligacao.getDiscavel().getCliente()
           .getId());
-      daoFactory.getClienteDaoTsaCRM().insereResultadoTsa(
+      daoFactory.getClienteDaoTsa().insereResultadoTsa(
           cliente,
           resultadoLigacao,
           telefoneOriginal,
@@ -81,7 +75,7 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
           configuracoes.getMotivoFinalizacao(), configuracoes.getNomeBaseDados(),
           configuracoes.getOperador(), configuracoes.getMotivoCampanha());
     } finally {
-      daoFactory.getClienteDaoTsaCRM().liberaNaBaseDoCliente(cliente,
+      daoFactory.getClienteDaoTsa().liberaNaBaseDoCliente(cliente,
           configuracoes.getNomeBaseDados(), configuracoes.getOperador());
     }
   }
@@ -94,7 +88,8 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
       ResultadoLigacao resultadoSemAgentes =
           daoFactory.getResultadoLigacaoDao().procura(23, campanha);
 
-      if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()) {
+      if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()
+          && !configuracoes.isUraReversa()) {
         logger.info("Nao vai efetivamente notificar finalizacao pois isAtendida() para {}", ligacao
             .getDiscavel().getCliente().getId());
         return;
@@ -102,7 +97,7 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
 
       logger.info("Efetivamente notificando finalizacao para {}", ligacao.getDiscavel()
           .getCliente().getId());
-      daoFactory.getClienteDaoTsaCRM().insereResultadoTsa(
+      daoFactory.getClienteDaoTsa().insereResultadoTsa(
           cliente,
           resultadoLigacao,
           telefoneOriginal,
@@ -113,19 +108,19 @@ class TratadorEspecificoClienteTsaCRMImpl implements TratadorEspecificoCliente {
           configuracoes.getMotivoFinalizacao(), configuracoes.getNomeBaseDados(),
           configuracoes.getOperador(), configuracoes.getMotivoCampanha());
     } finally {
-      daoFactory.getClienteDaoTsaCRM().liberaNaBaseDoCliente(cliente,
+      daoFactory.getClienteDaoTsa().liberaNaBaseDoCliente(cliente,
           configuracoes.getNomeBaseDados(), configuracoes.getOperador());
     }
   }
 
   @Override
   public ClienteDao obtemClienteDao() {
-    return daoFactory.getClienteDaoTsaCRM();
+    return daoFactory.getClienteDaoTsa();
   }
 
   @Override
   public boolean reservaNaBaseDoCliente(Cliente cliente) {
-    return daoFactory.getClienteDaoTsaCRM().reservaNaBaseDoCliente(cliente,
+    return daoFactory.getClienteDaoTsa().reservaNaBaseDoCliente(cliente,
         configuracoes.getOperador(), configuracoes.getNomeBaseDados());
   }
 

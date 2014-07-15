@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 
-public class PredictiveListenerImplTest {
+public class DefaultPredictiveListenerTest {
 
   private static final int CALL_ID = 1;
 
@@ -18,7 +18,7 @@ public class PredictiveListenerImplTest {
   private static final String AGENTE = "AGENTE";
 
   @Mock
-  private GerenciadorLigacoesImpl owner;
+  private DefaultGerenciadorLigacoes owner;
   @Mock
   private Exception e;
   @Mock

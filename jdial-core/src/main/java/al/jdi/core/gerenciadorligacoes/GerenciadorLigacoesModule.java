@@ -12,7 +12,7 @@ import al.jdi.cti.PredictiveListener;
 public class GerenciadorLigacoesModule {
 
   public interface PredictiveListenerFactory {
-    PredictiveListener create(GerenciadorLigacoesImpl owner);
+    PredictiveListener create(DefaultGerenciadorLigacoes owner);
   }
 
   @Produces

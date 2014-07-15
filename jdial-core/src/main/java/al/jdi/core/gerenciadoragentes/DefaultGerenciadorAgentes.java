@@ -18,7 +18,7 @@ import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 
-class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, ProviderListener {
+class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, ProviderListener {
 
   static class GerenciadorAgentesFactory implements GerenciadorAgentes.Factory {
     @Inject
@@ -33,7 +33,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, ProviderLi
 
     @Override
     public GerenciadorAgentes create(Configuracoes configuracoes) {
-      return new GerenciadorAgentesImpl(logger, dialerCtiManager, configuracoes, engineFactory,
+      return new DefaultGerenciadorAgentes(logger, dialerCtiManager, configuracoes, engineFactory,
           daoFactoryProvider);
     }
   }
@@ -48,7 +48,7 @@ class GerenciadorAgentesImpl implements GerenciadorAgentes, Runnable, ProviderLi
   private int livres;
   private boolean inService = false;
 
-  GerenciadorAgentesImpl(Logger logger, DialerCtiManager dialerCtiManager,
+  DefaultGerenciadorAgentes(Logger logger, DialerCtiManager dialerCtiManager,
       Configuracoes configuracoes, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider) {
     this.logger = logger;

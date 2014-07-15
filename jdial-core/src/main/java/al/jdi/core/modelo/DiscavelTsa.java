@@ -10,12 +10,12 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
-class DiscavelTsaImpl implements Discavel {
+class DiscavelTsa implements Discavel {
 
   private final Configuracoes configuracoes;
   private Cliente cliente;
 
-  DiscavelTsaImpl(Configuracoes configuracoes, Cliente cliente) {
+  DiscavelTsa(Configuracoes configuracoes, Cliente cliente) {
     this.configuracoes = configuracoes;
     this.cliente = cliente;
   }
@@ -28,7 +28,7 @@ class DiscavelTsaImpl implements Discavel {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    DiscavelTsaImpl other = (DiscavelTsaImpl) obj;
+    DiscavelTsa other = (DiscavelTsa) obj;
     return new EqualsBuilder().append(cliente, other.cliente).isEquals();
   }
 

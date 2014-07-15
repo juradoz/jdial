@@ -19,7 +19,7 @@ import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.DaoFactory;
 
-class GerenciadorFatorKImpl implements GerenciadorFatorK, Runnable {
+class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
 
   static class GerenciadorFatorKImplFactory implements GerenciadorFatorK.Factory {
     @Inject
@@ -32,7 +32,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Runnable {
 
     @Override
     public GerenciadorFatorK create(Configuracoes configuracoes) {
-      return new GerenciadorFatorKImpl(logger, configuracoes, daoFactoryProvider, engineFactory);
+      return new DefaultGerenciadorFatorK(logger, configuracoes, daoFactoryProvider, engineFactory);
     }
   }
 
@@ -52,7 +52,7 @@ class GerenciadorFatorKImpl implements GerenciadorFatorK, Runnable {
   private int atendidasDoMinuto;
 
 
-  GerenciadorFatorKImpl(Logger logger, Configuracoes configuracoes,
+  DefaultGerenciadorFatorK(Logger logger, Configuracoes configuracoes,
       Provider<DaoFactory> daoFactoryProvider, Engine.Factory engineFactory) {
     this.logger = logger;
     this.configuracoes = configuracoes;

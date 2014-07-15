@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 
 @RunWith(Parameterized.class)
-public class SistemaAtivoTest {
+public class DefaultSistemaAtivoTest {
 
   private final static LocalTime INICIO = new DateTime().withTime(8, 0, 0, 0).toLocalTime();
   private final static LocalTime TERMINO = new DateTime().withTime(17, 59, 59, 0).toLocalTime();
@@ -43,7 +43,7 @@ public class SistemaAtivoTest {
         {DateTimeConstants.SATURDAY}, {DateTimeConstants.SUNDAY}});
   }
 
-  public SistemaAtivoTest(int dayOfWeek) {
+  public DefaultSistemaAtivoTest(int dayOfWeek) {
     this.dayOfWeek = dayOfWeek;
   }
 

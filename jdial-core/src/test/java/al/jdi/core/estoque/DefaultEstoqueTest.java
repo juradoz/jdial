@@ -1,8 +1,12 @@
 package al.jdi.core.estoque;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -38,13 +42,13 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 
-public class EstoqueImplTest {
+public class DefaultEstoqueTest {
 
   private static final String CAMPANHA = "CAMPANHA";
   private static final DateTime DATA_BANCO = new DateTime();
   private static final Period INTERVALO_MONITORACAO = Period.seconds(5);
 
-  private EstoqueImpl estoqueImpl;
+  private DefaultEstoque defaultEstoque;
 
   @Mock
   private Configuracoes configuracoes;
@@ -102,17 +106,17 @@ public class EstoqueImplTest {
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
 
-    estoque = new LinkedList<Registro>(Arrays.asList(registro));
+    estoque = new LinkedList<Registro>(Arrays.asList(registro, registro));
 
-    estoqueImpl =
-        new EstoqueImpl(logger, configuracoes, daoFactoryProvider, devolveRegistro,
+    defaultEstoque =
+        new DefaultEstoque(logger, configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
             extraidorClientes, INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }
 
   @Test
   public void limpaMemoriaPorSolicitacaoNaoDeveriaLimparSeCampanhaNaoPedir() throws Exception {
-    estoqueImpl.limpaMemoriaPorSolicitacao(daoFactory);
+    defaultEstoque.limpaMemoriaPorSolicitacao(daoFactory);
     assertThat(estoque.contains(registro), is(true));
   }
 
@@ -120,17 +124,55 @@ public class EstoqueImplTest {
   public void limpaMemoriaPorSolicitacaoDeveriaLimparSeCampanhaPedir() throws Exception {
     when(campanha.isLimpaMemoria()).thenReturn(true);
     assertThat(estoque.isEmpty(), is(false));
-    estoqueImpl.limpaMemoriaPorSolicitacao(daoFactory);
+    defaultEstoque.limpaMemoriaPorSolicitacao(daoFactory);
     assertThat(estoque.isEmpty(), is(true));
   }
 
   @Test
   public void limpaMemoriaPorSolicitacaoDeveriaDevolverRegistroSeLimparMemoria() throws Exception {
     when(campanha.isLimpaMemoria()).thenReturn(true);
-    estoqueImpl.limpaMemoriaPorSolicitacao(daoFactory);
+    defaultEstoque.limpaMemoriaPorSolicitacao(daoFactory);
     ArgumentCaptor<Ligacao> captor = ArgumentCaptor.forClass(Ligacao.class);
-    verify(devolveRegistro).devolveLigacao(Mockito.eq(configuracoes), captor.capture());
+    verify(devolveRegistro, times(2)).devolveLigacao(Mockito.eq(configuracoes), captor.capture());
     Ligacao ligacao = captor.getValue();
     assertThat(ligacao.getDiscavel(), is(sameInstance(discavel)));
+  }
+
+  @Test
+  public void contemClienteDeveriaEncontrar() {
+    assertThat(defaultEstoque.contemCliente(cliente), is(true));
+  }
+
+  @Test
+  public void contemClienteNaoDeveriaEncontrar() {
+    Cliente cliente = mock(Cliente.class);
+    assertThat(defaultEstoque.contemCliente(cliente), is(false));
+  }
+
+  @Test
+  public void obtemRegistrosDeveriaRetornar0SeQuantidade0() {
+    assertThat(defaultEstoque.obtemRegistros(0).isEmpty(), is(true));
+  }
+
+  @Test
+  public void obtemRegistrosDeveriaRetornar2Registros() {
+    Collection<Cliente> registros = defaultEstoque.obtemRegistros(2);
+    assertThat(registros.size(), is(equalTo(2)));
+    assertThat(registros.contains(cliente), is(true));
+  }
+
+  @Test
+  public void obtemRegistrosDeveriaRetornarRegistro() {
+    Collection<Cliente> registros = defaultEstoque.obtemRegistros(1);
+    assertThat(registros.size(), is(equalTo(1)));
+    assertThat(registros.contains(cliente), is(true));
+  }
+
+  public void setUpXXX() {
+    initMocks(this);
+    when(registro.getCliente()).thenReturn(cliente);
+    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+        tratadorEspecificoCliente);
+    estoque = new LinkedList<Registro>(asList(registro, registro));
   }
 }

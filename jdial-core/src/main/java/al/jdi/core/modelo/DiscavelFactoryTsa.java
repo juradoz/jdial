@@ -6,11 +6,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
-class DiscavelFactoryTsaImpl implements Discavel.Factory {
+class DiscavelFactoryTsa implements Discavel.Factory {
 
   @Override
   public Discavel create(Configuracoes configuracoes, Cliente cliente) {
-    return new DiscavelTsaImpl(configuracoes, cliente);
+    return new DiscavelTsa(configuracoes, cliente);
   }
 
   @Override

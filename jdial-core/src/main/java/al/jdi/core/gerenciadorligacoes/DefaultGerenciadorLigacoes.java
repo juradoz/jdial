@@ -33,7 +33,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Telefone;
 
-class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
+class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
   static class GerenciadorLigacoesImplFactory implements GerenciadorLigacoes.Factory {
     @Inject
@@ -55,7 +55,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
     @Override
     public GerenciadorLigacoes create(Configuracoes configuracoes,
         GerenciadorFatorK gerenciadorFatorK) {
-      return new GerenciadorLigacoesImpl(logger, daoFactoryProvider, configuracoes,
+      return new DefaultGerenciadorLigacoes(logger, daoFactoryProvider, configuracoes,
           dialerCtiManager, ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory,
           gerenciadorFatorK);
     }
@@ -74,7 +74,7 @@ class GerenciadorLigacoesImpl implements GerenciadorLigacoes, Runnable {
 
   private Engine engine;
 
-  GerenciadorLigacoesImpl(Logger logger, Provider<DaoFactory> daoFactoryProvider,
+  DefaultGerenciadorLigacoes(Logger logger, Provider<DaoFactory> daoFactoryProvider,
       Configuracoes configuracoes, DialerCtiManager dialerCtiManager,
       Map<PredictiveListener, Ligacao> ligacoes,
       PredictiveListenerFactory predictiveListenerFactory, DevolveRegistro devolveRegistro,

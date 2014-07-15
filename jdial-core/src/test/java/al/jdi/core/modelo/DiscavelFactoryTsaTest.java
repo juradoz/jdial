@@ -13,9 +13,9 @@ import org.mockito.Mock;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Cliente;
 
-public class DiscavelFactoryTsaImplTest {
+public class DiscavelFactoryTsaTest {
 
-  private DiscavelFactoryTsaImpl discavelFactoryTsaImpl;
+  private DiscavelFactoryTsa discavelFactoryTsaImpl;
 
   @Mock
   private Configuracoes configuracoes;
@@ -24,7 +24,7 @@ public class DiscavelFactoryTsaImplTest {
 
   @Before
   public void setUp() throws Exception {
-    discavelFactoryTsaImpl = new DiscavelFactoryTsaImpl();
+    discavelFactoryTsaImpl = new DiscavelFactoryTsa();
   }
 
   @Test

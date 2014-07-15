@@ -8,7 +8,4 @@ public interface TenantManager extends Service {
   void addTenant(Campanha campanha);
 
   void removeTenant(Campanha campanha);
-
-  Tenant get(Campanha campanha);
-
 }

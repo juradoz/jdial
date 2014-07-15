@@ -30,7 +30,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Situacao;
 import al.jdi.dao.model.Telefone;
 
-public class TratadorEspecificoClienteTsaImplTest {
+public class TratadorEspecificoClienteTsaTest {
 
   private static final String NOME_BASE_DADOS = "NOME_BASE_DADOS";
   private static final int MOTIVO_POR_QUANTIDADE = 3;
@@ -43,7 +43,7 @@ public class TratadorEspecificoClienteTsaImplTest {
   private static final DateTime DATA_BANCO = new DateTime();
   private static final int MOTIVO_CAMPANHA = 0;
 
-  private TratadorEspecificoClienteTsaImpl tratadorEspecificoClienteTsaImpl;
+  private TratadorEspecificoClienteTsa tratadorEspecificoClienteTsaImpl;
 
   @Mock
   private Configuracoes configuracoes;
@@ -91,7 +91,7 @@ public class TratadorEspecificoClienteTsaImplTest {
         .thenReturn(true);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
     tratadorEspecificoClienteTsaImpl =
-        new TratadorEspecificoClienteTsaImpl(logger, configuracoes, daoFactory);
+        new TratadorEspecificoClienteTsa(logger, configuracoes, daoFactory);
   }
 
   @Test
