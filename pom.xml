@@ -20,6 +20,7 @@
 		<module>jdial-core</module>
 		<module>jdial-cti</module>
     <module>jdial-common</module>
+    <module>jdial-all</module>
   </modules>
 
 	<repositories>
