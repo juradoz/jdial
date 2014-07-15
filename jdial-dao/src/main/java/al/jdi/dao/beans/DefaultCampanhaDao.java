@@ -63,8 +63,8 @@ class DefaultCampanhaDao implements CampanhaDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Campanha> listaAtivas() {
-    return (List<Campanha>) dao.getSession().createCriteria(Campanha.class)
-        .add(Restrictions.eq("ativa", true));
+    return dao.getSession().createCriteria(Campanha.class).add(Restrictions.eq("ativa", true))
+        .list();
   }
 
 }
