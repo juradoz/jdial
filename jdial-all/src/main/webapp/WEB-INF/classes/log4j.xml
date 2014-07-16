@@ -9,7 +9,7 @@
 		</layout>
 	</appender>
 
-	<category name="com.mchange">
+	<!-- category name="com.mchange">
 		<priority value="error" />
 	</category>
 
@@ -27,10 +27,10 @@
 
 	<category name="org.jboss.logging">
 		<priority value="error" />
-	</category>
+	</category -->
 
 	<root>
-		<priority value="info" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>
 
