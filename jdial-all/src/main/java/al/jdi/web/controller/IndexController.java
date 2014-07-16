@@ -1,4 +1,4 @@
-package br.com.caelum.vraptor.controller;
+package al.jdi.web.controller;
 
 import javax.inject.Inject;
 

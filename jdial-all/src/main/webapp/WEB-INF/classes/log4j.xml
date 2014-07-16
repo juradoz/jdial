@@ -9,8 +9,28 @@
 		</layout>
 	</appender>
 
+	<category name="com.mchange">
+		<priority value="error" />
+	</category>
+
+	<category name="org.hibernate">
+		<priority value="error" />
+	</category>
+
+	<category name="com.avaya">
+		<priority value="error" />
+	</category>
+
+	<category name="org.jboss.weld">
+		<priority value="error" />
+	</category>
+
+	<category name="org.jboss.logging">
+		<priority value="error" />
+	</category>
+
 	<root>
-		<priority value="debug" />
+		<priority value="info" />
 		<appender-ref ref="console" />
 	</root>
 

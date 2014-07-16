@@ -9,7 +9,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.util.Nonbinding;
@@ -28,7 +27,7 @@ public class LogProducer {
     Class<?> clazz();
   }
 
-  @Default
+//  @Default
   @LogClass(clazz = Object.class)
   @Produces
   public Logger produce(InjectionPoint ip) {
