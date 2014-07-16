@@ -17,6 +17,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>${weld.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>al.jdi</groupId>
 			<artifactId>jdial-dao</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
@@ -35,5 +40,13 @@
 
 	<build>
 		<finalName>jdial</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>log4j.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 	</build>
 </project>
