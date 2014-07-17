@@ -103,39 +103,34 @@ class DefaultClienteDao implements ClienteDao {
 
     String hql =
         "select Cliente.idCliente from Cliente "
-            + "  inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente and InformacaoCliente.nomeBase = '' "
+            + "  inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente"
             + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
             + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente "
-            + "%s " // inner join Filtro_Mailing on Cliente.idMailing =
-            // Filtro_Mailing.idMailing
+            + "  left join Operador.FiltrosDet on Cliente.idCliente = Operador.FiltrosDet.idCliente "
             + "Where "
             + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
-            + "  And Cliente.idEstadoCliente = 1 " + "  And Agendamento.agendamento <= Now() "
-            + "  And Agendamento.idAgente is null "
+            + "  And Cliente.idEstadoCliente = 1 " + "  And InformacaoCliente.nomeBase = '' "
+            + "  And Agendamento.agendamento <= Now() " + "  And Agendamento.idAgente is null "
             + "  And Operador.DetCampanha.OperadorCtt in (0, 3) "
             + "  And Operador.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing
-            // in (:idMailings) : And
-            // Filtro_Mailing.idMailing in (:idMailings)
-            + "%s " // : And Cliente.filtro in (:filtros)
+                                                                          // in (:idMailings) -- Sem
+                                                                          // filtro
+                                                                          // And
+                                                                          // Operador.FiltrosDet.Filtro
+                                                                          // = :codigoFiltro --
+                                                                          // Comfiltro
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
-        String
-            .format(
-                hql,
-                isFiltroExclusivo(campanha) ? "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
-                    : "",
-                isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
-                    : "And Cliente.idMailing in (:idMailings)",
-                possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)" : "");
+        String.format(hql, possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
+            : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
-    Query query =
-        dao.getSession().createSQLQuery(hql).setParameterList("idMailings", idMailings)
-            .setInteger("limit", quantidade);
+    Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
-    query =
-        possuiFiltro(campanha) ? query.setParameterList("filtros", getFiltroAsInt(campanha))
-            : query;
+    if (possuiFiltro(campanha))
+      query = query.setParameterList("idMailings", idMailings);
+    else
+      query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
@@ -175,35 +170,26 @@ class DefaultClienteDao implements ClienteDao {
             + "inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente "
             + "left join Agendamento on Cliente.idCliente = Agendamento.idCliente "
             + "inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
-            + "%s " // : inner join Filtro_Mailing on Cliente.idMailing =
-            // Filtro_Mailing.idMailing
+            + "left join Operador.FiltrosDet on Cliente.idCliente = Operador.FiltrosDet.idCliente "
             + "Where " + "Agendamento.idAgendamento is null "
             + "And (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
             + "And Cliente.idEstadoCliente = 1 "
             + "And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "And Operador.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in
-            // (:idMailings) : And
-            // Filtro_Mailing.idMailing in (:idMailings)
-            + "%s " // : And Cliente.filtro in (:filtros)
+            + "And Operador.DetCampanha.Situacao <= 1 " 
+            + "%s " // And Cliente.idMailing in (:idMailings) -- Sem filtro
+                    // And Operador.FiltrosDet.Filtro = :codigoFiltro -- Com filtro
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
-        String
-            .format(
-                hql,
-                isFiltroExclusivo(campanha) ? "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
-                    : "",
-                isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
-                    : "And Cliente.idMailing in (:idMailings)",
-                possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)" : "");
+        String.format(hql, possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
+            : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
-    Query query =
-        dao.getSession().createSQLQuery(hql).setParameterList("idMailings", idMailings)
-            .setInteger("limit", quantidade);
+    Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
-    query =
-        possuiFiltro(campanha) ? query.setParameterList("filtros", getFiltroAsInt(campanha))
-            : query;
+    if (possuiFiltro(campanha))
+      query = query.setParameterList("idMailings", idMailings);
+    else
+      query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
