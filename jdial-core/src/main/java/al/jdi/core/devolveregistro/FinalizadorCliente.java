@@ -17,7 +17,7 @@ import al.jdi.dao.model.Telefone;
 
 class FinalizadorCliente {
 
-  private static class ClienteFinalizadoException extends RuntimeException {
+  public static class ClienteFinalizadoException extends RuntimeException {
     private static final long serialVersionUID = -358709782586621212L;
   }
 

@@ -10,8 +10,10 @@ import org.slf4j.Logger;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
+import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
 import al.jdi.core.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
 import al.jdi.core.modelo.Providencia.SemProximoTelefoneException;
+import al.jdi.core.modelo.Providencia.SomenteCelularException;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -61,6 +63,12 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
     } catch (NaoPodeReiniciarRodadaTelefoneException e) {
       logger.info("Nao pode passar pro proximotelefone ainda {}", cliente);
       processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
+    } catch (ClienteSemTelefoneException e) {
+    	logger.info("Cliente sem telefone {}", cliente);
+        processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
+    } catch (SomenteCelularException e) {
+    	logger.info("Somente celulares {}", cliente);
+        processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     } catch (SemProximoTelefoneException e) {
       logger.info("Nao possui proximo telefone {}", cliente);
       processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);

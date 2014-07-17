@@ -17,6 +17,7 @@ import al.jdi.common.Service;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.ThreadCountParameter;
+import al.jdi.core.devolveregistro.FinalizadorCliente.ClienteFinalizadoException;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
@@ -108,6 +109,8 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
         if (!processo.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory)) {
           break;
         }
+      } catch (ClienteFinalizadoException e) {
+        logger.error(e.getMessage(), e);
       } catch (Exception e) {
         logger.error(e.getMessage(), e);
       }
