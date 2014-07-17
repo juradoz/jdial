@@ -1,4 +1,4 @@
-package al.jdi.web.controller;
+package al.jdi.web.util;
 
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;

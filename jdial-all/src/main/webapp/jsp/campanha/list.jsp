@@ -9,6 +9,7 @@
 		<td>Rota</td>
 		<td>Serviço</td>
 		<td>Filtro ativo</td>
+		<td>Codigo Filtro</td>
 		<td></td>
 		<td></td>
 	</thead>
@@ -22,6 +23,7 @@
 			<td>${campanha.servico.nome }</td>
 			<td><input type="checkbox" disabled="disabled"
 				<c:if test="${campanha.filtroAtivo}">checked="true"</c:if>></td>
+			<td>${campanha.codigoFiltro }</td>
 			<td><form action="<c:url value="/campanha/${campanha.id}"/>">
 					<jurado:botaoSubmit value="Alterar" />
 				</form></td>

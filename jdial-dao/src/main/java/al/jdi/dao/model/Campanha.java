@@ -55,6 +55,9 @@ public class Campanha implements DaoObject {
   @Column(nullable = false)
   private boolean filtroAtivo = false;
 
+  @Column(nullable = false)
+  private int codigoFiltro = 0;
+
   @ManyToOne
   @JoinColumn(name = "idGrupo")
   private Grupo grupo;
@@ -70,7 +73,7 @@ public class Campanha implements DaoObject {
   private String descricao;
 
   private boolean limpaMemoria = false;
-  
+
   private boolean ativa = false;
 
   public boolean isAtiva() {
@@ -81,6 +84,7 @@ public class Campanha implements DaoObject {
     this.ativa = ativa;
   }
 
+  @Deprecated
   public Campanha() {}
 
   public Campanha(Long idCampanha) {
@@ -189,6 +193,14 @@ public class Campanha implements DaoObject {
 
   public void setLimpaMemoria(boolean limpaMemoria) {
     this.limpaMemoria = limpaMemoria;
+  }
+
+  public int getCodigoFiltro() {
+    return codigoFiltro;
+  }
+
+  public void setCodigoFiltro(int codigoFiltro) {
+    this.codigoFiltro = codigoFiltro;
   }
 
 }
