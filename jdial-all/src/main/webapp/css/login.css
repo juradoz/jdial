@@ -1,0 +1,44 @@
+body#corpo {
+	background-color: #D9D9D9;
+	font: 10px verdana;
+}
+
+div#geral {
+	margin: 0 auto;
+	width: 800px;
+}
+
+div#topo {
+	background-color: #FAFAFA;
+	height: 50px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+}
+
+div#login {
+	background-color: #FAFAFA;
+	height: 100px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 60px;
+	font-weight: bold;
+}
+
+div#rodape {
+	background-color: #FAFAFA;
+	clear: both;
+	height: 25px;
+	width: 100%;
+	text-align: center;
+}
+
+body#corpo,div#geral,div#topo,div#login,div#rodape {
+	border-radius: 8px; /* CSS3 */
+	-khtml-border-radius: 8px; /* Safari() */
+	-moz-border-radius: 8px; /* Mozilla */
+	-opera-border-radius: 8px; /* Opera */
+	-webkit-border-radius: 8px; /* Safari */
+}

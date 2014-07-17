@@ -1,0 +1,89 @@
+@CHARSET "UTF-8";
+
+/* PARTE 2 */
+body#corpo {
+	background-color: #D9D9D9;
+	font: 10px verdana;
+}
+
+div#geral {
+	margin: 0 auto;
+	width: 800px;
+}
+
+/* PARTE 3 */
+div#topo {
+	background-color: #FAFAFA;
+	height: 100px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 60px;
+	font-weight: bold;
+}
+
+div#menu {
+	background-color: #000000;
+	height: 30px;
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+/* PARTE 4 */
+div#esquerda {
+	float: left;
+	height: 430px;
+	margin-right: 1%;
+	width: 15%;
+}
+
+div#sub-conteudo {
+	background-color: #FAFAFA;
+	float: left;
+	margin-bottom: 5px;
+	min-height: 430px;
+	width: 84%;
+}
+
+div#rodape {
+	background-color: #FAFAFA;
+	clear: both;
+	height: 25px;
+	width: 100%;
+	text-align: center;
+}
+
+/* PARTE 6 */
+div#conteudo {
+	
+}
+
+div#info {
+	background-color: #FAFAFA;
+	height: 75%;
+	width: 100%;
+}
+
+/* PARTE 7 */
+div#info,div#menu,div#rodape,div#sub-conteudo,div#topo {
+	border-radius: 8px; /* CSS3 */
+	-khtml-border-radius: 8px; /* Safari() */
+	-moz-border-radius: 8px; /* Mozilla */
+	-opera-border-radius: 8px; /* Opera */
+	-webkit-border-radius: 8px; /* Safari */
+}
+
+a:link {
+	text-decoration: none
+}
+
+a:visited {
+	text-decoration: none
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:active {
+	text-decoration: none
+}

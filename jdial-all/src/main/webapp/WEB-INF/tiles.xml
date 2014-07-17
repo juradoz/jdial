@@ -3,11 +3,15 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition name="campanha/list" template="/layouts/classic.jsp">
+	<definition name="classic/loggedin" template="/layouts/classic_loggedin.jsp" >
+		<put-attribute name="topo" value="/tiles/topo.jsp" />
+		<put-attribute name="menu" value="/tiles/menu.jsp" />
+		<put-attribute name="info" value="/tiles/info.jsp" />
+		<put-attribute name="rodape" value="/tiles/rodape.jsp" />
+	</definition>
+
+	<definition name="campanha/list" extends="classic/loggedin">
 		<put-attribute name="title" value="Campanhas" />
-		<put-attribute name="header" value="/tiles/banner.jsp" />
-		<put-attribute name="menu" value="/tiles/common_menu.jsp" />
-		<put-attribute name="body" value="/jsp/campanha/list.jsp" />
-		<put-attribute name="footer" value="/tiles/credits.jsp" />
+		<put-attribute name="conteudo" value="/jsp/campanha/list.jsp" />
 	</definition>
 </tiles-definitions>
