@@ -21,7 +21,7 @@ import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
 
-// @Intercepts
+// @Intercepts(after = DaoFactoryInterceptor.class)
 public class LogInterceptor {
 
   @Retention(RetentionPolicy.RUNTIME)

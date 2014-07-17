@@ -3,13 +3,22 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition name="classic/loggedin" template="/layouts/classic_loggedin.jsp" >
+
+	<definition name="classic/loggedout" template="/layouts/classic_loggedout.jsp">
 		<put-attribute name="topo" value="/tiles/topo.jsp" />
-		<put-attribute name="menu" value="/tiles/menu.jsp" />
-		<put-attribute name="info" value="/tiles/info.jsp" />
 		<put-attribute name="rodape" value="/tiles/rodape.jsp" />
 	</definition>
-	
+
+	<definition name="admin/login" extends="classic/loggedout">
+		<put-attribute name="title" value="Discador Web" />
+		<put-attribute name="conteudo" value="/jsp/admin/login.jsp" />
+	</definition>
+
+	<definition name="classic/loggedin" template="/layouts/classic_loggedin.jsp">
+		<put-attribute name="topo" value="/tiles/topo.jsp" />
+		<put-attribute name="rodape" value="/tiles/rodape.jsp" />
+	</definition>
+
 	<definition name="campanha" extends="classic/loggedin">
 		<put-attribute name="title" value="Campanhas" />
 	</definition>
@@ -17,8 +26,9 @@
 	<definition name="campanha/list" extends="campanha">
 		<put-attribute name="conteudo" value="/jsp/campanha/list.jsp" />
 	</definition>
-	
+
 	<definition name="campanha/formularioCampanha" extends="campanha/list">
-		<put-attribute name="conteudo" value="/jsp/campanha/formularioCampanha.jsp" />
+		<put-attribute name="conteudo"
+			value="/jsp/campanha/formularioCampanha.jsp" />
 	</definition>
 </tiles-definitions>
