@@ -1,6 +1,14 @@
 package al.jdi.web.controller;
 
+import java.util.Enumeration;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
+import al.jdi.web.session.UsuarioAutenticadoSession;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;
@@ -8,15 +16,23 @@ import br.com.caelum.vraptor.view.Results;
 
 @Controller
 public class MenuController implements ExibidorAcessoNegado {
-  
+
+  private final Logger logger;
+  private final HttpServletRequest request;
+  private final UsuarioAutenticadoSession usuarioAutenticadoSession;
   private final Result result;
 
   @Deprecated
   public MenuController() {
-    this(null);
+    this(null, null, null, null);
   }
 
-  public MenuController(Result result) {
+  @Inject
+  public MenuController(Logger logger, HttpServletRequest request,
+      UsuarioAutenticadoSession usuarioAutenticadoSession, Result result) {
+    this.logger = logger;
+    this.request = request;
+    this.usuarioAutenticadoSession = usuarioAutenticadoSession;
     this.result = result;
   }
 
@@ -28,5 +44,11 @@ public class MenuController implements ExibidorAcessoNegado {
   }
 
   @Path("/menu")
-  public void menu() {}
+  public void menu() {
+    Enumeration<?> attributeNames = request.getSession().getAttributeNames();
+    while (attributeNames.hasMoreElements()) {
+      logger.info("name: {}", attributeNames.nextElement());
+    }
+    result.include("usuarioAutenticadoSession", usuarioAutenticadoSession);
+  }
 }

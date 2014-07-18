@@ -38,11 +38,6 @@ public class ClienteTest {
   }
 
   @Test
-  public void defaultFiltro() {
-    assertThat(cliente.getFiltro(), is(equalTo(0)));
-  }
-
-  @Test
   public void defaultHistoricoCliente() {
     assertThat(cliente.getHistoricoCliente(), is(not(nullValue(Collection.class))));
     assertThat(cliente.getHistoricoCliente().isEmpty(), is(true));

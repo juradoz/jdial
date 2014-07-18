@@ -35,7 +35,9 @@ public class LogInterceptor {
 
   @Deprecated
   public LogInterceptor() {
-    this(null, null, null);
+    this.usuarioAutenticadoSession = null;
+    this.methodInfo = null;
+    this.daoFactory = null;
   }
 
   @Inject

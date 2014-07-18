@@ -4,21 +4,35 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-	<definition name="classic/loggedout" template="/layouts/classic_loggedout.jsp">
+	<definition name="root">
+		<put-attribute name="title" value="Dialer Web" />
+	</definition>
+
+	<definition name="classic/loggedout" template="/layouts/classic_loggedout.jsp"
+		extends="root">
 		<put-attribute name="topo" value="/tiles/topo.jsp" />
 		<put-attribute name="rodape" value="/tiles/rodape.jsp" />
 	</definition>
 
 	<definition name="admin/login" extends="classic/loggedout">
-		<put-attribute name="title" value="Discador Web" />
 		<put-attribute name="conteudo" value="/jsp/admin/login.jsp" />
 	</definition>
 
-	<definition name="classic/loggedin" template="/layouts/classic_loggedin.jsp">
+	<definition name="classic/loggedin" template="/layouts/classic_loggedin.jsp"
+		extends="root">
 		<put-attribute name="topo" value="/tiles/topo.jsp" />
+		<put-attribute name="menu" value="/tiles/menu.jsp" />
+		<put-attribute name="info" value="/tiles/info.jsp" />
+		<put-attribute name="conteudo" value="/tiles/conteudo.jsp" />
 		<put-attribute name="rodape" value="/tiles/rodape.jsp" />
 	</definition>
 
+	<!-- Menu -->
+	<definition name="menu/menu" extends="classic/loggedin">
+	</definition>
+	<!-- /Menu -->
+
+	<!-- Campanha -->
 	<definition name="campanha" extends="classic/loggedin">
 		<put-attribute name="title" value="Campanhas" />
 	</definition>
@@ -31,4 +45,20 @@
 		<put-attribute name="conteudo"
 			value="/jsp/campanha/formularioCampanha.jsp" />
 	</definition>
+	<!-- /Campanha -->
+
+	<!-- Usuario -->
+	<definition name="usuario" extends="classic/loggedin">
+		<put-attribute name="title" value="Usuários" />
+	</definition>
+
+	<definition name="usuario/list" extends="usuario">
+		<put-attribute name="conteudo" value="/jsp/usuario/list.jsp" />
+	</definition>
+
+	<definition name="usuario/formularioUsuario" extends="usuario/list">
+		<put-attribute name="conteudo" value="/jsp/usuario/formularioUsuario.jsp" />
+	</definition>
+	<!-- /Usuario -->
+
 </tiles-definitions>
