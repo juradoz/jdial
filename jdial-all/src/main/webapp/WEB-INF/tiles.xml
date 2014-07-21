@@ -51,7 +51,7 @@
 	<definition name="definicao" extends="classic/loggedin">
 		<put-attribute name="title" value="Definições" />
 	</definition>
-	
+
 	<definition name="definicao/listCampanhas" extends="definicao">
 		<put-attribute name="conteudo" value="/jsp/definicao/listCampanhas.jsp" />
 	</definition>
@@ -61,29 +61,54 @@
 	</definition>
 
 	<definition name="definicao/formularioDefinicao" extends="definicao">
-		<put-attribute name="conteudo" value="/jsp/definicao/formularioDefinicao.jsp" />
+		<put-attribute name="conteudo"
+			value="/jsp/definicao/formularioDefinicao.jsp" />
 	</definition>
 	<!-- /Definicao -->
-	
+
 	<!-- DefinicaoPadrao -->
 	<definition name="definicaoPadrao" extends="classic/loggedin">
 		<put-attribute name="title" value="Definições Padrão" />
 	</definition>
-	
+
 	<definition name="definicaoPadrao/list" extends="definicaoPadrao">
 		<put-attribute name="conteudo" value="/jsp/definicaoPadrao/list.jsp" />
 	</definition>
 
-	<definition name="definicaoPadrao/formularioDefinicaoPadrao" extends="definicaoPadrao">
-		<put-attribute name="conteudo" value="/jsp/definicaoPadrao/formularioDefinicaoPadrao.jsp" />
+	<definition name="definicaoPadrao/formularioDefinicaoPadrao"
+		extends="definicaoPadrao">
+		<put-attribute name="conteudo"
+			value="/jsp/definicaoPadrao/formularioDefinicaoPadrao.jsp" />
 	</definition>
 	<!-- /DefinicaoPadrao -->
+
+	<!-- Filtro -->
+	<definition name="filtro" extends="classic/loggedin">
+		<put-attribute name="title" value="Filtros" />
+	</definition>
+
+	<definition name="filtro/adicionarMailing" extends="filtro">
+		<put-attribute name="conteudo" value="/jsp/filtro/adicionarMailing.jsp" />
+	</definition>
+
+	<definition name="filtro/formularioFiltro" extends="filtro">
+		<put-attribute name="conteudo" value="/jsp/filtro/formularioFiltro.jsp" />
+	</definition>
 	
+	<definition name="filtro/list" extends="filtro">
+		<put-attribute name="conteudo" value="/jsp/filtro/list.jsp" />
+	</definition>
+	
+	<definition name="filtro/mailings" extends="filtro">
+		<put-attribute name="conteudo" value="/jsp/filtro/mailings.jsp" />
+	</definition>
+	<!-- /Filtro -->
+
 	<!-- Grupo -->
 	<definition name="grupo" extends="classic/loggedin">
 		<put-attribute name="title" value="Grupos" />
 	</definition>
-	
+
 	<definition name="grupo/list" extends="grupo">
 		<put-attribute name="conteudo" value="/jsp/grupo/list.jsp" />
 	</definition>
@@ -92,12 +117,12 @@
 		<put-attribute name="conteudo" value="/jsp/grupo/formularioGrupo.jsp" />
 	</definition>
 	<!-- /Grupo -->
-	
+
 	<!-- Rota -->
 	<definition name="rota" extends="classic/loggedin">
 		<put-attribute name="title" value="Rotas" />
 	</definition>
-	
+
 	<definition name="rota/list" extends="rota">
 		<put-attribute name="conteudo" value="/jsp/rota/list.jsp" />
 	</definition>
@@ -106,12 +131,12 @@
 		<put-attribute name="conteudo" value="/jsp/rota/formularioRota.jsp" />
 	</definition>
 	<!-- /Rota -->
-	
+
 	<!-- Servico -->
 	<definition name="servico" extends="classic/loggedin">
 		<put-attribute name="title" value="Servicos" />
 	</definition>
-	
+
 	<definition name="servico/list" extends="servico">
 		<put-attribute name="conteudo" value="/jsp/servico/list.jsp" />
 	</definition>
@@ -120,7 +145,7 @@
 		<put-attribute name="conteudo" value="/jsp/servico/formularioServico.jsp" />
 	</definition>
 	<!-- /Servico -->
-	
+
 	<!-- Usuario -->
 	<definition name="usuario" extends="classic/loggedin">
 		<put-attribute name="title" value="Usuários" />
