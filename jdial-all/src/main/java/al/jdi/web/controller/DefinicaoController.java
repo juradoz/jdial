@@ -28,6 +28,7 @@ public class DefinicaoController {
   private final Result result;
   private final DaoFactory daoFactory;
 
+  @Deprecated
   public DefinicaoController() {
     this(null, null);
   }

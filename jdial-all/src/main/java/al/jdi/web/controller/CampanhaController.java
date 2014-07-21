@@ -30,6 +30,7 @@ public class CampanhaController {
   private final Result result;
   private final DaoFactory daoFactory;
 
+  @Deprecated
   public CampanhaController() {
     this.result = null;
     this.daoFactory = null;

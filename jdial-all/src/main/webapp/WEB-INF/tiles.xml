@@ -63,7 +63,21 @@
 	<definition name="definicao/formularioDefinicao" extends="definicao">
 		<put-attribute name="conteudo" value="/jsp/definicao/formularioDefinicao.jsp" />
 	</definition>
-	<!-- /Usuario -->
+	<!-- /Definicao -->
+	
+	<!-- Definicao -->
+	<definition name="definicaoPadrao" extends="classic/loggedin">
+		<put-attribute name="title" value="Definições Padrão" />
+	</definition>
+	
+	<definition name="definicaoPadrao/list" extends="definicaoPadrao">
+		<put-attribute name="conteudo" value="/jsp/definicaoPadrao/list.jsp" />
+	</definition>
+
+	<definition name="definicaoPadrao/formularioDefinicaoPadrao" extends="definicaoPadrao">
+		<put-attribute name="conteudo" value="/jsp/definicaoPadrao/formularioDefinicaoPadrao.jsp" />
+	</definition>
+	<!-- /Definicao -->
 	
 	<!-- Usuario -->
 	<definition name="usuario" extends="classic/loggedin">
