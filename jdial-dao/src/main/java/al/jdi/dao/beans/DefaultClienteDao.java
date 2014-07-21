@@ -98,7 +98,7 @@ class DefaultClienteDao implements ClienteDao {
       String nomeBase, int operadorDiscador) {
     List<Integer> idMailings = obtemIdMailings(campanha);
 
-    if (idMailings.isEmpty())
+    if (idMailings.isEmpty() && !possuiFiltro(campanha))
       return Collections.<Cliente>emptyList();
 
     String hql =
@@ -122,12 +122,12 @@ class DefaultClienteDao implements ClienteDao {
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
-        String.format(hql, possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
+        String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
             : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
     Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
-    if (possuiFiltro(campanha))
+    if (!possuiFiltro(campanha))
       query = query.setParameterList("idMailings", idMailings);
     else
       query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
@@ -162,7 +162,7 @@ class DefaultClienteDao implements ClienteDao {
       String nomeBase, int operadorDiscador) {
     List<Integer> idMailings = obtemIdMailings(campanha);
 
-    if (idMailings.isEmpty())
+    if (idMailings.isEmpty() && !possuiFiltro(campanha))
       return Collections.<Cliente>emptyList();
 
     String hql =
@@ -181,12 +181,12 @@ class DefaultClienteDao implements ClienteDao {
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
-        String.format(hql, possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
+        String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
             : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
     Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
-    if (possuiFiltro(campanha))
+    if (!possuiFiltro(campanha))
       query = query.setParameterList("idMailings", idMailings);
     else
       query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
