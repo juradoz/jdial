@@ -65,7 +65,7 @@
 	</definition>
 	<!-- /Definicao -->
 	
-	<!-- Definicao -->
+	<!-- DefinicaoPadrao -->
 	<definition name="definicaoPadrao" extends="classic/loggedin">
 		<put-attribute name="title" value="Definições Padrão" />
 	</definition>
@@ -77,7 +77,49 @@
 	<definition name="definicaoPadrao/formularioDefinicaoPadrao" extends="definicaoPadrao">
 		<put-attribute name="conteudo" value="/jsp/definicaoPadrao/formularioDefinicaoPadrao.jsp" />
 	</definition>
-	<!-- /Definicao -->
+	<!-- /DefinicaoPadrao -->
+	
+	<!-- Grupo -->
+	<definition name="grupo" extends="classic/loggedin">
+		<put-attribute name="title" value="Grupos" />
+	</definition>
+	
+	<definition name="grupo/list" extends="grupo">
+		<put-attribute name="conteudo" value="/jsp/grupo/list.jsp" />
+	</definition>
+
+	<definition name="grupo/formularioGrupo" extends="grupo">
+		<put-attribute name="conteudo" value="/jsp/grupo/formularioGrupo.jsp" />
+	</definition>
+	<!-- /Grupo -->
+	
+	<!-- Rota -->
+	<definition name="rota" extends="classic/loggedin">
+		<put-attribute name="title" value="Rotas" />
+	</definition>
+	
+	<definition name="rota/list" extends="rota">
+		<put-attribute name="conteudo" value="/jsp/rota/list.jsp" />
+	</definition>
+
+	<definition name="rota/formularioRota" extends="rota">
+		<put-attribute name="conteudo" value="/jsp/rota/formularioRota.jsp" />
+	</definition>
+	<!-- /Rota -->
+	
+	<!-- Servico -->
+	<definition name="servico" extends="classic/loggedin">
+		<put-attribute name="title" value="Servicos" />
+	</definition>
+	
+	<definition name="servico/list" extends="servico">
+		<put-attribute name="conteudo" value="/jsp/servico/list.jsp" />
+	</definition>
+
+	<definition name="servico/formularioServico" extends="servico">
+		<put-attribute name="conteudo" value="/jsp/servico/formularioServico.jsp" />
+	</definition>
+	<!-- /Servico -->
 	
 	<!-- Usuario -->
 	<definition name="usuario" extends="classic/loggedin">
