@@ -41,12 +41,30 @@
 		<put-attribute name="conteudo" value="/jsp/campanha/list.jsp" />
 	</definition>
 
-	<definition name="campanha/formularioCampanha" extends="campanha/list">
+	<definition name="campanha/formularioCampanha" extends="campanha">
 		<put-attribute name="conteudo"
 			value="/jsp/campanha/formularioCampanha.jsp" />
 	</definition>
 	<!-- /Campanha -->
 
+	<!-- Definicao -->
+	<definition name="definicao" extends="classic/loggedin">
+		<put-attribute name="title" value="Definições" />
+	</definition>
+	
+	<definition name="definicao/listCampanhas" extends="definicao">
+		<put-attribute name="conteudo" value="/jsp/definicao/listCampanhas.jsp" />
+	</definition>
+
+	<definition name="definicao/listDefinicao" extends="definicao">
+		<put-attribute name="conteudo" value="/jsp/definicao/listDefinicao.jsp" />
+	</definition>
+
+	<definition name="definicao/formularioDefinicao" extends="definicao">
+		<put-attribute name="conteudo" value="/jsp/definicao/formularioDefinicao.jsp" />
+	</definition>
+	<!-- /Usuario -->
+	
 	<!-- Usuario -->
 	<definition name="usuario" extends="classic/loggedin">
 		<put-attribute name="title" value="Usuários" />
@@ -56,7 +74,7 @@
 		<put-attribute name="conteudo" value="/jsp/usuario/list.jsp" />
 	</definition>
 
-	<definition name="usuario/formularioUsuario" extends="usuario/list">
+	<definition name="usuario/formularioUsuario" extends="usuario">
 		<put-attribute name="conteudo" value="/jsp/usuario/formularioUsuario.jsp" />
 	</definition>
 	<!-- /Usuario -->

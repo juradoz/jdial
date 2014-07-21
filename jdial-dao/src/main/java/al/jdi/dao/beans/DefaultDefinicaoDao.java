@@ -52,7 +52,7 @@ class DefaultDefinicaoDao implements DefinicaoDao {
 
   @Override
   public Definicao procura(Long id) {
-    return procura(id);
+    return dao.procura(id);
   }
 
   @Override
