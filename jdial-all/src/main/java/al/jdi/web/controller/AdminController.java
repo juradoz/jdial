@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
-import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.session.UsuarioAutenticadoSession;
 import br.com.caelum.vraptor.Controller;
@@ -22,16 +21,14 @@ public class AdminController {
 
   @Deprecated
   public AdminController() {
-    this.daoFactory = null;
-    this.result = null;
-    this.usuarioAutenticado = null;
+    this(null, null, null);
   }
 
   @Inject
-  public AdminController(Result result, DaoFactoryRequest daoFactoryRequest,
+  public AdminController(Result result, DaoFactory daoFactory,
       UsuarioAutenticadoSession usuarioAutenticado) {
     this.result = result;
-    this.daoFactory = daoFactoryRequest.get();
+    this.daoFactory = daoFactory;
     this.usuarioAutenticado = usuarioAutenticado;
   }
 

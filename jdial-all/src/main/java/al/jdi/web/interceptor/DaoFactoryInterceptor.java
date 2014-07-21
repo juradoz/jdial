@@ -3,7 +3,6 @@ package al.jdi.web.interceptor;
 import javax.inject.Inject;
 
 import al.jdi.dao.beans.DaoFactory;
-import al.jdi.web.component.DaoFactoryRequest;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
@@ -15,12 +14,12 @@ public class DaoFactoryInterceptor {
 
   @Deprecated
   public DaoFactoryInterceptor() {
-    this.daoFactory = null;
+    this(null);
   }
 
   @Inject
-  public DaoFactoryInterceptor(DaoFactoryRequest daoFactoryRequest) {
-    this.daoFactory = daoFactoryRequest.get();
+  public DaoFactoryInterceptor(DaoFactory daoFactory) {
+    this.daoFactory = daoFactory;
   }
 
   @AroundCall

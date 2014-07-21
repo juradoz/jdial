@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
 import al.jdi.dao.model.Usuario.TipoPerfil;
-import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -30,13 +29,12 @@ public class UsuarioController {
 
   @Deprecated
   public UsuarioController() {
-    this.daoFactory = null;
-    this.result = null;
+    this(null, null);
   }
 
   @Inject
-  public UsuarioController(DaoFactoryRequest daoFactoryRequest, Result result) {
-    this.daoFactory = daoFactoryRequest.get();
+  public UsuarioController(DaoFactory daoFactory, Result result) {
+    this.daoFactory = daoFactory;
     this.result = result;
   }
 

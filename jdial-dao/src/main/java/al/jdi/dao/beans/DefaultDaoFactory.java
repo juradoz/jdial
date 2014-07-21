@@ -1,5 +1,6 @@
 package al.jdi.dao.beans;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import org.hibernate.Query;
@@ -20,6 +21,7 @@ import al.jdi.dao.model.RestricaoHorario;
 import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.WebLog;
 
+@RequestScoped
 class DefaultDaoFactory implements DaoFactory {
 
   private final Logger logger;

@@ -12,16 +12,17 @@ import javax.inject.Inject;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
 import al.jdi.dao.model.WebLog;
-import al.jdi.web.component.DaoFactoryRequest;
+import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.session.UsuarioAutenticadoSession;
-import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.BeforeCall;
 import br.com.caelum.vraptor.InterceptionException;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
 import br.com.caelum.vraptor.core.MethodInfo;
+import br.com.caelum.vraptor.interceptor.AcceptsWithAnnotations;
 
 // @Intercepts(after = DaoFactoryInterceptor.class)
+@AcceptsWithAnnotations(LogAcesso.class)
 public class LogInterceptor {
 
   @Retention(RetentionPolicy.RUNTIME)
@@ -35,22 +36,15 @@ public class LogInterceptor {
 
   @Deprecated
   public LogInterceptor() {
-    this.usuarioAutenticadoSession = null;
-    this.methodInfo = null;
-    this.daoFactory = null;
+    this(null, null, null);
   }
 
   @Inject
   public LogInterceptor(UsuarioAutenticadoSession usuarioAutenticadoSession, MethodInfo methodInfo,
-      DaoFactoryRequest daoFactoryRequest) {
+      DaoFactory daoFactory) {
     this.usuarioAutenticadoSession = usuarioAutenticadoSession;
     this.methodInfo = methodInfo;
-    this.daoFactory = daoFactoryRequest.get();
-  }
-
-  @Accepts
-  public boolean accepts(ControllerMethod method) {
-    return method.containsAnnotation(LogAcesso.class);
+    this.daoFactory = daoFactory;
   }
 
   @BeforeCall

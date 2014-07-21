@@ -13,7 +13,6 @@ import al.jdi.dao.model.Grupo;
 import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Usuario.TipoPerfil;
-import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -32,14 +31,13 @@ public class CampanhaController {
 
   @Deprecated
   public CampanhaController() {
-    this.result = null;
-    this.daoFactory = null;
+    this(null, null);
   }
 
   @Inject
-  public CampanhaController(Result result, DaoFactoryRequest daoFactoryRequest) {
+  public CampanhaController(Result result, DaoFactory daoFactory) {
     this.result = result;
-    this.daoFactory = daoFactoryRequest.get();
+    this.daoFactory = daoFactory;
   }
 
   @Permissao(TipoPerfil.ADMINISTRADOR)

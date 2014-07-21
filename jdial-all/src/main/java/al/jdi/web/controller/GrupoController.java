@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Grupo;
 import al.jdi.dao.model.Usuario.TipoPerfil;
-import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -30,15 +29,14 @@ public class GrupoController {
   private final Result result;
   private final Validator validator;
 
+  @Deprecated
   public GrupoController() {
-    this.daoFactory = null;
-    this.result = null;
-    this.validator = null;
+    this(null, null, null);
   }
 
   @Inject
-  public GrupoController(DaoFactoryRequest daoFactoryRequest, Result result, Validator validator) {
-    this.daoFactory = daoFactoryRequest.get();
+  public GrupoController(DaoFactory daoFactory, Result result, Validator validator) {
+    this.daoFactory = daoFactory;
     this.result = result;
     this.validator = validator;
   }
