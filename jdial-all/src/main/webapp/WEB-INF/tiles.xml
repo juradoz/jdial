@@ -147,6 +147,23 @@
 		<put-attribute name="conteudo" value="/jsp/mailing/list.jsp" />
 	</definition>
 	<!-- /Mailing -->
+	
+	<!-- ResultadoLigacao -->
+	<definition name="resultadoLigacao" extends="classic/loggedin">
+		<put-attribute name="title" value="Resultados de Ligação" />
+	</definition>
+
+	<definition name="resultadoLigacao/campanhas" extends="resultadoLigacao">
+		<put-attribute name="conteudo" value="/jsp/resultadoLigacao/campanhas.jsp" />
+	</definition>
+
+	<definition name="resultadoLigacao/formularioResultadoLigacao" extends="resultadoLigacao">
+		<put-attribute name="conteudo" value="/jsp/resultadoLigacao/formularioResultadoLigacao.jsp" />
+	</definition>
+	<definition name="resultadoLigacao/list" extends="resultadoLigacao">
+		<put-attribute name="conteudo" value="/jsp/resultadoLigacao/list.jsp" />
+	</definition>
+	<!-- /ResultadoLigacao -->
 
 	<!-- Rota -->
 	<definition name="rota" extends="classic/loggedin">
