@@ -84,7 +84,6 @@ public class Campanha implements DaoObject {
     this.ativa = ativa;
   }
 
-  @Deprecated
   public Campanha() {}
 
   public Campanha(Long idCampanha) {
