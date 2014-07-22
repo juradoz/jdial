@@ -17,8 +17,6 @@
 		<li><a href="#">Mailings</a>
 			<ul class="subnav">
 				<li><a href="<c:url value="/mailing/campanhas"/>">Mailings</a></li>
-				<li><a href="<c:url value="/estadoDoMailing/campanhas"/>">Estado
-						do mailing</a></li>
 				<li><a href="<c:url value="/resultadoLigacao/campanhas"/>">Resultados
 						de Ligação</a></li>
 			</ul></li>

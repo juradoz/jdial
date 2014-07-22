@@ -8,6 +8,7 @@ import al.jdi.web.controller.ExibidorAcessoNegado;
 import al.jdi.web.controller.MenuController;
 import al.jdi.web.session.UsuarioAutenticadoSession;
 import br.com.caelum.vraptor.AroundCall;
+import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
@@ -15,7 +16,7 @@ import br.com.caelum.vraptor.interceptor.AcceptsWithAnnotations;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.view.Results;
 
-// @Intercepts
+@Intercepts
 @AcceptsWithAnnotations(Permissao.class)
 @SessionScoped
 public class PermissaoInterceptor {

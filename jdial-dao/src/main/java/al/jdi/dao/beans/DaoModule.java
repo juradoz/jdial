@@ -20,12 +20,12 @@ class DaoModule {
   @Produces
   public DaoFactory create(Logger logger, SessionHandler sessionHandler) {
     DaoFactory daoFactory = new DefaultDaoFactory(logger, sessionHandler);
-    logger.info("Creating {}", daoFactory);
+    logger.debug("Creating {}", daoFactory);
     return daoFactory;
   }
 
   public void close(@Disposes DaoFactory daoFactory) {
-    logger.info("Disposing {}", daoFactory);
+    logger.debug("Disposing {}", daoFactory);
     daoFactory.close();
   }
 }
