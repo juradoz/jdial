@@ -117,6 +117,36 @@
 		<put-attribute name="conteudo" value="/jsp/grupo/formularioGrupo.jsp" />
 	</definition>
 	<!-- /Grupo -->
+	
+	<!-- Mailing -->
+	<definition name="mailing" extends="classic/loggedin">
+		<put-attribute name="title" value="Mailings" />
+	</definition>
+	
+	<definition name="mailing/ativado" template="ajax.jsp">
+		<put-attribute name="ajax" value="Desativar" />
+	</definition>
+	
+	<definition name="mailing/campanhas" extends="mailing">
+		<put-attribute name="conteudo" value="/jsp/mailing/campanhas.jsp" />
+	</definition>
+	
+	<definition name="mailing/desativado" template="ajax.jsp">
+		<put-attribute name="ajax" value="Ativar" />
+	</definition>
+	
+	<definition name="mailing/formularioMailing" extends="mailing">
+		<put-attribute name="conteudo" value="/jsp/mailing/formularioMailing.jsp" />
+	</definition>
+	
+	<definition name="mailing/formularioPurge" extends="mailing">
+		<put-attribute name="conteudo" value="/jsp/mailing/formularioPurge.jsp" />
+	</definition>
+
+	<definition name="mailing/list" extends="mailing">
+		<put-attribute name="conteudo" value="/jsp/mailing/list.jsp" />
+	</definition>
+	<!-- /Mailing -->
 
 	<!-- Rota -->
 	<definition name="rota" extends="classic/loggedin">

@@ -21,8 +21,10 @@ class DefaultMailingDao implements MailingDao {
   @Override
   public void adiciona(Mailing mailing) {
     dao.adiciona(mailing);
-    mailing.getCampanha().getMailing().add(mailing);
-    new DefaultCampanhaDao(dao.getSession()).atualiza(mailing.getCampanha());
+    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
+    Campanha campanha = campanhaDao.procura(mailing.getCampanha().getId());
+    campanha.getMailing().add(mailing);
+    campanhaDao.atualiza(campanha);
   }
 
   @Override
@@ -56,15 +58,20 @@ class DefaultMailingDao implements MailingDao {
     dao.getSession().createSQLQuery("delete from Telefone where idCliente = 0").executeUpdate();
     dao.getSession().createSQLQuery("delete from Cliente where idMailing = :idMailing")
         .setLong("idMailing", t.getId()).executeUpdate();
-    t.getCampanha().setLimpaMemoria(true);
-    new DefaultCampanhaDao(dao.getSession()).atualiza(t.getCampanha());
+
+    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
+    Campanha campanha = campanhaDao.procura(t.getCampanha().getId());
+    campanha.setLimpaMemoria(true);
+    campanhaDao.atualiza(campanha);
     dao.remove(t);
   }
 
   @Override
   public void atualiza(Mailing t) {
-    t.getCampanha().setLimpaMemoria(true);
-    new DefaultCampanhaDao(dao.getSession()).atualiza(t.getCampanha());
+    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
+    Campanha campanha = campanhaDao.procura(t.getCampanha().getId());
+    campanha.setLimpaMemoria(true);
+    campanhaDao.atualiza(campanha);
     dao.atualiza(t);
   }
 

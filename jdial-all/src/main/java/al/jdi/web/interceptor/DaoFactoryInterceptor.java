@@ -24,14 +24,8 @@ public class DaoFactoryInterceptor {
 
   @AroundCall
   public void intercept(SimpleInterceptorStack stack) {
-    try {
-      daoFactory.beginTransaction();
-      stack.next();
-      daoFactory.commit();
-    } finally {
-      if (daoFactory.hasTransaction())
-        daoFactory.rollback();
-      daoFactory.close();
-    }
+    daoFactory.beginTransaction();
+    stack.next();
+    daoFactory.commit();
   }
 }
