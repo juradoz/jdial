@@ -28,7 +28,7 @@ public class DefaultSistemaAtivoTest {
   private final static LocalTime TERMINO = new DateTime().withTime(17, 59, 59, 0).toLocalTime();
 
   private SistemaAtivo sistemaAtivo;
-  
+
   @Mock
   private DefaultConfiguracoes configuracoes;
   @Mock

@@ -20,70 +20,64 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class DefinicaoPadraoController {
-	private final DaoFactory daoFactory;
-	private final Result result;
+  private final DaoFactory daoFactory;
+  private final Result result;
 
-	@Deprecated
-	public DefinicaoPadraoController() {
-	  this(null, null);
-    }
+  @Deprecated
+  public DefinicaoPadraoController() {
+    this(null, null);
+  }
 
-	@Inject
-	public DefinicaoPadraoController(DaoFactory daoFactory, Result result) {
-		this.daoFactory = daoFactory;
-		this.result = result;
-	}
+  @Inject
+  public DefinicaoPadraoController(DaoFactory daoFactory, Result result) {
+    this.daoFactory = daoFactory;
+    this.result = result;
+  }
 
-	@LogAcesso
-	public void add(DefinicaoPadrao definicaoPadrao) {
-		daoFactory.getDefinicaoPadraoDao().adiciona(definicaoPadrao);
-		result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class)
-				.list();
-	}
+  @LogAcesso
+  public void add(DefinicaoPadrao definicaoPadrao) {
+    daoFactory.getDefinicaoPadraoDao().adiciona(definicaoPadrao);
+    result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
+  }
 
-	@Put
-	@Path("/definicaoPadrao")
-	public void adicionar(DefinicaoPadrao definicaoPadrao) {
-		result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class)
-				.formularioDefinicaoPadrao("add", definicaoPadrao);
-	}
+  @Put
+  @Path("/definicaoPadrao")
+  public void adicionar(DefinicaoPadrao definicaoPadrao) {
+    result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class)
+        .formularioDefinicaoPadrao("add", definicaoPadrao);
+  }
 
-	@LogAcesso
-	@Delete
-	@Path("/definicaoPadrao/{definicaoPadrao.id}")
-	public void delete(DefinicaoPadrao definicaoPadrao) {
-		definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(
-				definicaoPadrao.getId());
-		daoFactory.getDefinicaoPadraoDao().remove(definicaoPadrao);
-		result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class)
-				.list();
-	}
+  @LogAcesso
+  @Delete
+  @Path("/definicaoPadrao/{definicaoPadrao.id}")
+  public void delete(DefinicaoPadrao definicaoPadrao) {
+    definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
+    daoFactory.getDefinicaoPadraoDao().remove(definicaoPadrao);
+    result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
+  }
 
-	@LogAcesso
-	public void edit(DefinicaoPadrao definicaoPadrao) {
-		daoFactory.getDefinicaoPadraoDao().atualiza(definicaoPadrao);
-		result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class)
-				.list();
-	}
+  @LogAcesso
+  public void edit(DefinicaoPadrao definicaoPadrao) {
+    daoFactory.getDefinicaoPadraoDao().atualiza(definicaoPadrao);
+    result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
+  }
 
-	@Get
-	@Path("/definicaoPadrao/{definicaoPadrao.id}")
-	public void editar(DefinicaoPadrao definicaoPadrao) {
-		definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(
-				definicaoPadrao.getId());
-		result.use(Results.logic()).forwardTo(DefinicaoPadraoController.class)
-				.formularioDefinicaoPadrao("edit", definicaoPadrao);
-	}
+  @Get
+  @Path("/definicaoPadrao/{definicaoPadrao.id}")
+  public void editar(DefinicaoPadrao definicaoPadrao) {
+    definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
+    result.use(Results.logic()).forwardTo(DefinicaoPadraoController.class)
+        .formularioDefinicaoPadrao("edit", definicaoPadrao);
+  }
 
-	public void formularioDefinicaoPadrao(String action,
-			DefinicaoPadrao definicaoPadrao) {
-		result.include("formAction", action);
-		result.include("definicaoPadrao", definicaoPadrao);
-	}
+  public void formularioDefinicaoPadrao(String action, DefinicaoPadrao definicaoPadrao) {
+    result.include("formAction", action);
+    result.include("definicaoPadrao", definicaoPadrao);
+  }
 
-	@Get
-	@Path("/definicaoPadrao")
-	public Collection<DefinicaoPadrao> list() {
-		return daoFactory.getDefinicaoPadraoDao().listaTudo();
-	}
+  @Get
+  @Path("/definicaoPadrao")
+  public Collection<DefinicaoPadrao> list() {
+    return daoFactory.getDefinicaoPadraoDao().listaTudo();
+  }
 }

@@ -17,6 +17,8 @@ import al.jdi.dao.model.Mailing;
 
 public class MailingDaoImplTest {
 
+  private static final Long CAMPANHA_ID = 1l;
+
   private DefaultMailingDao defaultMailingDao;
 
   @Mock
@@ -34,6 +36,8 @@ public class MailingDaoImplTest {
   public void setUp() throws Exception {
     initMocks(this);
     when(mailing.getCampanha()).thenReturn(campanha);
+    when(campanha.getId()).thenReturn(CAMPANHA_ID);
+    when(session.load(Campanha.class, CAMPANHA_ID)).thenReturn(campanha);
     when(session.createSQLQuery(Mockito.anyString())).thenReturn(query);
     when(query.setLong(Mockito.anyString(), Mockito.anyLong())).thenReturn(query);
     when(campanha.getCriacaoModificacao()).thenReturn(criacaoModificacao);

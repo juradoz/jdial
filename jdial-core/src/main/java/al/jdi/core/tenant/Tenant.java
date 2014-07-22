@@ -10,8 +10,8 @@ import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
 import al.jdi.dao.model.Campanha;
 
 public interface Tenant extends Service {
-  
-  public interface Factory{
+
+  public interface Factory {
     Tenant create(Campanha campanha);
   }
 

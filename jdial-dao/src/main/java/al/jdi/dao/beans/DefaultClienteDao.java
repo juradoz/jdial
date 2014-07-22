@@ -175,9 +175,10 @@ class DefaultClienteDao implements ClienteDao {
             + "And (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
             + "And Cliente.idEstadoCliente = 1 "
             + "And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "And Operador.DetCampanha.Situacao <= 1 " 
-            + "%s " // And Cliente.idMailing in (:idMailings) -- Sem filtro
-                    // And Operador.FiltrosDet.Filtro = :codigoFiltro -- Com filtro
+            + "And Operador.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in
+                                                                // (:idMailings) -- Sem filtro
+                                                                // And Operador.FiltrosDet.Filtro =
+                                                                // :codigoFiltro -- Com filtro
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =

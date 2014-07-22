@@ -27,7 +27,7 @@ public class LogProducer {
     Class<?> clazz();
   }
 
-//  @Default
+  // @Default
   @LogClass(clazz = Object.class)
   @Produces
   public Logger produce(InjectionPoint ip) {

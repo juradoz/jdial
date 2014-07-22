@@ -19,13 +19,13 @@ public interface TratadorEspecificoCliente {
 
   boolean isDnc(Cliente cliente);
 
-  void notificaFimTentativa(Ligacao ligacao,
-      Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
+  void notificaFimTentativa(Ligacao ligacao, Cliente cliente, Campanha campanha,
+      DateTime dataBanco, Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado);
 
-  void notificaFinalizacao(Ligacao ligacao,
-      Cliente cliente, Campanha campanha, DateTime dataBanco, Telefone telefoneOriginal,
-      ResultadoLigacao resultadoLigacao, boolean inutilizaComMotivoDiferenciado);
+  void notificaFinalizacao(Ligacao ligacao, Cliente cliente, Campanha campanha, DateTime dataBanco,
+      Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
+      boolean inutilizaComMotivoDiferenciado);
 
   ClienteDao obtemClienteDao();
 

@@ -40,8 +40,7 @@ class TratadorEspecificoClienteTsaCRM implements TratadorEspecificoCliente {
   private final Configuracoes configuracoes;
   private final DaoFactory daoFactory;
 
-  TratadorEspecificoClienteTsaCRM(Logger logger, Configuracoes configuracoes,
-      DaoFactory daoFactory) {
+  TratadorEspecificoClienteTsaCRM(Logger logger, Configuracoes configuracoes, DaoFactory daoFactory) {
     this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactory = daoFactory;

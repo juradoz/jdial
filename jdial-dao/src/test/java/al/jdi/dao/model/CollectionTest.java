@@ -8,7 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Collection;
 
 public class CollectionTest {
-  
+
   private final Collection<?> collection;
 
   public CollectionTest(Collection<?> collection) {

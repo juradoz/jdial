@@ -100,8 +100,8 @@ class DefaultEstoque implements Estoque, Runnable {
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  DefaultEstoque(Logger logger, Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      DevolveRegistro devolveRegistro,
+  DefaultEstoque(Logger logger, Configuracoes configuracoes,
+      Provider<DaoFactory> daoFactoryProvider, DevolveRegistro devolveRegistro,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
       ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,

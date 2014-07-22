@@ -5,12 +5,12 @@ import org.joda.time.Period;
 import al.jdi.common.Service;
 import al.jdi.cti.TratamentoSecretariaEletronica;
 
-public interface Configuracoes extends Service{
-  
-  public interface Factory{
+public interface Configuracoes extends Service {
+
+  public interface Factory {
     Configuracoes create(String nomeCampanha);
   }
-  
+
   boolean bloqueiaCelular();
 
   boolean getCancelaChamadasDesnecessarias();

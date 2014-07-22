@@ -64,11 +64,11 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
       logger.info("Nao pode passar pro proximotelefone ainda {}", cliente);
       processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     } catch (ClienteSemTelefoneException e) {
-    	logger.info("Cliente sem telefone {}", cliente);
-        processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
+      logger.info("Cliente sem telefone {}", cliente);
+      processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     } catch (SomenteCelularException e) {
-    	logger.info("Somente celulares {}", cliente);
-        processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
+      logger.info("Somente celulares {}", cliente);
+      processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);
     } catch (SemProximoTelefoneException e) {
       logger.info("Nao possui proximo telefone {}", cliente);
       processaFimDaFila.executa(configuracoes, ligacao, cliente, null, daoFactory);

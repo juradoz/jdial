@@ -69,8 +69,7 @@ public class ProcessaIncrementaTentativaTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaIncrementaTentativa =
-        new ProcessaIncrementaTentativa(logger, finalizadorCliente,
-            notificadorCliente);
+        new ProcessaIncrementaTentativa(logger, finalizadorCliente, notificadorCliente);
   }
 
   @Test
@@ -81,28 +80,28 @@ public class ProcessaIncrementaTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(true);
-    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(false);
-    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
-        is(false));
+    assertThat(processaIncrementaTentativa.accept(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(false));
   }
 
   @Test
   public void executaDeveriaIncrementar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
     verify(telefone).incTentativa();
   }
 
   @Test
   public void executaDeveriaAtualizar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaIncrementaTentativa.executa(configuracoes, ligacao, cliente,
+        resultadoLigacao, daoFactory), is(true));
     verify(telefoneDao).atualiza(telefone);
   }
 
