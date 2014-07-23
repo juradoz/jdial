@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor"
+	prefix="compress"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
+<compress:html enabled="true" removeComments="false"
+	compressJavaScript="true" yuiJsDisableOptimizations="true">
 <html>
 <head>
 <link type="text/css" rel="stylesheet"
@@ -19,7 +23,9 @@
 <body id="corpo">
 	<div id="geral">
 		<div id="topo">
-			<h2><tiles:insertAttribute name="topo" /></h2>
+			<h2>
+				<tiles:insertAttribute name="topo" />
+			</h2>
 		</div>
 		<div id="login">
 			<tiles:insertAttribute name="conteudo" />
@@ -39,3 +45,4 @@
 	</div>
 </body>
 </html>
+</compress:html>
