@@ -10,7 +10,7 @@
 <html>
 <head>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/login.css"/>" />
+	href="<c:url value="/css/frame.css"/>" />
 <link type="text/css"
 	href="<c:url value="/css/trontastic/jquery-ui-1.8.1.custom.css"/>"
 	rel="stylesheet" />
@@ -22,7 +22,7 @@
 </head>
 <body id="corpo">
 	<div id="geral">
-		<div id="topo">
+		<div id="topo" class="login">
 			<h2>
 				<tiles:insertAttribute name="topo" />
 			</h2>

@@ -1,6 +1,5 @@
 @CHARSET "UTF-8";
 
-/* PARTE 2 */
 body#corpo {
 	background-color: #D9D9D9;
 	font: 10px verdana;
@@ -11,8 +10,26 @@ div#geral {
 	width: 800px;
 }
 
-/* PARTE 3 */
+div#topo.login {
+	background-color: #FAFAFA;
+	height: 50px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+}
+
 div#topo {
+	background-color: #FAFAFA;
+	height: 100px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 60px;
+	font-weight: bold;
+}
+
+div#login {
 	background-color: #FAFAFA;
 	height: 100px;
 	margin-bottom: 5px;
@@ -28,7 +45,6 @@ div#menu {
 	width: 100%;
 }
 
-/* PARTE 4 */
 div#esquerda {
 	float: left;
 	height: 430px;
@@ -52,9 +68,7 @@ div#rodape {
 	text-align: center;
 }
 
-/* PARTE 6 */
 div#conteudo {
-	
 }
 
 div#info {
@@ -63,7 +77,6 @@ div#info {
 	width: 100%;
 }
 
-/* PARTE 7 */
 div#info,div#menu,div#rodape,div#sub-conteudo,div#topo {
 	border-radius: 8px; /* CSS3 */
 	-khtml-border-radius: 8px; /* Safari() */
