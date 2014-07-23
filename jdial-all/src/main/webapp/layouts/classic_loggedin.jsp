@@ -12,11 +12,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><tiles:getAsString name="title" /></title>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/tables.css"/>" />
-<link type="text/css" rel="stylesheet"
 	href="<c:url value="/css/frame.css"/>" />
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/menu.css"/>" />
 <link type="text/css"
 	href="<c:url value="/css/trontastic/jquery-ui-1.8.1.custom.css"/>"
 	rel="stylesheet" />
