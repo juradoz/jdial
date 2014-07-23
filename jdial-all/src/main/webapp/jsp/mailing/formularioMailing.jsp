@@ -31,7 +31,7 @@
 			<td align="right"><input id="dataInicial" class="campoData"
 				name="mailing.dataInicial"
 				value="<joda:format value="${mailing.dataInicial }" pattern="dd/MM/yyyy" />" />
-				<button type="button" onclick="limpaData(dataInicial)">Limpa</button>
+				<button type="button" onclick="resetDatePicker(dataInicial)">Limpa</button>
 			</td>
 		</tr>
 		<tr class="dataToolTip">
@@ -39,7 +39,7 @@
 			<td align="right"><input id="dataFinal" class="campoData"
 				name="mailing.dataFinal"
 				value="<joda:format value="${mailing.dataFinal }" pattern="dd/MM/yyyy" />" />
-				<button type="button" onclick="limpaData(dataFinal)">Limpa</button>
+				<button type="button" onclick="resetDatePicker(dataFinal)">Limpa</button>
 			</td>
 		</tr>
 		<tr>

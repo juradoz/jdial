@@ -22,7 +22,7 @@
 			<td><joda:format value="${mailing.dataFinal }"
 					pattern="dd/MM/yyyy" /></td>
 			<td><button type="submit"
-					onclick="ajaxAtivarDesativar(this,${mailing.id}, "<c:url value="/mailing/ajaxAtivarDesativar"/>")">${mailing.ativo?'Desativar':'Ativar'}</button></td>
+					onclick="ajaxAtivarDesativarMailing(this,${mailing.id},'<c:url value="/mailing/ajaxAtivarDesativar"/>')">${mailing.ativo?'Desativar':'Ativar'}</button></td>
 			<td><form action="<c:url value="/mailing/${mailing.id }"/>">
 					<button type="submit">Editar</button>
 				</form></td>
