@@ -130,14 +130,14 @@ ul.topnav li a {
 }
 
 ul.topnav li a:hover {
-	background: url(../imagens/topnav_hover.gif) no-repeat center top;
+	background: url(../images/topnav_hover.gif) no-repeat center top;
 }
 
 ul.topnav li span { /*--Drop down trigger styles--*/
 	width: 17px;
 	height: 35px;
 	float: left;
-	background: url(../imagens/subnav_btn.gif) no-repeat center top;
+	background: url(../images/subnav_btn.gif) no-repeat center top;
 }
 
 ul.topnav li span.subhover {
@@ -171,14 +171,14 @@ ul.topnav li ul.subnav li {
 html ul.topnav li ul.subnav li a {
 	float: left;
 	width: 145px;
-	background: #333 url(../imagens/dropdown_linkbg.gif) no-repeat 10px
+	background: #333 url(../images/dropdown_linkbg.gif) no-repeat 10px
 		center;
 	padding-left: 20px;
 }
 
 html ul.topnav li ul.subnav li a:hover {
 	/*--Hover effect for subnav links--*/
-	background: #222 url(../imagens/dropdown_linkbg.gif) no-repeat 10px
+	background: #222 url(../images/dropdown_linkbg.gif) no-repeat 10px
 		center;
 }
 

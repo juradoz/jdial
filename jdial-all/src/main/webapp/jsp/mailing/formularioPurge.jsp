@@ -10,7 +10,7 @@
 	<table>
 		<tr>
 			<td>Arquivo: <input name="file" type="file" /></td>
-			<td><input type="submit" /></td>
+			<td><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 

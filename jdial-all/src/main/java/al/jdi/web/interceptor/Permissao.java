@@ -9,5 +9,6 @@ import al.jdi.dao.model.Usuario.TipoPerfil;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permissao {
-  @Nonbinding TipoPerfil[] value();
+  @Nonbinding
+  TipoPerfil[] value();
 }

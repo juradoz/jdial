@@ -15,7 +15,7 @@
 				value="${grupo.descricao}" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><input type="submit" /></td>
+			<td colspan="2" align="right"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>

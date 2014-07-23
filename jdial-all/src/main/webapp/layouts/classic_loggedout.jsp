@@ -12,6 +12,7 @@
 	href="<c:url value="/css/frame.css"/>" />
 <link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
+<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body id="corpo">
@@ -24,20 +25,11 @@
 		<div id="login">
 			<tiles:insertAttribute name="conteudo" />
 		</div>
-		<c:if test="${not empty errors}">
-			<div id="errors">
-				<ul>
-					<c:forEach items="${errors}" var="error">
-						<li>${error }</li>
-					</c:forEach>
-				</ul>
-			</div>
-		</c:if>
+		<tiles:insertAttribute name="errors" />
 		<div id="rodape">
 			<tiles:insertAttribute name="rodape" />
 		</div>
 	</div>
-	<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script type="text/javascript"
 		src="<c:url value="/js/jquery-ui.min.js"/>"></script>
 	<script>

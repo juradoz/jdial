@@ -14,7 +14,7 @@ Selecione uma campanha para visualizar seus mailings
 			<td>${campanha.descricao }</td>
 			<td><form
 					action="<c:url value="/mailing/campanha/${campanha.id}"/>">
-					<input type="submit" value="Ver Mailings..." />
+					<button type="submit">Ver Mailings...</button>
 				</form></td>
 		</tr>
 	</c:forEach>

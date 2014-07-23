@@ -15,6 +15,7 @@
 	href="<c:url value="/css/frame.css"/>" />
 <link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
+<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 </head>
 <body id="corpo">
 	<div id="geral">
@@ -34,14 +35,13 @@
 			</div>
 			<div id="sub-conteudo">
 				<tiles:insertAttribute name="conteudo" />
+				<tiles:insertAttribute name="errors" />
 			</div>
 		</div>
-
 		<div id="rodape">
 			<tiles:insertAttribute name="rodape" />
 		</div>
 	</div>
-	<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script type="text/javascript"
 		src="<c:url value="/js/jquery-ui.min.js"/>"></script>
 	<script type="text/javascript">

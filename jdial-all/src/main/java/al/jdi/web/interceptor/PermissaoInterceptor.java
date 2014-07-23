@@ -1,72 +1,75 @@
 package al.jdi.web.interceptor;
 
-import javax.enterprise.context.SessionScoped;
+import static java.util.Arrays.asList;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 
 import al.jdi.dao.model.Usuario;
-import al.jdi.dao.model.Usuario.TipoPerfil;
 import al.jdi.web.controller.ExibidorAcessoNegado;
 import al.jdi.web.controller.MenuController;
 import al.jdi.web.session.UsuarioAutenticadoSession;
+import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.controller.ControllerInstance;
 import br.com.caelum.vraptor.controller.ControllerMethod;
-import br.com.caelum.vraptor.interceptor.AcceptsWithAnnotations;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 import br.com.caelum.vraptor.view.Results;
 
 @Intercepts
-@AcceptsWithAnnotations(Permissao.class)
-@SessionScoped
+@RequestScoped
 public class PermissaoInterceptor {
 
   private final UsuarioAutenticadoSession usuarioAutenticado;
   private final Result result;
 
+  @Deprecated
+  public PermissaoInterceptor() {
+    this(null, null);
+  }
+
+  @Inject
   public PermissaoInterceptor(UsuarioAutenticadoSession usuarioAutenticado, Result result) {
     this.usuarioAutenticado = usuarioAutenticado;
     this.result = result;
   }
 
+  @Accepts
+  public boolean accepts(ControllerMethod method) {
+    return method.getController().getType().isAnnotationPresent(Permissao.class)
+        || method.containsAnnotation(Permissao.class);
+  }
+
   @AroundCall
-  public void intercept(SimpleInterceptorStack stack, ControllerMethod method,
-      ControllerInstance instance) {
+  public void intercept(SimpleInterceptorStack stack, ControllerMethod method) {
+    Permissao controllerPermission =
+        method.getController().getType().getAnnotation(Permissao.class);
+    Permissao methodPermission = method.getMethod().getAnnotation(Permissao.class);
 
-    if (isExistePermissao(instance.getClass().getAnnotation(Permissao.class))) {
-      stack.next();
-      return;
-    }
-
-
-    if (isExistePermissao(method.getMethod().getAnnotation(Permissao.class))) {
+    if (hasPermission(controllerPermission) && hasPermission(methodPermission)) {
       stack.next();
       return;
     }
 
     try {
       result.use(Results.logic())
-          .forwardTo(instance.getController().getClass().asSubclass(ExibidorAcessoNegado.class))
+          .redirectTo(method.getController().getType().asSubclass(ExibidorAcessoNegado.class))
           .acessoNegado();
     } catch (ClassCastException e) {
-      result.use(Results.logic()).forwardTo(MenuController.class).acessoNegado();
+      result.use(Results.logic()).redirectTo(MenuController.class).acessoNegado();
     }
   }
 
-  private boolean isExistePermissao(Permissao permissaoList) {
+  private boolean hasPermission(Permissao permissao) {
     Usuario user = usuarioAutenticado.getUsuario();
-
     if (user == null)
+      return false;
+
+    if (permissao == null)
       return true;
 
-    if (permissaoList == null)
-      return true;
-
-    for (TipoPerfil perfil : permissaoList.value())
-      if (perfil.equals(user.getTipoPerfil()))
-        return true;
-
-    return false;
+    return asList(permissao.value()).contains(user.getTipoPerfil());
   }
 
 }

@@ -12,16 +12,16 @@
 			<td>${grupo.codigo }</td>
 			<td>${grupo.descricao }</td>
 			<td><form action="<c:url value="/grupo/${grupo.id}"/>">
-					<input type="submit" value="Editar" />
+					<button type="submit">Editar</button>
 				</form></td>
 			<td><form method="post"
 					action="<c:url value="/grupo/${grupo.id}"/>"
 					onsubmit="return confirm('Tem certeza???');">
-					<input type="submit" value="Remover" method="DELETE" />
+					<button type="submit" name="_method" value="DELETE">Remover</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post" action="<c:url value="/grupo"/>">
-	<input type="submit" value="Novo..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>
