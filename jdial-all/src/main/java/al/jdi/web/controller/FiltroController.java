@@ -13,7 +13,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Filtro;
 import al.jdi.dao.model.Mailing;
-import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
+import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
 import br.com.caelum.vraptor.Get;

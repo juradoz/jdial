@@ -2,7 +2,7 @@ package al.jdi.web.controller;
 
 import javax.inject.Inject;
 
-import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
+import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;

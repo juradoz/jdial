@@ -7,7 +7,8 @@
 	<table>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select class="selectmenu" name="mailing.campanha.id">
+			<td align="right"><select class="selectmenu"
+				name="mailing.campanha.id">
 					<c:forEach var="campanha" items="${campanhaList}">
 						<option value="${campanha.id}"
 							<c:if test="${mailing.campanha.id == campanha.id}">selected="true"</c:if>>
@@ -30,7 +31,7 @@
 			<td align="right"><input id="dataInicial" class="campoData"
 				name="mailing.dataInicial"
 				value="<joda:format value="${mailing.dataInicial }" pattern="dd/MM/yyyy" />" />
-				<button type="button" onclick="limpaData(dataInicial)">Limpa</button>
+				<button type="button" onclick="resetDatePicker(dataInicial)">Limpa</button>
 			</td>
 		</tr>
 		<tr class="dataToolTip">
@@ -38,7 +39,7 @@
 			<td align="right"><input id="dataFinal" class="campoData"
 				name="mailing.dataFinal"
 				value="<joda:format value="${mailing.dataFinal }" pattern="dd/MM/yyyy" />" />
-				<button type="button" onclick="limpaData(dataFinal)">Limpa</button>
+				<button type="button" onclick="resetDatePicker(dataFinal)">Limpa</button>
 			</td>
 		</tr>
 		<tr>
@@ -51,17 +52,4 @@
 		</tr>
 	</table>
 </form>
-<script type="text/javascript">
-	$(function() {
-		$(".campoData").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true
-		});
-		$(".dataToolTip").tooltip();
-	});
-
-	function limpaData(ref) {
-		$(ref).datepicker("setDate", null);
-	}
 </script>

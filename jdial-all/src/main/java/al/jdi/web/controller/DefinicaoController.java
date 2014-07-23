@@ -11,7 +11,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 import al.jdi.dao.model.Usuario.TipoPerfil;
-import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
+import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
