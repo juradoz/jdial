@@ -227,7 +227,7 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
       return Collections.<Cliente>emptyList();
 
     String hql =
-        "select Cliente.idCliente from Cliente "
+        "select distinct Cliente.idCliente from Cliente "
             + "  inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente and InformacaoCliente.nomeBase = :nomeBase "
             + "  inner join %s.DetCampanha on InformacaoCliente.chave = %s.DetCampanha.Codigo "
             + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente "
@@ -282,7 +282,7 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
       return Collections.<Cliente>emptyList();
 
     String hql =
-        "select Cliente.idCliente from Cliente "
+        "select distinct Cliente.idCliente from Cliente "
             + "inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente and InformacaoCliente.nomeBase = :nomeBase "
             + "left join Agendamento on Cliente.idCliente = Agendamento.idCliente "
             + "inner join %s.DetCampanha on InformacaoCliente.chave = %s.DetCampanha.Codigo "

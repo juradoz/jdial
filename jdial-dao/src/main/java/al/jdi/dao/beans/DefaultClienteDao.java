@@ -102,7 +102,7 @@ class DefaultClienteDao implements ClienteDao {
       return Collections.<Cliente>emptyList();
 
     String hql =
-        "select Cliente.idCliente from Cliente "
+        "select distinct Cliente.idCliente from Cliente "
             + "  inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente"
             + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
             + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente "
@@ -166,7 +166,7 @@ class DefaultClienteDao implements ClienteDao {
       return Collections.<Cliente>emptyList();
 
     String hql =
-        "select Cliente.idCliente from Cliente "
+        "select distinct Cliente.idCliente from Cliente "
             + "inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente "
             + "left join Agendamento on Cliente.idCliente = Agendamento.idCliente "
             + "inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
