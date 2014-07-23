@@ -1,14 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
-<script>
-	$(function() {
-		$(".campoData").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true
-		});
-	});
-</script>
 <h1>Mailing</h1>
 <form action="${formAction}" method="post">
 	<input type="hidden" name="mailing.id" value="${mailing.id}" />
@@ -36,16 +27,18 @@
 		</tr>
 		<tr>
 			<td>Data Inicial:</td>
-			<td align="right"><input class="campoData"
+			<td align="right"><input id="dataInicial" class="campoData"
 				name="mailing.dataInicial"
 				value="<joda:format value="${mailing.dataInicial }" pattern="dd/MM/yyyy" />" />
+				<button type="button" onclick="limpaData(dataInicial)">Limpa</button>
 				Formato: DD/MM/YYYY</td>
 		</tr>
 		<tr>
 			<td>Data Final:</td>
-			<td align="right"><input class="campoData"
+			<td align="right"><input id="dataFinal" class="campoData"
 				name="mailing.dataFinal"
 				value="<joda:format value="${mailing.dataFinal }" pattern="dd/MM/yyyy" />" />
+				<button type="button" onclick="limpaData(dataFinal)">Limpa</button>
 				Formato: DD/MM/YYYY</td>
 		</tr>
 		<tr>
@@ -58,3 +51,16 @@
 		</tr>
 	</table>
 </form>
+<script type="text/javascript">
+	$(function() {
+		$(".campoData").datepicker({
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true
+		});
+	});
+
+	function limpaData(ref) {
+		$(ref).datepicker("setDate", null);
+	}
+</script>
