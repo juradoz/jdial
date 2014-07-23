@@ -22,7 +22,7 @@
 			<td><joda:format value="${mailing.dataFinal }"
 					pattern="dd/MM/yyyy" /></td>
 			<td><button type="submit"
-					onclick="ajaxAtivarDesativar(this,${mailing.id})">${mailing.ativo?'Desativar':'Ativar'}</button></td>
+					onclick="ajaxAtivarDesativar(this,${mailing.id}, "<c:url value="/mailing/ajaxAtivarDesativar"/>")">${mailing.ativo?'Desativar':'Ativar'}</button></td>
 			<td><form action="<c:url value="/mailing/${mailing.id }"/>">
 					<button type="submit">Editar</button>
 				</form></td>
@@ -41,18 +41,3 @@
 <form method="post" action="<c:url value="/mailing"/>">
 	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>
-<script type="text/javascript">
-	function ajaxAtivarDesativar(ref, id, mailing) {
-		$.post("<c:url value="/mailing/ajaxAtivarDesativar"/>", {
-			'mailing.id' : id
-		}, function(dados, status) {
-			if (status == "success") {
-				alert("Sucesso!");
-				// $("span", ref).text(dados);
-				$(ref).button("option", "label", dados);
-			} else {
-				alert("Erro!");
-			}
-		});
-	}
-</script>

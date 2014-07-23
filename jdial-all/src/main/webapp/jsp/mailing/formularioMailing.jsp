@@ -7,7 +7,8 @@
 	<table>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select class="selectmenu" name="mailing.campanha.id">
+			<td align="right"><select class="selectmenu"
+				name="mailing.campanha.id">
 					<c:forEach var="campanha" items="${campanhaList}">
 						<option value="${campanha.id}"
 							<c:if test="${mailing.campanha.id == campanha.id}">selected="true"</c:if>>
@@ -51,17 +52,4 @@
 		</tr>
 	</table>
 </form>
-<script type="text/javascript">
-	$(function() {
-		$(".campoData").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true
-		});
-		$(".dataToolTip").tooltip();
-	});
-
-	function limpaData(ref) {
-		$(ref).datepicker("setDate", null);
-	}
 </script>

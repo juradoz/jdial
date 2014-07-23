@@ -12,10 +12,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><tiles:getAsString name="title" /></title>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/frame.css"/>" />
+	href="<c:url value="/css/css.css"/>" />
 <link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
-<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 </head>
 <body id="corpo">
 	<div id="geral">
@@ -42,34 +41,10 @@
 			<tiles:insertAttribute name="rodape" />
 		</div>
 	</div>
+	<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 	<script type="text/javascript"
 		src="<c:url value="/js/jquery-ui.min.js"/>"></script>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$(":button").button({width: 200});
-			$(".selectmenu").selectmenu({width: 200});
-
-			$("ul.subnav").parent().append("<span></span>"); //Only shows drop down trigger when js is enabled - Adds empty span tag after ul.subnav
-
-			$("ul.topnav li span").click(function() { //When trigger is clicked...
-
-				//Following events are applied to the subnav itself (moving subnav up and down)
-				$(this).parent().find("ul.subnav").slideDown('fast').show(); //Drop down the subnav on click
-
-				$(this).parent().hover(function() {
-				}, function() {
-					$(this).parent().find("ul.subnav").slideUp('slow'); //When the mouse hovers out of the subnav, move it back up
-				});
-
-				//Following events are applied to the trigger (Hover events for the trigger)
-			}).hover(function() {
-				$(this).addClass("subhover"); //On hover over, add class "subhover"
-			}, function() { //On Hover Out
-				$(this).removeClass("subhover"); //On hover out, remove class "subhover"
-			});
-
-		});
-	</script>
+	<script type="text/javascript" src="<c:url value="/js/scripts.js"/>"></script>
 </body>
 </html>
 </compress:html>
