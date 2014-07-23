@@ -53,7 +53,6 @@ public class AdminController {
   @Public
   public void login() {}
 
-  @LogAcesso
   public void logout() {
     usuarioAutenticado.setUsuario(null);
     result.use(Results.logic()).redirectTo(AdminController.class).login();

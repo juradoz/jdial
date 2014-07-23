@@ -55,6 +55,11 @@ public class DBLogInterceptor {
 
   @AfterCall
   public void afterCall() {
+    if (usuarioAutenticadoSession.getUsuario() == null) {
+      logger.debug("No user logged to session.");
+      return;
+    }
+
     logger.info("Usuario {}: {}/{}({})", usuarioAutenticadoSession.getUsuario(), method
         .getController().getType().getSimpleName(), method.getMethod().getName(),
         StringUtils.join(methodInfo.getParametersValues()));

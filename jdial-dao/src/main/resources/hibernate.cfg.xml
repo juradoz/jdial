@@ -55,5 +55,6 @@
 		<mapping class="al.jdi.dao.model.Servico" />
 		<mapping class="al.jdi.dao.model.Telefone" />
 		<mapping class="al.jdi.dao.model.Usuario" />
+		<mapping class="al.jdi.dao.model.WebLog" />
 	</session-factory>
 </hibernate-configuration>
