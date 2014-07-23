@@ -13,7 +13,7 @@
 			<td>${campanha.descricao }</td>
 			<td><form
 					action="<c:url value="/definicao/campanhas/${campanha.id }"/>">
-					<input type="submit" value="Definição..." />
+					<button type="submit">Definição...</button>
 				</form></td>
 		</tr>
 	</c:forEach>

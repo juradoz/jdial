@@ -11,7 +11,7 @@
 				id="senha" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center"><input type="submit"></td>
+			<td colspan="2" align="center"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>

@@ -13,15 +13,16 @@
 			<td>${definicao.propriedade }</td>
 			<td>${definicao.valor }</td>
 			<td><form action="<c:url value="/definicao/${definicao.id}"/>">
-					<input type="submit" value="Editar" />
+					<button type="submit">Editar</button>
 				</form></td>
 			<td><form method="post"
-					action="<c:url value="/definicao/${definicao.id}"/>">
-					<input type="submit" value="Remover" method="DELETE" />
+					action="<c:url value="/definicao/${definicao.id}"/>"
+					onsubmit="return confirm('Tem certeza???');">
+					<button type="submit" name="_method" value="DELETE">Remover</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post" action="<c:url value="/definicao/${campanha.id}"/>">
-	<input type="submit" value="Nova..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Nova...</button>
 </form>

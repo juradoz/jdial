@@ -15,13 +15,14 @@
 			<td>${mailing.descricao }</td>
 			<td>${mailing.nome }</td>
 			<td><form method="post"
-					action="<c:url value="/filtro/${filtro.id}/mailing/${mailing.id }"/>">
-					<input type="submit" value="Remover" method="DELETE" />
+					action="<c:url value="/filtro/${filtro.id}/mailing/${mailing.id }"/>"
+					onsubmit="return confirm('Tem certeza???');">
+					<button type="submit" name="_method" value="DELETE">Remover</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post"
 	action="<c:url value="/filtro/${filtro.id}/mailing"/>">
-	<input type="submit" value="Novo..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>

@@ -20,19 +20,19 @@
 			<td>${filtro.campanha.descricao }</td>
 			<td><form
 					action="<c:url value="/filtro/${filtro.id}/mailings"/>">
-					<input type="submit" value="Mailings" />
+					<button type="submit">Mailings</button>
 				</form></td>
 			<td><form action="<c:url value="/filtro/${filtro.id}"/>">
-					<input type="submit" value="Alterar" />
+					<button type="submit">Alterar</button>
 				</form></td>
 			<td><form method="post"
 					action="<c:url value="/filtro/${filtro.id}"/>"
 					onsubmit="return confirm('Tem certeza???');">
-					<input type="submit" value="Remover" method="DELETE" />
+					<button type="submit" name="_method" value="DELETE">Remover</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post" action="<c:url value="/filtro"/>">
-	<input type="submit" value="Novo..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>

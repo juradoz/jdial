@@ -12,7 +12,6 @@
 	href="<c:url value="/css/frame.css"/>" />
 <link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
-<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body id="corpo">
@@ -38,6 +37,12 @@
 			<tiles:insertAttribute name="rodape" />
 		</div>
 	</div>
+	<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
+	<script type="text/javascript"
+		src="<c:url value="/js/jquery-ui.min.js"/>"></script>
+	<script>
+		$(":button").button();
+	</script>
 </body>
 </html>
 </compress:html>
