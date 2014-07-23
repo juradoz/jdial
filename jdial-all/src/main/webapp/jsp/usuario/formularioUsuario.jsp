@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<td>Grupo:</td>
-			<td align="right"><select name="usuario.tipoPerfil">
+			<td align="right"><select class="selectmenu" name="usuario.tipoPerfil">
 					<c:forEach var="tipoPerfil" items="${tiposPerfil }">
 						<option value="${tipoPerfil}"
 							<c:if test="${usuario.tipoPerfil == tipoPerfil }">selected="true"</c:if>>

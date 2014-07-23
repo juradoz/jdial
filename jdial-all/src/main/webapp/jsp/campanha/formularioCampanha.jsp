@@ -22,7 +22,7 @@
 		</tr>
 		<tr>
 			<td>Grupo:</td>
-			<td align="right"><select name="campanha.grupo.id">
+			<td align="right"><select class="selectmenu" name="campanha.grupo.id">
 					<c:forEach var="grupo" items="${grupos}">
 						<option value="${grupo.id}"
 							<c:if test="${campanha.grupo.id == grupo.id}">selected="true"</c:if>>
@@ -32,7 +32,7 @@
 		</tr>
 		<tr>
 			<td>Rota:</td>
-			<td align="right"><select name="campanha.rota.id">
+			<td align="right"><select class="selectmenu" name="campanha.rota.id">
 					<c:forEach var="rota" items="${rotas}">
 						<option value="${rota.id}"
 							<c:if test="${campanha.rota.id == rota.id}">selected="true"</c:if>>
@@ -42,7 +42,7 @@
 		</tr>
 		<tr>
 			<td>Serviço:</td>
-			<td align="right"><select name="campanha.servico.id">
+			<td align="right"><select class="selectmenu" name="campanha.servico.id">
 					<c:forEach var="servico" items="${servicos}">
 						<option value="${servico.id}"
 							<c:if test="${campanha.servico.id == servico.id}">selected="true"</c:if>>

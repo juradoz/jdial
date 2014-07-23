@@ -47,6 +47,7 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$(":button").button();
+			$(".selectmenu").selectmenu();
 
 			$("ul.subnav").parent().append("<span></span>"); //Only shows drop down trigger when js is enabled - Adds empty span tag after ul.subnav
 

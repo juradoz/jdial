@@ -111,6 +111,7 @@ ul.topnav {
 	float: left;
 	width: 100%;
 	font-size: 1.2em;
+	z-index:1000;
 }
 
 ul.topnav li {

@@ -7,7 +7,7 @@
 	<table>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select name="mailing.campanha.id">
+			<td align="right"><select class="selectmenu" name="mailing.campanha.id">
 					<c:forEach var="campanha" items="${campanhaList}">
 						<option value="${campanha.id}"
 							<c:if test="${mailing.campanha.id == campanha.id}">selected="true"</c:if>>

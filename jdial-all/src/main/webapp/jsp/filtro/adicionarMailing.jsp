@@ -4,7 +4,7 @@
 	<table>
 		<tr>
 			<td>Mailings ativos:</td>
-			<td align="right"><select name="mailing.id">
+			<td align="right"><select class="selectmenu" name="mailing.id">
 					<c:forEach var="mailing" items="${mailingList}">
 						<option value="${mailing.id}">${mailing.id}-
 							${mailing.nome}</option>

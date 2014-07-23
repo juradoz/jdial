@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select name="filtro.campanha.id">
+			<td align="right"><select class="selectmenu" name="filtro.campanha.id">
 					<c:forEach var="campanha" items="${campanhas}">
 						<option value="${campanha.id}"
 							<c:if test="${filtro.campanha.id == campanha.id}">selected="true"</c:if>>
