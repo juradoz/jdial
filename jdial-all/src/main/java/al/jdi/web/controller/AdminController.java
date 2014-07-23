@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
 import al.jdi.web.interceptor.AuthInterceptor.Public;
-import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
+import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.session.UsuarioAutenticadoSession;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Path;
