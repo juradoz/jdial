@@ -10,13 +10,9 @@
 <head>
 <link type="text/css" rel="stylesheet"
 	href="<c:url value="/css/frame.css"/>" />
-<link type="text/css"
-	href="<c:url value="/css/trontastic/jquery-ui-1.8.1.custom.css"/>"
+<link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
-<script type="text/javascript"
-	src="<c:url value="/js/jquery-1.4.2.min.js"/>"></script>
-<script type="text/javascript"
-	src="<c:url value="/js/jquery-ui-1.8.1.custom.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body id="corpo">
