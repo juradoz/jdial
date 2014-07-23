@@ -25,21 +25,21 @@
 			<td align="right"><input name="mailing.descricao"
 				value="${mailing.descricao}" /></td>
 		</tr>
-		<tr>
-			<td>Data Inicial:</td>
+		<tr class="dataToolTip">
+			<td><a href="#" title="Formato: DD/MM/YYYY">Data Inicial:</a></td>
 			<td align="right"><input id="dataInicial" class="campoData"
 				name="mailing.dataInicial"
 				value="<joda:format value="${mailing.dataInicial }" pattern="dd/MM/yyyy" />" />
 				<button type="button" onclick="limpaData(dataInicial)">Limpa</button>
-				Formato: DD/MM/YYYY</td>
+			</td>
 		</tr>
-		<tr>
-			<td>Data Final:</td>
+		<tr class="dataToolTip">
+			<td><a href="#" title="Formato: DD/MM/YYYY">Data Final:</a></td>
 			<td align="right"><input id="dataFinal" class="campoData"
 				name="mailing.dataFinal"
 				value="<joda:format value="${mailing.dataFinal }" pattern="dd/MM/yyyy" />" />
 				<button type="button" onclick="limpaData(dataFinal)">Limpa</button>
-				Formato: DD/MM/YYYY</td>
+			</td>
 		</tr>
 		<tr>
 			<td>Ativo:</td>
@@ -58,6 +58,7 @@
 			changeMonth : true,
 			changeYear : true
 		});
+		$(".dataToolTip").tooltip();
 	});
 
 	function limpaData(ref) {
