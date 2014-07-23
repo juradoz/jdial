@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Expurgo de Mailing</h1>
 <h3>Id: ${mailing.id }</h3>
 <h3>Nome: ${mailing.nome }</h3>
@@ -11,7 +10,7 @@
 	<table>
 		<tr>
 			<td>Arquivo: <input name="file" type="file" /></td>
-			<td><jurado:botaoSubmit /></td>
+			<td><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 

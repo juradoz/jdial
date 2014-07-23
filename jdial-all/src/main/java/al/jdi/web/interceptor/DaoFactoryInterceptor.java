@@ -1,5 +1,6 @@
 package al.jdi.web.interceptor;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import al.jdi.dao.beans.DaoFactory;
@@ -8,6 +9,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 
 @Intercepts
+@RequestScoped
 public class DaoFactoryInterceptor {
 
   private final DaoFactory daoFactory;

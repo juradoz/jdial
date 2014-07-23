@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Campanhas</h1>
 <table>
 	<thead>
@@ -25,20 +24,22 @@
 				<c:if test="${campanha.filtroAtivo}">checked="true"</c:if>></td>
 			<td>${campanha.codigoFiltro }</td>
 			<td><form action="<c:url value="/campanha/${campanha.id}"/>">
-					<jurado:botaoSubmit value="Alterar" />
+					<button type="submit">Alterar</button>
 				</form></td>
-			<c:if test="${usuario.tipoPerfil } == ADMINISTRADOR">
+			<c:if
+				test="${usuarioAutenticadoSession.usuario.tipoPerfil == 'ADMINISTRADOR' }">
 				<td><form method="post"
 						action="<c:url value="/campanha/${campanha.id}"/>"
 						onsubmit="return confirm('Tem certeza???');">
-						<jurado:botaoSubmit value="Remover" method="DELETE" />
+						<button type="submit" name="_method" value="DELETE">Remover</button>
 					</form></td>
 			</c:if>
 		</tr>
 	</c:forEach>
 </table>
-<c:if test="${usuario.tipoPerfil } == ADMINISTRADOR">
+<c:if
+	test="${usuarioAutenticadoSession.usuario.tipoPerfil == 'ADMINISTRADOR' }">
 	<form method="post" action="<c:url value="/campanha"/>">
-		<jurado:botaoSubmit value="Novo..." method="PUT" />
+		<button type="submit" name="_method" value="PUT">Nova...</button>
 	</form>
 </c:if>

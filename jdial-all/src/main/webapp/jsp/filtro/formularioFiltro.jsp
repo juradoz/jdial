@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>
 	Filtro:
 	<c:choose>
@@ -28,7 +27,7 @@
 		</tr>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select name="filtro.campanha.id">
+			<td align="right"><select class="selectmenu" name="filtro.campanha.id">
 					<c:forEach var="campanha" items="${campanhas}">
 						<option value="${campanha.id}"
 							<c:if test="${filtro.campanha.id == campanha.id}">selected="true"</c:if>>
@@ -37,7 +36,7 @@
 			</select></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="right"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>

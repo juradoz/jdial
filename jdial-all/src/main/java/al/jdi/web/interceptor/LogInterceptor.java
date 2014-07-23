@@ -7,6 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import al.jdi.dao.beans.DaoFactory;
@@ -23,6 +24,7 @@ import br.com.caelum.vraptor.interceptor.AcceptsWithAnnotations;
 
 // @Intercepts(after = DaoFactoryInterceptor.class)
 @AcceptsWithAnnotations(LogAcesso.class)
+@RequestScoped
 public class LogInterceptor {
 
   @Retention(RetentionPolicy.RUNTIME)

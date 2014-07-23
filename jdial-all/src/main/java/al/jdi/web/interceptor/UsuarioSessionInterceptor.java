@@ -1,5 +1,6 @@
 package al.jdi.web.interceptor;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import al.jdi.web.session.UsuarioAutenticadoSession;
@@ -9,6 +10,7 @@ import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.Result;
 
 @Intercepts
+@RequestScoped
 public class UsuarioSessionInterceptor {
   private final Result result;
   private final UsuarioAutenticadoSession usuarioAutenticadoSession;

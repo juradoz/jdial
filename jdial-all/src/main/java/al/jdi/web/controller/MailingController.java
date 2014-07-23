@@ -24,6 +24,8 @@ import al.jdi.dao.model.Usuario.TipoPerfil;
 import al.jdi.web.interceptor.LogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
+import br.com.caelum.vraptor.Delete;
+import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Put;
@@ -61,6 +63,7 @@ public class MailingController {
     result.use(Results.logic()).redirectTo(MailingController.class).formularioMailing("add", null);
   }
 
+  @Post
   @LogAcesso
   public void ajaxAtivarDesativar(Mailing mailing) {
     mailing = daoFactory.getMailingDao().procura(mailing.getId());
@@ -80,7 +83,8 @@ public class MailingController {
   }
 
   @LogAcesso
-  @Post
+  @Delete
+  @Path("/mailing/{mailing.id}")
   public void delete(Mailing mailing) {
     mailing = daoFactory.getMailingDao().procura(mailing.getId());
     daoFactory.getMailingDao().remove(mailing);
@@ -96,6 +100,8 @@ public class MailingController {
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
 
+  @Get
+  @Path("mailing/{mailing.id}")
   public void editar(Mailing mailing) {
     mailing = daoFactory.getMailingDao().procura(mailing.getId());
     result.use(Results.logic()).forwardTo(MailingController.class)
@@ -109,6 +115,8 @@ public class MailingController {
     result.include("mailing", mailing);
   }
 
+  @Get
+  @Path("/mailing/purge/{mailing.id}")
   public void formularioPurge(Mailing mailing) {
     mailing = daoFactory.getMailingDao().procura(mailing.getId());
     result.include("mailing", mailing);

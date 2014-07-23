@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <form action="admin/logar" method="post">
 	<table align="center">
 		<tr>
@@ -12,7 +11,7 @@
 				id="senha" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="center"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>

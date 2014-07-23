@@ -1,6 +1,6 @@
 @CHARSET "UTF-8";
 
-/* PARTE 2 */
+/* Frames stuff */
 body#corpo {
 	background-color: #D9D9D9;
 	font: 10px verdana;
@@ -11,8 +11,26 @@ div#geral {
 	width: 800px;
 }
 
-/* PARTE 3 */
+div#topo.login {
+	background-color: #FAFAFA;
+	height: 50px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 25px;
+	font-weight: bold;
+	text-align: center;
+}
+
 div#topo {
+	background-color: #FAFAFA;
+	height: 100px;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 60px;
+	font-weight: bold;
+}
+
+div#login {
 	background-color: #FAFAFA;
 	height: 100px;
 	margin-bottom: 5px;
@@ -28,7 +46,6 @@ div#menu {
 	width: 100%;
 }
 
-/* PARTE 4 */
 div#esquerda {
 	float: left;
 	height: 430px;
@@ -52,7 +69,6 @@ div#rodape {
 	text-align: center;
 }
 
-/* PARTE 6 */
 div#conteudo {
 	
 }
@@ -63,7 +79,6 @@ div#info {
 	width: 100%;
 }
 
-/* PARTE 7 */
 div#info,div#menu,div#rodape,div#sub-conteudo,div#topo {
 	border-radius: 8px; /* CSS3 */
 	-khtml-border-radius: 8px; /* Safari() */
@@ -86,4 +101,97 @@ a:hover {
 
 a:active {
 	text-decoration: none
+}
+
+/* Menu Stuff */
+ul.topnav {
+	list-style: none;
+	padding: 0 20px;
+	margin: 0;
+	float: left;
+	width: 100%;
+	font-size: 1.2em;
+	z-index:1000;
+}
+
+ul.topnav li {
+	float: left;
+	margin: 0;
+	padding: 0 15px 0 0;
+	position: relative;
+	/*--Declare X and Y axis base for sub navigation--*/
+}
+
+ul.topnav li a {
+	padding: 10px 5px;
+	color: #fff;
+	display: block;
+	text-decoration: none;
+	float: left;
+}
+
+ul.topnav li a:hover {
+	background: url(../images/topnav_hover.gif) no-repeat center top;
+}
+
+ul.topnav li span { /*--Drop down trigger styles--*/
+	width: 17px;
+	height: 35px;
+	float: left;
+	background: url(../images/subnav_btn.gif) no-repeat center top;
+}
+
+ul.topnav li span.subhover {
+	background-position: center bottom;
+	cursor: pointer;
+} /*--Hover effect for trigger--*/
+ul.topnav li ul.subnav {
+	list-style: none;
+	position: absolute;
+	/*--Important - Keeps subnav from affecting main navigation flow--*/
+	left: 0;
+	top: 35px;
+	background: #333;
+	margin: 0;
+	padding: 0;
+	display: none;
+	float: left;
+	width: 170px;
+	border: 1px solid #111;
+}
+
+ul.topnav li ul.subnav li {
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid #252525; /*--Create bevel effect--*/
+	border-bottom: 1px solid #444; /*--Create bevel effect--*/
+	clear: both;
+	width: 170px;
+}
+
+html ul.topnav li ul.subnav li a {
+	float: left;
+	width: 145px;
+	background: #333 url(../images/dropdown_linkbg.gif) no-repeat 10px
+		center;
+	padding-left: 20px;
+}
+
+html ul.topnav li ul.subnav li a:hover {
+	/*--Hover effect for subnav links--*/
+	background: #222 url(../images/dropdown_linkbg.gif) no-repeat 10px
+		center;
+}
+
+/* Tables stuff */
+thead td {
+	font-weight: bold;
+}
+
+.odd {
+	background-color: #FFFFFF;
+}
+
+.even {
+	background-color: #EAEAEA;
 }

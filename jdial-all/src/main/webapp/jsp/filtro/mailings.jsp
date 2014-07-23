@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Mailings do Filtro ${filtro.codigo } - ${filtro.descricao }</h1>
 <table>
 	<thead>
@@ -16,13 +15,14 @@
 			<td>${mailing.descricao }</td>
 			<td>${mailing.nome }</td>
 			<td><form method="post"
-					action="<c:url value="/filtro/${filtro.id}/mailing/${mailing.id }"/>">
-					<jurado:botaoSubmit value="Remover" method="DELETE" />
+					action="<c:url value="/filtro/${filtro.id}/mailing/${mailing.id }"/>"
+					onsubmit="return confirm('Tem certeza???');">
+					<button type="submit" name="_method" value="DELETE">Remover</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post"
 	action="<c:url value="/filtro/${filtro.id}/mailing"/>">
-	<jurado:botaoSubmit value="Novo..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>

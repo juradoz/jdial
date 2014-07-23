@@ -1,21 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
-<script type="text/javascript">
-	function ajaxAtivarDesativar(ref, id, mailing) {
-		$.post("<c:url value="/mailing/ajaxAtivarDesativar"/>", {
-			'mailing.id' : id
-		}, function(dados, status) {
-			if (status == "success") {
-				alert("Sucesso!");
-				$(ref).val(dados);
-			} else {
-				alert("Erro!");
-			}
-		});
-	}
-</script>
-
 <h1>Mailings</h1>
 <h2>Campanha: ${campanha.nome } - ${campanha.descricao }</h2>
 <table>
@@ -37,25 +21,38 @@
 					pattern="dd/MM/yyyy" /></td>
 			<td><joda:format value="${mailing.dataFinal }"
 					pattern="dd/MM/yyyy" /></td>
-			<td><jurado:botaoSubmit
-					value="${mailing.ativo?'Desativar':'Ativar'}"
-					clickEvent="ajaxAtivarDesativar($(this),${mailing.id})" /></td>
-			<td><form action="<c:url value="/mailing/editar"/>">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Editar" />
+			<td><button type="submit"
+					onclick="ajaxAtivarDesativar(this,${mailing.id})">${mailing.ativo?'Desativar':'Ativar'}</button></td>
+			<td><form action="<c:url value="/mailing/${mailing.id }"/>">
+					<button type="submit">Editar</button>
 				</form></td>
-			<td><form action="<c:url value="/mailing/formularioPurge"/>">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Expurgar" />
+			<td><form
+					action="<c:url value="/mailing/purge/${mailing.id }"/>">
+					<button type="submit">Expurgar</button>
 				</form></td>
-			<td><form action="<c:url value="/mailing/delete"/>"
-					method="post" onsubmit="return confirm('Tem certeza???');">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Apagar" />
+			<td><form method="post"
+					action="<c:url value="/mailing/${mailing.id }"/>" method="post"
+					onsubmit="return confirm('Tem certeza???');">
+					<button type="submit" name="_method" value="DELETE">Apagar</button>
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post" action="<c:url value="/mailing"/>">
-	<jurado:botaoSubmit value="Novo..." method="PUT" />
+	<button type="submit" name="_method" value="PUT">Novo...</button>
 </form>
+<script type="text/javascript">
+	function ajaxAtivarDesativar(ref, id, mailing) {
+		$.post("<c:url value="/mailing/ajaxAtivarDesativar"/>", {
+			'mailing.id' : id
+		}, function(dados, status) {
+			if (status == "success") {
+				alert("Sucesso!");
+				// $("span", ref).text(dados);
+				$(ref).button("option", "label", dados);
+			} else {
+				alert("Erro!");
+			}
+		});
+	}
+</script>

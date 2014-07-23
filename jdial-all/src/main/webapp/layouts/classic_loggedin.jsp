@@ -12,18 +12,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title><tiles:getAsString name="title" /></title>
 <link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/tables.css"/>" />
-<link type="text/css" rel="stylesheet"
 	href="<c:url value="/css/frame.css"/>" />
-<link type="text/css" rel="stylesheet"
-	href="<c:url value="/css/menu.css"/>" />
-<link type="text/css"
-	href="<c:url value="/css/trontastic/jquery-ui-1.8.1.custom.css"/>"
+<link type="text/css" href="<c:url value="/css/jquery-ui.min.css"/>"
 	rel="stylesheet" />
-<script type="text/javascript"
-	src="<c:url value="/js/jquery-1.4.2.min.js"/>"></script>
-<script type="text/javascript"
-	src="<c:url value="/js/jquery-ui-1.8.1.custom.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/jquery.min.js"/>"></script>
 </head>
 <body id="corpo">
 	<div id="geral">
@@ -43,15 +35,19 @@
 			</div>
 			<div id="sub-conteudo">
 				<tiles:insertAttribute name="conteudo" />
+				<tiles:insertAttribute name="errors" />
 			</div>
 		</div>
-
 		<div id="rodape">
 			<tiles:insertAttribute name="rodape" />
 		</div>
 	</div>
+	<script type="text/javascript"
+		src="<c:url value="/js/jquery-ui.min.js"/>"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$(":button").button({width: 200});
+			$(".selectmenu").selectmenu({width: 200});
 
 			$("ul.subnav").parent().append("<span></span>"); //Only shows drop down trigger when js is enabled - Adds empty span tag after ul.subnav
 

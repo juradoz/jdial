@@ -6,6 +6,7 @@
 
 	<definition name="root">
 		<put-attribute name="title" value="Dialer Web" />
+		<put-attribute name="errors" value="/tiles/errors.jsp" />
 	</definition>
 
 	<definition name="classic/loggedout" template="/layouts/classic_loggedout.jsp"
@@ -123,7 +124,7 @@
 		<put-attribute name="title" value="Mailings" />
 	</definition>
 	
-	<definition name="mailing/ativado" template="ajax.jsp">
+	<definition name="mailing/ativado" template="/layouts/ajax.jsp">
 		<put-attribute name="ajax" value="Desativar" />
 	</definition>
 	
@@ -131,7 +132,7 @@
 		<put-attribute name="conteudo" value="/jsp/mailing/campanhas.jsp" />
 	</definition>
 	
-	<definition name="mailing/desativado" template="ajax.jsp">
+	<definition name="mailing/desativado" template="/layouts/ajax.jsp">
 		<put-attribute name="ajax" value="Ativar" />
 	</definition>
 	

@@ -1,15 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
-<script>
-	$(function() {
-		$(".campoData").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true
-		});
-	});
-</script>
 <h1>Mailing</h1>
 <form action="${formAction}" method="post">
 	<input type="hidden" name="mailing.id" value="${mailing.id}" />
@@ -17,7 +7,7 @@
 	<table>
 		<tr>
 			<td>Campanha:</td>
-			<td align="right"><select name="mailing.campanha.id">
+			<td align="right"><select class="selectmenu" name="mailing.campanha.id">
 					<c:forEach var="campanha" items="${campanhaList}">
 						<option value="${campanha.id}"
 							<c:if test="${mailing.campanha.id == campanha.id}">selected="true"</c:if>>
@@ -35,19 +25,21 @@
 			<td align="right"><input name="mailing.descricao"
 				value="${mailing.descricao}" /></td>
 		</tr>
-		<tr>
-			<td>Data Inicial:</td>
-			<td align="right"><input class="campoData"
+		<tr class="dataToolTip">
+			<td><a href="#" title="Formato: DD/MM/YYYY">Data Inicial:</a></td>
+			<td align="right"><input id="dataInicial" class="campoData"
 				name="mailing.dataInicial"
 				value="<joda:format value="${mailing.dataInicial }" pattern="dd/MM/yyyy" />" />
-				Formato: DD/MM/YYYY</td>
+				<button type="button" onclick="limpaData(dataInicial)">Limpa</button>
+			</td>
 		</tr>
-		<tr>
-			<td>Data Final:</td>
-			<td align="right"><input class="campoData"
+		<tr class="dataToolTip">
+			<td><a href="#" title="Formato: DD/MM/YYYY">Data Final:</a></td>
+			<td align="right"><input id="dataFinal" class="campoData"
 				name="mailing.dataFinal"
 				value="<joda:format value="${mailing.dataFinal }" pattern="dd/MM/yyyy" />" />
-				Formato: DD/MM/YYYY</td>
+				<button type="button" onclick="limpaData(dataFinal)">Limpa</button>
+			</td>
 		</tr>
 		<tr>
 			<td>Ativo:</td>
@@ -55,7 +47,21 @@
 				<c:if test="${mailing.ativo}">checked="true"</c:if>></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="right"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>
+<script type="text/javascript">
+	$(function() {
+		$(".campoData").datepicker({
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true
+		});
+		$(".dataToolTip").tooltip();
+	});
+
+	function limpaData(ref) {
+		$(ref).datepicker("setDate", null);
+	}
+</script>

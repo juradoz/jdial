@@ -27,7 +27,7 @@ public class MenuController implements ExibidorAcessoNegado {
   @Override
   public void acessoNegado() {
     result.include("errors", "Acesso negado!");
-    result.use(Results.logic()).forwardTo(MenuController.class).menu();
+    result.use(Results.logic()).redirectTo(MenuController.class).menu();
   }
 
   @Path("/menu")

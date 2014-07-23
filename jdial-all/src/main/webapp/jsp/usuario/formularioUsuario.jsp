@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Usuário</h1>
 <form action="${formAction}" method="post">
 	<input type="hidden" name="usuario.id" value="${usuario.id}" />
@@ -21,7 +20,8 @@
 		</tr>
 		<tr>
 			<td>Grupo:</td>
-			<td align="right"><select name="usuario.tipoPerfil">
+			<td align="right"><select class="selectmenu"
+				name="usuario.tipoPerfil">
 					<c:forEach var="tipoPerfil" items="${tiposPerfil }">
 						<option value="${tipoPerfil}"
 							<c:if test="${usuario.tipoPerfil == tipoPerfil }">selected="true"</c:if>>
@@ -30,7 +30,7 @@
 			</select></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="right"><button type="submit">Enviar</button></td>
 		</tr>
 	</table>
 </form>
