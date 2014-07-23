@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
 <script type="text/javascript">
 	function ajaxAtivarDesativar(ref, id, mailing) {
@@ -37,25 +36,25 @@
 					pattern="dd/MM/yyyy" /></td>
 			<td><joda:format value="${mailing.dataFinal }"
 					pattern="dd/MM/yyyy" /></td>
-			<td><jurado:botaoSubmit
-					value="${mailing.ativo?'Desativar':'Ativar'}"
-					clickEvent="ajaxAtivarDesativar($(this),${mailing.id})" /></td>
+			<td><input type="submit"
+				value="${mailing.ativo?'Desativar':'Ativar'}"
+				clickEvent="ajaxAtivarDesativar($(this),${mailing.id})" /></td>
 			<td><form action="<c:url value="/mailing/editar"/>">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Editar" />
+					<input type="hidden" name="mailing.id" value="${mailing.id }" /> <input
+						type="submit" value="Editar" />
 				</form></td>
 			<td><form action="<c:url value="/mailing/formularioPurge"/>">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Expurgar" />
+					<input type="hidden" name="mailing.id" value="${mailing.id }" /> <input
+						type="submit" value="Expurgar" />
 				</form></td>
 			<td><form action="<c:url value="/mailing/delete"/>"
 					method="post" onsubmit="return confirm('Tem certeza???');">
-					<input type="hidden" name="mailing.id" value="${mailing.id }" />
-					<jurado:botaoSubmit value="Apagar" />
+					<input type="hidden" name="mailing.id" value="${mailing.id }" /> <input
+						type="submit" value="Apagar" />
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post" action="<c:url value="/mailing"/>">
-	<jurado:botaoSubmit value="Novo..." method="PUT" />
+	<input type="submit" value="Novo..." method="PUT" />
 </form>

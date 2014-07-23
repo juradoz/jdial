@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Campanhas</h1>
 <table>
 	<thead>
@@ -25,13 +24,13 @@
 				<c:if test="${campanha.filtroAtivo}">checked="true"</c:if>></td>
 			<td>${campanha.codigoFiltro }</td>
 			<td><form action="<c:url value="/campanha/${campanha.id}"/>">
-					<jurado:botaoSubmit value="Alterar" />
+					<input type="submit" value="Alterar" />
 				</form></td>
 			<c:if test="${usuario.tipoPerfil } == ADMINISTRADOR">
 				<td><form method="post"
 						action="<c:url value="/campanha/${campanha.id}"/>"
 						onsubmit="return confirm('Tem certeza???');">
-						<jurado:botaoSubmit value="Remover" method="DELETE" />
+						<input type="submit" value="Remover" method="DELETE" />
 					</form></td>
 			</c:if>
 		</tr>
@@ -39,6 +38,6 @@
 </table>
 <c:if test="${usuario.tipoPerfil } == ADMINISTRADOR">
 	<form method="post" action="<c:url value="/campanha"/>">
-		<jurado:botaoSubmit value="Novo..." method="PUT" />
+		<input type="submit" value="Novo..." method="PUT" />
 	</form>
 </c:if>

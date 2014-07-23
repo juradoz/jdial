@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Mailings do Filtro ${filtro.codigo } - ${filtro.descricao }</h1>
 <table>
 	<thead>
@@ -17,12 +16,12 @@
 			<td>${mailing.nome }</td>
 			<td><form method="post"
 					action="<c:url value="/filtro/${filtro.id}/mailing/${mailing.id }"/>">
-					<jurado:botaoSubmit value="Remover" method="DELETE" />
+					<input type="submit" value="Remover" method="DELETE" />
 				</form></td>
 		</tr>
 	</c:forEach>
 </table>
 <form method="post"
 	action="<c:url value="/filtro/${filtro.id}/mailing"/>">
-	<jurado:botaoSubmit value="Novo..." method="PUT" />
+	<input type="submit" value="Novo..." method="PUT" />
 </form>

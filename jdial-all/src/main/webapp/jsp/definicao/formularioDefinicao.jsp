@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <form action="${formAction}" method="post">
 	<input type="hidden" name="definicao.id" value="${definicao.id}" /> <input
 		type="hidden" name="campanha.id" value="${campanha.id}" /> <br>
@@ -18,7 +17,7 @@
 				value="${definicao.valor}" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="right"><input type="submit" /></td>
 		</tr>
 	</table>
 </form>

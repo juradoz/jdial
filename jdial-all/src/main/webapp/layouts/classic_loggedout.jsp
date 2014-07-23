@@ -4,7 +4,6 @@
 <%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor"
 	prefix="compress"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <compress:html enabled="true" removeComments="false"
 	compressJavaScript="true" yuiJsDisableOptimizations="true">
 <html>

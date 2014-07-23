@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <h1>Resultados de Ligação</h1>
 Selecione uma campanha para visualizar seus resultados
 <table>
@@ -15,7 +14,7 @@ Selecione uma campanha para visualizar seus resultados
 			<td>${campanha.descricao }</td>
 			<td><form
 					action="<c:url value="/resultadoLigacao/campanha/${campanha.id}"/>">
-					<jurado:botaoSubmit value="Ver Resultados..." />
+					<input type="submit" value="Ver Resultados..." />
 				</form></td>
 		</tr>
 	</c:forEach>

@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="jurado"%>
 <%@taglib prefix="joda" uri="http://www.joda.org/joda/time/tags"%>
 <script>
 	$(function() {
@@ -55,7 +54,7 @@
 				<c:if test="${mailing.ativo}">checked="true"</c:if>></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="right"><jurado:botaoSubmit /></td>
+			<td colspan="2" align="right"><input type="submit" /></td>
 		</tr>
 	</table>
 </form>
