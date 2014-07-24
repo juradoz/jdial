@@ -33,6 +33,7 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>log4j.xml</exclude>
+					<exclude>cti.properties</exclude>
 				</excludes>
 			</resource>
 		</resources>

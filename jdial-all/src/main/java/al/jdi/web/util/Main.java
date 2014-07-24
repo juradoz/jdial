@@ -1,49 +1,53 @@
-package al.jdi.core;
+package al.jdi.web.util;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.jboss.weld.environment.se.events.ContainerInitialized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import al.jdi.common.Service;
 import al.jdi.core.devolveregistro.DevolveRegistroModule.DevolveRegistroService;
 import al.jdi.core.tenant.TenantModule.TenantManagerService;
 import al.jdi.cti.DialerCtiManagerModule.DialerCtiManagerService;
+import br.com.caelum.vraptor.events.VRaptorInitialized;
 
-@Vetoed
 class Main {
 
+  private static Logger logger = LoggerFactory.getLogger(Main.class);
   private final Service devolveRegistroService;
   private final Service dialerCtiManagerService;
   private final Service tenantService;
-  private final ShutdownHook.Factory shutdownHookFactory;
 
   @Inject
   Main(@DevolveRegistroService Service devolveRegistroService,
       @DialerCtiManagerService Service dialerCtiManagerService,
-      @TenantManagerService Service tenantService, ShutdownHook.Factory shutdownHookFactory) {
+      @TenantManagerService Service tenantService) {
     this.devolveRegistroService = devolveRegistroService;
     this.dialerCtiManagerService = dialerCtiManagerService;
     this.tenantService = tenantService;
-    this.shutdownHookFactory = shutdownHookFactory;
   }
 
-  @PostConstruct
-  public void start() {
+  @PreDestroy
+  public void stop() {
+    devolveRegistroService.stop();
+    dialerCtiManagerService.stop();
+    tenantService.stop();
+  }
+
+  public void run(@Observes VRaptorInitialized event) {
     ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
-    Runtime.getRuntime().addShutdownHook(
-        new Thread(shutdownHookFactory.create(devolveRegistroService, dialerCtiManagerService,
-            tenantService), "EventoShutdown"));
-
-    devolveRegistroService.start();
-    dialerCtiManagerService.start();
-    tenantService.start();
+    try {
+      devolveRegistroService.start();
+      dialerCtiManagerService.start();
+      //tenantService.start();
+      logger.warn("JDial Started");
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+    }
   }
-
-  public void run(@Observes ContainerInitialized event) {}
 
 }

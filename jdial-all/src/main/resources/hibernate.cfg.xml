@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!--Localhost -->
+		<property name="hibernate.connection.url">jdbc:mysql://10.10.10.81/DialerAvaya</property>
+		<property name="hibernate.connection.username">discador</property>
+		<property name="hibernate.connection.password">discad0r</property>
+
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+		<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate.generate_statistics">false</property>
+
+		<!-- configuration pool via c3p0 -->
+		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+		<property name="hibernate.c3p0.idle_test_period">5</property> <!-- seconds -->
+		<property name="hibernate.c3p0.max_size">200</property>
+		<property name="hibernate.c3p0.max_statements">0</property>
+		<property name="hibernate.c3p0.min_size">5</property>
+		<property name="hibernate.c3p0.timeout">10</property> <!-- seconds -->
+
+		<!-- configuration cache via ehcache -->
+		<!-- property name="hibernate.cache.region.factory_class">
+			net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property -->
+
+		<mapping class="al.jdi.dao.model.Agendamento" />
+		<mapping class="al.jdi.dao.model.Agente" />
+		<mapping class="al.jdi.dao.model.AreaArea" />
+		<mapping class="al.jdi.dao.model.Campanha" />
+		<mapping class="al.jdi.dao.model.Cliente" />
+		<mapping class="al.jdi.dao.model.Definicao" />
+		<mapping class="al.jdi.dao.model.DefinicaoPadrao" />
+		<mapping class="al.jdi.dao.model.EstadoCliente" />
+		<mapping class="al.jdi.dao.model.Filtro" />
+		<mapping class="al.jdi.dao.model.Grupo" />
+		<mapping class="al.jdi.dao.model.HistoricoCliente" />
+		<mapping class="al.jdi.dao.model.HistoricoLigacao" />
+		<mapping class="al.jdi.dao.model.InformacaoCliente" />
+		<mapping class="al.jdi.dao.model.InformacaoCliente" />
+		<mapping class="al.jdi.dao.model.Log" />
+		<mapping class="al.jdi.dao.model.Mailing" />
+		<mapping class="al.jdi.dao.model.MotivoFinalizacao" />
+		<mapping class="al.jdi.dao.model.RestricaoHorario" />
+		<mapping class="al.jdi.dao.model.ResultadoLigacao" />
+		<mapping class="al.jdi.dao.model.Rota" />
+		<mapping class="al.jdi.dao.model.Servico" />
+		<mapping class="al.jdi.dao.model.Telefone" />
+		<mapping class="al.jdi.dao.model.Usuario" />
+		<mapping class="al.jdi.dao.model.WebLog" />
+	</session-factory>
+</hibernate-configuration>

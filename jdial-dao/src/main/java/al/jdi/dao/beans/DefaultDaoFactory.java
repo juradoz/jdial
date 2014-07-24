@@ -1,6 +1,5 @@
 package al.jdi.dao.beans;
 
-import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 
 import org.hibernate.Query;
@@ -21,7 +20,6 @@ import al.jdi.dao.model.RestricaoHorario;
 import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.WebLog;
 
-@Alternative
 class DefaultDaoFactory implements DaoFactory {
 
   private final Logger logger;

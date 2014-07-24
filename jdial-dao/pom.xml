@@ -91,6 +91,7 @@
 				<directory>src/main/resources</directory>
 				<excludes>
 					<exclude>log4j.xml</exclude>
+					<exclude>hibernate.cfg.xml</exclude>
 				</excludes>
 			</resource>
 		</resources>
