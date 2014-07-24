@@ -7,12 +7,12 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Grupo;
 import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -27,7 +27,7 @@ import br.com.caelum.vraptor.view.Results;
 public class CampanhaController {
 
   private final Result result;
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
 
   @Deprecated
   public CampanhaController() {
@@ -35,15 +35,15 @@ public class CampanhaController {
   }
 
   @Inject
-  public CampanhaController(Result result, DaoFactory daoFactory) {
+  public CampanhaController(Result result, DaoFactoryRequest daoFactoryRequest) {
     this.result = result;
-    this.daoFactory = daoFactory;
+    this.daoFactoryRequest = daoFactoryRequest;
   }
 
   @Permissao(TipoPerfil.ADMINISTRADOR)
   @LogAcesso
   public void add(Campanha campanha) {
-    daoFactory.getCampanhaDao().adiciona(campanha);
+    daoFactoryRequest.get().getCampanhaDao().adiciona(campanha);
     result.use(Results.logic()).redirectTo(CampanhaController.class).list();
   }
 
@@ -60,21 +60,21 @@ public class CampanhaController {
   @Path("/campanha/{campanha.id}")
   @LogAcesso
   public void delete(Campanha campanha) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
-    daoFactory.getCampanhaDao().remove(campanha);
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
+    daoFactoryRequest.get().getCampanhaDao().remove(campanha);
     result.use(Results.logic()).redirectTo(CampanhaController.class).list();
   }
 
   @LogAcesso
   public void edit(Campanha campanha) {
-    daoFactory.getCampanhaDao().atualiza(campanha);
+    daoFactoryRequest.get().getCampanhaDao().atualiza(campanha);
     result.use(Results.logic()).redirectTo(CampanhaController.class).list();
   }
 
   @Get
   @Path("/campanha/{campanha.id}")
   public void editar(Campanha campanha) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     result.use(Results.logic()).forwardTo(CampanhaController.class)
         .formularioCampanha("edit", campanha);
   }
@@ -90,18 +90,18 @@ public class CampanhaController {
   @Get
   @Path("/campanhas")
   public Collection<Campanha> list() {
-    return sort(daoFactory.getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
+    return sort(daoFactoryRequest.get().getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
   }
 
   private Collection<Grupo> listGrupos() {
-    return daoFactory.getGrupoDao().listaTudo();
+    return daoFactoryRequest.get().getGrupoDao().listaTudo();
   }
 
   private Collection<Rota> listRotas() {
-    return daoFactory.getRotaDao().listaTudo();
+    return daoFactoryRequest.get().getRotaDao().listaTudo();
   }
 
   private Collection<Servico> listServicos() {
-    return daoFactory.getServicoDao().listaTudo();
+    return daoFactoryRequest.get().getServicoDao().listaTudo();
   }
 }

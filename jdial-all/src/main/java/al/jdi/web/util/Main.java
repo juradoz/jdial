@@ -43,7 +43,7 @@ class Main {
     try {
       devolveRegistroService.start();
       dialerCtiManagerService.start();
-      //tenantService.start();
+      tenantService.start();
       logger.warn("JDial Started");
     } catch (Exception e) {
       logger.error(e.getMessage(), e);

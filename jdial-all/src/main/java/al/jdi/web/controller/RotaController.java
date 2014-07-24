@@ -4,9 +4,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class RotaController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -29,14 +29,14 @@ public class RotaController {
   }
 
   @Inject
-  public RotaController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public RotaController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void add(Rota rota) {
-    daoFactory.getRotaDao().adiciona(rota);
+    daoFactoryRequest.get().getRotaDao().adiciona(rota);
     result.use(Results.logic()).redirectTo(RotaController.class).list();
   }
 
@@ -50,21 +50,21 @@ public class RotaController {
   @Delete
   @Path("/rota/{rota.id}")
   public void delete(Rota rota) {
-    rota = daoFactory.getRotaDao().procura(rota.getId());
-    daoFactory.getRotaDao().remove(rota);
+    rota = daoFactoryRequest.get().getRotaDao().procura(rota.getId());
+    daoFactoryRequest.get().getRotaDao().remove(rota);
     result.use(Results.logic()).redirectTo(RotaController.class).list();
   }
 
   @LogAcesso
   public void edit(Rota rota) {
-    daoFactory.getRotaDao().atualiza(rota);
+    daoFactoryRequest.get().getRotaDao().atualiza(rota);
     result.use(Results.logic()).redirectTo(RotaController.class).list();
   }
 
   @Get
   @Path("/rota/{rota.id}")
   public void editar(Rota rota) {
-    rota = daoFactory.getRotaDao().procura(rota.getId());
+    rota = daoFactoryRequest.get().getRotaDao().procura(rota.getId());
     result.use(Results.logic()).forwardTo(RotaController.class).formularioRota("edit", rota);
   }
 
@@ -76,6 +76,6 @@ public class RotaController {
   @Get
   @Path("/rotas")
   public Collection<Rota> list() {
-    return daoFactory.getRotaDao().listaTudo();
+    return daoFactoryRequest.get().getRotaDao().listaTudo();
   }
 }

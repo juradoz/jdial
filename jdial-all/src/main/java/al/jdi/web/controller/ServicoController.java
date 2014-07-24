@@ -4,9 +4,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class ServicoController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -29,14 +29,14 @@ public class ServicoController {
   }
 
   @Inject
-  public ServicoController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public ServicoController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void add(Servico servico) {
-    daoFactory.getServicoDao().adiciona(servico);
+    daoFactoryRequest.get().getServicoDao().adiciona(servico);
     result.use(Results.logic()).redirectTo(ServicoController.class).list();
   }
 
@@ -51,21 +51,21 @@ public class ServicoController {
   @Delete
   @Path("/servico/{servico.id}")
   public void delete(Servico servico) {
-    servico = daoFactory.getServicoDao().procura(servico.getId());
-    daoFactory.getServicoDao().remove(servico);
+    servico = daoFactoryRequest.get().getServicoDao().procura(servico.getId());
+    daoFactoryRequest.get().getServicoDao().remove(servico);
     result.use(Results.logic()).redirectTo(ServicoController.class).list();
   }
 
   @LogAcesso
   public void edit(Servico servico) {
-    daoFactory.getServicoDao().atualiza(servico);
+    daoFactoryRequest.get().getServicoDao().atualiza(servico);
     result.use(Results.logic()).redirectTo(ServicoController.class).list();
   }
 
   @Get
   @Path("/servico/{servico.id}")
   public void editar(Servico servico) {
-    servico = daoFactory.getServicoDao().procura(servico.getId());
+    servico = daoFactoryRequest.get().getServicoDao().procura(servico.getId());
     result.use(Results.logic()).forwardTo(ServicoController.class)
         .formularioServico("edit", servico);
   }
@@ -78,6 +78,6 @@ public class ServicoController {
   @Get
   @Path("/servicos")
   public Collection<Servico> list() {
-    return daoFactory.getServicoDao().listaTudo();
+    return daoFactoryRequest.get().getServicoDao().listaTudo();
   }
 }

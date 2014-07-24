@@ -15,12 +15,12 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.TelefoneDao;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Mailing;
 import al.jdi.dao.model.Telefone;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -36,7 +36,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class MailingController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -45,15 +45,16 @@ public class MailingController {
   }
 
   @Inject
-  public MailingController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public MailingController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void add(Mailing mailing) {
-    mailing.setCampanha(daoFactory.getCampanhaDao().procura(mailing.getCampanha().getId()));
-    daoFactory.getMailingDao().adiciona(mailing);
+    mailing.setCampanha(daoFactoryRequest.get().getCampanhaDao()
+        .procura(mailing.getCampanha().getId()));
+    daoFactoryRequest.get().getMailingDao().adiciona(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
 
@@ -66,9 +67,9 @@ public class MailingController {
   @Post
   @LogAcesso
   public void ajaxAtivarDesativar(Mailing mailing) {
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
     mailing.setAtivo(!mailing.isAtivo());
-    daoFactory.getMailingDao().atualiza(mailing);
+    daoFactoryRequest.get().getMailingDao().atualiza(mailing);
     if (mailing.isAtivo())
       result.forwardTo(this).ativado();
     else
@@ -79,15 +80,15 @@ public class MailingController {
   public void ativado() {}
 
   public Collection<Campanha> campanhas() {
-    return sort(daoFactory.getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
+    return sort(daoFactoryRequest.get().getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
   }
 
   @LogAcesso
   @Delete
   @Path("/mailing/{mailing.id}")
   public void delete(Mailing mailing) {
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
-    daoFactory.getMailingDao().remove(mailing);
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
+    daoFactoryRequest.get().getMailingDao().remove(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
 
@@ -96,14 +97,14 @@ public class MailingController {
 
   @LogAcesso
   public void edit(Mailing mailing) {
-    daoFactory.getMailingDao().atualiza(mailing);
+    daoFactoryRequest.get().getMailingDao().atualiza(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
 
   @Get
   @Path("mailing/{mailing.id}")
   public void editar(Mailing mailing) {
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
     result.use(Results.logic()).forwardTo(MailingController.class)
         .formularioMailing("edit", mailing);
   }
@@ -118,17 +119,17 @@ public class MailingController {
   @Get
   @Path("/mailing/purge/{mailing.id}")
   public void formularioPurge(Mailing mailing) {
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
     result.include("mailing", mailing);
   }
 
   @SuppressWarnings("unchecked")
   @Path("/mailing/campanha/{campanha.id}")
   public Collection<Mailing> list(Campanha campanha) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     result.include("campanha", campanha);
-    return sort(daoFactory.getMailingDao().listaTudo(campanha), on(Mailing.class).getId(),
-        reversedComparator(naturalComparator()));
+    return sort(daoFactoryRequest.get().getMailingDao().listaTudo(campanha), on(Mailing.class)
+        .getId(), reversedComparator(naturalComparator()));
   }
 
   @LogAcesso
@@ -144,8 +145,8 @@ public class MailingController {
       return;
     }
 
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
-    TelefoneDao telefoneDao = daoFactory.getTelefoneDao();
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
+    TelefoneDao telefoneDao = daoFactoryRequest.get().getTelefoneDao();
     BufferedReader bw = new BufferedReader(new InputStreamReader(file.getFile()));
     try {
       while (bw.ready()) {

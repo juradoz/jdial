@@ -4,9 +4,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.DefinicaoPadrao;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -20,7 +20,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class DefinicaoPadraoController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -29,14 +29,14 @@ public class DefinicaoPadraoController {
   }
 
   @Inject
-  public DefinicaoPadraoController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public DefinicaoPadraoController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void add(DefinicaoPadrao definicaoPadrao) {
-    daoFactory.getDefinicaoPadraoDao().adiciona(definicaoPadrao);
+    daoFactoryRequest.get().getDefinicaoPadraoDao().adiciona(definicaoPadrao);
     result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
   }
 
@@ -51,21 +51,23 @@ public class DefinicaoPadraoController {
   @Delete
   @Path("/definicaoPadrao/{definicaoPadrao.id}")
   public void delete(DefinicaoPadrao definicaoPadrao) {
-    definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
-    daoFactory.getDefinicaoPadraoDao().remove(definicaoPadrao);
+    definicaoPadrao =
+        daoFactoryRequest.get().getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
+    daoFactoryRequest.get().getDefinicaoPadraoDao().remove(definicaoPadrao);
     result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
   }
 
   @LogAcesso
   public void edit(DefinicaoPadrao definicaoPadrao) {
-    daoFactory.getDefinicaoPadraoDao().atualiza(definicaoPadrao);
+    daoFactoryRequest.get().getDefinicaoPadraoDao().atualiza(definicaoPadrao);
     result.use(Results.logic()).redirectTo(DefinicaoPadraoController.class).list();
   }
 
   @Get
   @Path("/definicaoPadrao/{definicaoPadrao.id}")
   public void editar(DefinicaoPadrao definicaoPadrao) {
-    definicaoPadrao = daoFactory.getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
+    definicaoPadrao =
+        daoFactoryRequest.get().getDefinicaoPadraoDao().procura(definicaoPadrao.getId());
     result.use(Results.logic()).forwardTo(DefinicaoPadraoController.class)
         .formularioDefinicaoPadrao("edit", definicaoPadrao);
   }
@@ -78,6 +80,6 @@ public class DefinicaoPadraoController {
   @Get
   @Path("/definicaoPadrao")
   public Collection<DefinicaoPadrao> list() {
-    return daoFactory.getDefinicaoPadraoDao().listaTudo();
+    return daoFactoryRequest.get().getDefinicaoPadraoDao().listaTudo();
   }
 }

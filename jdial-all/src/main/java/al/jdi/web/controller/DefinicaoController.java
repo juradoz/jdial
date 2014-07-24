@@ -7,10 +7,10 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Definicao;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -26,7 +26,7 @@ import br.com.caelum.vraptor.view.Results;
 public class DefinicaoController {
 
   private final Result result;
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
 
   @Deprecated
   public DefinicaoController() {
@@ -34,16 +34,16 @@ public class DefinicaoController {
   }
 
   @Inject
-  public DefinicaoController(Result result, DaoFactory daoFactory) {
+  public DefinicaoController(Result result, DaoFactoryRequest daoFactoryRequest) {
     this.result = result;
-    this.daoFactory = daoFactory;
+    this.daoFactoryRequest = daoFactoryRequest;
   }
 
   @LogAcesso
   public void add(Campanha campanha, Definicao definicao) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     definicao.setCampanha(campanha);
-    daoFactory.getDefinicaoDao().adiciona(definicao);
+    daoFactoryRequest.get().getDefinicaoDao().adiciona(definicao);
     result.use(Results.logic()).redirectTo(DefinicaoController.class).listDefinicao(campanha);
   }
 
@@ -51,7 +51,7 @@ public class DefinicaoController {
   @Put
   @Path("/definicao/{campanha.id}")
   public void adicionar(Campanha campanha, Definicao definicao) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     result.include("campanha", campanha);
     result.use(Results.logic()).forwardTo(DefinicaoController.class)
         .formularioDefinicao("add", definicao);
@@ -61,25 +61,27 @@ public class DefinicaoController {
   @Delete
   @Path("/definicao/{definicao.id}")
   public void delete(Definicao definicao) {
-    definicao = daoFactory.getDefinicaoDao().procura(definicao.getId());
-    Campanha campanha = daoFactory.getCampanhaDao().procura(definicao.getCampanha().getId());
-    daoFactory.getDefinicaoDao().remove(definicao);
+    definicao = daoFactoryRequest.get().getDefinicaoDao().procura(definicao.getId());
+    Campanha campanha =
+        daoFactoryRequest.get().getCampanhaDao().procura(definicao.getCampanha().getId());
+    daoFactoryRequest.get().getDefinicaoDao().remove(definicao);
     result.use(Results.logic()).redirectTo(DefinicaoController.class).listDefinicao(campanha);
   }
 
   @LogAcesso
   public void edit(Campanha campanha, Definicao definicao) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     definicao.setCampanha(campanha);
-    daoFactory.getDefinicaoDao().atualiza(definicao);
+    daoFactoryRequest.get().getDefinicaoDao().atualiza(definicao);
     result.use(Results.logic()).redirectTo(DefinicaoController.class).listDefinicao(campanha);
   }
 
   @Get
   @Path("/definicao/{definicao.id}")
   public void editar(Definicao definicao) {
-    definicao = daoFactory.getDefinicaoDao().procura(definicao.getId());
-    Campanha campanha = daoFactory.getCampanhaDao().procura(definicao.getCampanha().getId());
+    definicao = daoFactoryRequest.get().getDefinicaoDao().procura(definicao.getId());
+    Campanha campanha =
+        daoFactoryRequest.get().getCampanhaDao().procura(definicao.getCampanha().getId());
     result.include("campanha", campanha);
     result.use(Results.logic()).forwardTo(DefinicaoController.class)
         .formularioDefinicao("edit", definicao);
@@ -93,14 +95,14 @@ public class DefinicaoController {
   @Get
   @Path("/definicao/campanhas")
   public Collection<Campanha> listCampanhas() {
-    return sort(daoFactory.getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
+    return sort(daoFactoryRequest.get().getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
   }
 
   @Get
   @Path("/definicao/campanhas/{campanha.id}")
   public Collection<Definicao> listDefinicao(Campanha campanha) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     result.include("campanha", campanha);
-    return daoFactory.getDefinicaoDao().listaTudo(campanha);
+    return daoFactoryRequest.get().getDefinicaoDao().listaTudo(campanha);
   }
 }

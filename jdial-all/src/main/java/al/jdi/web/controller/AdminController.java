@@ -2,8 +2,8 @@ package al.jdi.web.controller;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.AuthInterceptor.Public;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.session.UsuarioAutenticadoSession;
@@ -16,7 +16,7 @@ import br.com.caelum.vraptor.view.Results;
 @Controller
 public class AdminController {
 
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
   private final UsuarioAutenticadoSession usuarioAutenticado;
 
@@ -26,10 +26,10 @@ public class AdminController {
   }
 
   @Inject
-  public AdminController(Result result, DaoFactory daoFactory,
+  public AdminController(Result result, DaoFactoryRequest daoFactoryRequest,
       UsuarioAutenticadoSession usuarioAutenticado) {
     this.result = result;
-    this.daoFactory = daoFactory;
+    this.daoFactoryRequest = daoFactoryRequest;
     this.usuarioAutenticado = usuarioAutenticado;
   }
 
@@ -37,7 +37,7 @@ public class AdminController {
   @Post
   @Public
   public void logar(Usuario usuario) {
-    usuario = daoFactory.getUsuarioDao().obtemAutenticado(usuario);
+    usuario = daoFactoryRequest.get().getUsuarioDao().obtemAutenticado(usuario);
     if (usuario == null) {
       usuarioAutenticado.setUsuario(null);
       result.include("errors", "Usuario ou senha invalidos!");

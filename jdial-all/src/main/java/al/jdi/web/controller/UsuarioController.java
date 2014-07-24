@@ -8,9 +8,9 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Usuario;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -24,7 +24,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class UsuarioController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -33,8 +33,8 @@ public class UsuarioController {
   }
 
   @Inject
-  public UsuarioController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public UsuarioController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
@@ -47,7 +47,7 @@ public class UsuarioController {
       return;
     }
     usuario.setSenha(usuario.criptografaSenha(usuario.getSenha()));
-    daoFactory.getUsuarioDao().adiciona(usuario);
+    daoFactoryRequest.get().getUsuarioDao().adiciona(usuario);
     result.use(Results.logic()).redirectTo(UsuarioController.class).list();
   }
 
@@ -61,28 +61,28 @@ public class UsuarioController {
   @Delete
   @Path("/usuario/{usuario.id}")
   public void delete(Usuario usuario) {
-    usuario = daoFactory.getUsuarioDao().procura(usuario.getId());
-    daoFactory.getUsuarioDao().remove(usuario);
+    usuario = daoFactoryRequest.get().getUsuarioDao().procura(usuario.getId());
+    daoFactoryRequest.get().getUsuarioDao().remove(usuario);
     result.use(Results.logic()).redirectTo(UsuarioController.class).list();
   }
 
   @LogAcesso
   public void edit(Usuario usuario) {
-    Usuario u = daoFactory.getUsuarioDao().procura(usuario.getId());
+    Usuario u = daoFactoryRequest.get().getUsuarioDao().procura(usuario.getId());
     u.setLogin(usuario.getLogin());
     u.setNome(usuario.getNome());
     u.setTipoPerfil(usuario.getTipoPerfil());
     if (!isBlank(usuario.getSenha())) {
       usuario.setSenha(usuario.criptografaSenha(usuario.getSenha()));
     }
-    daoFactory.getUsuarioDao().atualiza(u);
+    daoFactoryRequest.get().getUsuarioDao().atualiza(u);
     result.use(Results.logic()).redirectTo(UsuarioController.class).list();
   }
 
   @Get
   @Path("/usuario/{usuario.id}")
   public void editar(Usuario usuario) {
-    usuario = daoFactory.getUsuarioDao().procura(usuario.getId());
+    usuario = daoFactoryRequest.get().getUsuarioDao().procura(usuario.getId());
     result.use(Results.logic()).forwardTo(UsuarioController.class)
         .formularioUsuario("edit", usuario);
   }
@@ -96,7 +96,7 @@ public class UsuarioController {
   @Get
   @Path("/usuarios")
   public Collection<Usuario> list() {
-    return daoFactory.getUsuarioDao().listaTudo();
+    return daoFactoryRequest.get().getUsuarioDao().listaTudo();
   }
 
 }

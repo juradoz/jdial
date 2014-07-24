@@ -10,10 +10,10 @@ import javax.inject.Inject;
 
 import org.apache.commons.collections.ComparatorUtils;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -27,7 +27,7 @@ import ch.lambdaj.function.compare.ArgumentComparator;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class ResultadoLigacaoController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -36,14 +36,14 @@ public class ResultadoLigacaoController {
   }
 
   @Inject
-  public ResultadoLigacaoController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public ResultadoLigacaoController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void edit(ResultadoLigacao resultadoLigacao) {
-    daoFactory.getResultadoLigacaoDao().atualiza(resultadoLigacao);
+    daoFactoryRequest.get().getResultadoLigacaoDao().atualiza(resultadoLigacao);
     result.use(Results.logic()).redirectTo(ResultadoLigacaoController.class)
         .list(resultadoLigacao.getCampanha());
   }
@@ -51,7 +51,8 @@ public class ResultadoLigacaoController {
   @Get
   @Path("/resultadoLigacao/{resultadoLigacao.id}")
   public void editar(ResultadoLigacao resultadoLigacao) {
-    resultadoLigacao = daoFactory.getResultadoLigacaoDao().procura(resultadoLigacao.getId());
+    resultadoLigacao =
+        daoFactoryRequest.get().getResultadoLigacaoDao().procura(resultadoLigacao.getId());
     result.use(Results.logic()).forwardTo(ResultadoLigacaoController.class)
         .formularioResultadoLigacao("edit", resultadoLigacao);
   }
@@ -66,7 +67,7 @@ public class ResultadoLigacaoController {
   @SuppressWarnings({"rawtypes", "unchecked"})
   @Path("/resultadoLigacao/campanha/{campanha.id}")
   public Collection<ResultadoLigacao> list(Campanha campanha) {
-    campanha = daoFactory.getCampanhaDao().procura(campanha.getId());
+    campanha = daoFactoryRequest.get().getCampanhaDao().procura(campanha.getId());
     result.include("campanha", campanha);
 
     ArgumentComparator byCampanha =
@@ -76,15 +77,15 @@ public class ResultadoLigacaoController {
 
     Comparator comparator = ComparatorUtils.chainedComparator(byCampanha, byCodigo);
 
-    return Lambda.sort(daoFactory.getResultadoLigacaoDao().listaTudo(campanha),
+    return Lambda.sort(daoFactoryRequest.get().getResultadoLigacaoDao().listaTudo(campanha),
         Lambda.on(ResultadoLigacao.class), comparator);
   }
 
   public Collection<ResultadoLigacao> listaResultadosLigacao() {
-    return daoFactory.getResultadoLigacaoDao().listaTudo();
+    return daoFactoryRequest.get().getResultadoLigacaoDao().listaTudo();
   }
 
   public Collection<Campanha> campanhas() {
-    return sort(daoFactory.getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
+    return sort(daoFactoryRequest.get().getCampanhaDao().listaTudo(), on(Campanha.class).getNome());
   }
 }

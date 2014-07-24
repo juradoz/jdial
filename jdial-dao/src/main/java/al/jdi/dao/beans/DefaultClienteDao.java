@@ -2,13 +2,12 @@ package al.jdi.dao.beans;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.hibernate.criterion.Restrictions.eq;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -24,8 +23,7 @@ import al.jdi.dao.model.Mailing;
 
 class DefaultClienteDao implements ClienteDao {
 
-  @Inject
-  private Logger logger;
+  private static Logger logger = getLogger(DefaultClienteDao.class);
 
   private final DefaultDao<Cliente> dao;
 

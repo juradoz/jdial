@@ -9,10 +9,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Filtro;
 import al.jdi.dao.model.Mailing;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Delete;
@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.view.Results;
 
 @Controller
 public class FiltroController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
 
   @Deprecated
@@ -34,24 +34,24 @@ public class FiltroController {
   }
 
   @Inject
-  public FiltroController(DaoFactory daoFactory, Result result) {
-    this.daoFactory = daoFactory;
+  public FiltroController(DaoFactoryRequest daoFactoryRequest, Result result) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
   }
 
   @LogAcesso
   public void add(Filtro filtro) {
-    daoFactory.getFiltroDao().adiciona(filtro);
+    daoFactoryRequest.get().getFiltroDao().adiciona(filtro);
     result.use(Results.logic()).redirectTo(FiltroController.class).list();
   }
 
   @Post
   @Path("/filtro/{filtro.id}/addMailing")
   public void addMailing(Filtro filtro, Mailing mailing) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
-    mailing = daoFactory.getMailingDao().procura(mailing.getId());
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
     filtro.getMailing().add(mailing);
-    daoFactory.getFiltroDao().atualiza(filtro);
+    daoFactoryRequest.get().getFiltroDao().atualiza(filtro);
     result.use(Results.logic()).redirectTo(FiltroController.class).mailings(filtro);
   }
 
@@ -64,9 +64,9 @@ public class FiltroController {
   @Put
   @Path("/filtro/{filtro.id}/mailing")
   public Collection<Mailing> adicionarMailing(Filtro filtro) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
     result.include("filtro", filtro);
-    Collection<Mailing> mailings = daoFactory.getMailingDao().listaAtivos();
+    Collection<Mailing> mailings = daoFactoryRequest.get().getMailingDao().listaAtivos();
     mailings.removeAll(filtro.getMailing());
     return mailings;
   }
@@ -75,35 +75,35 @@ public class FiltroController {
   @Delete
   @Path("/filtro/{filtro.id}")
   public void delete(Filtro filtro) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
-    daoFactory.getFiltroDao().remove(filtro);
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
+    daoFactoryRequest.get().getFiltroDao().remove(filtro);
     result.use(Results.logic()).redirectTo(FiltroController.class).list();
   }
 
   @Delete
   @Path("/filtro/{filtro.id}/mailing/{mailing.id}")
   public void deleteMailing(Filtro filtro, Mailing mailing) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
     filtro.getMailing().remove(mailing);
-    daoFactory.getFiltroDao().atualiza(filtro);
+    daoFactoryRequest.get().getFiltroDao().atualiza(filtro);
     result.use(Results.logic()).redirectTo(FiltroController.class).mailings(filtro);
   }
 
   @LogAcesso
   public void edit(Filtro filtro) {
-    Filtro original = this.daoFactory.getFiltroDao().procura(filtro.getId());
+    Filtro original = this.daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
     original.setCampanha(filtro.getCampanha());
     original.setCodigo(filtro.getCodigo());
     original.setDescricao(filtro.getDescricao());
     original.setNome(filtro.getNome());
-    daoFactory.getFiltroDao().atualiza(original);
+    daoFactoryRequest.get().getFiltroDao().atualiza(original);
     result.use(Results.logic()).redirectTo(FiltroController.class).list();
   }
 
   @Get
   @Path("/filtro/{filtro.id}")
   public void editar(Filtro filtro) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
     result.use(Results.logic()).forwardTo(FiltroController.class).formularioFiltro("edit", filtro);
   }
 
@@ -117,18 +117,18 @@ public class FiltroController {
   @Path("/filtros")
   public Collection<Filtro> list() {
     Set<Filtro> filtrosDistinct = new HashSet<Filtro>();
-    filtrosDistinct.addAll(daoFactory.getFiltroDao().listaTudo());
+    filtrosDistinct.addAll(daoFactoryRequest.get().getFiltroDao().listaTudo());
     return sort(filtrosDistinct, on(Filtro.class).getNome());
   }
 
   private Collection<Campanha> listCampanhas() {
-    return daoFactory.getCampanhaDao().listaTudo();
+    return daoFactoryRequest.get().getCampanhaDao().listaTudo();
   }
 
   @Get
   @Path("/filtro/{filtro.id}/mailings")
   public Collection<Mailing> mailings(Filtro filtro) {
-    filtro = daoFactory.getFiltroDao().procura(filtro.getId());
+    filtro = daoFactoryRequest.get().getFiltroDao().procura(filtro.getId());
     result.include("filtro", filtro);
     return filtro.getMailing();
   }

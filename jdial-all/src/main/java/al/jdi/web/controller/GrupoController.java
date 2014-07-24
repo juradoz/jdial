@@ -7,9 +7,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Grupo;
 import al.jdi.dao.model.Usuario.TipoPerfil;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.interceptor.DBLogInterceptor.LogAcesso;
 import al.jdi.web.interceptor.Permissao;
 import br.com.caelum.vraptor.Controller;
@@ -25,7 +25,7 @@ import br.com.caelum.vraptor.view.Results;
 @Permissao(TipoPerfil.ADMINISTRADOR)
 @Controller
 public class GrupoController {
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final Result result;
   private final Validator validator;
 
@@ -35,8 +35,8 @@ public class GrupoController {
   }
 
   @Inject
-  public GrupoController(DaoFactory daoFactory, Result result, Validator validator) {
-    this.daoFactory = daoFactory;
+  public GrupoController(DaoFactoryRequest daoFactoryRequest, Result result, Validator validator) {
+    this.daoFactoryRequest = daoFactoryRequest;
     this.result = result;
     this.validator = validator;
   }
@@ -47,7 +47,7 @@ public class GrupoController {
       validator.add(new SimpleMessage("Código não pode ser vazio!", "codigoInvalido"));
     validator.onErrorUse(Results.page()).of(GrupoController.class).adicionar(grupo);
 
-    daoFactory.getGrupoDao().adiciona(grupo);
+    daoFactoryRequest.get().getGrupoDao().adiciona(grupo);
     result.use(Results.logic()).redirectTo(GrupoController.class).list();
   }
 
@@ -61,8 +61,8 @@ public class GrupoController {
   @Delete
   @Path("/grupo/{grupo.id}")
   public void delete(Grupo grupo) {
-    grupo = daoFactory.getGrupoDao().procura(grupo.getId());
-    daoFactory.getGrupoDao().remove(grupo);
+    grupo = daoFactoryRequest.get().getGrupoDao().procura(grupo.getId());
+    daoFactoryRequest.get().getGrupoDao().remove(grupo);
     result.use(Results.logic()).redirectTo(GrupoController.class).list();
   }
 
@@ -71,14 +71,14 @@ public class GrupoController {
     if (grupo.getCodigo() == null || grupo.getCodigo().length() == 0)
       validator.add(new SimpleMessage("Código não pode ser vazio!", "codigoInvalido"));
     validator.onErrorUse(Results.page()).of(GrupoController.class).editar(grupo);
-    daoFactory.getGrupoDao().atualiza(grupo);
+    daoFactoryRequest.get().getGrupoDao().atualiza(grupo);
     result.use(Results.logic()).redirectTo(GrupoController.class).list();
   }
 
   @Get
   @Path("/grupo/{grupo.id}")
   public void editar(Grupo grupo) {
-    grupo = daoFactory.getGrupoDao().procura(grupo.getId());
+    grupo = daoFactoryRequest.get().getGrupoDao().procura(grupo.getId());
     result.use(Results.logic()).forwardTo(GrupoController.class).formularioGrupo("edit", grupo);
   }
 
@@ -90,6 +90,6 @@ public class GrupoController {
   @Get
   @Path("/grupos")
   public Collection<Grupo> list() {
-    return sort(daoFactory.getGrupoDao().listaTudo(), on(Grupo.class).getDescricao());
+    return sort(daoFactoryRequest.get().getGrupoDao().listaTudo(), on(Grupo.class).getDescricao());
   }
 }

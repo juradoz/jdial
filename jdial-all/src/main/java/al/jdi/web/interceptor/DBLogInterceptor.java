@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
-import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.WebLog;
+import al.jdi.web.component.DaoFactoryRequest;
 import al.jdi.web.session.UsuarioAutenticadoSession;
 import br.com.caelum.vraptor.Accepts;
 import br.com.caelum.vraptor.AfterCall;
@@ -26,7 +26,7 @@ public class DBLogInterceptor {
   }
 
   private final Logger logger;
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
   private final UsuarioAutenticadoSession usuarioAutenticadoSession;
   private final ControllerMethod method;
   private final MethodInfo methodInfo;
@@ -37,11 +37,11 @@ public class DBLogInterceptor {
   }
 
   @Inject
-  public DBLogInterceptor(Logger logger, DaoFactory daoFactory,
+  public DBLogInterceptor(Logger logger, DaoFactoryRequest daoFactoryRequest,
       UsuarioAutenticadoSession usuarioAutenticadoSession, ControllerMethod method,
       MethodInfo methodInfo) {
     this.logger = logger;
-    this.daoFactory = daoFactory;
+    this.daoFactoryRequest = daoFactoryRequest;
     this.usuarioAutenticadoSession = usuarioAutenticadoSession;
     this.method = method;
     this.methodInfo = methodInfo;
@@ -72,6 +72,6 @@ public class DBLogInterceptor {
     webLog.setUsuario(usuarioAutenticadoSession.getUsuario());
     webLog.setMessage(msg);
 
-    daoFactory.getWebLog().adiciona(webLog);
+    daoFactoryRequest.get().getWebLog().adiciona(webLog);
   }
 }

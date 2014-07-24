@@ -3,7 +3,7 @@ package al.jdi.web.interceptor;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import al.jdi.dao.beans.DaoFactory;
+import al.jdi.web.component.DaoFactoryRequest;
 import br.com.caelum.vraptor.AroundCall;
 import br.com.caelum.vraptor.Intercepts;
 import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.interceptor.SimpleInterceptorStack;
 @RequestScoped
 public class DaoFactoryInterceptor {
 
-  private final DaoFactory daoFactory;
+  private final DaoFactoryRequest daoFactoryRequest;
 
   @Deprecated
   public DaoFactoryInterceptor() {
@@ -20,14 +20,14 @@ public class DaoFactoryInterceptor {
   }
 
   @Inject
-  public DaoFactoryInterceptor(DaoFactory daoFactory) {
-    this.daoFactory = daoFactory;
+  public DaoFactoryInterceptor(DaoFactoryRequest daoFactoryRequest) {
+    this.daoFactoryRequest = daoFactoryRequest;
   }
 
   @AroundCall
   public void intercept(SimpleInterceptorStack stack) {
-    daoFactory.beginTransaction();
+    daoFactoryRequest.get().beginTransaction();
     stack.next();
-    daoFactory.commit();
+    daoFactoryRequest.get().commit();
   }
 }
