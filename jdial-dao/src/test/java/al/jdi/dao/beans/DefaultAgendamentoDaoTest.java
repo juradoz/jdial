@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import al.jdi.dao.model.Agendamento;
-import al.jdi.dao.model.Agente;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.CriacaoModificacao;
 
@@ -40,8 +39,6 @@ public class DefaultAgendamentoDaoTest {
   @Mock
   private List<Agendamento> agendamentos;
   @Mock
-  private Agente agente;
-  @Mock
   private Criteria criteria;
   @Mock
   private DefaultDao<Agendamento> dao;
@@ -58,8 +55,6 @@ public class DefaultAgendamentoDaoTest {
     when(agendamento.getCliente()).thenReturn(cliente);
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(cliente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
-    when(agente.getAgendamento()).thenReturn(agendamentos);
-    when(agente.getCriacaoModificacao()).thenReturn(criacaoModificacao);
     defaultAgendamentoDao = new DefaultAgendamentoDao(dao);
   }
 
@@ -81,20 +76,6 @@ public class DefaultAgendamentoDaoTest {
   public void adicionaShouldUpdateCliente() throws Exception {
     defaultAgendamentoDao.adiciona(agendamento);
     verify(session).update(cliente);
-  }
-
-  @Test
-  public void adicionaShouldAddAgente() throws Exception {
-    when(agendamento.getAgente()).thenReturn(agente);
-    defaultAgendamentoDao.adiciona(agendamento);
-    verify(dao).adiciona(agendamento);
-  }
-
-  @Test
-  public void adicionaShouldUpdateAgente() throws Exception {
-    when(agendamento.getAgente()).thenReturn(agente);
-    defaultAgendamentoDao.adiciona(agendamento);
-    verify(session).update(agente);
   }
 
   @Test

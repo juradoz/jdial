@@ -13,7 +13,6 @@ import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Agendamento;
-import al.jdi.dao.model.Agente;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.HistoricoCliente;
 import al.jdi.dao.model.ResultadoLigacao;
@@ -61,7 +60,6 @@ class ProcessaAgendamento implements ProcessoDevolucao {
     DateTime calAgendamento =
         new DateTime().plusMinutes(resultadoLigacao.getIntervaloReagendamento());
 
-    Agente agente = null;
     Agendamento agendamento = daoFactory.getAgendamentoDao().procura(cliente);
 
     if (agendamento == null) {
@@ -77,7 +75,6 @@ class ProcessaAgendamento implements ProcessoDevolucao {
     HistoricoCliente historicoCliente = new HistoricoCliente();
     historicoCliente.setCliente(cliente);
     historicoCliente.setAgendamento(calAgendamento);
-    historicoCliente.setAgente(agente);
     historicoCliente.setEstadoCliente(cliente.getEstadoCliente());
     historicoCliente
         .setDescricao(String.format("Agendamento de registro por %s", resultadoLigacao));

@@ -23,8 +23,6 @@ public interface DaoFactory {
 
   AgendamentoDao getAgendamentoDao();
 
-  AgenteDao getAgenteDao();
-
   AreaAreaDao getAreaAreaDao();
 
   CampanhaDao getCampanhaDao();

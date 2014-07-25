@@ -52,11 +52,6 @@ class DefaultDaoFactory implements DaoFactory {
   }
 
   @Override
-  public AgenteDao getAgenteDao() {
-    return new DefaultAgenteDao(session);
-  }
-
-  @Override
   public CampanhaDao getCampanhaDao() {
     return new DefaultCampanhaDao(session);
   }

@@ -34,10 +34,6 @@ public class HistoricoCliente implements DaoObject {
   private EstadoCliente estadoCliente;
 
   @ManyToOne
-  @JoinColumn(name = "idAgente", nullable = true)
-  private Agente agente;
-
-  @ManyToOne
   @JoinColumn(name = "idMotivoFinalizacao", nullable = true)
   private MotivoFinalizacao motivoFinalizacao;
 
@@ -61,10 +57,6 @@ public class HistoricoCliente implements DaoObject {
 
   public DateTime getAgendamento() {
     return agendamento;
-  }
-
-  public Agente getAgente() {
-    return agente;
   }
 
   public Cliente getCliente() {
@@ -99,10 +91,6 @@ public class HistoricoCliente implements DaoObject {
 
   public void setAgendamento(DateTime agendamento) {
     this.agendamento = agendamento;
-  }
-
-  public void setAgente(Agente agente) {
-    this.agente = agente;
   }
 
   public void setCliente(Cliente cliente) {

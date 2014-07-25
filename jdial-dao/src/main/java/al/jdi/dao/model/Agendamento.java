@@ -41,10 +41,6 @@ public class Agendamento implements DaoObject {
   @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
   private DateTime agendamento;
 
-  @ManyToOne
-  @JoinColumn(name = "idAgente", nullable = true)
-  private Agente agente;
-
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -59,10 +55,6 @@ public class Agendamento implements DaoObject {
 
   public DateTime getAgendamento() {
     return agendamento;
-  }
-
-  public Agente getAgente() {
-    return agente;
   }
 
   public Cliente getCliente() {
@@ -85,10 +77,6 @@ public class Agendamento implements DaoObject {
 
   public void setAgendamento(DateTime agendamento) {
     this.agendamento = agendamento;
-  }
-
-  public void setAgente(Agente agente) {
-    this.agente = agente;
   }
 
   public void setCliente(Cliente cliente) {

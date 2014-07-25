@@ -2,7 +2,6 @@ package al.jdi.core.devolveregistro;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
@@ -32,7 +31,6 @@ import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.HistoricoLigacaoDao;
 import al.jdi.dao.model.Agendamento;
-import al.jdi.dao.model.Agente;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.EstadoCliente;
 import al.jdi.dao.model.HistoricoCliente;
@@ -180,7 +178,6 @@ public class ProcessaAgendamentoTest {
     HistoricoCliente historicoCliente = captor.getValue();
     assertThat(historicoCliente.getCliente(), is(sameInstance(cliente)));
     assertThat(historicoCliente.getAgendamento().isAfterNow(), is(true));
-    assertThat(historicoCliente.getAgente(), is(nullValue(Agente.class)));
     assertThat(historicoCliente.getEstadoCliente(), is(sameInstance(estadoCliente)));
     assertThat(historicoCliente.getDescricao(), startsWith("Agendamento de registro por"));
   }

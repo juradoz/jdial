@@ -25,15 +25,6 @@ class DefaultAgendamentoDao implements AgendamentoDao {
   public void adiciona(Agendamento agendamento) {
     dao.adiciona(agendamento);
     adicionaCliente(agendamento);
-    adicionaAgente(agendamento);
-  }
-
-  private void adicionaAgente(Agendamento agendamento) {
-    if (agendamento.getAgente() == null)
-      return;
-
-    agendamento.getAgente().getAgendamento().add(agendamento);
-    new DefaultAgenteDao(dao.getSession()).atualiza(agendamento.getAgente());
   }
 
   private void adicionaCliente(Agendamento agendamento) {
