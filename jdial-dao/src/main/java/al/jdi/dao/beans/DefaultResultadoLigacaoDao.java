@@ -18,12 +18,6 @@ class DefaultResultadoLigacaoDao implements ResultadoLigacaoDao {
   }
 
   @Override
-  public ResultadoLigacao procura(Campanha campanha, String nome) {
-    return (ResultadoLigacao) dao.getSession().createCriteria(ResultadoLigacao.class)
-        .add(eq("campanha", campanha)).add(eq("nome", nome)).uniqueResult();
-  }
-
-  @Override
   public ResultadoLigacao procura(int codigo, Campanha campanha) {
     return (ResultadoLigacao) dao.getSession().createCriteria(ResultadoLigacao.class)
         .add(eq("campanha", campanha)).add(eq("codigo", codigo)).uniqueResult();

@@ -1,7 +1,6 @@
 package al.jdi.dao.beans;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.hibernate.criterion.Restrictions.eq;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collection;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.EstadoCliente;
-import al.jdi.dao.model.Mailing;
 
 class DefaultClienteDao implements ClienteDao {
 
@@ -65,13 +63,6 @@ class DefaultClienteDao implements ClienteDao {
   @Override
   public int limpezaTemporaria(Campanha campanha, String nomeBaseDados, String nomeBase) {
     return 0;
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
-  public Collection<Cliente> listaTudo(Campanha campanha, int maxResults) {
-    return dao.getSession().createCriteria(Cliente.class).setMaxResults(maxResults)
-        .createAlias("mailing", "m").add(eq("m.campanha", campanha)).list();
   }
 
   @Override
@@ -180,36 +171,6 @@ class DefaultClienteDao implements ClienteDao {
 
   protected boolean possuiFiltro(Campanha campanha) {
     return campanha.isFiltroAtivo();
-  }
-
-  @Override
-  public Cliente procura(Mailing mailing, String chave) {
-    return (Cliente) dao.getSession().createCriteria(Cliente.class).add(eq("mailing", mailing))
-        .createCriteria("informacaoCliente").add(eq("chave", chave)).uniqueResult();
-  }
-
-  @Override
-  public void retornaReservadosOperador(Campanha campanha) {
-    DefaultDao<EstadoCliente> estadoclienteDao =
-        new DefaultDao<EstadoCliente>(dao.getSession(), EstadoCliente.class);
-    EstadoCliente ativo = estadoclienteDao.procura("Ativo");
-    if (ativo == null)
-      return;
-    EstadoCliente reservado = estadoclienteDao.procura("Reservado pelo Operador");
-    if (reservado == null)
-      return;
-    DateTime limite = new DateTime().minusHours(2);
-    dao.getSession()
-        .createSQLQuery(
-            "update Cliente c " + "inner join Telefone t on t.idCliente = c.idCliente "
-                + "inner join Mailing m on c.idMailing = m.idMailing "
-                + "set c.idEstadoCliente = :idEstadoClienteAtivo, "
-                + "c.ultimaMudancaEstado = Now() " + "where " + "m.idCampanha = :idCampanha "
-                + "and c.idEstadoCliente = :idEstadoClienteReservadoOperador "
-                + "and c.ultimaMudancaEstado = :limiteReserva")
-        .setLong("idEstadoClienteAtivo", ativo.getId()).setLong("idCampanha", campanha.getId())
-        .setLong("idEstadoClienteReservadoOperador", reservado.getId())
-        .setTimestamp("limiteReserva", limite.toDate()).executeUpdate();
   }
 
   @Override

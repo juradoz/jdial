@@ -12,6 +12,4 @@ public interface MailingDao extends Dao<Mailing> {
 
   List<Mailing> listaTudo(Campanha campanha);
 
-  Mailing procura(Campanha campanha, String nome);
-
 }

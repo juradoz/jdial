@@ -16,6 +16,7 @@ import al.jdi.dao.model.InformacaoCliente;
 import al.jdi.dao.model.Log;
 import al.jdi.dao.model.MotivoFinalizacao;
 import al.jdi.dao.model.RestricaoHorario;
+import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.WebLog;
 
 class DefaultDaoFactory implements DaoFactory {
@@ -134,8 +135,8 @@ class DefaultDaoFactory implements DaoFactory {
   }
 
   @Override
-  public ServicoDao getServicoDao() {
-    return new DefaultServicoDao(session);
+  public Dao<Servico> getServicoDao() {
+    return new DefaultDao<Servico>(session, Servico.class);
   }
 
   @Override

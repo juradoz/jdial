@@ -10,8 +10,6 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 public interface HistoricoLigacaoDao extends Dao<HistoricoLigacao> {
 
-  Collection<HistoricoLigacao> procura(Cliente cliente);
-
   Collection<HistoricoLigacao> procura(Cliente cliente, ResultadoLigacao resultadoLigacao);
 
   Collection<HistoricoLigacao> procura(Cliente cliente, ResultadoLigacao resultadoLigacao,

@@ -36,12 +36,6 @@ class DefaultMailingDao implements MailingDao {
   }
 
   @Override
-  public Mailing procura(Campanha campanha, String nome) {
-    return (Mailing) dao.getSession().createCriteria(Mailing.class).add(eq("campanha", campanha))
-        .add(eq("nome", nome)).uniqueResult();
-  }
-
-  @Override
   public void remove(Mailing t) {
     dao.getSession().createSQLQuery("update Mailing set ativo = 0 where idMailing = :idMailing")
         .setLong("idMailing", t.getId()).executeUpdate();

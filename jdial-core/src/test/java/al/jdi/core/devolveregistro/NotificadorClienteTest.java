@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
@@ -45,8 +46,11 @@ public class NotificadorClienteTest {
   private Configuracoes configuracoes;
   @Mock
   private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   private DateTime dataBanco;
+
 
 
   @Before
@@ -59,6 +63,8 @@ public class NotificadorClienteTest {
         tratadorEspecificoCliente);
     when(tenant.getCampanha()).thenReturn(campanha);
     when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     notificadorCliente = new NotificadorCliente(tratadorEspecificoClienteFactory);
   }
 

@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
-import al.jdi.dao.model.Mailing;
 import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Situacao;
 import al.jdi.dao.model.Telefone;
@@ -293,11 +292,6 @@ class DefaultClienteDaoTsa implements ClienteDaoTsa {
   }
 
   @Override
-  public Collection<Cliente> listaTudo(Campanha campanha, int maxResults) {
-    return dao.listaTudo(campanha, maxResults);
-  }
-
-  @Override
   public Collection<Cliente> obtemAGGs(int quantidade, Campanha campanha, String nomeBaseDados,
       String nomeBase, int operadorDiscador) {
     return dao.obtemAGGs(quantidade, campanha, nomeBaseDados, nomeBase, operadorDiscador);
@@ -307,16 +301,6 @@ class DefaultClienteDaoTsa implements ClienteDaoTsa {
   public Collection<Cliente> obtemLivres(int quantidade, Campanha campanha, String nomeBaseDados,
       String nomeBase, int operadorDiscador) {
     return dao.obtemLivres(quantidade, campanha, nomeBaseDados, nomeBase, operadorDiscador);
-  }
-
-  @Override
-  public Cliente procura(Mailing mailing, String chave) {
-    return dao.procura(mailing, chave);
-  }
-
-  @Override
-  public void retornaReservadosOperador(Campanha campanha) {
-    dao.retornaReservadosOperador(campanha);
   }
 
   @Override

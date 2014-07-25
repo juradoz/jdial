@@ -33,7 +33,6 @@
 		<property name="hibernate.cache.use_query_cache">true</property -->
 
 		<mapping class="al.jdi.dao.model.Agendamento" />
-		<mapping class="al.jdi.dao.model.Agente" />
 		<mapping class="al.jdi.dao.model.AreaArea" />
 		<mapping class="al.jdi.dao.model.Campanha" />
 		<mapping class="al.jdi.dao.model.Cliente" />

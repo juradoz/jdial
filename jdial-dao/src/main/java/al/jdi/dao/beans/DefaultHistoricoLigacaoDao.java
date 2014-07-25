@@ -30,13 +30,6 @@ class DefaultHistoricoLigacaoDao implements HistoricoLigacaoDao {
 
   @Override
   @SuppressWarnings("unchecked")
-  public Collection<HistoricoLigacao> procura(Cliente cliente) {
-    return dao.getSession().createCriteria(HistoricoLigacao.class).add(eq("cliente", cliente))
-        .list();
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
   public Collection<HistoricoLigacao> procura(Cliente cliente, ResultadoLigacao resultadoLigacao) {
     return dao.getSession().createCriteria(HistoricoLigacao.class).add(eq("cliente", cliente))
         .add(eq("resultadoLigacao", resultadoLigacao)).list();
