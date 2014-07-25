@@ -10,12 +10,12 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.ModeloModule.ProvidenciaMantemAtual;
 import al.jdi.core.modelo.ModeloModule.ProvidenciaProximoTelefone;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Telefone;
@@ -42,20 +42,20 @@ class MantemAtual implements Providencia {
   }
 
   @Override
-  public Telefone getTelefone(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente) {
+  public Telefone getTelefone(Tenant tenant, DaoFactory daoFactory, Cliente cliente) {
     List<Telefone> telefones = new LinkedList<Telefone>(cliente.getTelefones());
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = clienteSemTelefoneFilter.filter(configuracoes, telefones);
+    telefones = clienteSemTelefoneFilter.filter(tenant, telefones);
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = somenteCelularFilter.filter(configuracoes, telefones);
+    telefones = somenteCelularFilter.filter(tenant, telefones);
     if (telefones.isEmpty())
       throw new SomenteCelularException();
 
-    telefones = telefoneSorter.sort(configuracoes, telefones);
+    telefones = telefoneSorter.sort(tenant, telefones);
 
     Telefone result = cliente.getTelefone();
     if (result == null) {
@@ -66,7 +66,7 @@ class MantemAtual implements Providencia {
     if (!telefones.contains(result)) {
       logger.warn("Telefone {} nao esta contido na relacao de telefones uteis cliente {}", result,
           cliente);
-      return proximoTelefone.get().getTelefone(configuracoes, daoFactory, cliente);
+      return proximoTelefone.get().getTelefone(tenant, daoFactory, cliente);
     }
     logger.debug("Mantendo telefone atual para cliente {} Id {} DDD {} TEL {}", new Object[] {
         cliente, result, result.getDdd(), result.getTelefone()});

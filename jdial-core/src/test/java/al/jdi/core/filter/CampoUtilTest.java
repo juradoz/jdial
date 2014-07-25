@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Telefone;
 
 public class CampoUtilTest {
@@ -20,23 +21,26 @@ public class CampoUtilTest {
   private Telefone telefone;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
     when(telefone.isUtil()).thenReturn(true);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     campoUtil = new CampoUtil();
   }
 
   @Test
   public void isUtilDeveriaRetornarTrue() throws Exception {
-    assertThat(campoUtil.isUtil(configuracoes, telefone), is(true));
+    assertThat(campoUtil.isUtil(tenant, telefone), is(true));
   }
 
   @Test
   public void isUtilDeveriaRetornarFalse() throws Exception {
     when(telefone.isUtil()).thenReturn(false);
-    assertThat(campoUtil.isUtil(configuracoes, telefone), is(false));
+    assertThat(campoUtil.isUtil(tenant, telefone), is(false));
   }
 
 }

@@ -12,7 +12,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
@@ -51,6 +53,10 @@ public class ProcessaSemTelefonesTest {
   private Telefone telefone;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
@@ -60,6 +66,9 @@ public class ProcessaSemTelefonesTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     when(cliente.getTelefone()).thenReturn(telefone);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaSemTelefones = new ProcessaSemTelefones(finalizadorCliente, notificadorCliente);
   }
 
@@ -71,36 +80,32 @@ public class ProcessaSemTelefonesTest {
   @Test
   public void acceptNaoDeveriaRetornarFalse() {
     when(ligacao.getMotivoFinalizacao()).thenReturn(MotivoSistema.ATENDIDA.getCodigo());
-    assertThat(
-        processaSemTelefones.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaSemTelefones.accept(tenant, ligacao, resultadoLigacao, daoFactory),
         is(false));
   }
 
   @Test
   public void acceptNaoDeveriaRetornarTrue() {
     when(ligacao.getMotivoFinalizacao()).thenReturn(MotivoSistema.SEM_TELEFONES.getCodigo());
-    assertThat(
-        processaSemTelefones.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
-        is(true));
+    assertThat(processaSemTelefones.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
   }
 
   @Test
   public void processaDeveriaFinalizar() throws Exception {
-    processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory);
-    verify(finalizadorCliente).finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
+    processaSemTelefones.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    verify(finalizadorCliente).finaliza(tenant, daoFactory, cliente, motivoFinalizacao);
   }
 
   @Test
   public void processaDeveriaNotificar() throws Exception {
-    processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory);
-    verify(notificadorCliente).notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
+    processaSemTelefones.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    verify(notificadorCliente).notificaFinalizacao(tenant, daoFactory, ligacao, cliente,
         resultadoLigacao, telefone, false, campanha);
   }
 
   @Test
   public void processaDeveriaRetornarFalse() throws Exception {
-    assertThat(
-        processaSemTelefones.executa(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaSemTelefones.executa(tenant, ligacao, resultadoLigacao, daoFactory),
         is(false));
   }
 

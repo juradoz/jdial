@@ -11,8 +11,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -50,6 +52,10 @@ public class ProcessaRetornaProvidenciaTest {
   private InformacaoCliente informacaoCliente;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
@@ -62,6 +68,9 @@ public class ProcessaRetornaProvidenciaTest {
         .thenReturn(resultadoLigacaoSemProximoTelefone);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
     when(informacaoCliente.getProvidenciaTelefone()).thenReturn(PROVIDENCIA);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaRetornaProvidencia = new ProcessaRetornaProvidencia();
   }
 
@@ -72,33 +81,31 @@ public class ProcessaRetornaProvidenciaTest {
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory), is(false));
+    assertThat(processaRetornaProvidencia.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(configuracoes, ligacao, cliente,
+    assertThat(processaRetornaProvidencia.accept(tenant, ligacao,
         resultadoLigacaoSemProximoTelefone, daoFactory), is(true));
   }
 
   @Test
   public void processaDeveriaRetornarProvidencia() throws Exception {
-    processaRetornaProvidencia.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
+    processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory);
     verify(informacaoCliente).setProvidenciaTelefone(Providencia.Codigo.MANTEM_ATUAL.getCodigo());
   }
 
   @Test
   public void processaDeveriaAtualizarInformacaoCliente() throws Exception {
-    processaRetornaProvidencia.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
+    processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory);
     verify(informacaoClienteDao).atualiza(informacaoCliente);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 }

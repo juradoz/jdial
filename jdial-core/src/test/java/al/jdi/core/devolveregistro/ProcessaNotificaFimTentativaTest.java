@@ -12,7 +12,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
@@ -46,8 +48,13 @@ public class ProcessaNotificaFimTentativaTest {
   private Mailing mailing;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   private DateTime dataBanco;
+
 
   @Before
   public void setUp() throws Exception {
@@ -58,8 +65,11 @@ public class ProcessaNotificaFimTentativaTest {
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.getTelefoneOriginal()).thenReturn(telefone);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_MOTIVO_DIFERENCIADO);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaNotificaFimTentativa =
         new ProcessaNotificaFimTentativa(tratadorEspecificoClienteFactory);
   }
@@ -72,29 +82,28 @@ public class ProcessaNotificaFimTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    assertThat(processaNotificaFimTentativa.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaNotificaFimTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    assertThat(processaNotificaFimTentativa.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(false));
+    assertThat(processaNotificaFimTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(false));
   }
 
   @Test
   public void processaDeveriaNotificar() throws Exception {
-    processaNotificaFimTentativa.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(ligacao, cliente, campanha, dataBanco,
+    processaNotificaFimTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(tenant, ligacao, cliente, dataBanco,
         telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaNotificaFimTentativa.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaNotificaFimTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 
 }

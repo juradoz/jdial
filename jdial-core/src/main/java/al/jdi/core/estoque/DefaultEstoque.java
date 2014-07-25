@@ -135,7 +135,7 @@ class DefaultEstoque implements Estoque, Runnable {
         new Ligacao.Builder(discavelFactory.create(tenant.getConfiguracoes(), cliente), instante)
             .setInicio(instante).setTermino(instante)
             .setMotivoFinalizacao(motivoSistema.getCodigo()).build();
-    devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
+    devolveRegistro.devolveLigacao(tenant, ligacao);
   }
 
   @Override
@@ -160,11 +160,12 @@ class DefaultEstoque implements Estoque, Runnable {
       return;
 
     ultimaLimpezaTemporaria = new DateTime();
-    Campanha campanha = daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
+    Campanha campanha =
+        daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
     logger.info("Limpeza temporaria para campanha {}", campanha);
     int registrosLimpos =
         tratadorEspecificoClienteFactory
-            .create(tenant.getConfiguracoes(), daoFactory)
+            .create(tenant, daoFactory)
             .obtemClienteDao()
             .limpezaTemporaria(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
                 tenant.getConfiguracoes().getNomeBase());
@@ -212,12 +213,12 @@ class DefaultEstoque implements Estoque, Runnable {
     Providencia.Codigo codigo =
         Providencia.Codigo.fromValue(cliente.getInformacaoCliente().getProvidenciaTelefone());
     Providencia providencia = providencias.get(codigo);
-    cliente.setTelefone(providencia.getTelefone(tenant.getConfiguracoes(), daoFactory, cliente));
+    cliente.setTelefone(providencia.getTelefone(tenant, daoFactory, cliente));
 
     cliente.getInformacaoCliente().setProvidenciaTelefone(
         Providencia.Codigo.MANTEM_ATUAL.getCodigo());
 
-    if (tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).isDnc(cliente))
+    if (tratadorEspecificoClienteFactory.create(tenant, daoFactory).isDnc(cliente))
       throw new DncException();
 
     boolean isConurbada = daoFactory.getAreaAreaDao().isConurbada(cliente.getTelefone());
@@ -226,17 +227,16 @@ class DefaultEstoque implements Estoque, Runnable {
 
     String digitoSaida =
         tenant.getConfiguracoes().isDigitoSaidaDoBanco() ? tratadorEspecificoClienteFactory
-            .create(tenant.getConfiguracoes(), daoFactory).obtemClienteDao().getDigitoSaida(cliente) : EMPTY;
+            .create(tenant, daoFactory).obtemClienteDao().getDigitoSaida(cliente) : EMPTY;
 
     cliente.setDigitoSaida(digitoSaida);
 
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     cliente.setEstadoCliente(estadoCliente);
-    tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).obtemClienteDao()
-        .atualiza(cliente);
-    if (!tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).reservaNaBaseDoCliente(
-        cliente))
+    tratadorEspecificoClienteFactory.create(tenant, daoFactory).obtemClienteDao().atualiza(cliente);
+    if (!tratadorEspecificoClienteFactory.create(tenant, daoFactory)
+        .reservaNaBaseDoCliente(cliente))
       throw new ClienteJaEmUsoException();
     logger.debug("Cliente {} reservado!", cliente);
   }
@@ -263,7 +263,7 @@ class DefaultEstoque implements Estoque, Runnable {
       for (Iterator<Registro> it = estoque.iterator(); it.hasNext();) {
         Cliente cliente = it.next().getCliente();
         Telefone telefone = cliente.getTelefone();
-        List<Telefone> telefonesFiltrados = telefoneFilter.filter(tenant.getConfiguracoes(), asList(telefone));
+        List<Telefone> telefonesFiltrados = telefoneFilter.filter(tenant, asList(telefone));
         if (!telefonesFiltrados.isEmpty()) {
           logger.debug("Telefone ainda bom na memoria {} {}", telefone, cliente);
           continue;
@@ -336,7 +336,7 @@ class DefaultEstoque implements Estoque, Runnable {
 
     try {
       Collection<Cliente> clientesDoBanco =
-          extraidorClientes.extrai(tenant.getConfiguracoes(), daoFactory, quantidade);
+          extraidorClientes.extrai(tenant, daoFactory, quantidade);
       for (Cliente cliente : clientesDoBanco) {
         try {
           daoFactory.beginTransaction();

@@ -13,7 +13,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
@@ -40,13 +42,20 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   private ClienteDao clienteDao;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaIndisponibilizaTemporariamente =
         new ProcessaIndisponibilizaTemporariamente(tratadorEspecificoClienteFactory);
   }
@@ -58,22 +67,22 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.accept(tenant, ligacao, resultadoLigacao,
+        daoFactory), is(true));
   }
 
   @Test
   public void executaDeveriaSetarNull() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
+        daoFactory), is(true));
     verify(cliente).setDisponivelAPartirDe(null);
   }
 
   @Test
   public void executaDeveriaSetarData() throws Exception {
     when(resultadoLigacao.getIntervaloIndisponivel()).thenReturn(1);
-    assertThat(processaIndisponibilizaTemporariamente.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
+        daoFactory), is(true));
     ArgumentCaptor<DateTime> captor = ArgumentCaptor.forClass(DateTime.class);
     verify(cliente).setDisponivelAPartirDe(captor.capture());
     assertThat(captor.getValue().isAfterNow(), is(true));
@@ -81,8 +90,8 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
 
   @Test
   public void executaDeveriaAtualizar() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
+        daoFactory), is(true));
     verify(clienteDao).atualiza(cliente);
   }
 }

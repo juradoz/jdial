@@ -1,8 +1,8 @@
 package al.jdi.core.filter;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Telefone;
 
 public interface TelefoneUtil {
-  boolean isUtil(Configuracoes configuracoes, Telefone telefone);
+  boolean isUtil(Tenant tenant, Telefone telefone);
 }

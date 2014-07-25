@@ -12,6 +12,7 @@ import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
@@ -42,6 +43,8 @@ public class NotificadorClienteTest {
   private Campanha campanha;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
 
   private DateTime dataBanco;
 
@@ -52,44 +55,46 @@ public class NotificadorClienteTest {
     initMocks(this);
     when(daoFactory.getDataBanco()).thenReturn(dataBanco);
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_DIFERENCIADO);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
+    when(tenant.getCampanha()).thenReturn(campanha);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     notificadorCliente = new NotificadorCliente(tratadorEspecificoClienteFactory);
   }
 
   @Test
   public void notificaFimTentativaNaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(ligacao, cliente, campanha,
+    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        telefoneOriginal, campanha);
+    verify(tratadorEspecificoCliente, never()).notificaFimTentativa(tenant, ligacao, cliente,
         dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFimTentativaDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    notificadorCliente.notificaFimTentativa(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, telefoneOriginal, campanha);
-    verify(tratadorEspecificoCliente).notificaFimTentativa(ligacao, cliente, campanha, dataBanco,
+    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        telefoneOriginal, campanha);
+    verify(tratadorEspecificoCliente).notificaFimTentativa(tenant, ligacao, cliente, dataBanco,
         telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFinalizacaoNaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(ligacao, cliente, campanha,
+    notificadorCliente.notificaFinalizacao(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
+    verify(tratadorEspecificoCliente, never()).notificaFinalizacao(tenant, ligacao, cliente,
         dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 
   @Test
   public void notificaFinalizacaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
-    verify(tratadorEspecificoCliente).notificaFinalizacao(ligacao, cliente, campanha, dataBanco,
+    notificadorCliente.notificaFinalizacao(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        telefoneOriginal, INUTILIZA_DIFERENCIADO, campanha);
+    verify(tratadorEspecificoCliente).notificaFinalizacao(tenant, ligacao, cliente, dataBanco,
         telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
 

@@ -5,8 +5,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.EstadoCliente;
@@ -18,8 +18,9 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   private static final Logger logger = getLogger(ProcessaAsseguraExistenciaReserva.class);
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     if (cliente.getEstadoCliente().equals(estadoCliente)) {
@@ -30,9 +31,10 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
     int motivoFinalizacao = ligacao.getMotivoFinalizacao();
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (motivoFinalizacao == MotivoSistema.LEI_NAO_PERTURBE.getCodigo()
         || motivoFinalizacao == MotivoSistema.SEM_TELEFONES.getCodigo()) {
       logger.info("Nao tem reserva por DNC ou SEMTELEFONES {}", cliente);

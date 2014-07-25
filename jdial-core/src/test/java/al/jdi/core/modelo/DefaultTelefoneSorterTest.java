@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Telefone;
 
 public class DefaultTelefoneSorterTest {
@@ -25,15 +26,19 @@ public class DefaultTelefoneSorterTest {
 
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
 
   private Telefone t1;
   private Telefone t2;
   private Telefone t3;
   private LinkedList<Telefone> telefones;
 
+
   @Before
   public void setUp() throws Exception {
     initMocks(this);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
 
     t1 = new Telefone();
     t1.setId(1l);
@@ -61,7 +66,7 @@ public class DefaultTelefoneSorterTest {
   @Test
   public void sortDeveriaOrdenarOrdenacaoSimples() throws Exception {
     when(configuracoes.isPriorizaCelular()).thenReturn(true);
-    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(tenant, telefones);
     assertThat(result.get(0), is(sameInstance(t1)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t3)));
@@ -69,7 +74,7 @@ public class DefaultTelefoneSorterTest {
 
   @Test
   public void sortDeveriaOrdenarPrioridade() throws Exception {
-    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(tenant, telefones);
     assertThat(result.get(0), is(sameInstance(t3)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t1)));
@@ -78,7 +83,7 @@ public class DefaultTelefoneSorterTest {
   @Test
   public void sortDeveriaOrdenarId() throws Exception {
     forEach(telefones).setPrioridade(0);
-    List<Telefone> result = defaultTelefoneSorter.sort(configuracoes, telefones);
+    List<Telefone> result = defaultTelefoneSorter.sort(tenant, telefones);
     assertThat(result.get(0), is(sameInstance(t1)));
     assertThat(result.get(1), is(sameInstance(t2)));
     assertThat(result.get(2), is(sameInstance(t3)));

@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.ClienteDaoTsa;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
@@ -66,6 +67,8 @@ public class TratadorEspecificoClienteTsaTest {
   private Grupo grupo;
   @Mock
   private ResultadoLigacaoDao resultadoLigacaoDao;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
@@ -87,7 +90,8 @@ public class TratadorEspecificoClienteTsaTest {
     when(clienteDaoTsa.reservaNaBaseDoCliente(cliente, OPERADOR_DISCADOR, NOME_BASE_DADOS))
         .thenReturn(true);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
-    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsa(configuracoes, daoFactory);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsa(tenant, daoFactory);
   }
 
   @Test
@@ -105,14 +109,14 @@ public class TratadorEspecificoClienteTsaTest {
 
   @Test
   public void notificaFimTentativaDeveriaLiberarNaBaseSempre() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).liberaNaBaseDoCliente(cliente, NOME_BASE_DADOS, OPERADOR_DISCADOR);
   }
 
   @Test
   public void notificaFimTentativaDeveriaNotificarComLigacaoNaoAtendida() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_TENTATIVA, MOTIVO, MOTIVO_FINALIZACAO, NOME_BASE_DADOS, OPERADOR_DISCADOR,
@@ -122,7 +126,7 @@ public class TratadorEspecificoClienteTsaTest {
 
   @Test
   public void notificaFimTentativaDeveriaNotificarComLigacaoNaoAtendidaMotivoDiferenciado() {
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, true);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_TENTATIVA, MOTIVO_POR_QUANTIDADE, MOTIVO_FINALIZACAO, NOME_BASE_DADOS,
@@ -133,7 +137,7 @@ public class TratadorEspecificoClienteTsaTest {
   @Test
   public void notificaFimTentativaNaoDeveriaNotificarComLigacaoAtendida() {
     when(ligacao.isAtendida()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFimTentativa(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa, never()).insereResultadoTsa(any(Cliente.class),
         any(ResultadoLigacao.class), any(Telefone.class), any(DateTime.class), any(Situacao.class),
@@ -145,14 +149,14 @@ public class TratadorEspecificoClienteTsaTest {
 
   @Test
   public void notificaFinalizacaoDeveriaLiberarNaBaseSempre() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).liberaNaBaseDoCliente(cliente, NOME_BASE_DADOS, OPERADOR_DISCADOR);
   }
 
   @Test
   public void notificaFinalizacaoDeveriaNotificarComLigacaoNaoAtendida() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_FINALIZACAO, MOTIVO, MOTIVO_FINALIZACAO, NOME_BASE_DADOS, OPERADOR_DISCADOR,
@@ -162,7 +166,7 @@ public class TratadorEspecificoClienteTsaTest {
 
   @Test
   public void notificaFinalizacaoDeveriaNotificarComLigacaoNaoAtendidaMotivoDiferenciado() {
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, true);
     verify(clienteDaoTsa).insereResultadoTsa(cliente, resultadoLigacao, telefone, DATA_BANCO,
         SITUACAO_FINALIZACAO, MOTIVO_POR_QUANTIDADE, MOTIVO_FINALIZACAO, NOME_BASE_DADOS,
@@ -173,7 +177,7 @@ public class TratadorEspecificoClienteTsaTest {
   @Test
   public void notificaFinalizacaoNaoDeveriaNotificarComLigacaoAtendida() {
     when(ligacao.isAtendida()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa, never()).insereResultadoTsa(any(Cliente.class),
         any(ResultadoLigacao.class), any(Telefone.class), any(DateTime.class), any(Situacao.class),
@@ -186,7 +190,7 @@ public class TratadorEspecificoClienteTsaTest {
     when(ligacao.isAtendida()).thenReturn(true);
     when(campanha.getGrupo()).thenReturn(null);
     when(configuracoes.isUraReversa()).thenReturn(true);
-    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(ligacao, cliente, campanha, DATA_BANCO,
+    tratadorEspecificoClienteTsaImpl.notificaFinalizacao(tenant, ligacao, cliente, DATA_BANCO,
         telefone, resultadoLigacao, INUTILIZA_COM_MOTIVO_DIFERENCIADO);
     verify(clienteDaoTsa).insereResultadoTsa(any(Cliente.class), any(ResultadoLigacao.class),
         any(Telefone.class), any(DateTime.class), any(Situacao.class), anyInt(), anyInt(),

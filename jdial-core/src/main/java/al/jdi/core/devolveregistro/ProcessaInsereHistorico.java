@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.HistoricoLigacao;
@@ -18,8 +18,9 @@ class ProcessaInsereHistorico implements ProcessoDevolucao {
   private static final Logger logger = getLogger(ProcessaInsereHistorico.class);
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+  public boolean accept(Tenant tenant, Ligacao ligacao, 
       ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isInsereHistorico()) {
       logger.info("Nao vai inserir historico {}", cliente);
       return false;
@@ -28,8 +29,9 @@ class ProcessaInsereHistorico implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
+  public boolean executa(Tenant tenant, Ligacao ligacao, 
       ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     try {
       logger.info("Inserindo historico {} {}", resultadoLigacao, cliente);
       HistoricoLigacao historicoLigacao = new HistoricoLigacao();

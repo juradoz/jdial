@@ -10,7 +10,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -37,6 +39,10 @@ public class ProcessaAsseguraExistenciaReservaTest {
   private Dao<EstadoCliente> estadoClienteDao;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
@@ -44,6 +50,9 @@ public class ProcessaAsseguraExistenciaReservaTest {
     when(daoFactory.getEstadoClienteDao()).thenReturn(estadoClienteDao);
     when(estadoClienteDao.procura("Reservado pelo Discador")).thenReturn(estadoClienteReservado);
     when(cliente.getEstadoCliente()).thenReturn(estadoCliente);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaAsseguraExistenciaReserva = new ProcessaAsseguraExistenciaReserva();
   }
 
@@ -54,21 +63,24 @@ public class ProcessaAsseguraExistenciaReservaTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaAsseguraExistenciaReserva.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaAsseguraExistenciaReserva.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(cliente.getEstadoCliente()).thenReturn(estadoClienteReservado);
-    assertThat(processaAsseguraExistenciaReserva.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(false));
+    assertThat(
+        processaAsseguraExistenciaReserva.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(false));
   }
 
   @Test
   public void executaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaAsseguraExistenciaReserva.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaAsseguraExistenciaReserva.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 
 }

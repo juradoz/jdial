@@ -13,8 +13,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -48,14 +50,21 @@ public class ProcessaCiclaTelefoneTest {
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getInformacaoCliente()).thenReturn(informacaoCliente);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaCiclaTelefone =
         new ProcessaCiclaTelefone(tratadorEspecificoClienteFactory, processaFimDaFila, providencias);
   }
@@ -68,23 +77,20 @@ public class ProcessaCiclaTelefoneTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(true);
-    assertThat(
-        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(false);
-    assertThat(
-        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
         is(false));
   }
 
   @Test
   public void acceptDeveriaSetarTelOriginal() throws Exception {
-    assertThat(
-        processaCiclaTelefone.accept(configuracoes, ligacao, cliente, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
         is(false));
     verify(ligacao).setTelefoneOriginal(telefone);
   }

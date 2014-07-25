@@ -15,7 +15,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.RestricaoHorario;
 import al.jdi.dao.model.RestricaoHorario.DiaSemana;
@@ -63,8 +63,8 @@ class RestricaoHorarioUtil implements TelefoneUtil {
   }
 
   @Override
-  public boolean isUtil(Configuracoes configuracoes, Telefone telefone) {
-    if (!configuracoes.isBloqueiaDddPorPeriodo())
+  public boolean isUtil(Tenant tenant, Telefone telefone) {
+    if (!tenant.getConfiguracoes().isBloqueiaDddPorPeriodo())
       return true;
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {

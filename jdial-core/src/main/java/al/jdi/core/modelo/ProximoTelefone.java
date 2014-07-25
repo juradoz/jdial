@@ -12,12 +12,12 @@ import javax.inject.Inject;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.FilterModule.ClienteSemTelefoneFilter;
 import al.jdi.core.filter.FilterModule.SomenteCelularFilter;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.ModeloModule.ProvidenciaMantemAtual;
 import al.jdi.core.modelo.ModeloModule.ProvidenciaProximoTelefone;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Telefone;
@@ -44,24 +44,24 @@ class ProximoTelefone implements Providencia {
   }
 
   @Override
-  public Telefone getTelefone(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente) {
+  public Telefone getTelefone(Tenant tenant, DaoFactory daoFactory, Cliente cliente) {
     final Telefone result = cliente.getTelefone();
     if (result == null)
-      return mantemAtual.get().getTelefone(configuracoes, daoFactory, cliente);
+      return mantemAtual.get().getTelefone(tenant, daoFactory, cliente);
 
     List<Telefone> telefones = new LinkedList<Telefone>(cliente.getTelefones());
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = clienteSemTelefonesFilter.filter(configuracoes, telefones);
+    telefones = clienteSemTelefonesFilter.filter(tenant, telefones);
     if (telefones.isEmpty())
       throw new ClienteSemTelefoneException();
 
-    telefones = somenteCelulareFilter.filter(configuracoes, telefones);
+    telefones = somenteCelulareFilter.filter(tenant, telefones);
     if (telefones.isEmpty())
       throw new SomenteCelularException();
 
-    telefones = telefoneSorter.sort(configuracoes, telefones);
+    telefones = telefoneSorter.sort(tenant, telefones);
 
     Telefone telefoneDaVez = null;
     for (Iterator<Telefone> it = telefones.iterator(); it.hasNext();) {
@@ -78,7 +78,7 @@ class ProximoTelefone implements Providencia {
         DateTime agora = daoFactory.getDataBanco();
         DateTime expiracao =
             cliente.getUltimoInicioRodadaTelefones().plus(
-                configuracoes.getIntervaloMinimoNovaRodadaTelefone());
+                tenant.getConfiguracoes().getIntervaloMinimoNovaRodadaTelefone());
         if (expiracao.isAfter(agora)) {
           throw new NaoPodeReiniciarRodadaTelefoneException();
         }

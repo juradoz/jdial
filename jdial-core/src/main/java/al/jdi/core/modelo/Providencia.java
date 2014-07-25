@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.Telefone;
@@ -55,6 +55,6 @@ public interface Providencia {
 
   Providencia.Codigo getCodigo();
 
-  Telefone getTelefone(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente);
+  Telefone getTelefone(Tenant tenant, DaoFactory daoFactory, Cliente cliente);
 
 }

@@ -23,6 +23,7 @@ import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Providencia.ClienteSemTelefoneException;
 import al.jdi.core.modelo.Providencia.SomenteCelularException;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -56,9 +57,10 @@ public class MantemAtualTest {
   private TelefoneFilter somenteCelulareFilter;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
 
   private List<Telefone> telefones;
-
 
   @Before
   public void setUp() throws Exception {
@@ -69,11 +71,12 @@ public class MantemAtualTest {
     when(daoFactory.getClienteDao()).thenReturn(clienteDao);
     when(cliente.getTelefone()).thenReturn(telefone);
     when(cliente.getTelefones()).thenReturn(telefones);
-    when(telefoneSorter.sort(configuracoes, telefones)).thenReturn(telefones);
+    when(telefoneSorter.sort(tenant, telefones)).thenReturn(telefones);
     when(iProximoTelefone.get()).thenReturn(proximoTelefone);
-    when(proximoTelefone.getTelefone(configuracoes, daoFactory, cliente)).thenReturn(telefone2);
-    when(clienteSemTelefonesFilter.filter(configuracoes, telefones)).thenReturn(telefones);
-    when(somenteCelulareFilter.filter(configuracoes, telefones)).thenReturn(telefones);
+    when(proximoTelefone.getTelefone(tenant, daoFactory, cliente)).thenReturn(telefone2);
+    when(clienteSemTelefonesFilter.filter(tenant, telefones)).thenReturn(telefones);
+    when(somenteCelulareFilter.filter(tenant, telefones)).thenReturn(telefones);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     mantemAtual =
         new MantemAtual(telefoneSorter, iProximoTelefone, clienteSemTelefonesFilter,
             somenteCelulareFilter);
@@ -81,48 +84,45 @@ public class MantemAtualTest {
 
   @Test
   public void deveriaRetornarMesmoTelefone() throws Exception {
-    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
-        is(sameInstance(telefone)));
+    assertThat(mantemAtual.getTelefone(tenant, daoFactory, cliente), is(sameInstance(telefone)));
   }
 
   @Test(expected = ClienteSemTelefoneException.class)
   public void deveriaLancarSemTelefonesException() throws Exception {
     telefones.clear();
-    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
+    mantemAtual.getTelefone(tenant, daoFactory, cliente);
   }
 
   @Test(expected = SomenteCelularException.class)
   public void deveriaLancarSomenteCelularesException() throws Exception {
-    when(somenteCelulareFilter.filter(configuracoes, telefones)).thenReturn(
+    when(somenteCelulareFilter.filter(tenant, telefones)).thenReturn(
         Collections.<Telefone>emptyList());
-    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
+    mantemAtual.getTelefone(tenant, daoFactory, cliente);
   }
 
   @Test
   public void deveriaRetornarProximoTelefoneSeAtualNaoContido() throws Exception {
     telefones.remove(telefone);
-    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
-        is(sameInstance(telefone2)));
+    assertThat(mantemAtual.getTelefone(tenant, daoFactory, cliente), is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaOrdenar() throws Exception {
-    when(telefoneSorter.sort(configuracoes, telefones)).thenReturn(asList(telefone2));
-    assertThat(mantemAtual.getTelefone(configuracoes, daoFactory, cliente),
-        is(sameInstance(telefone2)));
+    when(telefoneSorter.sort(tenant, telefones)).thenReturn(asList(telefone2));
+    assertThat(mantemAtual.getTelefone(tenant, daoFactory, cliente), is(sameInstance(telefone2)));
   }
 
   @Test
   public void deveriaSetarHorarioSeTelNull() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
+    mantemAtual.getTelefone(tenant, daoFactory, cliente);
     verify(cliente).setUltimoInicioRodadaTelefones(DATA_BANCO);
   }
 
   @Test
   public void deveriaAtualizarClienteSeTelNull() throws Exception {
     when(cliente.getTelefone()).thenReturn(null);
-    mantemAtual.getTelefone(configuracoes, daoFactory, cliente);
+    mantemAtual.getTelefone(tenant, daoFactory, cliente);
     verify(clienteDao).atualiza(cliente);
   }
 

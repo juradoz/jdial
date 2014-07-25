@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -36,23 +36,24 @@ class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
     if (!resultadoLigacao.isNotificaFimTentativa()) {
-      logger.info("Nao vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
+      logger.info("Nao vai notificar fim tentativa motivo {} {}", resultadoLigacao, ligacao
+          .getDiscavel().getCliente());
       return false;
     }
     return true;
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
-    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)
-        .notificaFimTentativa(ligacao, cliente, cliente.getMailing().getCampanha(),
-            daoFactory.getDataBanco(), ligacao.getTelefoneOriginal(), resultadoLigacao,
-            ligacao.isInutilizaComMotivoDiferenciado());
+    tratadorEspecificoClienteFactory.create(tenant, daoFactory).notificaFimTentativa(tenant,
+        ligacao, cliente, daoFactory.getDataBanco(), ligacao.getTelefoneOriginal(),
+        resultadoLigacao, ligacao.isInutilizaComMotivoDiferenciado());
     return true;
   }
 

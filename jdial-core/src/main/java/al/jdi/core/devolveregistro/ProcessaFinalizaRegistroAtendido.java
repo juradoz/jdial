@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.MotivoFinalizacao;
@@ -29,19 +29,20 @@ class ProcessaFinalizaRegistroAtendido implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
-    return configuracoes.getFinalizaRegistroAtendido() && ligacao.isAtendida();
+  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    return tenant.getConfiguracoes().getFinalizaRegistroAtendido() && ligacao.isAtendida();
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     MotivoFinalizacao motivo = daoFactory.getMotivoFinalizacaoDao().procura("Atendimento");
-    finalizadorCliente.finaliza(configuracoes, daoFactory, cliente, motivo);
+    finalizadorCliente.finaliza(tenant, daoFactory, cliente, motivo);
     logger.info("Finalizado {}", cliente);
-    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, cliente.getTelefone(), false, cliente.getMailing().getCampanha());
+    notificadorCliente.notificaFinalizacao(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        cliente.getTelefone(), false, cliente.getMailing().getCampanha());
     return false;
   }
 

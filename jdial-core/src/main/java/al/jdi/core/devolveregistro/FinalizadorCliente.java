@@ -6,8 +6,8 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.TelefoneDao;
@@ -35,14 +35,13 @@ class FinalizadorCliente {
     this.telefoneFilter = telefoneFilter;
   }
 
-  void finaliza(Configuracoes configuracoes, DaoFactory daoFactory, Cliente cliente,
+  void finaliza(Tenant tenant, DaoFactory daoFactory, Cliente cliente,
       MotivoFinalizacao motivoFinalizacao) {
     EstadoCliente estadoCliente = daoFactory.getEstadoClienteDao().procura("Finalizado");
     cliente.setEstadoCliente(estadoCliente);
 
     cliente.getAgendamento().clear();
-    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
-        .atualiza(cliente);
+    tratadorEspecificoClienteFactory.create(tenant, daoFactory).obtemClienteDao().atualiza(cliente);
 
     HistoricoCliente historicoCliente = new HistoricoCliente();
     historicoCliente.setCliente(cliente);
@@ -53,13 +52,13 @@ class FinalizadorCliente {
     daoFactory.getHistoricoClienteDao().adiciona(historicoCliente);
   }
 
-  void finalizaPorInutilizacaoSimples(Configuracoes configuracoes, DaoFactory daoFactory,
-      Cliente cliente) throws ClienteFinalizadoException {
+  void finalizaPorInutilizacaoSimples(Tenant tenant, DaoFactory daoFactory, Cliente cliente)
+      throws ClienteFinalizadoException {
     TelefoneDao telefoneDao = daoFactory.getTelefoneDao();
     Telefone telefone = telefoneDao.procura(cliente.getTelefone().getId());
     telefone.setUtil(false);
     telefoneDao.atualiza(telefone);
-    if (telefoneFilter.filter(configuracoes, cliente.getTelefones()).size() > 0) {
+    if (telefoneFilter.filter(tenant, cliente.getTelefones()).size() > 0) {
       logger.info(
           "Nao vai finalizar por inutilizacao simples pois ainda possui outros telefones {}",
           cliente);
@@ -69,7 +68,7 @@ class FinalizadorCliente {
     MotivoFinalizacao motivoFinalizacao =
         daoFactory.getMotivoFinalizacaoDao().procura("Sem telefones");
 
-    finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
+    finaliza(tenant, daoFactory, cliente, motivoFinalizacao);
 
     throw new ClienteFinalizadoException();
   }

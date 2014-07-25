@@ -107,7 +107,7 @@ public class DefaultJDialTest {
     when(campanhaDao.procura(CAMPANHA)).thenReturn(campanha);
     when(campanha.getNome()).thenReturn(CAMPANHA);
     when(campanha.getServico()).thenReturn(servico);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
 

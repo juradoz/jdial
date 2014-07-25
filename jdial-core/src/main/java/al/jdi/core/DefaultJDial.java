@@ -89,7 +89,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
       tratadorEspecificoClienteFactory
-          .create(tenant.getConfiguracoes(), daoFactory)
+          .create(tenant, daoFactory)
           .obtemClienteDao()
           .limpaReservas(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
               tenant.getConfiguracoes().getNomeBase(), tenant.getConfiguracoes().getOperador());

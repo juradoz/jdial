@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Telefone;
 
 class BloqueioCelularUtil implements TelefoneUtil {
@@ -18,8 +18,9 @@ class BloqueioCelularUtil implements TelefoneUtil {
   }
 
   @Override
-  public boolean isUtil(Configuracoes configuracoes, Telefone telefone) {
-    return !(configuracoes.bloqueiaCelular() && telefoneCelularChecker.isCelular(telefone));
+  public boolean isUtil(Tenant tenant, Telefone telefone) {
+    return !(tenant.getConfiguracoes().bloqueiaCelular() && telefoneCelularChecker
+        .isCelular(telefone));
   }
 
   @Override

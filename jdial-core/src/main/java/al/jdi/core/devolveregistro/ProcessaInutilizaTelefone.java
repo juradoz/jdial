@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
@@ -25,8 +25,9 @@ class ProcessaInutilizaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isInutilizaTelefone()
         && resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone() <= 0) {
       logger.info("Nao vai inutilizar telefone {}", cliente);
@@ -36,11 +37,12 @@ class ProcessaInutilizaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (resultadoLigacao.isInutilizaTelefone()) {
       logger.info("Inutilizando telefone por isInutilizaTelefone {}", cliente);
-      finalizadorCliente.finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
+      finalizadorCliente.finalizaPorInutilizacaoSimples(tenant, daoFactory, cliente);
       return true;
     }
 
@@ -48,7 +50,7 @@ class ProcessaInutilizaTelefone implements ProcessoDevolucao {
         .getQuantidadeDesteResultadoInutilizaTelefone()) {
       logger.info("Vai inutilizar telefone por quantidadeDesteResultadoInutilizaTelefone {}",
           cliente);
-      finalizadorCliente.finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
+      finalizadorCliente.finalizaPorInutilizacaoSimples(tenant, daoFactory, cliente);
       ligacao.setInutilizaComMotivoDiferenciado(true);
     }
     return true;

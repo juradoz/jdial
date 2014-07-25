@@ -3,13 +3,13 @@ package al.jdi.core.filter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Telefone;
 
 class CampoUtil implements TelefoneUtil {
 
   @Override
-  public boolean isUtil(Configuracoes configuracoes, Telefone telefone) {
+  public boolean isUtil(Tenant tenant, Telefone telefone) {
     return telefone.isUtil();
   }
 

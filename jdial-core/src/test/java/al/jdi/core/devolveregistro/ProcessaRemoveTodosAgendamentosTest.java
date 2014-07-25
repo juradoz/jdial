@@ -15,7 +15,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.AgendamentoDao;
 import al.jdi.dao.beans.ClienteDao;
@@ -48,6 +50,10 @@ public class ProcessaRemoveTodosAgendamentosTest {
   private ClienteDao clienteDao;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   private LinkedList<Agendamento> agendamentos;
 
@@ -57,9 +63,12 @@ public class ProcessaRemoveTodosAgendamentosTest {
     agendamentos = new LinkedList<Agendamento>(asList(agendamento));
     when(cliente.getAgendamento()).thenReturn(agendamentos);
     when(daoFactory.getAgendamentoDao()).thenReturn(agendamentoDao);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     processaRemoveTodosAgendamentos =
         new ProcessaRemoveTodosAgendamentos(tratadorEspecificoClienteFactory);
   }
@@ -72,42 +81,42 @@ public class ProcessaRemoveTodosAgendamentosTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isLimpaAgendamentos()).thenReturn(true);
-    assertThat(processaRemoveTodosAgendamentos.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaRemoveTodosAgendamentos.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isLimpaAgendamentos()).thenReturn(false);
-    assertThat(processaRemoveTodosAgendamentos.accept(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(false));
+    assertThat(
+        processaRemoveTodosAgendamentos.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(false));
   }
 
   @Test
   public void processaDeveriaLimparAgendamentos() throws Exception {
-    processaRemoveTodosAgendamentos.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
     assertThat(agendamentos.isEmpty(), is(true));
   }
 
   @Test
   public void processaDeveriaRemoverAgendamento() throws Exception {
-    processaRemoveTodosAgendamentos.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
     verify(agendamentoDao).remove(agendamento);
   }
 
   @Test
   public void processaDeveriaRemoverVariosAgendamento() throws Exception {
     agendamentos.add(agendamento);
-    processaRemoveTodosAgendamentos.executa(configuracoes, ligacao, cliente, resultadoLigacao,
-        daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
     verify(agendamentoDao, times(2)).remove(agendamento);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRemoveTodosAgendamentos.executa(configuracoes, ligacao, cliente,
-        resultadoLigacao, daoFactory), is(true));
+    assertThat(
+        processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        is(true));
   }
 }

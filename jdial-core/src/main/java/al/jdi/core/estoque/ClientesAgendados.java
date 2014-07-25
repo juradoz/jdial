@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.EstoqueModule.Agendados;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Cliente;
@@ -24,15 +24,14 @@ class ClientesAgendados implements ExtraidorClientes {
   }
 
   @Override
-  public Collection<Cliente> extrai(Configuracoes configuracoes, DaoFactory daoFactory,
-      int quantidade) {
+  public Collection<Cliente> extrai(Tenant tenant, DaoFactory daoFactory, int quantidade) {
     return tratadorEspecificoClienteFactory
-        .create(configuracoes, daoFactory)
+        .create(tenant, daoFactory)
         .obtemClienteDao()
         .obtemAGGs(quantidade,
-            daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()),
-            configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
-            configuracoes.getOperador());
+            daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha()),
+            tenant.getConfiguracoes().getNomeBaseDados(), tenant.getConfiguracoes().getNomeBase(),
+            tenant.getConfiguracoes().getOperador());
   }
 
   @Override

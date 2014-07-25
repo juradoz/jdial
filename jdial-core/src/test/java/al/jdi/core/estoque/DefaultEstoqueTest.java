@@ -103,7 +103,7 @@ public class DefaultEstoqueTest {
     when(registro.getCliente()).thenReturn(cliente);
     when(discavel.getCliente()).thenReturn(cliente);
 
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
 
     when(tenant.getConfiguracoes()).thenReturn(configuracoes);
@@ -135,7 +135,7 @@ public class DefaultEstoqueTest {
     when(campanha.isLimpaMemoria()).thenReturn(true);
     defaultEstoque.limpaMemoriaPorSolicitacao(daoFactory);
     ArgumentCaptor<Ligacao> captor = ArgumentCaptor.forClass(Ligacao.class);
-    verify(devolveRegistro, times(2)).devolveLigacao(Mockito.eq(configuracoes), captor.capture());
+    verify(devolveRegistro, times(2)).devolveLigacao(Mockito.eq(tenant), captor.capture());
     Ligacao ligacao = captor.getValue();
     assertThat(ligacao.getDiscavel(), is(sameInstance(discavel)));
   }
@@ -173,7 +173,7 @@ public class DefaultEstoqueTest {
   public void setUpXXX() {
     initMocks(this);
     when(registro.getCliente()).thenReturn(cliente);
-    when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
+    when(tratadorEspecificoClienteFactory.create(tenant, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     estoque = new LinkedList<Registro>(asList(registro, registro));
   }

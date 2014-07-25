@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.TelefoneDao;
 import al.jdi.dao.model.Cliente;
@@ -33,8 +33,9 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isIncrementaTentativa()) {
       logger.info("Nao vai incrementar tentativa {}", cliente);
       return false;
@@ -43,24 +44,25 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
+      DaoFactory daoFactory) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Incrementando tentativa {}", cliente);
 
     TelefoneDao telefoneDao = daoFactory.getTelefoneDao();
     Telefone telefone = telefoneDao.procura(cliente.getTelefone().getId());
     telefone.incTentativa();
     telefoneDao.atualiza(telefone);
-    if (configuracoes.getLimiteTentativasPorTelefone()) {
-      return limitaTentativasPorTelefone(configuracoes, daoFactory, cliente, telefoneDao);
+    if (tenant.getConfiguracoes().getLimiteTentativasPorTelefone()) {
+      return limitaTentativasPorTelefone(tenant, daoFactory, cliente, telefoneDao);
     }
 
-    return limitaTentativasPorCliente(configuracoes, daoFactory, cliente, telefoneDao, ligacao);
+    return limitaTentativasPorCliente(tenant, daoFactory, cliente, telefoneDao, ligacao);
   }
 
-  private boolean limitaTentativasPorTelefone(Configuracoes configuracoes, DaoFactory daoFactory,
+  private boolean limitaTentativasPorTelefone(Tenant tenant, DaoFactory daoFactory,
       Cliente cliente, TelefoneDao telefoneDao) {
-    int limiteTentativas = configuracoes.getLimiteTentativas();
+    int limiteTentativas = tenant.getConfiguracoes().getLimiteTentativas();
     int totalTentativas = cliente.getTelefone().getTentativa();
     if (totalTentativas < limiteTentativas) {
       logger.info("Ainda nao estourou tentativas telefone {}: {} de {} {}",
@@ -70,14 +72,15 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
 
     logger.info("Finalizando por excesso de tentativas tentativas telefone {}: {} de {} {}",
         new Object[] {cliente.getTelefone(), totalTentativas, limiteTentativas, cliente});
-    finalizadorCliente.finalizaPorInutilizacaoSimples(configuracoes, daoFactory, cliente);
+    finalizadorCliente.finalizaPorInutilizacaoSimples(tenant, daoFactory, cliente);
     return true;
   }
 
-  private boolean limitaTentativasPorCliente(Configuracoes configuracoes, DaoFactory daoFactory,
-      Cliente cliente, TelefoneDao telefoneDao, Ligacao ligacao) {
-    int limiteTentativas = configuracoes.getLimiteTentativas();
-    int totalTentativas = telefoneDao.totalTentativas(configuracoes.bloqueiaCelular(), cliente);
+  private boolean limitaTentativasPorCliente(Tenant tenant, DaoFactory daoFactory, Cliente cliente,
+      TelefoneDao telefoneDao, Ligacao ligacao) {
+    int limiteTentativas = tenant.getConfiguracoes().getLimiteTentativas();
+    int totalTentativas =
+        telefoneDao.totalTentativas(tenant.getConfiguracoes().bloqueiaCelular(), cliente);
     if (totalTentativas < limiteTentativas) {
       logger.info("Ainda nao estourou tentativas cliente: {} de {} {}", new Object[] {
           totalTentativas, limiteTentativas, cliente});
@@ -90,10 +93,10 @@ class ProcessaIncrementaTentativa implements ProcessoDevolucao {
     MotivoFinalizacao motivoFinalizacao =
         daoFactory.getMotivoFinalizacaoDao().procura("Excesso tentativas");
 
-    finalizadorCliente.finaliza(configuracoes, daoFactory, cliente, motivoFinalizacao);
+    finalizadorCliente.finaliza(tenant, daoFactory, cliente, motivoFinalizacao);
     logger.info("Finalizado {}", cliente);
-    notificadorCliente.notificaFinalizacao(configuracoes, daoFactory, ligacao, cliente,
-        resultadoLigacao, cliente.getTelefone(), false, cliente.getMailing().getCampanha());
+    notificadorCliente.notificaFinalizacao(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
+        cliente.getTelefone(), false, cliente.getMailing().getCampanha());
     return true;
   }
 

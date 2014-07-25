@@ -7,11 +7,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.ClienteDao;
 import al.jdi.dao.beans.DaoFactory;
-import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 import al.jdi.dao.model.Situacao;
@@ -21,37 +20,38 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
 
   static class TratadorEspecificoClienteTsaImplFactory implements TratadorEspecificoCliente.Factory {
     @Override
-    public TratadorEspecificoCliente create(Configuracoes configuracoes, DaoFactory daoFactory) {
-      return new TratadorEspecificoClienteTsa(configuracoes, daoFactory);
+    public TratadorEspecificoCliente create(Tenant tenant, DaoFactory daoFactory) {
+      return new TratadorEspecificoClienteTsa(tenant, daoFactory);
     }
   }
 
   private static final Logger logger = getLogger(TratadorEspecificoClienteTsa.class);
 
-  private final Configuracoes configuracoes;
+  private final Tenant tenant;
   private final DaoFactory daoFactory;
 
-  TratadorEspecificoClienteTsa(Configuracoes configuracoes, DaoFactory daoFactory) {
-    this.configuracoes = configuracoes;
+  TratadorEspecificoClienteTsa(Tenant tenant, DaoFactory daoFactory) {
+    this.tenant = tenant;
     this.daoFactory = daoFactory;
     logger.debug("Iniciando {}", this);
   }
 
   @Override
   public boolean isDnc(Cliente cliente) {
-    return daoFactory.getClienteDaoTsa().isDnc(cliente, configuracoes.getNomeBaseDados());
+    return daoFactory.getClienteDaoTsa().isDnc(cliente,
+        tenant.getConfiguracoes().getNomeBaseDados());
   }
 
   @Override
-  public void notificaFimTentativa(Ligacao ligacao, Cliente cliente, Campanha campanha,
+  public void notificaFimTentativa(Tenant tenant, Ligacao ligacao, Cliente cliente,
       DateTime dataBanco, Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
       boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
-          daoFactory.getResultadoLigacaoDao().procura(23, campanha);
+          daoFactory.getResultadoLigacaoDao().procura(23, tenant.getCampanha());
 
       if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()
-          && !configuracoes.isUraReversa()) {
+          && !tenant.getConfiguracoes().isUraReversa()) {
         logger.info("Nao vai efetivamente notificar tentativa pois isAtendida() para {}", ligacao
             .getDiscavel().getCliente().getId());
         return;
@@ -67,24 +67,25 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
           Situacao.TENTATIVA,
           inutilizaComMotivoDiferenciado ? resultadoLigacao
               .getMotivoFinalizacaoPorQuantidadeResultado() : resultadoLigacao.getMotivo(),
-          configuracoes.getMotivoFinalizacao(), configuracoes.getNomeBaseDados(),
-          configuracoes.getOperador(), configuracoes.getMotivoCampanha());
+          tenant.getConfiguracoes().getMotivoFinalizacao(),
+          tenant.getConfiguracoes().getNomeBaseDados(), tenant.getConfiguracoes().getOperador(),
+          tenant.getConfiguracoes().getMotivoCampanha());
     } finally {
       daoFactory.getClienteDaoTsa().liberaNaBaseDoCliente(cliente,
-          configuracoes.getNomeBaseDados(), configuracoes.getOperador());
+          tenant.getConfiguracoes().getNomeBaseDados(), tenant.getConfiguracoes().getOperador());
     }
   }
 
   @Override
-  public void notificaFinalizacao(Ligacao ligacao, Cliente cliente, Campanha campanha,
+  public void notificaFinalizacao(Tenant tenant, Ligacao ligacao, Cliente cliente,
       DateTime dataBanco, Telefone telefoneOriginal, ResultadoLigacao resultadoLigacao,
       boolean inutilizaComMotivoDiferenciado) {
     try {
       ResultadoLigacao resultadoSemAgentes =
-          daoFactory.getResultadoLigacaoDao().procura(23, campanha);
+          daoFactory.getResultadoLigacaoDao().procura(23, tenant.getCampanha());
 
       if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()
-          && !configuracoes.isUraReversa()) {
+          && !tenant.getConfiguracoes().isUraReversa()) {
         logger.info("Nao vai efetivamente notificar finalizacao pois isAtendida() para {}", ligacao
             .getDiscavel().getCliente().getId());
         return;
@@ -100,11 +101,12 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
           Situacao.FINALIZACAO,
           inutilizaComMotivoDiferenciado ? resultadoLigacao
               .getMotivoFinalizacaoPorQuantidadeResultado() : resultadoLigacao.getMotivo(),
-          configuracoes.getMotivoFinalizacao(), configuracoes.getNomeBaseDados(),
-          configuracoes.getOperador(), configuracoes.getMotivoCampanha());
+          tenant.getConfiguracoes().getMotivoFinalizacao(),
+          tenant.getConfiguracoes().getNomeBaseDados(), tenant.getConfiguracoes().getOperador(),
+          tenant.getConfiguracoes().getMotivoCampanha());
     } finally {
       daoFactory.getClienteDaoTsa().liberaNaBaseDoCliente(cliente,
-          configuracoes.getNomeBaseDados(), configuracoes.getOperador());
+          tenant.getConfiguracoes().getNomeBaseDados(), tenant.getConfiguracoes().getOperador());
     }
   }
 
@@ -116,7 +118,7 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
   @Override
   public boolean reservaNaBaseDoCliente(Cliente cliente) {
     return daoFactory.getClienteDaoTsa().reservaNaBaseDoCliente(cliente,
-        configuracoes.getOperador(), configuracoes.getNomeBaseDados());
+        tenant.getConfiguracoes().getOperador(), tenant.getConfiguracoes().getNomeBaseDados());
   }
 
   @Override
