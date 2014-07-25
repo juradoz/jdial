@@ -3,6 +3,7 @@ package al.jdi.web.util;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -16,6 +17,7 @@ import al.jdi.core.tenant.TenantModule.TenantManagerService;
 import al.jdi.cti.DialerCtiManagerModule.DialerCtiManagerService;
 import br.com.caelum.vraptor.events.VRaptorInitialized;
 
+@ApplicationScoped
 class Main {
 
   private static Logger logger = getLogger(Main.class);

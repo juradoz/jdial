@@ -65,39 +65,39 @@ public class RestricaoHorario implements DaoObject {
   @Column(nullable = false)
   private boolean ativo = true;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioSegunda;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalSegunda;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioTerca;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalTerca;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioQuarta;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalQuarta;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioQuinta;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalQuinta;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioSexta;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalSexta;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioSabado;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalSabado;
 
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaInicioDomingo;
-  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+  @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
   private LocalTime horaFinalDomingo;
 
   public RestricaoHorario() {}

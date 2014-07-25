@@ -9,7 +9,7 @@
 		</layout>
 	</appender>
 
-	<!-- category name="com.mchange">
+	<category name="com.mchange">
 		<priority value="error" />
 	</category>
 
@@ -21,13 +21,9 @@
 		<priority value="error" />
 	</category>
 
-	<category name="org.jboss.weld">
+	<category name="org.jboss">
 		<priority value="error" />
 	</category>
-
-	<category name="org.jboss.logging">
-		<priority value="error" />
-	</category -->
 
 	<root>
 		<priority value="info" />
