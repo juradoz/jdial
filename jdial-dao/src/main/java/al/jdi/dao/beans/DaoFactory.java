@@ -11,7 +11,6 @@ import al.jdi.dao.model.InformacaoCliente;
 import al.jdi.dao.model.Log;
 import al.jdi.dao.model.MotivoFinalizacao;
 import al.jdi.dao.model.RestricaoHorario;
-import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.WebLog;
 
 public interface DaoFactory {
@@ -63,8 +62,6 @@ public interface DaoFactory {
   Dao<RestricaoHorario> getRestricaoHorarioDao();
 
   ResultadoLigacaoDao getResultadoLigacaoDao();
-
-  Dao<Rota> getRotaDao();
 
   ServicoDao getServicoDao();
 

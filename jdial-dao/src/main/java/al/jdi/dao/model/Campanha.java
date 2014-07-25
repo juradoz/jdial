@@ -45,10 +45,6 @@ public class Campanha implements DaoObject {
   private Grupo grupo;
 
   @ManyToOne
-  @JoinColumn(name = "idRota", nullable = false)
-  private Rota rota;
-
-  @ManyToOne
   @JoinColumn(name = "idServico", nullable = false)
   private Servico servico;
 
@@ -61,8 +57,8 @@ public class Campanha implements DaoObject {
   public Campanha() {}
 
   private Campanha(Long id, CriacaoModificacao criacaoModificacao, String nome,
-      boolean filtroAtivo, int codigoFiltro, Grupo grupo, Rota rota, Servico servico,
-      String descricao, boolean limpaMemoria, boolean ativa) {
+      boolean filtroAtivo, int codigoFiltro, Grupo grupo, Servico servico, String descricao,
+      boolean limpaMemoria, boolean ativa) {
     super();
     this.id = id;
     this.criacaoModificacao = criacaoModificacao;
@@ -70,7 +66,6 @@ public class Campanha implements DaoObject {
     this.filtroAtivo = filtroAtivo;
     this.codigoFiltro = codigoFiltro;
     this.grupo = grupo;
-    this.rota = rota;
     this.servico = servico;
     this.descricao = descricao;
     this.limpaMemoria = limpaMemoria;
@@ -123,10 +118,6 @@ public class Campanha implements DaoObject {
     return nome;
   }
 
-  public Rota getRota() {
-    return rota;
-  }
-
   public Servico getServico() {
     return servico;
   }
@@ -160,10 +151,6 @@ public class Campanha implements DaoObject {
     this.nome = nome;
   }
 
-  public void setRota(Rota rota) {
-    this.rota = rota;
-  }
-
   public void setServico(Servico servico) {
     this.servico = servico;
   }
@@ -191,8 +178,8 @@ public class Campanha implements DaoObject {
   }
 
   public Campanha clone() {
-    return new Campanha(id, criacaoModificacao, nome, filtroAtivo, codigoFiltro, grupo, rota,
-        servico, descricao, limpaMemoria, ativa);
+    return new Campanha(id, criacaoModificacao, nome, filtroAtivo, codigoFiltro, grupo.clone(),
+        servico.clone(), descricao, limpaMemoria, ativa);
   }
 
 }

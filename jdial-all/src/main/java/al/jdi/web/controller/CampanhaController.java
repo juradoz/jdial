@@ -9,7 +9,6 @@ import javax.inject.Inject;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Grupo;
-import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.Servico;
 import al.jdi.dao.model.Usuario.TipoPerfil;
 import al.jdi.web.component.DaoFactoryRequest;
@@ -82,7 +81,6 @@ public class CampanhaController {
   public void formularioCampanha(String action, Campanha campanha) {
     result.include("campanha", campanha);
     result.include("grupos", listGrupos());
-    result.include("rotas", listRotas());
     result.include("servicos", listServicos());
     result.include("formAction", action);
   }
@@ -95,10 +93,6 @@ public class CampanhaController {
 
   private Collection<Grupo> listGrupos() {
     return daoFactoryRequest.get().getGrupoDao().listaTudo();
-  }
-
-  private Collection<Rota> listRotas() {
-    return daoFactoryRequest.get().getRotaDao().listaTudo();
   }
 
   private Collection<Servico> listServicos() {

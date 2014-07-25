@@ -16,7 +16,6 @@ import al.jdi.dao.model.InformacaoCliente;
 import al.jdi.dao.model.Log;
 import al.jdi.dao.model.MotivoFinalizacao;
 import al.jdi.dao.model.RestricaoHorario;
-import al.jdi.dao.model.Rota;
 import al.jdi.dao.model.WebLog;
 
 class DefaultDaoFactory implements DaoFactory {
@@ -137,11 +136,6 @@ class DefaultDaoFactory implements DaoFactory {
   @Override
   public ResultadoLigacaoDao getResultadoLigacaoDao() {
     return new DefaultResultadoLigacaoDao(session);
-  }
-
-  @Override
-  public Dao<Rota> getRotaDao() {
-    return new DefaultRotaDao(session);
   }
 
   @Override

@@ -35,6 +35,17 @@ public class Servico implements DaoObject {
   @Column(nullable = false)
   private boolean monitoravelQrf = false;
 
+  public Servico() {}
+
+  private Servico(Long id, CriacaoModificacao criacaoModificacao, String nome, String descricao,
+      boolean monitoravelQrf) {
+    this.id = id;
+    this.criacaoModificacao = criacaoModificacao;
+    this.nome = nome;
+    this.descricao = descricao;
+    this.monitoravelQrf = monitoravelQrf;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -93,5 +104,9 @@ public class Servico implements DaoObject {
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
         .append("nome", nome).toString();
+  }
+
+  public Servico clone() {
+    return new Servico(id, criacaoModificacao, nome, descricao, monitoravelQrf);
   }
 }

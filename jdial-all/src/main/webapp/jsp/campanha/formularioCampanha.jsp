@@ -31,16 +31,6 @@
 			</select></td>
 		</tr>
 		<tr>
-			<td>Rota:</td>
-			<td align="right"><select class="selectmenu" name="campanha.rota.id">
-					<c:forEach var="rota" items="${rotas}">
-						<option value="${rota.id}"
-							<c:if test="${campanha.rota.id == rota.id}">selected="true"</c:if>>
-							${rota.codigo} - ${rota.descricao}</option>
-					</c:forEach>
-			</select></td>
-		</tr>
-		<tr>
 			<td>Serviço:</td>
 			<td align="right"><select class="selectmenu" name="campanha.servico.id">
 					<c:forEach var="servico" items="${servicos}">

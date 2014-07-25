@@ -38,6 +38,18 @@ public class Grupo implements DaoObject {
 
   private boolean semAgentes = false;
 
+  public Grupo() {}
+
+  private Grupo(Long id, CriacaoModificacao criacaoModificacao, String codigo, String descricao,
+      boolean visivelOperador, boolean semAgentes) {
+    this.id = id;
+    this.criacaoModificacao = criacaoModificacao;
+    this.codigo = codigo;
+    this.descricao = descricao;
+    this.visivelOperador = visivelOperador;
+    this.semAgentes = semAgentes;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -105,4 +117,9 @@ public class Grupo implements DaoObject {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
         .append("codigo", codigo).toString();
   }
+
+  public Grupo clone() {
+    return new Grupo(id, criacaoModificacao, codigo, descricao, visivelOperador, semAgentes);
+  }
+  
 }

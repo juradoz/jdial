@@ -5,7 +5,6 @@
 		<td>Nome</td>
 		<td>Descrição</td>
 		<td>Grupo</td>
-		<td>Rota</td>
 		<td>Serviço</td>
 		<td>Filtro ativo</td>
 		<td>Codigo Filtro</td>
@@ -18,7 +17,6 @@
 			<td>${campanha.nome }</td>
 			<td>${campanha.descricao }</td>
 			<td>${campanha.grupo.codigo }</td>
-			<td>${campanha.rota.codigo }</td>
 			<td>${campanha.servico.nome }</td>
 			<td><input type="checkbox" disabled="disabled"
 				<c:if test="${campanha.filtroAtivo}">checked="true"</c:if>></td>
