@@ -76,7 +76,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     this.tenant = tenant;
 
     dialerCtiManager.addListener(this);
-    logger.info("Iniciando jDial {}...", this.versao);
+    logger.info("Iniciando jDial {} {}...", versao, tenant.getCampanha());
     limpaReservas();
   }
 
@@ -85,7 +85,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     try {
       Campanha campanha =
           daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
-      logger.debug("Limpando reservas para campanha {}...", campanha.getNome());
+      logger.debug("Limpando reservas {}...", campanha.getNome());
       DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
       tratadorEspecificoClienteFactory
@@ -94,10 +94,10 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
           .limpaReservas(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
               tenant.getConfiguracoes().getNomeBase(), tenant.getConfiguracoes().getOperador());
       daoFactory.commit();
-      logger.info("Limpou reservas para campanha {}. Demorou {}ms", campanha.getNome(),
-          new Duration(inicio, new DateTime()).getMillis());
+      logger.info("Limpou reservas. Demorou {}ms {}",
+          new Duration(inicio, new DateTime()).getMillis(), campanha);
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
+      logger.error("{} {}", e.getMessage(), tenant.getCampanha(), e);
     } finally {
       if (daoFactory.hasTransaction())
         daoFactory.rollback();
@@ -108,7 +108,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
   void rodada(DaoFactory daoFactory, Estoque estoque) {
     Campanha campanha =
         daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
-    logger.debug("Rodada {} para campanha {}", estoque, campanha.getNome());
+    logger.debug("Rodada {} {}", estoque, campanha);
     int livres = tenant.getGerenciadorAgentes().getLivres();
 
     double fatorK = tenant.getGerenciadorFatorK().getFatorK();
@@ -120,16 +120,17 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
     int quantidade = ((int) (livres * fatorK) - quantidadeLigacoesNaoAtendidas);
 
-    logger.info("Rodada {} Livres: {} * fatorK: {} - ligacoes: {} ({} total) = quantidade: {}",
+    logger.info("Rodada {} Livres: {} * fatorK: {} - ligacoes: {} ({} total) = quantidade: {} {}",
         new Object[] {estoque, livres, fatorK, quantidadeLigacoesNaoAtendidas, quantidadeLigacoes,
-            quantidade});
+            quantidade, tenant.getCampanha()});
 
     if (quantidade <= 0)
       return;
 
     Collection<Cliente> clientesAgendados = estoque.obtemRegistros(quantidade);
 
-    logger.debug("Obtive {} clientes de {}", clientesAgendados.size(), estoque);
+    logger.debug("Obtive {} clientes de {} {}", clientesAgendados.size(), estoque,
+        tenant.getCampanha());
 
     DateTime dataBanco = daoFactory.getDataBanco();
     Servico servico = campanha.getServico();
@@ -139,23 +140,24 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       Ligacao ligacao = new Ligacao.Builder(discavel).setInicio(dataBanco).build();
       DateTime inicio = new DateTime();
       tenant.getGerenciadorLigacoes().disca(ligacao, servico);
-      logger.debug("Discagem demorou {} ms", new Duration(inicio, new DateTime()).getMillis());
+      logger.debug("Discagem demorou {} ms {}", new Duration(inicio, new DateTime()).getMillis(),
+          tenant.getCampanha());
     }
   }
 
   @Override
   public void run() {
     if (!tenant.getConfiguracoes().getSistemaAtivo()) {
-      logger.warn("Sistema inativo");
+      logger.warn("Sistema inativo {}", tenant.getCampanha());
       return;
     }
 
     if (!inService) {
-      logger.warn("Fora de servico.");
+      logger.warn("Fora de servico. {}", tenant.getCampanha());
       return;
     }
 
-    logger.debug("Sistema ativo!");
+    logger.debug("Sistema ativo! {}", tenant.getCampanha());
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
       rodada(daoFactory, tenant.getEstoqueAgendados());
@@ -196,25 +198,25 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
   @Override
   public void providerEventTransmissionEnded(ProviderEvent event) {
-    logger.debug("providerEventTransmissionEnded");
+    logger.debug("providerEventTransmissionEnded {}", tenant.getCampanha());
     inService = false;
   }
 
   @Override
   public void providerInService(ProviderEvent event) {
-    logger.debug("providerInService");
+    logger.debug("providerInService {}", tenant.getCampanha());
     inService = true;
   }
 
   @Override
   public void providerOutOfService(ProviderEvent event) {
-    logger.debug("providerOutOfService");
+    logger.debug("providerOutOfService {}", tenant.getCampanha());
     inService = false;
   }
 
   @Override
   public void providerShutdown(ProviderEvent event) {
-    logger.debug("providerShutdown");
+    logger.debug("providerShutdown {}", tenant.getCampanha());
     inService = false;
   }
 

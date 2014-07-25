@@ -112,7 +112,7 @@ class DefaultEstoque implements Estoque, Runnable {
     this.intervaloMonitoracao = intervaloMonitoracao;
     this.providencias = providencias;
     this.telefoneFilter = telefoneFilter;
-    logger.debug("Iniciando {} para {}...", this, extraidorClientes);
+    logger.debug("Iniciando {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
   }
 
   private void devolveCliente(DaoFactory daoFactory, Cliente cliente, MotivoSistema motivoSistema) {
@@ -150,14 +150,14 @@ class DefaultEstoque implements Estoque, Runnable {
     ultimaLimpezaTemporaria = new DateTime();
     Campanha campanha =
         daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
-    logger.info("Limpeza temporaria para campanha {}", campanha);
+    logger.info("Limpeza temporaria {}", campanha);
     int registrosLimpos =
         tratadorEspecificoClienteFactory
             .create(tenant, daoFactory)
             .obtemClienteDao()
             .limpezaTemporaria(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
                 tenant.getConfiguracoes().getNomeBase());
-    logger.info("Foram limpos {} registros", registrosLimpos);
+    logger.info("Foram limpos {} registros {}", registrosLimpos, campanha);
   }
 
   @Override
@@ -185,8 +185,8 @@ class DefaultEstoque implements Estoque, Runnable {
         if (!registroExpirado)
           continue;
 
-        logger.warn("Registro expirado: {} Na memoria ha mais de {}s", registro.getCliente(),
-            new Duration(registro.getCriacao(), new DateTime()).getStandardSeconds());
+        logger.warn("Registro expirado: {} Na memoria ha mais de {}s {}", registro.getCliente(),
+            new Duration(registro.getCriacao(), new DateTime()).getStandardSeconds(), tenant.getCampanha());
         devolveCliente(instante, registro.getCliente(), MotivoSistema.NAO_UTILIZADO);
         it.remove();
       }
@@ -195,8 +195,8 @@ class DefaultEstoque implements Estoque, Runnable {
 
   private void reservaCliente(DaoFactory daoFactory, Cliente cliente) throws DncException,
       ClienteJaEmUsoException {
-    logger.debug("Providencia para cliente {} = {}", cliente, cliente.getInformacaoCliente()
-        .getProvidenciaTelefone());
+    logger.debug("Providencia para cliente {} = {} {}", cliente, cliente.getInformacaoCliente()
+        .getProvidenciaTelefone(), tenant.getCampanha());
 
     Providencia.Codigo codigo =
         Providencia.Codigo.fromValue(cliente.getInformacaoCliente().getProvidenciaTelefone());
@@ -226,7 +226,7 @@ class DefaultEstoque implements Estoque, Runnable {
     if (!tratadorEspecificoClienteFactory.create(tenant, daoFactory)
         .reservaNaBaseDoCliente(cliente))
       throw new ClienteJaEmUsoException();
-    logger.debug("Cliente {} reservado!", cliente);
+    logger.debug("Cliente {} reservado! {}", cliente, tenant.getCampanha());
   }
 
   @Override
@@ -253,10 +253,10 @@ class DefaultEstoque implements Estoque, Runnable {
         Telefone telefone = cliente.getTelefone();
         List<Telefone> telefonesFiltrados = telefoneFilter.filter(tenant, asList(telefone));
         if (!telefonesFiltrados.isEmpty()) {
-          logger.debug("Telefone ainda bom na memoria {} {}", telefone, cliente);
+          logger.debug("Telefone ainda bom na memoria {} {} {}", telefone, cliente, tenant.getCampanha());
           continue;
         }
-        logger.warn("Removendo da memoria cliente com telefone {} inutil {}", telefone, cliente);
+        logger.warn("Removendo da memoria cliente com telefone {} inutil {} {}", telefone, cliente, tenant.getCampanha());
         devolveCliente(instante, cliente, MotivoSistema.NAO_UTILIZADO);
         it.remove();
       }
@@ -267,7 +267,7 @@ class DefaultEstoque implements Estoque, Runnable {
     Dao<Campanha> campanhaDao = daoFactory.getCampanhaDao();
     Campanha campanha = campanhaDao.procura(tenant.getConfiguracoes().getNomeCampanha());
     if (!campanha.isLimpaMemoria()) {
-      logger.debug("Limpeza de memoria nao solicitada.");
+      logger.debug("Limpeza de memoria nao solicitada. {}", tenant.getCampanha());
       return;
     }
 
@@ -276,7 +276,7 @@ class DefaultEstoque implements Estoque, Runnable {
     campanhaDao.atualiza(campanha);
     daoFactory.commit();
 
-    logger.warn("Limpeza de memoria solicitada!");
+    logger.warn("Limpeza de memoria solicitada! {}", tenant.getCampanha());
     DateTime instante = daoFactory.getDataBanco();
     synchronized (estoque) {
       for (Iterator<Registro> it = estoque.iterator(); it.hasNext();) {
@@ -285,7 +285,7 @@ class DefaultEstoque implements Estoque, Runnable {
         it.remove();
       }
     }
-    logger.warn("Limpeza de memoria realizada com sucesso!");
+    logger.warn("Limpeza de memoria realizada com sucesso! {}", tenant.getCampanha());
   }
 
   @Override
@@ -293,17 +293,17 @@ class DefaultEstoque implements Estoque, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloMonitoracao, true, true);
-    logger.info("Iniciado {} para {}...", this, extraidorClientes);
+    logger.info("Iniciado {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
   }
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {} para {}...", this, extraidorClientes);
+    logger.debug("Encerrando {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
     if (engine == null)
       throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
-    logger.info("Encerrado {} para {}", this, extraidorClientes);
+    logger.info("Encerrado {} para {} {}", this, extraidorClientes, tenant.getCampanha());
   }
 
   @Override
@@ -317,7 +317,7 @@ class DefaultEstoque implements Estoque, Runnable {
       size = estoque.size();
     }
 
-    logger.info("Em estoque para {}: {}", extraidorClientes, size);
+    logger.info("Em estoque para {}: {} {}", extraidorClientes, size, tenant.getCampanha());
     if (size >= tenant.getConfiguracoes().getMinimoEstoque())
       return;
     int quantidade = tenant.getConfiguracoes().getMaximoEstoque() - size;
@@ -334,26 +334,31 @@ class DefaultEstoque implements Estoque, Runnable {
             daoFactory.commit();
           }
 
-          logger.info("Armazenando em {}: {}", new Object[] {this, cliente.toStringFull()});
+          logger.info("Armazenando em {}: {} {}", this, cliente.toStringFull(),
+              tenant.getCampanha());
           synchronized (estoque) {
             estoque.add(new Registro(cliente));
           }
         } catch (ClienteSemTelefoneException e) {
-          logger.warn("Erro na obtencao de telefone para o cliente {}", cliente);
+          logger.warn("Erro na obtencao de telefone para o cliente {} {}", cliente,
+              tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.SEM_TELEFONES);
         } catch (SomenteCelularException e) {
-          logger.warn("Cliente somente com celulares {}", cliente);
+          logger.warn("Cliente somente com celulares {} {}", cliente, tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.SOMENTE_CELULARES);
         } catch (DncException e) {
-          logger.warn("Cliente {} consta na lista DNC", cliente);
+          logger.warn("Cliente {} consta na lista DNC {}", cliente, tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.LEI_NAO_PERTURBE);
         } catch (ClienteJaEmUsoException e) {
-          logger.error("Nao atualizou cliente {}! Ja deve ter algum operador com ele...", cliente);
+          logger.error("Nao atualizou cliente {}! Ja deve ter algum operador com ele {}", cliente,
+              tenant.getCampanha());
         } catch (SemProximoTelefoneException e) {
-          logger.warn("Cliente sem proximoTelefone para providencia {}", cliente);
+          logger.warn("Cliente sem proximoTelefone para providencia {} {}", cliente,
+              tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.SEM_PROXIMO_TELEFONE);
         } catch (NaoPodeReiniciarRodadaTelefoneException e) {
-          logger.warn("Ainda nao posso ir para proximo telefone {}", cliente);
+          logger.warn("Ainda nao posso ir para proximo telefone {} {}", cliente,
+              tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.NAO_PODE_IR_PROXIMO_TELEFONE);
         } catch (RuntimeException e) {
           logger.error(e.getMessage(), e);
