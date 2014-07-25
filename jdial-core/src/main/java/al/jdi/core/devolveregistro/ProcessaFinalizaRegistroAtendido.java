@@ -29,14 +29,14 @@ class ProcessaFinalizaRegistroAtendido implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     return tenant.getConfiguracoes().getFinalizaRegistroAtendido() && ligacao.isAtendida();
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     MotivoFinalizacao motivo = daoFactory.getMotivoFinalizacaoDao().procura("Atendimento");
     finalizadorCliente.finaliza(tenant, daoFactory, cliente, motivo);

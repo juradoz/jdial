@@ -70,19 +70,19 @@ public class ProcessaLimpaReservaTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaLimpaReserva.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaLimpaReserva.accept(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
 
   }
 
   @Test
   public void executaDeveriaLimpar() throws Exception {
-    processaLimpaReserva.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaLimpaReserva.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(clienteDao).limpaReserva(cliente, OPERADOR, NOME_BASE_DADOS);
   }
 
   @Test
   public void executaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaLimpaReserva.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaLimpaReserva.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 

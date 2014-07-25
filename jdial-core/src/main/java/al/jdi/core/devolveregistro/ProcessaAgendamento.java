@@ -30,8 +30,8 @@ class ProcessaAgendamento implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     if (resultadoLigacao == null || resultadoLigacao.getIntervaloReagendamento() <= 0) {
       logger.info("Nao vai agendar {}", ligacao.getDiscavel().getCliente());
       return false;
@@ -40,8 +40,8 @@ class ProcessaAgendamento implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
 
     DateTime cal =

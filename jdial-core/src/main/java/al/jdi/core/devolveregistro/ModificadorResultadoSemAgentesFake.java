@@ -14,8 +14,8 @@ class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
   private static final Logger logger = getLogger(ModificadorResultadoSemAgentesFake.class);
 
   @Override
-  public boolean accept(Tenant tenant, DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     if (tenant.getConfiguracoes().isUraReversa())
       return false;
     ResultadoLigacao resultadoLigacaoAtendida =
@@ -25,7 +25,7 @@ class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
 
   @Override
   public ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao) {
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
     logger.info("Alterando resultado por semAgentesFake {}", ligacao.getDiscavel().getCliente());
     return daoFactory.getResultadoLigacaoDao().procura(23, tenant.getCampanha());
   }

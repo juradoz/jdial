@@ -7,10 +7,10 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 interface ModificadorResultadoFilter {
 
-  boolean accept(Tenant tenant, DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao);
+  boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao);
 
   ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao);
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao);
 
 }

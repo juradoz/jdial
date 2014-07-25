@@ -103,19 +103,19 @@ public class ProcessaAgendamentoTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.getIntervaloReagendamento()).thenReturn(10);
-    assertThat(processaAgendamento.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.accept(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
-    assertThat(processaAgendamento.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(false));
+    assertThat(processaAgendamento.accept(tenant, daoFactory, ligacao, resultadoLigacao), is(false));
   }
 
   @Test
   public void executaDeveriaLimparAgendamentosPorHistoricoNoIntervalo() throws Exception {
     when(historicoLigacaoDao.procura(eq(cliente), eq(resultadoLigacao), any(DateTime.class)))
         .thenReturn(asList(historicoLigacao, historicoLigacao));
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(agendamentos).clear();
   }
 
@@ -123,27 +123,27 @@ public class ProcessaAgendamentoTest {
   public void executaDeveriaAtualizarPorHistoricoNoIntervalo() throws Exception {
     when(historicoLigacaoDao.procura(eq(cliente), eq(resultadoLigacao), any(DateTime.class)))
         .thenReturn(asList(historicoLigacao, historicoLigacao));
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(clienteDao).atualiza(cliente);
   }
 
   @Test
   public void executaNaoDeveriaLimparAgendamentosPorHistoricoNoIntervalo() throws Exception {
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(agendamentos, never()).clear();
   }
 
   @Test
   public void executaDeveriaAdicionarNovoAgendamento() throws Exception {
     when(resultadoLigacao.getIntervaloReagendamento()).thenReturn(10);
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(agendamentoDao).adiciona(any(Agendamento.class));
   }
 
   @Test
   public void verificaNovoAgendamentoAdicionado() throws Exception {
     when(resultadoLigacao.getIntervaloReagendamento()).thenReturn(10);
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     ArgumentCaptor<Agendamento> captor = ArgumentCaptor.forClass(Agendamento.class);
     verify(agendamentoDao).adiciona(captor.capture());
     Agendamento agendamento = captor.getValue();
@@ -154,27 +154,27 @@ public class ProcessaAgendamentoTest {
   @Test
   public void exeutaDeveriaAlterarAgendamento() throws Exception {
     when(agendamentoDao.procura(cliente)).thenReturn(agendamento);
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(agendamento).setAgendamento(any(DateTime.class));
   }
 
   @Test
   public void executaDeveriaAtualizarAgendamento() throws Exception {
     when(agendamentoDao.procura(cliente)).thenReturn(agendamento);
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(agendamentoDao).atualiza(agendamento);
   }
 
   @Test
   public void executaDeveriaInserirHistorico() throws Exception {
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(historicoClienteDao).adiciona(any(HistoricoCliente.class));
   }
 
   @Test
   public void verificaHistoricoInserido() throws Exception {
     when(resultadoLigacao.getIntervaloReagendamento()).thenReturn(10);
-    assertThat(processaAgendamento.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaAgendamento.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     ArgumentCaptor<HistoricoCliente> captor = ArgumentCaptor.forClass(HistoricoCliente.class);
     verify(historicoClienteDao).adiciona(captor.capture());
     HistoricoCliente historicoCliente = captor.getValue();

@@ -63,33 +63,33 @@ public class ModificadorResultadoInexistenteFakeTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     assertThat(modificadorResultadoInexistenteFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(true));
+        ligacao, resultadoLigacaoAtendida), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(true);
     assertThat(modificadorResultadoInexistenteFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(false));
+        ligacao, resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
     assertThat(modificadorResultadoInexistenteFake.accept(tenant, daoFactory,
-        resultadoLigacaoInexistente, ligacao), is(false));
+        ligacao, resultadoLigacaoInexistente), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseAtendida() throws Exception {
     when(ligacao.isAtendida()).thenReturn(true);
     assertThat(modificadorResultadoInexistenteFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(false));
+        ligacao, resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarInexistente() throws Exception {
     assertThat(
-        modificadorResultadoInexistenteFake.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoInexistenteFake.modifica(tenant, daoFactory, ligacao, resultadoLigacao),
         is(sameInstance(resultadoLigacaoInexistente)));
   }
 

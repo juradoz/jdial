@@ -65,24 +65,24 @@ public class ProcessaFimDaFilaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isVaiParaOFimDaFila()).thenReturn(true);
-    assertThat(processaFimDaFila.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaFimDaFila.accept(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isVaiParaOFimDaFila()).thenReturn(false);
-    assertThat(processaFimDaFila.accept(tenant, ligacao, resultadoLigacao, daoFactory), is(false));
+    assertThat(processaFimDaFila.accept(tenant, daoFactory, ligacao, resultadoLigacao), is(false));
   }
 
   @Test
   public void executaDeveriaFimDaFila() throws Exception {
-    assertThat(processaFimDaFila.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaFimDaFila.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(cliente).fimDaFila();
   }
 
   @Test
   public void executaDeveriaAtualizarCliente() throws Exception {
-    assertThat(processaFimDaFila.executa(tenant, ligacao, resultadoLigacao, daoFactory), is(true));
+    assertThat(processaFimDaFila.executa(tenant, daoFactory, ligacao, resultadoLigacao), is(true));
     verify(clienteDao).atualiza(cliente);
   }
 

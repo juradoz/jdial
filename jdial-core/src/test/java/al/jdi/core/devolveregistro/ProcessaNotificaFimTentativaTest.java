@@ -82,27 +82,27 @@ public class ProcessaNotificaFimTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    assertThat(processaNotificaFimTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaNotificaFimTentativa.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    assertThat(processaNotificaFimTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaNotificaFimTentativa.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void processaDeveriaNotificar() throws Exception {
-    processaNotificaFimTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaNotificaFimTentativa.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(tratadorEspecificoCliente).notificaFimTentativa(tenant, ligacao, cliente, dataBanco,
         telefone, resultadoLigacao, INUTILIZA_MOTIVO_DIFERENCIADO);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaNotificaFimTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaNotificaFimTentativa.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 

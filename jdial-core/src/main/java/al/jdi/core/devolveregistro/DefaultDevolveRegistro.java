@@ -96,17 +96,17 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
       return;
     }
 
-    resultadoLigacao = modificadorResultado.modifica(tenant, daoFactory, resultadoLigacao, ligacao);
+    resultadoLigacao = modificadorResultado.modifica(tenant, daoFactory, ligacao, resultadoLigacao);
 
     logger.info("Devolvendo com motivo {} {}", resultadoLigacao, cliente);
 
     for (ProcessoDevolucao processo : processosDevolucao) {
-      if (!processo.accept(tenant, ligacao, resultadoLigacao, daoFactory)) {
+      if (!processo.accept(tenant, daoFactory, ligacao, resultadoLigacao)) {
         continue;
       }
 
       try {
-        if (!processo.executa(tenant, ligacao, resultadoLigacao, daoFactory)) {
+        if (!processo.executa(tenant, daoFactory, ligacao, resultadoLigacao)) {
           break;
         }
       } catch (ClienteFinalizadoException e) {

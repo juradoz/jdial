@@ -78,27 +78,27 @@ public class ProcessaFinalizaClienteTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isFinalizaCliente()).thenReturn(true);
-    assertThat(processaFinalizaCliente.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaFinalizaCliente.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isFinalizaCliente()).thenReturn(false);
-    assertThat(processaFinalizaCliente.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaFinalizaCliente.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void executaDeveriaFinalizar() throws Exception {
-    assertThat(processaFinalizaCliente.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaFinalizaCliente.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
     verify(finalizadorCliente).finaliza(tenant, daoFactory, cliente, motivoFinalizacao);
   }
 
   @Test
   public void executaDeveriaNotificar() throws Exception {
-    assertThat(processaFinalizaCliente.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaFinalizaCliente.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
     verify(notificadorCliente).notificaFinalizacao(tenant, daoFactory, ligacao, cliente,
         resultadoLigacao, telefone, false, campanha);

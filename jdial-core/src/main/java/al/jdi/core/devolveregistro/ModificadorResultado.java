@@ -25,13 +25,13 @@ class ModificadorResultado {
   }
 
   ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao) {
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
 
     for (ModificadorResultadoFilter filter : filters) {
       logger.debug("Avaliando {}...", filter);
-      if (filter.accept(tenant, daoFactory, resultadoLigacao, ligacao)) {
+      if (filter.accept(tenant, daoFactory, ligacao, resultadoLigacao)) {
         logger.debug("Vai processar {}", filter);
-        return filter.modifica(tenant, daoFactory, resultadoLigacao, ligacao);
+        return filter.modifica(tenant, daoFactory, ligacao, resultadoLigacao);
       }
       logger.debug("Filtro {} nao aceito", filter);
     }

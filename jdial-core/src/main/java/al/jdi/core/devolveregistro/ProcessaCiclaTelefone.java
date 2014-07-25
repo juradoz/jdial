@@ -38,8 +38,8 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     ligacao.setTelefoneOriginal(cliente.getTelefone());
     if (!resultadoLigacao.isCiclaTelefone()) {
@@ -50,8 +50,8 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Ciclando telefone {}", cliente);
     Providencia.Codigo codigo =
@@ -65,16 +65,16 @@ class ProcessaCiclaTelefone implements ProcessoDevolucao {
       cliente.setTelefone(providencia.getTelefone(tenant, daoFactory, cliente));
     } catch (NaoPodeReiniciarRodadaTelefoneException e) {
       logger.info("Nao pode passar pro proximotelefone ainda {}", cliente);
-      processaFimDaFila.executa(tenant, ligacao, null, daoFactory);
+      processaFimDaFila.executa(tenant, daoFactory, ligacao, null);
     } catch (ClienteSemTelefoneException e) {
       logger.info("Cliente sem telefone {}", cliente);
-      processaFimDaFila.executa(tenant, ligacao, null, daoFactory);
+      processaFimDaFila.executa(tenant, daoFactory, ligacao, null);
     } catch (SomenteCelularException e) {
       logger.info("Somente celulares {}", cliente);
-      processaFimDaFila.executa(tenant, ligacao, null, daoFactory);
+      processaFimDaFila.executa(tenant, daoFactory, ligacao, null);
     } catch (SemProximoTelefoneException e) {
       logger.info("Nao possui proximo telefone {}", cliente);
-      processaFimDaFila.executa(tenant, ligacao, null, daoFactory);
+      processaFimDaFila.executa(tenant, daoFactory, ligacao, null);
     }
     logger.info("Consegui ciclar telefone {}", cliente);
     tratadorEspecificoClienteFactory.create(tenant, daoFactory).obtemClienteDao().atualiza(cliente);

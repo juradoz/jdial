@@ -63,20 +63,20 @@ public class ModificadorResultadoSemAgentesFakeTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     assertThat(modificadorResultadoSemAgentesFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(true));
+        ligacao, resultadoLigacaoAtendida), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(true);
     assertThat(modificadorResultadoSemAgentesFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(false));
+        ligacao, resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
     assertThat(
-        modificadorResultadoSemAgentesFake.accept(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoSemAgentesFake.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
@@ -84,13 +84,13 @@ public class ModificadorResultadoSemAgentesFakeTest {
   public void acceptDeveriaRetornarFalseNoAgente() throws Exception {
     when(ligacao.isNoAgente()).thenReturn(true);
     assertThat(modificadorResultadoSemAgentesFake.accept(tenant, daoFactory,
-        resultadoLigacaoAtendida, ligacao), is(false));
+        ligacao, resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarSemAgentes() throws Exception {
     assertThat(
-        modificadorResultadoSemAgentesFake.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoSemAgentesFake.modifica(tenant, daoFactory, ligacao, resultadoLigacao),
         is(sameInstance(resultadoLigacaoSemAgentes)));
   }
 

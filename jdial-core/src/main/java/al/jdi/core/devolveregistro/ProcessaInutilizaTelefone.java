@@ -25,8 +25,8 @@ class ProcessaInutilizaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isInutilizaTelefone()
         && resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone() <= 0) {
@@ -37,8 +37,8 @@ class ProcessaInutilizaTelefone implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (resultadoLigacao.isInutilizaTelefone()) {
       logger.info("Inutilizando telefone por isInutilizaTelefone {}", cliente);

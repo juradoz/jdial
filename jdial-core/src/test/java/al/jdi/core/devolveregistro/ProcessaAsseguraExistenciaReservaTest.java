@@ -64,7 +64,7 @@ public class ProcessaAsseguraExistenciaReservaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     assertThat(
-        processaAsseguraExistenciaReserva.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaAsseguraExistenciaReserva.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
@@ -72,14 +72,14 @@ public class ProcessaAsseguraExistenciaReservaTest {
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(cliente.getEstadoCliente()).thenReturn(estadoClienteReservado);
     assertThat(
-        processaAsseguraExistenciaReserva.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaAsseguraExistenciaReserva.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void executaDeveriaRetornarTrue() throws Exception {
     assertThat(
-        processaAsseguraExistenciaReserva.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaAsseguraExistenciaReserva.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 

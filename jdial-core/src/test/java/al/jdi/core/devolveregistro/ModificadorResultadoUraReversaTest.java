@@ -70,41 +70,41 @@ public class ModificadorResultadoUraReversaTest {
   @Test
   public void acceptDeveriaRetornarTrueSemAgentes() throws Exception {
     assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory,
-        resultadoLigacaoSemAgentes, ligacao), is(true));
+        ligacao, resultadoLigacaoSemAgentes), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarTrueAtendida() throws Exception {
-    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
-        ligacao), is(true));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, ligacao,
+        resultadoLigacaoAtendida), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(false);
-    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
-        ligacao), is(false));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, ligacao,
+        resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
     assertThat(
-        modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoUraReversa.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseNoAgente() throws Exception {
     when(ligacao.isNoAgente()).thenReturn(true);
-    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
-        ligacao), is(false));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, ligacao,
+        resultadoLigacaoAtendida), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarAbandonou() throws Exception {
     when(ligacao.isFoiPraFila()).thenReturn(true);
     assertThat(
-        modificadorResultadoUraReversa.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoUraReversa.modifica(tenant, daoFactory, ligacao, resultadoLigacao),
         is(sameInstance(resultadoLigacaoAbandonou)));
   }
 
@@ -112,7 +112,7 @@ public class ModificadorResultadoUraReversaTest {
   public void modificaDeveriaRetornarSemInteresse() throws Exception {
     when(ligacao.isFoiPraFila()).thenReturn(false);
     assertThat(
-        modificadorResultadoUraReversa.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        modificadorResultadoUraReversa.modifica(tenant, daoFactory, ligacao, resultadoLigacao),
         is(sameInstance(resultadoLigacaoSemInteresse)));
   }
 

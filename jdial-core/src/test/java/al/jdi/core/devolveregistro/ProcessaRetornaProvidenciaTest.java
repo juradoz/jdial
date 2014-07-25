@@ -81,31 +81,31 @@ public class ProcessaRetornaProvidenciaTest {
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaRetornaProvidencia.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.accept(tenant, ligacao,
-        resultadoLigacaoSemProximoTelefone, daoFactory), is(true));
+    assertThat(processaRetornaProvidencia.accept(tenant, daoFactory,
+        ligacao, resultadoLigacaoSemProximoTelefone), is(true));
   }
 
   @Test
   public void processaDeveriaRetornarProvidencia() throws Exception {
-    processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaRetornaProvidencia.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(informacaoCliente).setProvidenciaTelefone(Providencia.Codigo.MANTEM_ATUAL.getCodigo());
   }
 
   @Test
   public void processaDeveriaAtualizarInformacaoCliente() throws Exception {
-    processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaRetornaProvidencia.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(informacaoClienteDao).atualiza(informacaoCliente);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
-    assertThat(processaRetornaProvidencia.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaRetornaProvidencia.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 }

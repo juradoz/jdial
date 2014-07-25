@@ -15,8 +15,8 @@ class ModificadorResultadoUraReversa implements ModificadorResultadoFilter {
   private static final Logger logger = getLogger(ModificadorResultadoUraReversa.class);
 
   @Override
-  public boolean accept(Tenant tenant, DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
-      Ligacao ligacao) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     if (!tenant.getConfiguracoes().isUraReversa())
       return false;
 
@@ -39,7 +39,7 @@ class ModificadorResultadoUraReversa implements ModificadorResultadoFilter {
 
   @Override
   public ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao) {
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (ligacao.isFoiPraFila()) {
       logger.info("Alterando resultado por abandono Ura reversa {}", cliente);

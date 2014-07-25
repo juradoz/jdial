@@ -26,8 +26,8 @@ class ProcessaFimDaFila implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (resultadoLigacao != null && !resultadoLigacao.isVaiParaOFimDaFila()) {
       logger.info("Nao vai para o fim da fila {}", cliente);
@@ -37,8 +37,8 @@ class ProcessaFimDaFila implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Fim da fila {}", cliente);
 

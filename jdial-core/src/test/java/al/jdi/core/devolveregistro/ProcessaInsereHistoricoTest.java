@@ -61,20 +61,20 @@ public class ProcessaInsereHistoricoTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isInsereHistorico()).thenReturn(true);
-    assertThat(processaInsereHistorico.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInsereHistorico.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isInsereHistorico()).thenReturn(false);
-    assertThat(processaInsereHistorico.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInsereHistorico.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void executaDeveriaInserir() throws Exception {
-    assertThat(processaInsereHistorico.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInsereHistorico.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
     verify(historicoLigacaoDao).adiciona(any(HistoricoLigacao.class));
   }
@@ -83,7 +83,7 @@ public class ProcessaInsereHistoricoTest {
   public void executaDeveriaLancarException() throws Exception {
     doThrow(new RuntimeException("Teste")).when(historicoLigacaoDao).adiciona(
         any(HistoricoLigacao.class));
-    assertThat(processaInsereHistorico.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInsereHistorico.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 

@@ -86,27 +86,27 @@ public class ProcessaIncrementaTentativaTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(true);
-    assertThat(processaIncrementaTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isIncrementaTentativa()).thenReturn(false);
-    assertThat(processaIncrementaTentativa.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void executaDeveriaIncrementar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
     verify(telefone).incTentativa();
   }
 
   @Test
   public void executaDeveriaAtualizar() throws Exception {
-    assertThat(processaIncrementaTentativa.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaIncrementaTentativa.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
     verify(telefoneDao).atualiza(telefone);
   }

@@ -18,8 +18,8 @@ class ProcessaInsereHistorico implements ProcessoDevolucao {
   private static final Logger logger = getLogger(ProcessaInsereHistorico.class);
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, 
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, 
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isInsereHistorico()) {
       logger.info("Nao vai inserir historico {}", cliente);
@@ -29,8 +29,8 @@ class ProcessaInsereHistorico implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, 
-      ResultadoLigacao resultadoLigacao, DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, 
+      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     try {
       logger.info("Inserindo historico {} {}", resultadoLigacao, cliente);

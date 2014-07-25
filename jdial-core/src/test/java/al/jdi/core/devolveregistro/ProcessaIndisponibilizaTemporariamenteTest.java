@@ -67,22 +67,22 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.accept(tenant, ligacao, resultadoLigacao,
-        daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.accept(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(true));
   }
 
   @Test
   public void executaDeveriaSetarNull() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
-        daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(true));
     verify(cliente).setDisponivelAPartirDe(null);
   }
 
   @Test
   public void executaDeveriaSetarData() throws Exception {
     when(resultadoLigacao.getIntervaloIndisponivel()).thenReturn(1);
-    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
-        daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(true));
     ArgumentCaptor<DateTime> captor = ArgumentCaptor.forClass(DateTime.class);
     verify(cliente).setDisponivelAPartirDe(captor.capture());
     assertThat(captor.getValue().isAfterNow(), is(true));
@@ -90,8 +90,8 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
 
   @Test
   public void executaDeveriaAtualizar() throws Exception {
-    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, ligacao, resultadoLigacao,
-        daoFactory), is(true));
+    assertThat(processaIndisponibilizaTemporariamente.executa(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(true));
     verify(clienteDao).atualiza(cliente);
   }
 }

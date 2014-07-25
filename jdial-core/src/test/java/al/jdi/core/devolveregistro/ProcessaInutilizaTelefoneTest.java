@@ -67,14 +67,14 @@ public class ProcessaInutilizaTelefoneTest {
   @Test
   public void acceptDeveriaRetornarFalsePorResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
-    assertThat(processaInutilizaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInutilizaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarTruePorResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(true);
-    assertThat(processaInutilizaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInutilizaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
@@ -82,14 +82,14 @@ public class ProcessaInutilizaTelefoneTest {
   public void acceptDeveriaRetornarTruePorQtd() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
     when(resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone()).thenReturn(1);
-    assertThat(processaInutilizaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInutilizaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void executaDeveriaFinalizarPeloResultado() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(true);
-    assertThat(processaInutilizaTelefone.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInutilizaTelefone.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
     verify(finalizadorCliente).finalizaPorInutilizacaoSimples(tenant, daoFactory, cliente);
   }
@@ -98,7 +98,7 @@ public class ProcessaInutilizaTelefoneTest {
   public void executaDeveriaFinalizarPeloHistorico() throws Exception {
     when(resultadoLigacao.isInutilizaTelefone()).thenReturn(false);
     when(resultadoLigacao.getQuantidadeDesteResultadoInutilizaTelefone()).thenReturn(1);
-    assertThat(processaInutilizaTelefone.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaInutilizaTelefone.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
     verify(finalizadorCliente).finalizaPorInutilizacaoSimples(tenant, daoFactory, cliente);
   }

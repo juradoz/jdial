@@ -82,7 +82,7 @@ public class ProcessaRemoveTodosAgendamentosTest {
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isLimpaAgendamentos()).thenReturn(true);
     assertThat(
-        processaRemoveTodosAgendamentos.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaRemoveTodosAgendamentos.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
@@ -90,33 +90,33 @@ public class ProcessaRemoveTodosAgendamentosTest {
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isLimpaAgendamentos()).thenReturn(false);
     assertThat(
-        processaRemoveTodosAgendamentos.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaRemoveTodosAgendamentos.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void processaDeveriaLimparAgendamentos() throws Exception {
-    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     assertThat(agendamentos.isEmpty(), is(true));
   }
 
   @Test
   public void processaDeveriaRemoverAgendamento() throws Exception {
-    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(agendamentoDao).remove(agendamento);
   }
 
   @Test
   public void processaDeveriaRemoverVariosAgendamento() throws Exception {
     agendamentos.add(agendamento);
-    processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory);
+    processaRemoveTodosAgendamentos.executa(tenant, daoFactory, ligacao, resultadoLigacao);
     verify(agendamentoDao, times(2)).remove(agendamento);
   }
 
   @Test
   public void processaDeveriaRetornarTrue() throws Exception {
     assertThat(
-        processaRemoveTodosAgendamentos.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaRemoveTodosAgendamentos.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 }

@@ -28,8 +28,8 @@ class ProcessaRetornaProvidencia implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     ResultadoLigacao resultadoSemProximoTelefone =
         daoFactory.getResultadoLigacaoDao().procura(MotivoSistema.SEM_PROXIMO_TELEFONE.getCodigo(),
@@ -45,8 +45,8 @@ class ProcessaRetornaProvidencia implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Retornando providencia de {} {}", cliente.getInformacaoCliente()
         .getProvidenciaTelefone(), cliente);

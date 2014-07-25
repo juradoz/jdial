@@ -65,8 +65,7 @@ public class NotificadorClienteTest {
   @Test
   public void notificaFimTentativaNaoDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(false);
-    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, campanha);
+    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, telefoneOriginal, resultadoLigacao);
     verify(tratadorEspecificoCliente, never()).notificaFimTentativa(tenant, ligacao, cliente,
         dataBanco, telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }
@@ -74,8 +73,7 @@ public class NotificadorClienteTest {
   @Test
   public void notificaFimTentativaDeveriaNotificar() throws Exception {
     when(resultadoLigacao.isNotificaFimTentativa()).thenReturn(true);
-    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, cliente, resultadoLigacao,
-        telefoneOriginal, campanha);
+    notificadorCliente.notificaFimTentativa(tenant, daoFactory, ligacao, telefoneOriginal, resultadoLigacao);
     verify(tratadorEspecificoCliente).notificaFimTentativa(tenant, ligacao, cliente, dataBanco,
         telefoneOriginal, resultadoLigacao, INUTILIZA_DIFERENCIADO);
   }

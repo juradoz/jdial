@@ -77,20 +77,20 @@ public class ProcessaCiclaTelefoneTest {
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(true);
-    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalse() throws Exception {
     when(resultadoLigacao.isCiclaTelefone()).thenReturn(false);
-    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void acceptDeveriaSetarTelOriginal() throws Exception {
-    assertThat(processaCiclaTelefone.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+    assertThat(processaCiclaTelefone.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
     verify(ligacao).setTelefoneOriginal(telefone);
   }

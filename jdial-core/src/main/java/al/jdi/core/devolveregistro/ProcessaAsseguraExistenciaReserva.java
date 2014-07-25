@@ -18,8 +18,8 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   private static final Logger logger = getLogger(ProcessaAsseguraExistenciaReserva.class);
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
@@ -31,8 +31,8 @@ class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     int motivoFinalizacao = ligacao.getMotivoFinalizacao();
     Cliente cliente = ligacao.getDiscavel().getCliente();
     if (motivoFinalizacao == MotivoSistema.LEI_NAO_PERTURBE.getCodigo()

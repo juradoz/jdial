@@ -81,7 +81,7 @@ public class ProcessaFinalizaRegistroAtendidoTest {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(true);
     when(ligacao.isAtendida()).thenReturn(true);
     assertThat(
-        processaFinalizaRegistroAtendido.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaFinalizaRegistroAtendido.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(true));
   }
 
@@ -90,7 +90,7 @@ public class ProcessaFinalizaRegistroAtendidoTest {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(false);
     when(ligacao.isAtendida()).thenReturn(true);
     assertThat(
-        processaFinalizaRegistroAtendido.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaFinalizaRegistroAtendido.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
@@ -99,14 +99,14 @@ public class ProcessaFinalizaRegistroAtendidoTest {
     when(configuracoes.getFinalizaRegistroAtendido()).thenReturn(true);
     when(ligacao.isAtendida()).thenReturn(false);
     assertThat(
-        processaFinalizaRegistroAtendido.accept(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaFinalizaRegistroAtendido.accept(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
   }
 
   @Test
   public void executaDeveriaFinalizar() throws Exception {
     assertThat(
-        processaFinalizaRegistroAtendido.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaFinalizaRegistroAtendido.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
     verify(finalizadorCliente).finaliza(tenant, daoFactory, cliente, motivoFinalizacao);
   }
@@ -114,7 +114,7 @@ public class ProcessaFinalizaRegistroAtendidoTest {
   @Test
   public void executaDeveriaNotificar() throws Exception {
     assertThat(
-        processaFinalizaRegistroAtendido.executa(tenant, ligacao, resultadoLigacao, daoFactory),
+        processaFinalizaRegistroAtendido.executa(tenant, daoFactory, ligacao, resultadoLigacao),
         is(false));
     verify(notificadorCliente).notificaFinalizacao(tenant, daoFactory, ligacao, cliente,
         resultadoLigacao, telefone, false, campanha);

@@ -36,8 +36,8 @@ class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean accept(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     if (!resultadoLigacao.isNotificaFimTentativa()) {
       logger.info("Nao vai notificar fim tentativa motivo {} {}", resultadoLigacao, ligacao
           .getDiscavel().getCliente());
@@ -47,8 +47,8 @@ class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
   }
 
   @Override
-  public boolean executa(Tenant tenant, Ligacao ligacao, ResultadoLigacao resultadoLigacao,
-      DaoFactory daoFactory) {
+  public boolean executa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     Cliente cliente = ligacao.getDiscavel().getCliente();
     logger.info("Vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
     tratadorEspecificoClienteFactory.create(tenant, daoFactory).notificaFimTentativa(tenant,

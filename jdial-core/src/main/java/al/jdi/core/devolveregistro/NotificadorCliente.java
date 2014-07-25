@@ -26,8 +26,9 @@ class NotificadorCliente {
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 
-  void notificaFimTentativa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao, Cliente cliente,
-      ResultadoLigacao resultadoLigacao, Telefone telefoneOriginal, Campanha campanha) {
+  void notificaFimTentativa(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao, Telefone telefoneOriginal,
+      ResultadoLigacao resultadoLigacao) {
+    Cliente cliente = ligacao.getDiscavel().getCliente();
     if (!resultadoLigacao.isNotificaFimTentativa()) {
       logger.info("Nao vai notificar fim tentativa motivo {} {}", resultadoLigacao, cliente);
       return;
