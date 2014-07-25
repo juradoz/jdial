@@ -21,10 +21,6 @@ class DefaultMailingDao implements MailingDao {
   @Override
   public void adiciona(Mailing mailing) {
     dao.adiciona(mailing);
-    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
-    Campanha campanha = campanhaDao.procura(mailing.getCampanha().getId());
-    campanha.getMailing().add(mailing);
-    campanhaDao.atualiza(campanha);
   }
 
   @Override

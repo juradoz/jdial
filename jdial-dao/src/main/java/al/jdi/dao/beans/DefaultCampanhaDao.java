@@ -24,15 +24,13 @@ class DefaultCampanhaDao implements CampanhaDao {
   @Override
   public void adiciona(Campanha campanha) {
     dao.adiciona(campanha);
+    DefaultDao<Definicao> definicaoDao =
+        new DefaultDao<Definicao>(dao.getSession(), Definicao.class);
     for (DefinicaoPadrao definicaoPadrao : new DefaultDao<DefinicaoPadrao>(dao.getSession(),
         DefinicaoPadrao.class).listaTudo()) {
-      Definicao definicao = new Definicao();
-      definicao.setCampanha(campanha);
-      definicao.setPropriedade(definicaoPadrao.getPropriedade());
-      definicao.setValor(definicaoPadrao.getValor());
-      campanha.getDefinicao().add(definicao);
+      definicaoDao.adiciona(new Definicao(campanha, definicaoPadrao.getPropriedade(),
+          definicaoPadrao.getValor()));
     }
-    atualiza(campanha);
   }
 
   @Override

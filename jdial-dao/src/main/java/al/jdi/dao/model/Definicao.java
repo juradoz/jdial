@@ -39,6 +39,15 @@ public class Definicao implements DaoObject {
 
   @Column(nullable = false)
   private String valor;
+  
+  public Definicao() {
+  }
+
+  public Definicao(Campanha campanha, String propriedade, String valor) {
+    this.campanha = campanha;
+    this.propriedade = propriedade;
+    this.valor = valor;
+  }
 
   @Override
   public boolean equals(Object obj) {

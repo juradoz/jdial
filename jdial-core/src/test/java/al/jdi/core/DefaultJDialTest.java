@@ -127,7 +127,7 @@ public class DefaultJDialTest {
     when(estoqueAgendados.obtemRegistros((int) (FATOR_K * QTD_LIVRES) - QTD_LIGACOES_NAO_ATENDIDAS))
         .thenReturn(Arrays.asList(cliente));
 
-    when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
+    when(discavelFactory.create(tenant, cliente)).thenReturn(discavel);
 
     when(tenant.getCampanha()).thenReturn(campanha);
     when(tenant.getConfiguracoes()).thenReturn(configuracoes);

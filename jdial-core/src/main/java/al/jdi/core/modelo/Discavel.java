@@ -1,12 +1,12 @@
 package al.jdi.core.modelo;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Cliente;
 
 public interface Discavel {
 
   public interface Factory {
-    Discavel create(Configuracoes configuracoes, Cliente cliente);
+    Discavel create(Tenant tenant, Cliente cliente);
   }
 
   String getChave();

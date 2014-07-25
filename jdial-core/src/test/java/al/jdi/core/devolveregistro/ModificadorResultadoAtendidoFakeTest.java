@@ -11,7 +11,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
 import al.jdi.dao.model.Campanha;
@@ -40,6 +42,10 @@ public class ModificadorResultadoAtendidoFakeTest {
   private ResultadoLigacao resultadoLigacaoInexistente;
   @Mock
   private Configuracoes configuracoes;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
@@ -49,39 +55,44 @@ public class ModificadorResultadoAtendidoFakeTest {
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
     when(ligacao.isAtendida()).thenReturn(true);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(tenant.getCampanha()).thenReturn(campanha);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake();
   }
 
   @Test
   public void acceptDeveriaRetornarTrue() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
-        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(true));
+    assertThat(modificadorResultadoAtendidoFake.accept(tenant, daoFactory,
+        resultadoLigacaoInexistente, ligacao), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(true);
-    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
-        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(tenant, daoFactory,
+        resultadoLigacaoInexistente, ligacao), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
-        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(tenant, daoFactory,
+        resultadoLigacaoAtendida, ligacao), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseAtendida() throws Exception {
     when(ligacao.isAtendida()).thenReturn(false);
-    assertThat(modificadorResultadoAtendidoFake.accept(configuracoes, daoFactory,
-        resultadoLigacaoInexistente, ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoAtendidoFake.accept(tenant, daoFactory,
+        resultadoLigacaoInexistente, ligacao), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarAtendida() throws Exception {
-    assertThat(modificadorResultadoAtendidoFake.modifica(configuracoes, daoFactory,
-        resultadoLigacao, ligacao, cliente, campanha), is(sameInstance(resultadoLigacaoAtendida)));
+    assertThat(
+        modificadorResultadoAtendidoFake.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        is(sameInstance(resultadoLigacaoAtendida)));
   }
 
 }

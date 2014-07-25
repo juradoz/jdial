@@ -98,7 +98,7 @@ public class DefaultEstoqueTest {
     when(daoFactory.getCampanhaDao()).thenReturn(campanhaDao);
     when(campanhaDao.procura(CAMPANHA)).thenReturn(campanha);
 
-    when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
+    when(discavelFactory.create(tenant, cliente)).thenReturn(discavel);
 
     when(registro.getCliente()).thenReturn(cliente);
     when(discavel.getCliente()).thenReturn(cliente);

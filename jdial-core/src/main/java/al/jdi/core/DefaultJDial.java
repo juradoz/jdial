@@ -135,7 +135,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     Servico servico = campanha.getServico();
 
     for (Cliente cliente : clientesAgendados) {
-      Discavel discavel = discavelFactory.create(tenant.getConfiguracoes(), cliente);
+      Discavel discavel = discavelFactory.create(tenant, cliente);
       Ligacao ligacao = new Ligacao.Builder(discavel).setInicio(dataBanco).build();
       DateTime inicio = new DateTime();
       tenant.getGerenciadorLigacoes().disca(ligacao, servico);

@@ -7,16 +7,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Cliente;
 
 class DiscavelTsa implements Discavel {
 
-  private final Configuracoes configuracoes;
+  private final Tenant tenant;
   private Cliente cliente;
 
-  DiscavelTsa(Configuracoes configuracoes, Cliente cliente) {
-    this.configuracoes = configuracoes;
+  DiscavelTsa(Tenant tenant, Cliente cliente) {
+    this.tenant = tenant;
     this.cliente = cliente;
   }
 
@@ -89,32 +89,32 @@ class DiscavelTsa implements Discavel {
   private String destinoCustom() {
     if (isChamadaLocal())
       return cliente.getDigitoSaida().concat(cliente.getTelefone().getTelefone());
-    return cliente.getDigitoSaida().concat(configuracoes.digitoSaidaCustomPrefixoDDD())
+    return cliente.getDigitoSaida().concat(tenant.getConfiguracoes().digitoSaidaCustomPrefixoDDD())
         .concat(cliente.getTelefone().getDdd()).concat(cliente.getTelefone().getTelefone());
   }
 
   private String destinoPadrao() {
     if (isChamadaLocal()) {
       if (cliente.getTelefone().isCelular()) {
-        return configuracoes.digitoSaidaPadraoCelularLocal().concat(
+        return tenant.getConfiguracoes().digitoSaidaPadraoCelularLocal().concat(
             cliente.getTelefone().getTelefone());
       } else {
-        return configuracoes.digitoSaidaPadraoFixoLocal().concat(
+        return tenant.getConfiguracoes().digitoSaidaPadraoFixoLocal().concat(
             cliente.getTelefone().getTelefone());
       }
     }
 
     if (cliente.getTelefone().isCelular()) {
-      return configuracoes.digitoSaidaPadraoCelularDDD().concat(cliente.getTelefone().getDdd())
+      return tenant.getConfiguracoes().digitoSaidaPadraoCelularDDD().concat(cliente.getTelefone().getDdd())
           .concat(cliente.getTelefone().getTelefone());
     } else {
-      return configuracoes.digitoSaidaPadraoFixoDDD().concat(cliente.getTelefone().getDdd())
+      return tenant.getConfiguracoes().digitoSaidaPadraoFixoDDD().concat(cliente.getTelefone().getDdd())
           .concat(cliente.getTelefone().getTelefone());
     }
   }
 
   private boolean isChamadaLocal() {
-    return configuracoes.dddLocalidade().equals(cliente.getTelefone().getDdd())
+    return tenant.getConfiguracoes().dddLocalidade().equals(cliente.getTelefone().getDdd())
         && !cliente.getTelefone().isConurbada();
   }
 

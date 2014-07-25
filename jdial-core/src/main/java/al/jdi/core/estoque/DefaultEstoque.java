@@ -132,7 +132,7 @@ class DefaultEstoque implements Estoque, Runnable {
 
   private void devolveCliente(DateTime instante, Cliente cliente, MotivoSistema motivoSistema) {
     Ligacao ligacao =
-        new Ligacao.Builder(discavelFactory.create(tenant.getConfiguracoes(), cliente), instante)
+        new Ligacao.Builder(discavelFactory.create(tenant, cliente), instante)
             .setInicio(instante).setTermino(instante)
             .setMotivoFinalizacao(motivoSistema.getCodigo()).build();
     devolveRegistro.devolveLigacao(tenant, ligacao);

@@ -16,7 +16,6 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.CriacaoModificacao;
@@ -56,7 +55,6 @@ public class DefaultCampanhaDaoTest {
     when(dao.getSession()).thenReturn(session);
     when(session.createCriteria(DefinicaoPadrao.class)).thenReturn(criteriaDefinicaoPadrao);
     when(criteriaDefinicaoPadrao.list()).thenReturn(definicaoPadraos);
-    when(campanha.getDefinicao()).thenReturn(definicaos);
     when(campanha.getCriacaoModificacao()).thenReturn(criacaoModificacao);
 
     defaultCampanhaDao = new DefaultCampanhaDao(dao);
@@ -66,18 +64,6 @@ public class DefaultCampanhaDaoTest {
   public void adiciona() throws Exception {
     defaultCampanhaDao.adiciona(campanha);
     verify(dao).adiciona(campanha);
-  }
-
-  @Test
-  public void adicionaDeveriaInserirDefinicao() throws Exception {
-    defaultCampanhaDao.adiciona(campanha);
-    verify(definicaos).add(Mockito.any(Definicao.class));
-  }
-
-  @Test
-  public void adicionaDeveriaAtualizar() throws Exception {
-    defaultCampanhaDao.adiciona(campanha);
-    verify(dao).atualiza(campanha);
   }
 
   @Test

@@ -1,9 +1,5 @@
 package al.jdi.dao.model;
 
-import java.util.Collection;
-import java.util.LinkedList;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -20,7 +15,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Cascade;
 
 import al.jdi.dao.beans.Dao.CampoBusca;
 
@@ -39,18 +33,6 @@ public class Campanha implements DaoObject {
   @CampoBusca
   @Column(nullable = false)
   private String nome;
-
-  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "campanha")
-  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-  private final Collection<Mailing> mailing = new LinkedList<Mailing>();
-
-  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "campanha")
-  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-  private final Collection<Filtro> filtro = new LinkedList<Filtro>();
-
-  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "campanha")
-  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-  private final Collection<Definicao> definicao = new LinkedList<Definicao>();
 
   @Column(nullable = false)
   private boolean filtroAtivo = false;
@@ -76,6 +58,25 @@ public class Campanha implements DaoObject {
 
   private boolean ativa = false;
 
+  public Campanha() {}
+
+  private Campanha(Long id, CriacaoModificacao criacaoModificacao, String nome,
+      boolean filtroAtivo, int codigoFiltro, Grupo grupo, Rota rota, Servico servico,
+      String descricao, boolean limpaMemoria, boolean ativa) {
+    super();
+    this.id = id;
+    this.criacaoModificacao = criacaoModificacao;
+    this.nome = nome;
+    this.filtroAtivo = filtroAtivo;
+    this.codigoFiltro = codigoFiltro;
+    this.grupo = grupo;
+    this.rota = rota;
+    this.servico = servico;
+    this.descricao = descricao;
+    this.limpaMemoria = limpaMemoria;
+    this.ativa = ativa;
+  }
+
   public boolean isAtiva() {
     return ativa;
   }
@@ -84,7 +85,6 @@ public class Campanha implements DaoObject {
     this.ativa = ativa;
   }
 
-  public Campanha() {}
 
   public Campanha(Long idCampanha) {
     this.id = idCampanha;
@@ -107,16 +107,8 @@ public class Campanha implements DaoObject {
     return criacaoModificacao;
   }
 
-  public Collection<Definicao> getDefinicao() {
-    return definicao;
-  }
-
   public String getDescricao() {
     return descricao;
-  }
-
-  public Collection<Filtro> getFiltro() {
-    return filtro;
   }
 
   public Grupo getGrupo() {
@@ -125,10 +117,6 @@ public class Campanha implements DaoObject {
 
   public Long getId() {
     return id;
-  }
-
-  public Collection<Mailing> getMailing() {
-    return mailing;
   }
 
   public String getNome() {
@@ -200,6 +188,11 @@ public class Campanha implements DaoObject {
 
   public void setCodigoFiltro(int codigoFiltro) {
     this.codigoFiltro = codigoFiltro;
+  }
+
+  public Campanha clone() {
+    return new Campanha(id, criacaoModificacao, nome, filtroAtivo, codigoFiltro, grupo, rota,
+        servico, descricao, limpaMemoria, ativa);
   }
 
 }

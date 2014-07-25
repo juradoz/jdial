@@ -8,11 +8,9 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
-import al.jdi.dao.model.Campanha;
-import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultado {
@@ -26,15 +24,14 @@ class ModificadorResultado {
     this.filters = filters;
   }
 
-  ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
+  ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao) {
 
     for (ModificadorResultadoFilter filter : filters) {
       logger.debug("Avaliando {}...", filter);
-      if (filter.accept(configuracoes, daoFactory, resultadoLigacao, ligacao, cliente, campanha)) {
+      if (filter.accept(tenant, daoFactory, resultadoLigacao, ligacao)) {
         logger.debug("Vai processar {}", filter);
-        return filter.modifica(configuracoes, daoFactory, resultadoLigacao, ligacao, cliente,
-            campanha);
+        return filter.modifica(tenant, daoFactory, resultadoLigacao, ligacao);
       }
       logger.debug("Filtro {} nao aceito", filter);
     }

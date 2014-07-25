@@ -4,11 +4,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import org.slf4j.Logger;
 
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
-import al.jdi.dao.model.Campanha;
-import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
@@ -16,20 +14,20 @@ class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
   private static final Logger logger = getLogger(ModificadorResultadoSemAgentesFake.class);
 
   @Override
-  public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
-    if (configuracoes.isUraReversa())
+  public boolean accept(Tenant tenant, DaoFactory daoFactory, ResultadoLigacao resultadoLigacao,
+      Ligacao ligacao) {
+    if (tenant.getConfiguracoes().isUraReversa())
       return false;
     ResultadoLigacao resultadoLigacaoAtendida =
-        daoFactory.getResultadoLigacaoDao().procura(-1, campanha);
+        daoFactory.getResultadoLigacaoDao().procura(-1, tenant.getCampanha());
     return resultadoLigacao.equals(resultadoLigacaoAtendida) && !ligacao.isNoAgente();
   }
 
   @Override
-  public ResultadoLigacao modifica(Configuracoes configuracoes, DaoFactory daoFactory,
-      ResultadoLigacao resultadoLigacao, Ligacao ligacao, Cliente cliente, Campanha campanha) {
-    logger.info("Alterando resultado por semAgentesFake {}", cliente);
-    return daoFactory.getResultadoLigacaoDao().procura(23, campanha);
+  public ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
+      ResultadoLigacao resultadoLigacao, Ligacao ligacao) {
+    logger.info("Alterando resultado por semAgentesFake {}", ligacao.getDiscavel().getCliente());
+    return daoFactory.getResultadoLigacaoDao().procura(23, tenant.getCampanha());
   }
 
 }

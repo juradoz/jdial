@@ -11,7 +11,9 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
 import al.jdi.dao.model.Campanha;
@@ -44,6 +46,10 @@ public class ModificadorResultadoUraReversaTest {
   private ResultadoLigacao resultadoLigacaoAbandonou;
   @Mock
   private ResultadoLigacao resultadoLigacaoSemInteresse;
+  @Mock
+  private Tenant tenant;
+  @Mock
+  private Discavel discavel;
 
   @Before
   public void setUp() throws Exception {
@@ -54,53 +60,60 @@ public class ModificadorResultadoUraReversaTest {
     when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
     when(resultadoLigacaoDao.procura(-10, campanha)).thenReturn(resultadoLigacaoAbandonou);
     when(resultadoLigacaoDao.procura(-11, campanha)).thenReturn(resultadoLigacaoSemInteresse);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(tenant.getCampanha()).thenReturn(campanha);
+    when(ligacao.getDiscavel()).thenReturn(discavel);
+    when(discavel.getCliente()).thenReturn(cliente);
     modificadorResultadoUraReversa = new ModificadorResultadoUraReversa();
   }
 
   @Test
   public void acceptDeveriaRetornarTrueSemAgentes() throws Exception {
-    assertThat(modificadorResultadoUraReversa.accept(configuracoes, daoFactory,
-        resultadoLigacaoSemAgentes, ligacao, cliente, campanha), is(true));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory,
+        resultadoLigacaoSemAgentes, ligacao), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarTrueAtendida() throws Exception {
-    assertThat(modificadorResultadoUraReversa.accept(configuracoes, daoFactory,
-        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(true));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
+        ligacao), is(true));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseUraReversa() throws Exception {
     when(configuracoes.isUraReversa()).thenReturn(false);
-    assertThat(modificadorResultadoUraReversa.accept(configuracoes, daoFactory,
-        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
+        ligacao), is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseResultado() throws Exception {
-    assertThat(modificadorResultadoUraReversa.accept(configuracoes, daoFactory, resultadoLigacao,
-        ligacao, cliente, campanha), is(false));
+    assertThat(
+        modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacao, ligacao),
+        is(false));
   }
 
   @Test
   public void acceptDeveriaRetornarFalseNoAgente() throws Exception {
     when(ligacao.isNoAgente()).thenReturn(true);
-    assertThat(modificadorResultadoUraReversa.accept(configuracoes, daoFactory,
-        resultadoLigacaoAtendida, ligacao, cliente, campanha), is(false));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, resultadoLigacaoAtendida,
+        ligacao), is(false));
   }
 
   @Test
   public void modificaDeveriaRetornarAbandonou() throws Exception {
     when(ligacao.isFoiPraFila()).thenReturn(true);
-    assertThat(modificadorResultadoUraReversa.modifica(configuracoes, daoFactory, resultadoLigacao,
-        ligacao, cliente, campanha), is(sameInstance(resultadoLigacaoAbandonou)));
+    assertThat(
+        modificadorResultadoUraReversa.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        is(sameInstance(resultadoLigacaoAbandonou)));
   }
 
   @Test
   public void modificaDeveriaRetornarSemInteresse() throws Exception {
     when(ligacao.isFoiPraFila()).thenReturn(false);
-    assertThat(modificadorResultadoUraReversa.modifica(configuracoes, daoFactory, resultadoLigacao,
-        ligacao, cliente, campanha), is(sameInstance(resultadoLigacaoSemInteresse)));
+    assertThat(
+        modificadorResultadoUraReversa.modifica(tenant, daoFactory, resultadoLigacao, ligacao),
+        is(sameInstance(resultadoLigacaoSemInteresse)));
   }
 
 }

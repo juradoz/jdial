@@ -20,12 +20,6 @@ class DefaultDefinicaoDao implements DefinicaoDao {
   @Override
   public void adiciona(Definicao definicao) {
     dao.adiciona(definicao);
-    adicionaCampanha(definicao);
-  }
-
-  private void adicionaCampanha(Definicao definicao) {
-    definicao.getCampanha().getDefinicao().add(definicao);
-    new DefaultCampanhaDao(dao.getSession()).atualiza(definicao.getCampanha());
   }
 
   @Override

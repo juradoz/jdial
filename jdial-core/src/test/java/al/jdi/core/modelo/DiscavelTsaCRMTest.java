@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.InformacaoCliente;
@@ -51,6 +52,8 @@ public class DiscavelTsaCRMTest {
   private Mailing mailing;
   @Mock
   private Campanha campanha;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
@@ -76,8 +79,9 @@ public class DiscavelTsaCRMTest {
     when(configuracoes.digitoSaidaPadraoCelularDDD()).thenReturn(DIGITO_SAIDA_PADRAO_CELULAR_DDD);
     when(configuracoes.dddLocalidade()).thenReturn(DDD_LOCALIDADE);
     when(configuracoes.digitoSaidaCustomPrefixoDDD()).thenReturn(DIGITO_SAIDA_CUSTOM_PREFIXO_DDD);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
 
-    discavelTsaCRMImpl = new DiscavelTsaCRM(configuracoes, cliente);
+    discavelTsaCRMImpl = new DiscavelTsaCRM(tenant, cliente);
   }
 
   @Test

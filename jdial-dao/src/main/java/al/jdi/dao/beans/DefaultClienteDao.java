@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.EstadoCliente;
-import al.jdi.dao.model.Filtro;
 import al.jdi.dao.model.Mailing;
 
 class DefaultClienteDao implements ClienteDao {
@@ -31,30 +30,13 @@ class DefaultClienteDao implements ClienteDao {
     this.dao = new DefaultDao<>(session, Cliente.class);
   }
 
-  Collection<Integer> getFiltroAsInt(Campanha campanha) {
-    Collection<Integer> result = new LinkedList<Integer>();
-    for (Filtro filtro : campanha.getFiltro())
-      result.add(filtro.getCodigo());
-    return result;
-  }
-
-  boolean isFiltroExclusivo(Campanha campanha) {
-    if (!campanha.isFiltroAtivo())
-      return false;
-
-    for (Filtro filtro : campanha.getFiltro())
-      if (filtro.getMailing().isEmpty())
-        return false;
-    return true;
-  }
-
   @Override
   public void limpaReserva(Cliente cliente, int operadorDiscador, String nomeBaseDados) {
-    EstadoCliente estadoClienteAtivo =
-        new DefaultEstadoClienteDao(dao.getSession()).procura("Ativo");
+    DefaultDao<EstadoCliente> estadoclienteDao =
+        new DefaultDao<EstadoCliente>(dao.getSession(), EstadoCliente.class);
+    EstadoCliente estadoClienteAtivo = estadoclienteDao.procura("Ativo");
 
-    EstadoCliente estadoClienteReservado =
-        new DefaultEstadoClienteDao(dao.getSession()).procura("Reservado pelo Discador");
+    EstadoCliente estadoClienteReservado = estadoclienteDao.procura("Reservado pelo Discador");
 
     cliente = procura(cliente.getId());
 
@@ -67,9 +49,10 @@ class DefaultClienteDao implements ClienteDao {
 
   @Override
   public void limpaReservas(Campanha campanha, String nomeBaseDados, String nomeBase, int operador) {
-    EstadoCliente ativo = new DefaultEstadoClienteDao(dao.getSession()).procura("Ativo");
-    EstadoCliente reservado =
-        new DefaultEstadoClienteDao(dao.getSession()).procura("Reservado pelo Discador");
+    DefaultDao<EstadoCliente> estadoclienteDao =
+        new DefaultDao<EstadoCliente>(dao.getSession(), EstadoCliente.class);
+    EstadoCliente ativo = estadoclienteDao.procura("Ativo");
+    EstadoCliente reservado = estadoclienteDao.procura("Reservado pelo Discador");
     dao.getSession()
         .createSQLQuery(
             "update Cliente c " + "inner join Mailing m on c.idMailing = m.idMailing "
@@ -110,14 +93,20 @@ class DefaultClienteDao implements ClienteDao {
             + "  And Cliente.idEstadoCliente = 1 " + "  And InformacaoCliente.nomeBase = '' "
             + "  And Agendamento.agendamento <= Now() " + "  And Agendamento.idAgente is null "
             + "  And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "  And Operador.DetCampanha.Situacao in (0, 1, 8) " + "%s "
+            + "  And Operador.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing
+                                                                          // in (:idMailings) -- Sem
+                                                                          // filtro
+                                                                          // And
+                                                                          // Operador.FiltrosDet.Filtro
+                                                                          // = :codigoFiltro --
+                                                                          // Comfiltro
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
         String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
             : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
-    Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
+    Query query = dao.getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
     if (!possuiFiltro(campanha))
       query = query.setParameterList("idMailings", idMailings);
@@ -133,16 +122,12 @@ class DefaultClienteDao implements ClienteDao {
   }
 
   @SuppressWarnings("unchecked")
-  List<Integer> obtemIdMailings(Campanha campanha) {
+  protected List<Integer> obtemIdMailings(Campanha campanha) {
     String hql =
-        isFiltroExclusivo(campanha) ? "select Filtro_Mailing.idMailing from Filtro inner join Filtro_Mailing on Filtro.idFiltro = Filtro_Mailing.idFiltro inner join Mailing on Filtro_Mailing.idMailing = Mailing.idMailing "
-            + "where Filtro.idCampanha = :idCampanha and "
-            + "Mailing.ativo = 1 and "
-            + "(Mailing.dataInicial is null or Mailing.dataInicial <= Now()) and (Mailing.dataFinal is null or Mailing.dataFinal >= Now())"
-            : "select Mailing.idMailing from Mailing "
-                + "where idCampanha = :idCampanha and "
-                + "Mailing.ativo = 1 and (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) and "
-                + "(Mailing.dataFinal is null or Mailing.dataFinal >= Now())";
+        "select Mailing.idMailing from Mailing "
+            + "where idCampanha = :idCampanha and "
+            + "Mailing.ativo = 1 and (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) and "
+            + "(Mailing.dataFinal is null or Mailing.dataFinal >= Now())";
     Query query = dao.getSession().createSQLQuery(hql);
     query.setLong("idCampanha", campanha.getId());
     List<Integer> idMailings = query.list();
@@ -167,14 +152,18 @@ class DefaultClienteDao implements ClienteDao {
             + "And (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
             + "And Cliente.idEstadoCliente = 1 "
             + "And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "And Operador.DetCampanha.Situacao <= 1 " + "%s "
+            + "And Operador.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in
+                                                                // (:idMailings) -- Sem filtro
+                                                                // And Operador.FiltrosDet.Filtro =
+                                                                // :codigoFiltro -- Com
+                                                                // filtro
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
     hql =
         String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
             : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
 
-    Query query = getSession().createSQLQuery(hql).setInteger("limit", quantidade);
+    Query query = dao.getSession().createSQLQuery(hql).setInteger("limit", quantidade);
 
     if (!possuiFiltro(campanha))
       query = query.setParameterList("idMailings", idMailings);
@@ -189,8 +178,8 @@ class DefaultClienteDao implements ClienteDao {
     return result;
   }
 
-  boolean possuiFiltro(Campanha campanha) {
-    return campanha.isFiltroAtivo() && !getFiltroAsInt(campanha).isEmpty();
+  protected boolean possuiFiltro(Campanha campanha) {
+    return campanha.isFiltroAtivo();
   }
 
   @Override
@@ -201,11 +190,12 @@ class DefaultClienteDao implements ClienteDao {
 
   @Override
   public void retornaReservadosOperador(Campanha campanha) {
-    EstadoCliente ativo = new DefaultEstadoClienteDao(dao.getSession()).procura("Ativo");
+    DefaultDao<EstadoCliente> estadoclienteDao =
+        new DefaultDao<EstadoCliente>(dao.getSession(), EstadoCliente.class);
+    EstadoCliente ativo = estadoclienteDao.procura("Ativo");
     if (ativo == null)
       return;
-    EstadoCliente reservado =
-        new DefaultEstadoClienteDao(dao.getSession()).procura("Reservado pelo Operador");
+    EstadoCliente reservado = estadoclienteDao.procura("Reservado pelo Operador");
     if (reservado == null)
       return;
     DateTime limite = new DateTime().minusHours(2);
@@ -248,17 +238,17 @@ class DefaultClienteDao implements ClienteDao {
   }
 
   @Override
+  public Cliente procura(String s) {
+    return dao.procura(s);
+  }
+
+  @Override
   public void remove(Cliente u) {
     dao.remove(u);
   }
 
-  Session getSession() {
+  protected Session getSession() {
     return dao.getSession();
-  }
-
-  @Override
-  public Cliente procura(String s) {
-    return dao.procura(s);
   }
 
 }

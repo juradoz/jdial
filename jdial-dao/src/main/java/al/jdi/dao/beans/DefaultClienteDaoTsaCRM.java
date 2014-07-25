@@ -230,38 +230,40 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
             + "  inner join %s.DetCampanha on InformacaoCliente.chave = %s.DetCampanha.Codigo "
             + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente "
             + "%s " // inner join Filtro_Mailing on Cliente.idMailing =
-            // Filtro_Mailing.idMailing
+                    // Filtro_Mailing.idMailing
             + "Where "
             + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
             + "  And Cliente.idEstadoCliente = 1 " + "  And Agendamento.agendamento <= Now() "
             + "  And Agendamento.idAgente is null "
             + "  And %s.DetCampanha.OperadorCtt in (0, :operador) "
             + "  And %s.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing in
-            // (:idMailings) : And
-            // Filtro_Mailing.idMailing in (:idMailings)
+                                                                    // (:idMailings) : And
+                                                                    // Filtro_Mailing.idMailing in
+                                                                    // (:idMailings)
             + "%s "// : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
-    hql =
-        String
-            .format(
-                hql,
-                nomeBaseDados,
-                nomeBaseDados,
-                dao.isFiltroExclusivo(campanha) ? "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
-                    : "", nomeBaseDados, nomeBaseDados,
-                dao.isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
-                    : "And Cliente.idMailing in (:idMailings)",
-                dao.possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)" : "");
+    // hql = String
+    // .format(hql,
+    // nomeBaseDados,
+    // nomeBaseDados,
+    // isFiltroExclusivo(campanha) ?
+    // "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
+    // : "",
+    // nomeBaseDados,
+    // nomeBaseDados,
+    // isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
+    // : "And Cliente.idMailing in (:idMailings)",
+    // possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)"
+    // : "");
 
     Query query =
         dao.getSession().createSQLQuery(hql).setString("nomeBase", nomeBase)
             .setParameterList("idMailings", idMailings).setInteger("operador", operadorDiscador)
             .setInteger("limit", quantidade);
 
-    query =
-        dao.possuiFiltro(campanha) ? query
-            .setParameterList("filtros", dao.getFiltroAsInt(campanha)) : query;
+    // query = possuiFiltro(campanha) ? query.setParameterList("filtros",
+    // getFiltroAsInt(campanha)) : query;
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
@@ -285,37 +287,39 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
             + "left join Agendamento on Cliente.idCliente = Agendamento.idCliente "
             + "inner join %s.DetCampanha on InformacaoCliente.chave = %s.DetCampanha.Codigo "
             + "%s " // : inner join Filtro_Mailing on Cliente.idMailing =
-            // Filtro_Mailing.idMailing
+                    // Filtro_Mailing.idMailing
             + "Where " + "Agendamento.idAgendamento is null "
             + "And (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
             + "And Cliente.idEstadoCliente = 1 "
             + "And %s.DetCampanha.OperadorCtt in (0, :operador) "
             + "And %s.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in (:idMailings)
-            // : And
-            // Filtro_Mailing.idMailing in (:idMailings)
+                                                          // : And
+                                                          // Filtro_Mailing.idMailing in
+                                                          // (:idMailings)
             + "%s " // : And Cliente.filtro in (:filtros)
             + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
 
-    hql =
-        String
-            .format(
-                hql,
-                nomeBaseDados,
-                nomeBaseDados,
-                dao.isFiltroExclusivo(campanha) ? "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
-                    : "", nomeBaseDados, nomeBaseDados,
-                dao.isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
-                    : "And Cliente.idMailing in (:idMailings)",
-                dao.possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)" : "");
+    // hql = String
+    // .format(hql,
+    // nomeBaseDados,
+    // nomeBaseDados,
+    // isFiltroExclusivo(campanha) ?
+    // "inner join Filtro_Mailing on Cliente.idMailing = Filtro_Mailing.idMailing"
+    // : "",
+    // nomeBaseDados,
+    // nomeBaseDados,
+    // isFiltroExclusivo(campanha) ? "And Filtro_Mailing.idMailing in (:idMailings)"
+    // : "And Cliente.idMailing in (:idMailings)",
+    // possuiFiltro(campanha) ? "And Cliente.filtro in (:filtros)"
+    // : "");
 
     Query query =
         dao.getSession().createSQLQuery(hql).setString("nomeBase", nomeBase)
             .setParameterList("idMailings", idMailings).setInteger("operador", operadorDiscador)
             .setInteger("limit", quantidade);
 
-    query =
-        dao.possuiFiltro(campanha) ? query
-            .setParameterList("filtros", dao.getFiltroAsInt(campanha)) : query;
+    // query = possuiFiltro(campanha) ? query.setParameterList("filtros",
+    // getFiltroAsInt(campanha)) : query;
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
@@ -361,13 +365,13 @@ class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
   }
 
   @Override
-  public void remove(Cliente u) {
-    dao.remove(u);
+  public Cliente procura(String s) {
+    return dao.procura(s);
   }
 
   @Override
-  public Cliente procura(String s) {
-    return dao.procura(s);
+  public void remove(Cliente u) {
+    dao.remove(u);
   }
 
 }

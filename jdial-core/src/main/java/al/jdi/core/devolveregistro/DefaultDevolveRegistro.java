@@ -96,9 +96,7 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
       return;
     }
 
-    resultadoLigacao =
-        modificadorResultado.modifica(tenant.getConfiguracoes(), daoFactory, resultadoLigacao,
-            ligacao, cliente, campanha);
+    resultadoLigacao = modificadorResultado.modifica(tenant, daoFactory, resultadoLigacao, ligacao);
 
     logger.info("Devolvendo com motivo {} {}", resultadoLigacao, cliente);
 

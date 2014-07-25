@@ -66,7 +66,7 @@ class DefaultTenant implements Tenant {
       Estoque.Factory estoqueFactory, GerenciadorAgentes.Factory gerenciadorAgentesFactory,
       GerenciadorFatorK.Factory gerenciadorFatorKFactory,
       GerenciadorLigacoes.Factory gerenciadorLigacoesFactory, JDial.Factory jdialFactory) {
-    this.campanha = campanha;
+    this.campanha = campanha.clone();
     this.configuracoes = configuracoesFactory.create(campanha.getNome());
     this.estoqueLivres =
         estoqueFactory.create(this, extraidorClientesLivres, intervaloMonitoracaoLivres);
