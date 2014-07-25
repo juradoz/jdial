@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -15,13 +17,13 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProcessaIndisponibilizaTemporariamente.class);
+
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaIndisponibilizaTemporariamente(Logger logger,
+  ProcessaIndisponibilizaTemporariamente(
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
-    this.logger = logger;
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 

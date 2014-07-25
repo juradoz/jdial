@@ -1,5 +1,7 @@
 package al.jdi.core.modelo;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -15,13 +17,13 @@ import al.jdi.dao.model.Telefone;
 @ProvidenciaInvalidaAtualEProximoTelefone
 class InvalidaAtualEProximoTelefone implements Providencia {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(InvalidaAtualEProximoTelefone.class);
+
   private final Instance<ProximoTelefone> proximoTelefone;
 
   @Inject
-  InvalidaAtualEProximoTelefone(Logger logger,
+  InvalidaAtualEProximoTelefone(
       @ProvidenciaProximoTelefone Instance<ProximoTelefone> proximoTelefone) {
-    this.logger = logger;
     this.proximoTelefone = proximoTelefone;
   }
 

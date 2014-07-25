@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -50,8 +49,6 @@ public class ProcessaFinalizaRegistroAtendidoTest {
   private Campanha campanha;
   @Mock
   private Telefone telefone;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -62,7 +59,7 @@ public class ProcessaFinalizaRegistroAtendidoTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaFinalizaRegistroAtendido =
-        new ProcessaFinalizaRegistroAtendido(logger, finalizadorCliente, notificadorCliente);
+        new ProcessaFinalizaRegistroAtendido(finalizadorCliente, notificadorCliente);
   }
 
   @Test

@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -41,8 +40,6 @@ public class ModificadorResultadoSemAgentesFakeTest {
   private ResultadoLigacao resultadoLigacaoAtendida;
   @Mock
   private ResultadoLigacao resultadoLigacaoSemAgentes;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -50,7 +47,7 @@ public class ModificadorResultadoSemAgentesFakeTest {
     when(daoFactory.getResultadoLigacaoDao()).thenReturn(resultadoLigacaoDao);
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
-    modificadorResultadoSemAgentesFake = new ModificadorResultadoSemAgentesFake(logger);
+    modificadorResultadoSemAgentesFake = new ModificadorResultadoSemAgentesFake();
   }
 
   @Test

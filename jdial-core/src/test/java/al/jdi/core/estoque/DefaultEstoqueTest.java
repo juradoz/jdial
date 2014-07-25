@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
@@ -82,8 +81,6 @@ public class DefaultEstoqueTest {
   private Discavel discavel;
   @Mock
   private TelefoneFilter telefoneFilter;
-  @Mock
-  private Logger logger;
 
   private Collection<Registro> estoque;
 
@@ -109,7 +106,7 @@ public class DefaultEstoqueTest {
     estoque = new LinkedList<Registro>(Arrays.asList(registro, registro));
 
     defaultEstoque =
-        new DefaultEstoque(logger, configuracoes, daoFactoryProvider, devolveRegistro,
+        new DefaultEstoque(configuracoes, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
             extraidorClientes, INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }

@@ -2,6 +2,7 @@ package al.jdi.dao.beans;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -21,11 +22,11 @@ import al.jdi.dao.model.Telefone;
 
 class DefaultClienteDaoTsa implements ClienteDaoTsa {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultClienteDaoTsa.class);
+
   private final DefaultClienteDao dao;
 
-  DefaultClienteDaoTsa(Logger logger, Session session) {
-    this.logger = logger;
+  DefaultClienteDaoTsa(Session session) {
     this.dao = new DefaultClienteDao(session);
   }
 

@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 
@@ -47,7 +49,8 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultDevolveRegistro.class);
+
   private final Provider<DaoFactory> daoFactoryProvider;
   private final BlockingQueue<Bean> ligacoes;
   private final Provider<ExecutorService> executorServiceProvider;
@@ -58,11 +61,10 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
   private ExecutorService executorService;
 
   @Inject
-  DefaultDevolveRegistro(Logger logger, Provider<DaoFactory> daoFactoryProvider,
+  DefaultDevolveRegistro(Provider<DaoFactory> daoFactoryProvider,
       Provider<ExecutorService> executorServiceProvider, @ThreadCountParameter int threadCount,
       BlockingQueue<Bean> ligacoes, ModificadorResultado modificadorResultado,
       Instance<ProcessoDevolucao> processosDevolucao) {
-    this.logger = logger;
     this.daoFactoryProvider = daoFactoryProvider;
     this.ligacoes = ligacoes;
     this.executorServiceProvider = executorServiceProvider;

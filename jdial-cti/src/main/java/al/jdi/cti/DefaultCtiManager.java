@@ -1,5 +1,7 @@
 package al.jdi.cti;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +32,8 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
   private final Set<ProviderListener> providerListeners = Collections
       .synchronizedSet(new HashSet<ProviderListener>());
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultCtiManager.class);
+
   private final JtapiPeer jtapiPeer;
   private final Period providerTimeout = Period.seconds(10);
   private final Engine.Factory engineFactory;
@@ -42,11 +45,9 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
   private String providerString;
 
   @Inject
-  DefaultCtiManager(Logger logger, Engine.Factory engineFactory,
-      @Named("serverIp") String serverIp, @Named("port") int port,
-      @Named("service") String service, @Named("login") String login,
+  DefaultCtiManager(Engine.Factory engineFactory, @Named("serverIp") String serverIp,
+      @Named("port") int port, @Named("service") String service, @Named("login") String login,
       @Named("password") String password, @Named("jtapiPeerName") String jtapiPeerName) {
-    this.logger = logger;
     this.engineFactory = engineFactory;
     try {
       this.jtapiPeer = JtapiPeerFactory.getJtapiPeer(jtapiPeerName);

@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -42,8 +41,6 @@ public class ProcessaLimpaReservaTest {
   private DaoFactory daoFactory;
   @Mock
   private ClienteDao clienteDao;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -54,7 +51,7 @@ public class ProcessaLimpaReservaTest {
     when(configuracoes.getOperador()).thenReturn(OPERADOR);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
 
-    processaLimpaReserva = new ProcessaLimpaReserva(logger, tratadorEspecificoClienteFactory);
+    processaLimpaReserva = new ProcessaLimpaReserva(tratadorEspecificoClienteFactory);
   }
 
   @Test

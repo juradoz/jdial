@@ -1,5 +1,7 @@
 package al.jdi.core.modelo;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,18 +25,18 @@ import al.jdi.dao.model.Telefone;
 @ProvidenciaProximoTelefone
 class ProximoTelefone implements Providencia {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProximoTelefone.class);
+
   private final TelefoneSorter telefoneSorter;
   private final Instance<Providencia> mantemAtual;
   private final TelefoneFilter clienteSemTelefonesFilter;
   private final TelefoneFilter somenteCelulareFilter;
 
   @Inject
-  ProximoTelefone(Logger logger, TelefoneSorter telefoneSorter,
+  ProximoTelefone(TelefoneSorter telefoneSorter,
       @ProvidenciaMantemAtual Instance<Providencia> mantemAtual,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelulareFilter) {
-    this.logger = logger;
     this.telefoneSorter = telefoneSorter;
     this.mantemAtual = mantemAtual;
     this.clienteSemTelefonesFilter = clienteSemTelefoneFilter;

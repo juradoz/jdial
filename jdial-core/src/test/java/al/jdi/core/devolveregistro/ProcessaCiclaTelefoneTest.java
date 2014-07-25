@@ -11,7 +11,6 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -48,8 +47,6 @@ public class ProcessaCiclaTelefoneTest {
   @Mock
   private Map<Providencia.Codigo, Providencia> providencias;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   @Before
@@ -60,8 +57,7 @@ public class ProcessaCiclaTelefoneTest {
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     processaCiclaTelefone =
-        new ProcessaCiclaTelefone(logger, tratadorEspecificoClienteFactory, processaFimDaFila,
-            providencias);
+        new ProcessaCiclaTelefone(tratadorEspecificoClienteFactory, processaFimDaFila, providencias);
   }
 
   @Test

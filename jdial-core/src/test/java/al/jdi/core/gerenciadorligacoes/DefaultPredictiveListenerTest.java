@@ -7,7 +7,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 public class DefaultPredictiveListenerTest {
 
@@ -21,8 +20,6 @@ public class DefaultPredictiveListenerTest {
   private DefaultGerenciadorLigacoes owner;
   @Mock
   private Exception e;
-  @Mock
-  private Logger logger;
 
   private PredictiveListenerImpl predictiveListenerImpl;
 
@@ -30,7 +27,7 @@ public class DefaultPredictiveListenerTest {
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    predictiveListenerImpl = new PredictiveListenerImpl(logger, owner);
+    predictiveListenerImpl = new PredictiveListenerImpl(owner);
   }
 
   @Test

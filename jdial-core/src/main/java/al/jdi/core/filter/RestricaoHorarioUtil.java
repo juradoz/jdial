@@ -1,5 +1,7 @@
 package al.jdi.core.filter;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +25,15 @@ import al.jdi.dao.model.Telefone;
 
 class RestricaoHorarioUtil implements TelefoneUtil {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(RestricaoHorarioUtil.class);
+
   private final Provider<DaoFactory> daoFactoryProvider;
 
   private final Map<Integer, Method> inicios = new HashMap<Integer, Method>();
   private final Map<Integer, Method> finais = new HashMap<Integer, Method>();
 
   @Inject
-  RestricaoHorarioUtil(Logger logger, Provider<DaoFactory> daoFactoryProvider) {
-    this.logger = logger;
+  RestricaoHorarioUtil(Provider<DaoFactory> daoFactoryProvider) {
     this.daoFactoryProvider = daoFactoryProvider;
     registraMetodos();
   }

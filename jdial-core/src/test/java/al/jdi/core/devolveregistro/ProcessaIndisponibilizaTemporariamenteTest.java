@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -40,8 +39,6 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   @Mock
   private ClienteDao clienteDao;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   @Before
@@ -51,7 +48,7 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
         tratadorEspecificoCliente);
     when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
     processaIndisponibilizaTemporariamente =
-        new ProcessaIndisponibilizaTemporariamente(logger, tratadorEspecificoClienteFactory);
+        new ProcessaIndisponibilizaTemporariamente(tratadorEspecificoClienteFactory);
   }
 
   @Test

@@ -19,7 +19,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 @RunWith(Parameterized.class)
 public class DefaultSistemaAtivoTest {
@@ -31,8 +30,6 @@ public class DefaultSistemaAtivoTest {
 
   @Mock
   private DefaultConfiguracoes configuracoes;
-  @Mock
-  private Logger logger;
 
   private Integer dayOfWeek;
 
@@ -56,7 +53,7 @@ public class DefaultSistemaAtivoTest {
         INICIO.toString(DateTimeFormat.forPattern("HH:mm:ss")),
         TERMINO.toString(DateTimeFormat.forPattern("HH:mm:ss")));
 
-    sistemaAtivo = new DefaultSistemaAtivo(logger, configuracoes);
+    sistemaAtivo = new DefaultSistemaAtivo(configuracoes);
   }
 
   @Test

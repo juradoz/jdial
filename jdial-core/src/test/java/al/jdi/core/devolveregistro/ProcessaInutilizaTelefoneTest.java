@@ -11,7 +11,6 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -40,8 +39,6 @@ public class ProcessaInutilizaTelefoneTest {
   @Mock
   private HistoricoLigacao historicoLigacao;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   @Before
@@ -50,7 +47,7 @@ public class ProcessaInutilizaTelefoneTest {
     when(daoFactory.getHistoricoLigacaoDao()).thenReturn(historicoLigacaoDao);
     when(historicoLigacaoDao.procura(cliente, resultadoLigacao)).thenReturn(
         Arrays.asList(historicoLigacao));
-    processaInutilizaTelefone = new ProcessaInutilizaTelefone(logger, finalizadorCliente);
+    processaInutilizaTelefone = new ProcessaInutilizaTelefone(finalizadorCliente);
   }
 
   @Test

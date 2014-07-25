@@ -1,9 +1,10 @@
 package al.jdi.dao.beans;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,12 +19,13 @@ import org.slf4j.Logger;
 @Singleton
 class DefaultSessionHandler implements SessionHandler {
 
+  private static final Logger logger = getLogger(DefaultSessionHandler.class);
+
   private final Map<String, Configuration> configurations = new HashMap<String, Configuration>();
   private final Map<String, SessionFactory> sessionFactories =
       new HashMap<String, SessionFactory>();
 
-  @Inject
-  DefaultSessionHandler(Logger logger) {
+  DefaultSessionHandler() {
     Configuration configuration = new Configuration().configure();
     configurations.put(null, configuration);
     sessionFactories.put(

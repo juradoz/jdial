@@ -1,6 +1,7 @@
 package al.jdi.core.gerenciadorfatork;
 
 import static ch.lambdaj.Lambda.sum;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -15,7 +16,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.DaoFactory;
 
@@ -23,22 +23,20 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
 
   static class GerenciadorFatorKImplFactory implements GerenciadorFatorK.Factory {
     @Inject
-    @LogClass(clazz = GerenciadorFatorK.class)
-    private Logger logger;
-    @Inject
     private Provider<DaoFactory> daoFactoryProvider;
     @Inject
     private Engine.Factory engineFactory;
 
     @Override
     public GerenciadorFatorK create(Configuracoes configuracoes) {
-      return new DefaultGerenciadorFatorK(logger, configuracoes, daoFactoryProvider, engineFactory);
+      return new DefaultGerenciadorFatorK(configuracoes, daoFactoryProvider, engineFactory);
     }
   }
 
   private static final int MINUTOS_ACUMULADOS = 10;
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultGerenciadorFatorK.class);
+
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Engine.Factory engineFactory;
@@ -52,9 +50,8 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
   private int atendidasDoMinuto;
 
 
-  DefaultGerenciadorFatorK(Logger logger, Configuracoes configuracoes,
-      Provider<DaoFactory> daoFactoryProvider, Engine.Factory engineFactory) {
-    this.logger = logger;
+  DefaultGerenciadorFatorK(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+      Engine.Factory engineFactory) {
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.engineFactory = engineFactory;

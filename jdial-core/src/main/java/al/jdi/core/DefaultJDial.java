@@ -1,5 +1,7 @@
 package al.jdi.core;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -14,7 +16,6 @@ import org.joda.time.Duration;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.JDialModule.Versao;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
@@ -37,9 +38,6 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
   static class DefaultJDialFactory implements JDial.Factory {
     @Inject
-    @LogClass(clazz = JDial.class)
-    private Logger logger;
-    @Inject
     private Engine.Factory engineFactory;
     @Inject
     private @Versao
@@ -57,13 +55,14 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     public JDial create(Configuracoes configuracoes, GerenciadorAgentes gerenciadorAgentes,
         GerenciadorLigacoes gerenciadorLigacoes, Estoque estoqueLivres, Estoque estoqueAgendados,
         GerenciadorFatorK gerenciadorFatorK) {
-      return new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
+      return new DefaultJDial(configuracoes, engineFactory, versao, gerenciadorAgentes,
           gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
           daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK, dialerCtiManager);
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultJDial.class);
+
   private final Configuracoes configuracoes;
   private final GerenciadorAgentes gerenciadorAgentes;
   private final GerenciadorLigacoes gerenciadorLigacoes;
@@ -79,14 +78,12 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
   private Engine engine;
   private boolean inService = false;
 
-  DefaultJDial(Logger logger, Configuracoes configuracoes, Engine.Factory engineFactory,
-      @Versao String versao, GerenciadorAgentes gerenciadorAgentes,
-      GerenciadorLigacoes gerenciadorLigacoes, @Livres Estoque estoqueLivres,
-      @Agendados Estoque estoqueAgendados, @DiscavelTsa Discavel.Factory discavelFactory,
-      Provider<DaoFactory> daoFactoryProvider,
+  DefaultJDial(Configuracoes configuracoes, Engine.Factory engineFactory, @Versao String versao,
+      GerenciadorAgentes gerenciadorAgentes, GerenciadorLigacoes gerenciadorLigacoes,
+      @Livres Estoque estoqueLivres, @Agendados Estoque estoqueAgendados,
+      @DiscavelTsa Discavel.Factory discavelFactory, Provider<DaoFactory> daoFactoryProvider,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       GerenciadorFatorK gerenciadorFatorK, DialerCtiManager dialerCtiManager) {
-    this.logger = logger;
     this.configuracoes = configuracoes;
     this.gerenciadorAgentes = gerenciadorAgentes;
     this.gerenciadorLigacoes = gerenciadorLigacoes;

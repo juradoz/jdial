@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -13,12 +15,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaInutilizaTelefone implements ProcessoDevolucao {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProcessaInutilizaTelefone.class);
+
   private final FinalizadorCliente finalizadorCliente;
 
   @Inject
-  ProcessaInutilizaTelefone(Logger logger, FinalizadorCliente finalizadorCliente) {
-    this.logger = logger;
+  ProcessaInutilizaTelefone(FinalizadorCliente finalizadorCliente) {
     this.finalizadorCliente = finalizadorCliente;
   }
 

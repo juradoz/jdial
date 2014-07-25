@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
@@ -91,8 +90,6 @@ public class DefaultJDialTest {
   @Mock
   private Servico servico;
   @Mock
-  private Logger logger;
-  @Mock
   private DialerCtiManager dialerCtiManager;
   @Mock
   private ProviderEvent event;
@@ -130,7 +127,7 @@ public class DefaultJDialTest {
     when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
 
     jDial =
-        new DefaultJDial(logger, configuracoes, engineFactory, versao, gerenciadorAgentes,
+        new DefaultJDial(configuracoes, engineFactory, versao, gerenciadorAgentes,
             gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
             daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK,
             dialerCtiManager);

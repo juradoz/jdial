@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
 
@@ -13,11 +15,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaRetornaProvidencia implements ProcessoDevolucao {
 
-  private final Logger logger;
-
-  ProcessaRetornaProvidencia(Logger logger) {
-    this.logger = logger;
-  }
+  private static final Logger logger = getLogger(ProcessaRetornaProvidencia.class);
 
   @Override
   public int compareTo(ProcessoDevolucao o) {

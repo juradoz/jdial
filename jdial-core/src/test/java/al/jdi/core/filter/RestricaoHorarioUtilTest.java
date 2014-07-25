@@ -12,7 +12,6 @@ import org.joda.time.DateTimeConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.beans.Dao;
@@ -74,8 +73,6 @@ public class RestricaoHorarioUtilTest {
   private Dao<RestricaoHorario> restricaoHorarioDao;
   @Mock
   private RestricaoHorario restricaoHorario;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -105,7 +102,7 @@ public class RestricaoHorarioUtilTest {
 
     when(daoFactory.getDataBanco()).thenReturn(DATA_BANCO);
 
-    restricaoHorarioUtil = new RestricaoHorarioUtil(logger, daoFactoryProvider);
+    restricaoHorarioUtil = new RestricaoHorarioUtil(daoFactoryProvider);
   }
 
   @Test

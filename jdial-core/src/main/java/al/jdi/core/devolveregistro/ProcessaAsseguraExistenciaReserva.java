@@ -1,6 +1,6 @@
 package al.jdi.core.devolveregistro;
 
-import javax.inject.Inject;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.slf4j.Logger;
@@ -15,12 +15,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaAsseguraExistenciaReserva implements ProcessoDevolucao {
 
-  private final Logger logger;
-
-  @Inject
-  ProcessaAsseguraExistenciaReserva(Logger logger) {
-    this.logger = logger;
-  }
+  private static final Logger logger = getLogger(ProcessaAsseguraExistenciaReserva.class);
 
   @Override
   public boolean accept(Configuracoes configuracoes, Ligacao ligacao, Cliente cliente,

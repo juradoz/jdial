@@ -1,6 +1,7 @@
 package al.jdi.cti;
 
-import javax.inject.Inject;
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.telephony.CallEvent;
 import javax.telephony.Connection;
 import javax.telephony.ConnectionEvent;
@@ -25,20 +26,17 @@ class DefaultPredictiveCallListener implements CallControlConnectionListener {
   }
 
   static class DefaultFactory implements DefaultPredictiveCallListener.Factory {
-    @Inject
-    private Logger logger;
-
     @Override
     public CallControlConnectionListener create(PredictiveListener listener) {
-      return new DefaultPredictiveCallListener(logger, listener);
+      return new DefaultPredictiveCallListener(listener);
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultPredictiveCallListener.class);
+
   private final PredictiveListener predictiveListener;
 
-  DefaultPredictiveCallListener(Logger logger, PredictiveListener predictiveListener) {
-    this.logger = logger;
+  DefaultPredictiveCallListener(PredictiveListener predictiveListener) {
     this.predictiveListener = predictiveListener;
   }
 

@@ -1,14 +1,14 @@
 package al.jdi.core.tratadorespecificocliente;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.dao.beans.ClienteDao;
@@ -25,23 +25,19 @@ class TratadorEspecificoClienteTsaCRM implements TratadorEspecificoCliente {
   @Alternative
   static class TratadorEspecificoClienteTsaCRMImplFactory implements
       TratadorEspecificoCliente.Factory {
-    @Inject
-    @LogClass(clazz = TratadorEspecificoClienteTsaCRM.class)
-    private Logger logger;
-
     @Override
     public TratadorEspecificoCliente create(Configuracoes configuracoes, DaoFactory daoFactory) {
-      return new TratadorEspecificoClienteTsaCRM(logger, configuracoes, daoFactory);
+      return new TratadorEspecificoClienteTsaCRM(configuracoes, daoFactory);
     }
 
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(TratadorEspecificoClienteTsaCRM.class);
+
   private final Configuracoes configuracoes;
   private final DaoFactory daoFactory;
 
-  TratadorEspecificoClienteTsaCRM(Logger logger, Configuracoes configuracoes, DaoFactory daoFactory) {
-    this.logger = logger;
+  TratadorEspecificoClienteTsaCRM(Configuracoes configuracoes, DaoFactory daoFactory) {
     this.configuracoes = configuracoes;
     this.daoFactory = daoFactory;
     logger.debug("Iniciando {}", this);

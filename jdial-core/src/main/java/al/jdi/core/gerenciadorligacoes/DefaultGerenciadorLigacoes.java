@@ -4,6 +4,7 @@ import static ch.lambdaj.Lambda.filter;
 import static ch.lambdaj.Lambda.having;
 import static ch.lambdaj.Lambda.on;
 import static org.hamcrest.CoreMatchers.is;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,7 +21,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
@@ -37,9 +37,6 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
   static class GerenciadorLigacoesImplFactory implements GerenciadorLigacoes.Factory {
     @Inject
-    @LogClass(clazz = GerenciadorLigacoes.class)
-    private Logger logger;
-    @Inject
     private Provider<DaoFactory> daoFactoryProvider;
     @Inject
     private DialerCtiManager dialerCtiManager;
@@ -55,14 +52,14 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
     @Override
     public GerenciadorLigacoes create(Configuracoes configuracoes,
         GerenciadorFatorK gerenciadorFatorK) {
-      return new DefaultGerenciadorLigacoes(logger, daoFactoryProvider, configuracoes,
-          dialerCtiManager, ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory,
-          gerenciadorFatorK);
+      return new DefaultGerenciadorLigacoes(daoFactoryProvider, configuracoes, dialerCtiManager,
+          ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
     }
 
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultGerenciadorLigacoes.class);
+
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Configuracoes configuracoes;
   private final DialerCtiManager dialerCtiManager;
@@ -74,12 +71,10 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
   private Engine engine;
 
-  DefaultGerenciadorLigacoes(Logger logger, Provider<DaoFactory> daoFactoryProvider,
-      Configuracoes configuracoes, DialerCtiManager dialerCtiManager,
-      Map<PredictiveListener, Ligacao> ligacoes,
+  DefaultGerenciadorLigacoes(Provider<DaoFactory> daoFactoryProvider, Configuracoes configuracoes,
+      DialerCtiManager dialerCtiManager, Map<PredictiveListener, Ligacao> ligacoes,
       PredictiveListenerFactory predictiveListenerFactory, DevolveRegistro devolveRegistro,
       Engine.Factory engineFactory, GerenciadorFatorK gerenciadorFatorK) {
-    this.logger = logger;
     this.daoFactoryProvider = daoFactoryProvider;
     this.configuracoes = configuracoes;
     this.dialerCtiManager = dialerCtiManager;

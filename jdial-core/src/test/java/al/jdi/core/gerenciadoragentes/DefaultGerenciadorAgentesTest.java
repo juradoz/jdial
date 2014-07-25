@@ -14,7 +14,6 @@ import javax.inject.Provider;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
@@ -53,8 +52,6 @@ public class DefaultGerenciadorAgentesTest {
   private Grupo grupo;
   @Mock
   private CtiManager ctiManager;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -70,7 +67,7 @@ public class DefaultGerenciadorAgentesTest {
     assertThat(LIVRES, is(not(equalTo(SIMULTANEOS))));
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
     gerenciadorAgentesImpl =
-        new DefaultGerenciadorAgentes(logger, dialerCtiManager, configuracoes, engineFactory,
+        new DefaultGerenciadorAgentes(dialerCtiManager, configuracoes, engineFactory,
             daoFactoryProvider);
   }
 

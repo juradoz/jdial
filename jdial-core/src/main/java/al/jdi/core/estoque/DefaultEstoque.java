@@ -4,6 +4,7 @@ import static ch.lambdaj.Lambda.extract;
 import static ch.lambdaj.Lambda.on;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,7 +24,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;
@@ -48,9 +48,6 @@ class DefaultEstoque implements Estoque, Runnable {
 
   static class EstoqueImplFactory implements Estoque.Factory {
     @Inject
-    @LogClass(clazz = Estoque.class)
-    private Logger logger;
-    @Inject
     private Provider<DaoFactory> daoFactoryProvider;
     @Inject
     private DevolveRegistro devolveRegistro;
@@ -70,7 +67,7 @@ class DefaultEstoque implements Estoque, Runnable {
     @Override
     public Estoque create(Configuracoes configuracoes, ExtraidorClientes extraidorClientes,
         Period intervaloMonitoracao) {
-      return new DefaultEstoque(logger, configuracoes, daoFactoryProvider, devolveRegistro,
+      return new DefaultEstoque(configuracoes, daoFactoryProvider, devolveRegistro,
           tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
           extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
     }
@@ -84,7 +81,8 @@ class DefaultEstoque implements Estoque, Runnable {
   public static class DncException extends Exception {
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultEstoque.class);
+
   private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final DevolveRegistro devolveRegistro;
@@ -100,13 +98,12 @@ class DefaultEstoque implements Estoque, Runnable {
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  DefaultEstoque(Logger logger, Configuracoes configuracoes,
-      Provider<DaoFactory> daoFactoryProvider, DevolveRegistro devolveRegistro,
+  DefaultEstoque(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+      DevolveRegistro devolveRegistro,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
       ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
-    this.logger = logger;
     this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.devolveRegistro = devolveRegistro;

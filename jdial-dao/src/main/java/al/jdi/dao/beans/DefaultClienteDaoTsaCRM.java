@@ -1,14 +1,13 @@
 package al.jdi.dao.beans;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -25,8 +24,7 @@ import al.jdi.dao.model.Telefone;
 
 class DefaultClienteDaoTsaCRM implements ClienteDaoTsa {
 
-  @Inject
-  private Logger logger;
+  private static final Logger logger = getLogger(DefaultClienteDaoTsaCRM.class);
 
   private final DefaultClienteDao dao;
 

@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -14,13 +16,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaNotificaFimTentativa implements ProcessoDevolucao {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProcessaNotificaFimTentativa.class);
+
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaNotificaFimTentativa(Logger logger,
-      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
-    this.logger = logger;
+  ProcessaNotificaFimTentativa(TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 

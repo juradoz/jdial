@@ -1,5 +1,7 @@
 package al.jdi.core.tenant;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -17,15 +19,15 @@ import al.jdi.dao.model.Campanha;
 @TenantManagerService
 class DefaultTenantManager implements TenantManager {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultTenantManager.class);
+
   private final Map<Campanha, Tenant> tenants;
   private final Tenant.Factory tenantFactory;
   private final Provider<DaoFactory> daoFactoryProvider;
 
   @Inject
-  DefaultTenantManager(Logger logger, Map<Campanha, Tenant> tenants, Factory tenantFactory,
+  DefaultTenantManager(Map<Campanha, Tenant> tenants, Factory tenantFactory,
       Provider<DaoFactory> daoFactoryProvider) {
-    this.logger = logger;
     this.tenants = tenants;
     this.tenantFactory = tenantFactory;
     this.daoFactoryProvider = daoFactoryProvider;

@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -38,8 +37,6 @@ public class ProcessaFimDaFilaTest {
   @Mock
   private ClienteDao clienteDao;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   @Before
@@ -48,7 +45,7 @@ public class ProcessaFimDaFilaTest {
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     when(tratadorEspecificoCliente.obtemClienteDao()).thenReturn(clienteDao);
-    processaFimDaFila = new ProcessaFimDaFila(logger, tratadorEspecificoClienteFactory);
+    processaFimDaFila = new ProcessaFimDaFila(tratadorEspecificoClienteFactory);
   }
 
   @Test

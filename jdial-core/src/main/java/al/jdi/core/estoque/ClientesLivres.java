@@ -1,5 +1,7 @@
 package al.jdi.core.estoque;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -17,10 +19,12 @@ import al.jdi.dao.model.Cliente;
 @Livres
 class ClientesLivres implements ExtraidorClientes {
 
+  private static final Logger logger = getLogger(ClientesLivres.class);
+
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ClientesLivres(Logger logger, TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
+  ClientesLivres(TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     logger.debug("Iniciando {}", this);
   }

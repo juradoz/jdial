@@ -1,5 +1,7 @@
 package al.jdi.dao.model;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -9,7 +11,6 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -21,8 +22,7 @@ import org.slf4j.Logger;
 @Table(indexes = {@Index(name = "IX_informacaoCliente_chave", columnList = "chave")})
 public class InformacaoCliente implements DaoObject {
 
-  @Transient
-  private Logger logger;
+  private static final Logger logger = getLogger(InformacaoCliente.class);
 
   @Id
   @GeneratedValue

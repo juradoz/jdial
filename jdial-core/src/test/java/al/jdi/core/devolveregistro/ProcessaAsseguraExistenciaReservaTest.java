@@ -8,7 +8,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -37,8 +36,6 @@ public class ProcessaAsseguraExistenciaReservaTest {
   @Mock
   private Dao<EstadoCliente> estadoClienteDao;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   @Before
@@ -47,7 +44,7 @@ public class ProcessaAsseguraExistenciaReservaTest {
     when(daoFactory.getEstadoClienteDao()).thenReturn(estadoClienteDao);
     when(estadoClienteDao.procura("Reservado pelo Discador")).thenReturn(estadoClienteReservado);
     when(cliente.getEstadoCliente()).thenReturn(estadoCliente);
-    processaAsseguraExistenciaReserva = new ProcessaAsseguraExistenciaReserva(logger);
+    processaAsseguraExistenciaReserva = new ProcessaAsseguraExistenciaReserva();
   }
 
   @Test

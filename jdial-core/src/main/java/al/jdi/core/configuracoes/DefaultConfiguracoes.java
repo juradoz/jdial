@@ -2,6 +2,7 @@ package al.jdi.core.configuracoes;
 
 import static java.lang.Math.max;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.ConfiguracoesModule.IntervaloAtualizacao;
 import al.jdi.cti.TratamentoSecretariaEletronica;
 import al.jdi.dao.beans.DaoFactory;
@@ -26,9 +26,6 @@ import al.jdi.dao.model.Definicao;
 class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   static class DefaultConfiguracoesFactory implements Configuracoes.Factory {
-    @Inject
-    @LogClass(clazz = Configuracoes.class)
-    private Logger logger;
     @Inject
     private Engine.Factory engineFactory;
     @Inject
@@ -43,7 +40,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
     @Override
     public Configuracoes create(String nomeCampanha) {
-      return new DefaultConfiguracoes(logger, nomeCampanha, engineFactory, daoFactoryProvider,
+      return new DefaultConfiguracoes(nomeCampanha, engineFactory, daoFactoryProvider,
           intervaloAtualizacao, definicoes, sistemaAtivoFactory);
     }
   }
@@ -123,7 +120,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
       "sistema.limiteTentativasPorTelefone";
   private static final String SISTEMA_BLOQUEIA_DDD_POR_PERIODO = "sistema.bloqueiaDddPorPeriodo";
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultConfiguracoes.class);
 
   private final String nomeCampanha;
   private final Engine.Factory engineFactory;
@@ -134,10 +131,9 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   private Engine engine;
 
-  DefaultConfiguracoes(Logger logger, String nomeCampanha, Engine.Factory engineFactory,
+  DefaultConfiguracoes(String nomeCampanha, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider, Period intervaloAtualizacao,
       Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
-    this.logger = logger;
     this.nomeCampanha = nomeCampanha;
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;

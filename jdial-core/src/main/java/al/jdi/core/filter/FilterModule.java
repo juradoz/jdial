@@ -14,8 +14,6 @@ import java.util.HashSet;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
-import org.slf4j.Logger;
-
 public class FilterModule {
 
   @Retention(RUNTIME)
@@ -31,25 +29,24 @@ public class FilterModule {
   }
 
   @Produces
-  public TelefoneFilter getTelefoneFilter(Logger logger, CampoUtil campoUtil,
+  public TelefoneFilter getTelefoneFilter(CampoUtil campoUtil,
       BloqueioCelularUtil bloqueioCelularUtil, RestricaoHorarioUtil restricaoHorarioUtil) {
-    return new DefaultTelefoneFilter(logger, new HashSet<>(asList((TelefoneUtil) campoUtil,
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) campoUtil,
         (TelefoneUtil) bloqueioCelularUtil, (TelefoneUtil) restricaoHorarioUtil)));
   }
 
   @Produces
   @ClienteSemTelefoneFilter
-  public TelefoneFilter getTelefoneFilterClienteSemTelefoneFilter(Logger logger,
-      CampoUtil campoUtil, RestricaoHorarioUtil restricaoHorarioUtil) {
-    return new DefaultTelefoneFilter(logger, new HashSet<>(asList((TelefoneUtil) campoUtil,
+  public TelefoneFilter getTelefoneFilterClienteSemTelefoneFilter(CampoUtil campoUtil,
+      RestricaoHorarioUtil restricaoHorarioUtil) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) campoUtil,
         (TelefoneUtil) restricaoHorarioUtil)));
   }
 
   @Produces
   @SomenteCelularFilter
-  public TelefoneFilter getTelefoneFilterSomenteCelular(Logger logger,
-      BloqueioCelularUtil bloqueiaCelular) {
-    return new DefaultTelefoneFilter(logger, new HashSet<>(asList((TelefoneUtil) bloqueiaCelular)));
+  public TelefoneFilter getTelefoneFilterSomenteCelular(BloqueioCelularUtil bloqueiaCelular) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) bloqueiaCelular)));
   }
 
 }

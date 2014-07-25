@@ -1,27 +1,22 @@
 package al.jdi.core.configuracoes;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 
-import al.jdi.common.LogProducer.LogClass;
-
 class DefaultSistemaAtivo implements SistemaAtivo {
 
   static class DefaultSistemaAtivoFactory implements SistemaAtivo.Factory {
-    @Inject
-    @LogClass(clazz = SistemaAtivo.class)
-    private Logger logger;
 
     @Override
     public SistemaAtivo create(DefaultConfiguracoes configuracoes) {
-      return new DefaultSistemaAtivo(logger, configuracoes);
+      return new DefaultSistemaAtivo(configuracoes);
     }
   }
 
@@ -40,13 +35,13 @@ class DefaultSistemaAtivo implements SistemaAtivo {
   static final String SISTEMA_HORA_FINAL_SEGUNDA = "sistema.horaFinalSegunda";
   static final String SISTEMA_HORA_FINAL_DOMINGO = "sistema.horaFinalDomingo";
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultSistemaAtivo.class);
+
   private final DefaultConfiguracoes configuracoes;
   private final Map<Integer, String> constInicios = new HashMap<Integer, String>();
   private final Map<Integer, String> constTerminos = new HashMap<Integer, String>();
 
-  DefaultSistemaAtivo(Logger logger, DefaultConfiguracoes configuracoes) {
-    this.logger = logger;
+  DefaultSistemaAtivo(DefaultConfiguracoes configuracoes) {
     this.configuracoes = configuracoes;
     registraConstInicios();
     registraConstTerminos();

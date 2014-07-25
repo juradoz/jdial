@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.dao.model.Telefone;
@@ -33,8 +32,6 @@ public class DefaultTelefoneFilterTest {
   @Mock
   private Telefone t3;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   private HashSet<TelefoneUtil> checkers;
@@ -49,7 +46,7 @@ public class DefaultTelefoneFilterTest {
     when(checker2.isUtil(configuracoes, t1)).thenReturn(true);
     when(checker2.isUtil(configuracoes, t2)).thenReturn(true);
     when(checker2.isUtil(configuracoes, t3)).thenReturn(true);
-    defaultTelefoneFilter = new DefaultTelefoneFilter(logger, checkers);
+    defaultTelefoneFilter = new DefaultTelefoneFilter(checkers);
   }
 
   @Test

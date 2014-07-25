@@ -1,33 +1,28 @@
 package al.jdi.core.gerenciadorligacoes;
 
-import javax.inject.Inject;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.cti.PredictiveListener;
 
 class PredictiveListenerImpl implements PredictiveListener {
 
   static class PredictiveListenerImplFactory implements PredictiveListenerFactory {
-    @Inject
-    @LogClass(clazz = PredictiveListener.class)
-    private Logger logger;
-
     @Override
     public PredictiveListener create(DefaultGerenciadorLigacoes owner) {
-      return new PredictiveListenerImpl(logger, owner);
+      return new PredictiveListenerImpl(owner);
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(PredictiveListenerImpl.class);
+
   private final DefaultGerenciadorLigacoes owner;
 
-  PredictiveListenerImpl(Logger logger, DefaultGerenciadorLigacoes owner) {
-    this.logger = logger;
+  PredictiveListenerImpl(DefaultGerenciadorLigacoes owner) {
     this.owner = owner;
     logger.debug("Iniciando {}", this);
   }

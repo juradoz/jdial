@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -21,16 +23,15 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaCiclaTelefone implements ProcessoDevolucao {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProcessaCiclaTelefone.class);
+
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final ProcessaFimDaFila processaFimDaFila;
   private final Map<Providencia.Codigo, Providencia> providencias;
 
   @Inject
-  ProcessaCiclaTelefone(Logger logger,
-      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
+  ProcessaCiclaTelefone(TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       ProcessaFimDaFila processaFimDaFila, Map<Providencia.Codigo, Providencia> providencias) {
-    this.logger = logger;
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.processaFimDaFila = processaFimDaFila;
     this.providencias = providencias;

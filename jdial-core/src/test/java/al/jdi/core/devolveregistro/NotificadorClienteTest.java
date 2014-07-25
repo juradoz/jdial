@@ -9,7 +9,6 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -42,8 +41,6 @@ public class NotificadorClienteTest {
   @Mock
   private Campanha campanha;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   private DateTime dataBanco;
@@ -57,7 +54,7 @@ public class NotificadorClienteTest {
     when(ligacao.isInutilizaComMotivoDiferenciado()).thenReturn(INUTILIZA_DIFERENCIADO);
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
-    notificadorCliente = new NotificadorCliente(logger, tratadorEspecificoClienteFactory);
+    notificadorCliente = new NotificadorCliente(tratadorEspecificoClienteFactory);
   }
 
   @Test

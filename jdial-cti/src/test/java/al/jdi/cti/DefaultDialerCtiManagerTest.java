@@ -22,7 +22,6 @@ import javax.telephony.callcenter.Agent;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import com.avaya.jtapi.tsapi.LucentAddress;
 import com.avaya.jtapi.tsapi.LucentCall;
@@ -59,8 +58,6 @@ public class DefaultDialerCtiManagerTest {
   private DefaultPredictiveCallListener.Factory predictiveCallListenerFactory;
   @Mock
   private DefaultPredictiveCallRunner.Factory predictiveCallRunnerFactory;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws InvalidArgumentException, MethodNotSupportedException,
@@ -74,8 +71,8 @@ public class DefaultDialerCtiManagerTest {
     when(provider.getTerminal(ORIGEM)).thenReturn(terminal);
     when(provider.getAddress(ORIGEM)).thenReturn(address);
     dialerCtiManagerImpl =
-        new DefaultDialerCtiManager(logger, ctiManager, executorService,
-            predictiveCallListenerFactory, predictiveCallRunnerFactory);
+        new DefaultDialerCtiManager(ctiManager, executorService, predictiveCallListenerFactory,
+            predictiveCallRunnerFactory);
   }
 
   @Test

@@ -15,7 +15,6 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Discavel;
@@ -67,8 +66,6 @@ public class TratadorEspecificoClienteTsaTest {
   private Grupo grupo;
   @Mock
   private ResultadoLigacaoDao resultadoLigacaoDao;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -90,8 +87,7 @@ public class TratadorEspecificoClienteTsaTest {
     when(clienteDaoTsa.reservaNaBaseDoCliente(cliente, OPERADOR_DISCADOR, NOME_BASE_DADOS))
         .thenReturn(true);
     when(configuracoes.getNomeBaseDados()).thenReturn(NOME_BASE_DADOS);
-    tratadorEspecificoClienteTsaImpl =
-        new TratadorEspecificoClienteTsa(logger, configuracoes, daoFactory);
+    tratadorEspecificoClienteTsaImpl = new TratadorEspecificoClienteTsa(configuracoes, daoFactory);
   }
 
   @Test

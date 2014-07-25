@@ -18,7 +18,6 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.filter.TelefoneFilter;
@@ -56,8 +55,6 @@ public class MantemAtualTest {
   @Mock
   private TelefoneFilter somenteCelulareFilter;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   private List<Telefone> telefones;
@@ -78,7 +75,7 @@ public class MantemAtualTest {
     when(clienteSemTelefonesFilter.filter(configuracoes, telefones)).thenReturn(telefones);
     when(somenteCelulareFilter.filter(configuracoes, telefones)).thenReturn(telefones);
     mantemAtual =
-        new MantemAtual(logger, telefoneSorter, iProximoTelefone, clienteSemTelefonesFilter,
+        new MantemAtual(telefoneSorter, iProximoTelefone, clienteSemTelefonesFilter,
             somenteCelulareFilter);
   }
 

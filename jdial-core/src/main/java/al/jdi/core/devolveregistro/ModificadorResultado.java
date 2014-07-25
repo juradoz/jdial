@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -15,12 +17,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultado {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ModificadorResultado.class);
+
   private final Instance<ModificadorResultadoFilter> filters;
 
   @Inject
-  ModificadorResultado(Logger logger, @Any Instance<ModificadorResultadoFilter> filters) {
-    this.logger = logger;
+  ModificadorResultado(@Any Instance<ModificadorResultadoFilter> filters) {
     this.filters = filters;
   }
 

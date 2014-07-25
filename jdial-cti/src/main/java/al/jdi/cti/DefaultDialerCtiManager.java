@@ -4,6 +4,7 @@ import static ch.lambdaj.Lambda.filter;
 import static ch.lambdaj.Lambda.having;
 import static ch.lambdaj.Lambda.on;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.concurrent.ExecutorService;
 
@@ -36,18 +37,18 @@ import com.avaya.jtapi.tsapi.TsapiMethodNotSupportedException;
 @DialerCtiManagerService
 class DefaultDialerCtiManager implements DialerCtiManager {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultDialerCtiManager.class);
+
   private final CtiManager ctiManager;
   private final ExecutorService executorService;
   private final DefaultPredictiveCallListener.Factory predictiveCallListenerFactory;
   private final DefaultPredictiveCallRunner.Factory predictiveCallRunnerFactory;
 
   @Inject
-  DefaultDialerCtiManager(Logger logger, @CtiManagerService CtiManager ctiManager,
+  DefaultDialerCtiManager(@CtiManagerService CtiManager ctiManager,
       @CtiManagerService ExecutorService executorService,
       DefaultPredictiveCallListener.Factory predictiveCallListenerFactory,
       DefaultPredictiveCallRunner.Factory predictiveCallRunnerFactory) {
-    this.logger = logger;
     this.ctiManager = ctiManager;
     this.executorService = executorService;
     this.predictiveCallListenerFactory = predictiveCallListenerFactory;

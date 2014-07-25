@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -46,8 +45,6 @@ public class ProcessaNotificaFimTentativaTest {
   @Mock
   private Mailing mailing;
   @Mock
-  private Logger logger;
-  @Mock
   private Configuracoes configuracoes;
 
   private DateTime dataBanco;
@@ -64,7 +61,7 @@ public class ProcessaNotificaFimTentativaTest {
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
     processaNotificaFimTentativa =
-        new ProcessaNotificaFimTentativa(logger, tratadorEspecificoClienteFactory);
+        new ProcessaNotificaFimTentativa(tratadorEspecificoClienteFactory);
   }
 
   @Test

@@ -1,5 +1,7 @@
 package al.jdi.core.gerenciadoragentes;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.telephony.ProviderEvent;
@@ -13,7 +15,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
@@ -21,9 +22,6 @@ import al.jdi.dao.beans.DaoFactory;
 class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, ProviderListener {
 
   static class GerenciadorAgentesFactory implements GerenciadorAgentes.Factory {
-    @Inject
-    @LogClass(clazz = GerenciadorAgentes.class)
-    private Logger logger;
     @Inject
     private DialerCtiManager dialerCtiManager;
     @Inject
@@ -33,12 +31,13 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
     @Override
     public GerenciadorAgentes create(Configuracoes configuracoes) {
-      return new DefaultGerenciadorAgentes(logger, dialerCtiManager, configuracoes, engineFactory,
+      return new DefaultGerenciadorAgentes(dialerCtiManager, configuracoes, engineFactory,
           daoFactoryProvider);
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultGerenciadorAgentes.class);
+
   private final DialerCtiManager dialerCtiManager;
   private final Configuracoes configuracoes;
   private final Engine.Factory engineFactory;
@@ -48,10 +47,8 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
   private int livres;
   private boolean inService = false;
 
-  DefaultGerenciadorAgentes(Logger logger, DialerCtiManager dialerCtiManager,
-      Configuracoes configuracoes, Engine.Factory engineFactory,
-      Provider<DaoFactory> daoFactoryProvider) {
-    this.logger = logger;
+  DefaultGerenciadorAgentes(DialerCtiManager dialerCtiManager, Configuracoes configuracoes,
+      Engine.Factory engineFactory, Provider<DaoFactory> daoFactoryProvider) {
     this.dialerCtiManager = dialerCtiManager;
     this.configuracoes = configuracoes;
     this.engineFactory = engineFactory;

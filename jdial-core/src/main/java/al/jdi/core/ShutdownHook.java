@@ -1,10 +1,9 @@
 package al.jdi.core;
 
-import javax.inject.Inject;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import org.slf4j.Logger;
 
-import al.jdi.common.LogProducer.LogClass;
 import al.jdi.common.Service;
 
 class ShutdownHook implements Runnable {
@@ -14,21 +13,17 @@ class ShutdownHook implements Runnable {
   }
 
   static class ShutdownHookFactory implements ShutdownHook.Factory {
-    @Inject
-    @LogClass(clazz = ShutdownHook.class)
-    private Logger logger;
-
     @Override
     public ShutdownHook create(Service... services) {
-      return new ShutdownHook(logger, services);
+      return new ShutdownHook(services);
     }
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ShutdownHook.class);
+
   private final Service[] services;
 
-  ShutdownHook(Logger logger, Service... services) {
-    this.logger = logger;
+  ShutdownHook(Service... services) {
     this.services = services;
   }
 

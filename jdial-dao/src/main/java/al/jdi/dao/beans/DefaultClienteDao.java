@@ -23,7 +23,7 @@ import al.jdi.dao.model.Mailing;
 
 class DefaultClienteDao implements ClienteDao {
 
-  private static Logger logger = getLogger(DefaultClienteDao.class);
+  private static final Logger logger = getLogger(DefaultClienteDao.class);
 
   private final DefaultDao<Cliente> dao;
 

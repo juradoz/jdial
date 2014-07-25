@@ -1,5 +1,7 @@
 package al.jdi.core.modelo;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,18 +23,18 @@ import al.jdi.dao.model.Telefone;
 @ProvidenciaMantemAtual
 class MantemAtual implements Providencia {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(MantemAtual.class);
+
   private final TelefoneSorter telefoneSorter;
   private final Instance<Providencia> proximoTelefone;
   private final TelefoneFilter clienteSemTelefoneFilter;
   private final TelefoneFilter somenteCelularFilter;
 
   @Inject
-  MantemAtual(Logger logger, TelefoneSorter telefoneSorter,
+  MantemAtual(TelefoneSorter telefoneSorter,
       @ProvidenciaProximoTelefone Instance<Providencia> proximoTelefone,
       @ClienteSemTelefoneFilter TelefoneFilter clienteSemTelefoneFilter,
       @SomenteCelularFilter TelefoneFilter somenteCelularFilter) {
-    this.logger = logger;
     this.telefoneSorter = telefoneSorter;
     this.proximoTelefone = proximoTelefone;
     this.clienteSemTelefoneFilter = clienteSemTelefoneFilter;

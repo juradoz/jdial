@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -41,8 +40,6 @@ public class ModificadorResultadoAtendidoFakeTest {
   private ResultadoLigacao resultadoLigacaoInexistente;
   @Mock
   private Configuracoes configuracoes;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -52,7 +49,7 @@ public class ModificadorResultadoAtendidoFakeTest {
     when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
     when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
     when(ligacao.isAtendida()).thenReturn(true);
-    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake(logger);
+    modificadorResultadoAtendidoFake = new ModificadorResultadoAtendidoFake();
   }
 
   @Test

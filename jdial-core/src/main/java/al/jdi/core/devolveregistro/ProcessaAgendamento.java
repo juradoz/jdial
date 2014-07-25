@@ -1,5 +1,7 @@
 package al.jdi.core.devolveregistro;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -18,13 +20,12 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ProcessaAgendamento implements ProcessoDevolucao {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(ProcessaAgendamento.class);
+
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
 
   @Inject
-  ProcessaAgendamento(Logger logger,
-      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
-    this.logger = logger;
+  ProcessaAgendamento(TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
   }
 

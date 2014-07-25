@@ -1,6 +1,6 @@
 package al.jdi.core.devolveregistro;
 
-import javax.inject.Inject;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import org.slf4j.Logger;
 
@@ -13,12 +13,7 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultadoAtendidoFake implements ModificadorResultadoFilter {
 
-  private final Logger logger;
-
-  @Inject
-  ModificadorResultadoAtendidoFake(Logger logger) {
-    this.logger = logger;
-  }
+  private static final Logger logger = getLogger(ModificadorResultadoAtendidoFake.class);
 
   @Override
   public boolean accept(Configuracoes configuracoes, DaoFactory daoFactory,

@@ -1,5 +1,7 @@
 package al.jdi.core.filter;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,12 +18,12 @@ import al.jdi.dao.model.Telefone;
 @Alternative
 class DefaultTelefoneFilter implements TelefoneFilter {
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DefaultTelefoneFilter.class);
+
   private final Set<TelefoneUtil> checkers;
 
   @Inject
-  DefaultTelefoneFilter(Logger logger, Set<TelefoneUtil> checkers) {
-    this.logger = logger;
+  DefaultTelefoneFilter(Set<TelefoneUtil> checkers) {
     this.checkers = checkers;
   }
 

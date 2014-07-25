@@ -1,5 +1,7 @@
 package al.jdi.web.interceptor;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -25,7 +27,8 @@ public class DBLogInterceptor {
   public @interface LogAcesso {
   }
 
-  private final Logger logger;
+  private static final Logger logger = getLogger(DBLogInterceptor.class);
+
   private final DaoFactoryRequest daoFactoryRequest;
   private final UsuarioAutenticadoSession usuarioAutenticadoSession;
   private final ControllerMethod method;
@@ -33,14 +36,13 @@ public class DBLogInterceptor {
 
   @Deprecated
   public DBLogInterceptor() {
-    this(null, null, null, null, null);
+    this(null, null, null, null);
   }
 
   @Inject
-  public DBLogInterceptor(Logger logger, DaoFactoryRequest daoFactoryRequest,
+  public DBLogInterceptor(DaoFactoryRequest daoFactoryRequest,
       UsuarioAutenticadoSession usuarioAutenticadoSession, ControllerMethod method,
       MethodInfo methodInfo) {
-    this.logger = logger;
     this.daoFactoryRequest = daoFactoryRequest;
     this.usuarioAutenticadoSession = usuarioAutenticadoSession;
     this.method = method;

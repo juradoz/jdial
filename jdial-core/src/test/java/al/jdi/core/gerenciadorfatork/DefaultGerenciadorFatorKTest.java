@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
@@ -36,8 +35,6 @@ public class DefaultGerenciadorFatorKTest {
   private Engine engine;
   @Mock
   private DaoFactory daoFactory;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -51,7 +48,7 @@ public class DefaultGerenciadorFatorKTest {
             Mockito.anyBoolean(), Mockito.anyBoolean())).thenReturn(engine);
 
     gerenciadorFatorKImpl =
-        new DefaultGerenciadorFatorK(logger, configuracoes, daoFactoryProvider, engineFactory);
+        new DefaultGerenciadorFatorK(configuracoes, daoFactoryProvider, engineFactory);
   }
 
   @Test

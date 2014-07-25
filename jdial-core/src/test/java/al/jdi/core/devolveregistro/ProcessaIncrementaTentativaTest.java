@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -54,8 +53,6 @@ public class ProcessaIncrementaTentativaTest {
   private Mailing mailing;
   @Mock
   private Campanha campanha;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -69,7 +66,7 @@ public class ProcessaIncrementaTentativaTest {
     when(cliente.getMailing()).thenReturn(mailing);
     when(mailing.getCampanha()).thenReturn(campanha);
     processaIncrementaTentativa =
-        new ProcessaIncrementaTentativa(logger, finalizadorCliente, notificadorCliente);
+        new ProcessaIncrementaTentativa(finalizadorCliente, notificadorCliente);
   }
 
   @Test

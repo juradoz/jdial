@@ -9,7 +9,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.slf4j.Logger;
 
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.modelo.Ligacao;
@@ -45,8 +44,6 @@ public class ModificadorResultadoUraReversaTest {
   private ResultadoLigacao resultadoLigacaoAbandonou;
   @Mock
   private ResultadoLigacao resultadoLigacaoSemInteresse;
-  @Mock
-  private Logger logger;
 
   @Before
   public void setUp() throws Exception {
@@ -57,7 +54,7 @@ public class ModificadorResultadoUraReversaTest {
     when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
     when(resultadoLigacaoDao.procura(-10, campanha)).thenReturn(resultadoLigacaoAbandonou);
     when(resultadoLigacaoDao.procura(-11, campanha)).thenReturn(resultadoLigacaoSemInteresse);
-    modificadorResultadoUraReversa = new ModificadorResultadoUraReversa(logger);
+    modificadorResultadoUraReversa = new ModificadorResultadoUraReversa();
   }
 
   @Test
