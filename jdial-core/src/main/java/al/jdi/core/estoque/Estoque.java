@@ -14,7 +14,6 @@ public interface Estoque extends Service {
     Estoque create(Tenant tenant, ExtraidorClientes extraidorClientes, Period intervaloMonitoracao);
   }
 
-  boolean contemCliente(Cliente cliente);
-
   Collection<Cliente> obtemRegistros(int quantidade);
+  
 }

@@ -1,13 +1,10 @@
 package al.jdi.core.estoque;
 
-import static ch.lambdaj.Lambda.extract;
-import static ch.lambdaj.Lambda.on;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,23 +115,14 @@ class DefaultEstoque implements Estoque, Runnable {
     logger.debug("Iniciando {} para {}...", this, extraidorClientes);
   }
 
-  @Override
-  public boolean contemCliente(Cliente cliente) {
-    synchronized (estoque) {
-      return new HashSet<Cliente>(extract(estoque, on(Registro.class).getCliente()))
-          .contains(cliente);
-    }
-  }
-
   private void devolveCliente(DaoFactory daoFactory, Cliente cliente, MotivoSistema motivoSistema) {
     devolveCliente(daoFactory.getDataBanco(), cliente, motivoSistema);
   }
 
   private void devolveCliente(DateTime instante, Cliente cliente, MotivoSistema motivoSistema) {
     Ligacao ligacao =
-        new Ligacao.Builder(discavelFactory.create(tenant, cliente), instante)
-            .setInicio(instante).setTermino(instante)
-            .setMotivoFinalizacao(motivoSistema.getCodigo()).build();
+        new Ligacao.Builder(discavelFactory.create(tenant, cliente), instante).setInicio(instante)
+            .setTermino(instante).setMotivoFinalizacao(motivoSistema.getCodigo()).build();
     devolveRegistro.devolveLigacao(tenant, ligacao);
   }
 

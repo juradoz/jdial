@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -138,17 +137,6 @@ public class DefaultEstoqueTest {
     verify(devolveRegistro, times(2)).devolveLigacao(Mockito.eq(tenant), captor.capture());
     Ligacao ligacao = captor.getValue();
     assertThat(ligacao.getDiscavel(), is(sameInstance(discavel)));
-  }
-
-  @Test
-  public void contemClienteDeveriaEncontrar() {
-    assertThat(defaultEstoque.contemCliente(cliente), is(true));
-  }
-
-  @Test
-  public void contemClienteNaoDeveriaEncontrar() {
-    Cliente cliente = mock(Cliente.class);
-    assertThat(defaultEstoque.contemCliente(cliente), is(false));
   }
 
   @Test
