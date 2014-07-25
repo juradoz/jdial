@@ -15,20 +15,20 @@ public interface Tenant extends Service {
     Tenant create(Campanha campanha);
   }
 
-  public abstract Campanha getCampanha();
+  Campanha getCampanha();
 
-  public abstract Configuracoes getConfiguracoes();
+  Configuracoes getConfiguracoes();
 
-  public abstract Estoque getEstoqueLivres();
+  Estoque getEstoqueLivres();
 
-  public abstract Estoque getEstoqueAgendados();
+  Estoque getEstoqueAgendados();
 
-  public abstract GerenciadorAgentes getGerenciadorAgentes();
+  GerenciadorAgentes getGerenciadorAgentes();
 
-  public abstract GerenciadorLigacoes getGerenciadorLigacoes();
+  GerenciadorLigacoes getGerenciadorLigacoes();
 
-  public abstract GerenciadorFatorK getGerenciadorFatorK();
+  GerenciadorFatorK getGerenciadorFatorK();
 
-  public abstract JDial getJdial();
+  JDial getJdial();
 
 }
