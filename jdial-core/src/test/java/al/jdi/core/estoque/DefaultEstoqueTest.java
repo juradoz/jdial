@@ -35,6 +35,7 @@ import al.jdi.core.modelo.Discavel.Factory;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.modelo.Providencia;
 import al.jdi.core.modelo.Providencia.Codigo;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.CampanhaDao;
 import al.jdi.dao.beans.DaoFactory;
@@ -81,6 +82,8 @@ public class DefaultEstoqueTest {
   private Discavel discavel;
   @Mock
   private TelefoneFilter telefoneFilter;
+  @Mock
+  private Tenant tenant;
 
   private Collection<Registro> estoque;
 
@@ -103,10 +106,12 @@ public class DefaultEstoqueTest {
     when(tratadorEspecificoClienteFactory.create(configuracoes, daoFactory)).thenReturn(
         tratadorEspecificoCliente);
 
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+
     estoque = new LinkedList<Registro>(Arrays.asList(registro, registro));
 
     defaultEstoque =
-        new DefaultEstoque(configuracoes, daoFactoryProvider, devolveRegistro,
+        new DefaultEstoque(tenant, daoFactoryProvider, devolveRegistro,
             tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
             extraidorClientes, INTERVALO_MONITORACAO, providencias, telefoneFilter);
   }

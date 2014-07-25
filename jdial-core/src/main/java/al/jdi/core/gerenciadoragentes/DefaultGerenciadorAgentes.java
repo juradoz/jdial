@@ -15,7 +15,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
 
@@ -30,36 +30,36 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
     private Provider<DaoFactory> daoFactoryProvider;
 
     @Override
-    public GerenciadorAgentes create(Configuracoes configuracoes) {
-      return new DefaultGerenciadorAgentes(dialerCtiManager, configuracoes, engineFactory,
-          daoFactoryProvider);
+    public GerenciadorAgentes create(Tenant tenant) {
+      return new DefaultGerenciadorAgentes(dialerCtiManager, engineFactory, daoFactoryProvider,
+          tenant);
     }
   }
 
   private static final Logger logger = getLogger(DefaultGerenciadorAgentes.class);
 
   private final DialerCtiManager dialerCtiManager;
-  private final Configuracoes configuracoes;
   private final Engine.Factory engineFactory;
   private final Provider<DaoFactory> daoFactoryProvider;
+  private final Tenant tenant;
 
   private Engine engine;
   private int livres;
   private boolean inService = false;
 
-  DefaultGerenciadorAgentes(DialerCtiManager dialerCtiManager, Configuracoes configuracoes,
-      Engine.Factory engineFactory, Provider<DaoFactory> daoFactoryProvider) {
+  DefaultGerenciadorAgentes(DialerCtiManager dialerCtiManager, Engine.Factory engineFactory,
+      Provider<DaoFactory> daoFactoryProvider, Tenant tenant) {
     this.dialerCtiManager = dialerCtiManager;
-    this.configuracoes = configuracoes;
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;
+    this.tenant = tenant;
     dialerCtiManager.addListener(this);
     logger.debug("Iniciando {}...", this);
   }
 
   @Override
   public int getLivres() {
-    int reservados = configuracoes.getQtdAgentesReservados();
+    int reservados = tenant.getConfiguracoes().getQtdAgentesReservados();
     synchronized (this) {
       return livres - reservados;
     }
@@ -67,7 +67,7 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
   @Override
   public void run() {
-    if (!configuracoes.getSistemaAtivo())
+    if (!tenant.getConfiguracoes().getSistemaAtivo())
       return;
 
     if (!inService) {
@@ -77,7 +77,7 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
-      if (!configuracoes.getSistemaAtivo())
+      if (!tenant.getConfiguracoes().getSistemaAtivo())
         return;
 
       int livres = obtemQtdAgentesLivres(daoFactory);
@@ -92,16 +92,16 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
   int obtemQtdAgentesLivres(DaoFactory daoFactory) {
     String acd =
-        daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha()).getGrupo().getCodigo();
+        daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha()).getGrupo().getCodigo();
     logger.debug("Vai obter agentes livres de {}", acd);
     DateTime inicio = new DateTime();
     int livres = dialerCtiManager.getAgentesLivres(acd);
     logger.debug("Acd {} atualmente com {} agentes livres. Consulta demorou {}ms", new Object[] {
         acd, livres, new Duration(inicio, new DateTime()).getMillis()});
 
-    if (configuracoes.isUraReversa()) {
+    if (tenant.getConfiguracoes().isUraReversa()) {
       if (livres > 0) {
-        int qtdMaximaCanaisSimultaneos = configuracoes.getQtdMaximaCanaisSimultaneos();
+        int qtdMaximaCanaisSimultaneos = tenant.getConfiguracoes().getQtdMaximaCanaisSimultaneos();
         logger.info("URA Reversa. Retornando canais simultaneos ({})...",
             qtdMaximaCanaisSimultaneos);
         return qtdMaximaCanaisSimultaneos;

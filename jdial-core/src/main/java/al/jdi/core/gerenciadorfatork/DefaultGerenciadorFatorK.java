@@ -16,7 +16,7 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 
 class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
@@ -28,8 +28,8 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
     private Engine.Factory engineFactory;
 
     @Override
-    public GerenciadorFatorK create(Configuracoes configuracoes) {
-      return new DefaultGerenciadorFatorK(configuracoes, daoFactoryProvider, engineFactory);
+    public GerenciadorFatorK create(Tenant tenant) {
+      return new DefaultGerenciadorFatorK(tenant, daoFactoryProvider, engineFactory);
     }
   }
 
@@ -37,7 +37,7 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
 
   private static final Logger logger = getLogger(DefaultGerenciadorFatorK.class);
 
-  private final Configuracoes configuracoes;
+  private final Tenant tenant;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Engine.Factory engineFactory;
 
@@ -50,11 +50,11 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
   private int atendidasDoMinuto;
 
 
-  DefaultGerenciadorFatorK(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+  DefaultGerenciadorFatorK(Tenant tenant, Provider<DaoFactory> daoFactoryProvider,
       Engine.Factory engineFactory) {
-    this.configuracoes = configuracoes;
     this.daoFactoryProvider = daoFactoryProvider;
     this.engineFactory = engineFactory;
+    this.tenant = tenant;
     logger.debug("Iniciando {}...", this);
   }
 
@@ -74,7 +74,7 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
   public double getFatorK() {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
-      int fatorKMaximo = configuracoes.getFatorKMaximo();
+      int fatorKMaximo = tenant.getConfiguracoes().getFatorKMaximo();
       int sumAtendidas;
       synchronized (atendidas) {
         sumAtendidas = sum(atendidas).intValue();
@@ -90,7 +90,7 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
       }
 
       double calculo = sumIniciadas / sumAtendidas;
-      int fatorKMinimo = configuracoes.getFatorKMinimo();
+      int fatorKMinimo = tenant.getConfiguracoes().getFatorKMinimo();
 
       double result;
       if (calculo < fatorKMinimo)

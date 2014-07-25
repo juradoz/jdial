@@ -17,16 +17,10 @@ import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.JDialModule.Versao;
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
-import al.jdi.core.estoque.EstoqueModule.Agendados;
-import al.jdi.core.estoque.EstoqueModule.Livres;
-import al.jdi.core.gerenciadoragentes.GerenciadorAgentes;
-import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
-import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
-import al.jdi.core.modelo.ModeloModule.DiscavelTsa;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.DaoFactory;
@@ -52,68 +46,53 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     private DialerCtiManager dialerCtiManager;
 
     @Override
-    public JDial create(Configuracoes configuracoes, GerenciadorAgentes gerenciadorAgentes,
-        GerenciadorLigacoes gerenciadorLigacoes, Estoque estoqueLivres, Estoque estoqueAgendados,
-        GerenciadorFatorK gerenciadorFatorK) {
-      return new DefaultJDial(configuracoes, engineFactory, versao, gerenciadorAgentes,
-          gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
-          daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK, dialerCtiManager);
+    public JDial create(Tenant tenant) {
+      return new DefaultJDial(engineFactory, versao, discavelFactory, daoFactoryProvider,
+          tratadorEspecificoClienteFactory, dialerCtiManager, tenant);
     }
   }
 
   private static final Logger logger = getLogger(DefaultJDial.class);
 
-  private final Configuracoes configuracoes;
-  private final GerenciadorAgentes gerenciadorAgentes;
-  private final GerenciadorLigacoes gerenciadorLigacoes;
-  private final Estoque estoqueLivres;
-  private final Estoque estoqueAgendados;
-  private final Discavel.Factory discavelFactory;
   private final Engine.Factory engineFactory;
-  private final Provider<DaoFactory> daoFactoryProvider;
-  private final GerenciadorFatorK gerenciadorFatorK;
-  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
   private final String versao;
+  private final Discavel.Factory discavelFactory;
+  private final Provider<DaoFactory> daoFactoryProvider;
+  private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
+  private final Tenant tenant;
 
   private Engine engine;
   private boolean inService = false;
 
-  DefaultJDial(Configuracoes configuracoes, Engine.Factory engineFactory, @Versao String versao,
-      GerenciadorAgentes gerenciadorAgentes, GerenciadorLigacoes gerenciadorLigacoes,
-      @Livres Estoque estoqueLivres, @Agendados Estoque estoqueAgendados,
-      @DiscavelTsa Discavel.Factory discavelFactory, Provider<DaoFactory> daoFactoryProvider,
+  DefaultJDial(Engine.Factory engineFactory, String versao, Discavel.Factory discavelFactory,
+      Provider<DaoFactory> daoFactoryProvider,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
-      GerenciadorFatorK gerenciadorFatorK, DialerCtiManager dialerCtiManager) {
-    this.configuracoes = configuracoes;
-    this.gerenciadorAgentes = gerenciadorAgentes;
-    this.gerenciadorLigacoes = gerenciadorLigacoes;
-    this.estoqueLivres = estoqueLivres;
-    this.estoqueAgendados = estoqueAgendados;
-    this.discavelFactory = discavelFactory;
+      DialerCtiManager dialerCtiManager, Tenant tenant) {
     this.engineFactory = engineFactory;
-    this.daoFactoryProvider = daoFactoryProvider;
-    this.gerenciadorFatorK = gerenciadorFatorK;
-    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
     this.versao = versao;
+    this.discavelFactory = discavelFactory;
+    this.daoFactoryProvider = daoFactoryProvider;
+    this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
+    this.tenant = tenant;
+
     dialerCtiManager.addListener(this);
     logger.info("Iniciando jDial {}...", this.versao);
-
-    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
+    limpaReservas();
   }
 
-  void limpaReservas(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
-      TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory) {
+  void limpaReservas() {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
-      Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
+      Campanha campanha =
+          daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
       logger.debug("Limpando reservas para campanha {}...", campanha.getNome());
       DateTime inicio = new DateTime();
       daoFactory.beginTransaction();
       tratadorEspecificoClienteFactory
-          .create(configuracoes, daoFactory)
+          .create(tenant.getConfiguracoes(), daoFactory)
           .obtemClienteDao()
-          .limpaReservas(campanha, configuracoes.getNomeBaseDados(), configuracoes.getNomeBase(),
-              configuracoes.getOperador());
+          .limpaReservas(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
+              tenant.getConfiguracoes().getNomeBase(), tenant.getConfiguracoes().getOperador());
       daoFactory.commit();
       logger.info("Limpou reservas para campanha {}. Demorou {}ms", campanha.getNome(),
           new Duration(inicio, new DateTime()).getMillis());
@@ -127,15 +106,17 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
   }
 
   void rodada(DaoFactory daoFactory, Estoque estoque) {
-    Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
+    Campanha campanha =
+        daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
     logger.debug("Rodada {} para campanha {}", estoque, campanha.getNome());
-    int livres = gerenciadorAgentes.getLivres();
+    int livres = tenant.getGerenciadorAgentes().getLivres();
 
-    double fatorK = gerenciadorFatorK.getFatorK();
+    double fatorK = tenant.getGerenciadorFatorK().getFatorK();
 
-    int quantidadeLigacoes = gerenciadorLigacoes.getQuantidadeLigacoes();
+    int quantidadeLigacoes = tenant.getGerenciadorLigacoes().getQuantidadeLigacoes();
 
-    int quantidadeLigacoesNaoAtendidas = gerenciadorLigacoes.getQuantidadeLigacoesNaoAtendidas();
+    int quantidadeLigacoesNaoAtendidas =
+        tenant.getGerenciadorLigacoes().getQuantidadeLigacoesNaoAtendidas();
 
     int quantidade = ((int) (livres * fatorK) - quantidadeLigacoesNaoAtendidas);
 
@@ -154,17 +135,17 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     Servico servico = campanha.getServico();
 
     for (Cliente cliente : clientesAgendados) {
-      Discavel discavel = discavelFactory.create(configuracoes, cliente);
+      Discavel discavel = discavelFactory.create(tenant.getConfiguracoes(), cliente);
       Ligacao ligacao = new Ligacao.Builder(discavel).setInicio(dataBanco).build();
       DateTime inicio = new DateTime();
-      gerenciadorLigacoes.disca(ligacao, servico);
+      tenant.getGerenciadorLigacoes().disca(ligacao, servico);
       logger.debug("Discagem demorou {} ms", new Duration(inicio, new DateTime()).getMillis());
     }
   }
 
   @Override
   public void run() {
-    if (!configuracoes.getSistemaAtivo()) {
+    if (!tenant.getConfiguracoes().getSistemaAtivo()) {
       logger.warn("Sistema inativo");
       return;
     }
@@ -177,8 +158,8 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     logger.debug("Sistema ativo!");
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
-      rodada(daoFactory, estoqueAgendados);
-      rodada(daoFactory, estoqueLivres);
+      rodada(daoFactory, tenant.getEstoqueAgendados());
+      rodada(daoFactory, tenant.getEstoqueLivres());
     } finally {
       daoFactory.close();
     }
@@ -190,11 +171,13 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
     if (engine != null)
       throw new IllegalStateException("Already started");
 
-    engine = engineFactory.create(this, configuracoes.getIntervaloEntreRodadas(), false, true);
+    engine =
+        engineFactory.create(this, tenant.getConfiguracoes().getIntervaloEntreRodadas(), false,
+            true);
     logger
         .warn(
             "\n------------------------------------\nIniciado jDial {} {}\n------------------------------------",
-            configuracoes.getNomeCampanha(), versao);
+            tenant.getConfiguracoes().getNomeCampanha(), versao);
   }
 
   @Override
@@ -203,7 +186,7 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
       throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
-    limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
+    limpaReservas();
   }
 
   @Override

@@ -17,6 +17,7 @@ import org.mockito.Mock;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.cti.CtiManager;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.CampanhaDao;
@@ -52,6 +53,8 @@ public class DefaultGerenciadorAgentesTest {
   private Grupo grupo;
   @Mock
   private CtiManager ctiManager;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
@@ -66,9 +69,9 @@ public class DefaultGerenciadorAgentesTest {
     when(configuracoes.getQtdMaximaCanaisSimultaneos()).thenReturn(SIMULTANEOS);
     assertThat(LIVRES, is(not(equalTo(SIMULTANEOS))));
     when(configuracoes.getSistemaAtivo()).thenReturn(true);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     gerenciadorAgentesImpl =
-        new DefaultGerenciadorAgentes(dialerCtiManager, configuracoes, engineFactory,
-            daoFactoryProvider);
+        new DefaultGerenciadorAgentes(dialerCtiManager, engineFactory, daoFactoryProvider, tenant);
   }
 
   @Test

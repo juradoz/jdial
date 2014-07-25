@@ -69,16 +69,13 @@ class DefaultTenant implements Tenant {
     this.campanha = campanha;
     this.configuracoes = configuracoesFactory.create(campanha.getNome());
     this.estoqueLivres =
-        estoqueFactory.create(configuracoes, extraidorClientesLivres, intervaloMonitoracaoLivres);
+        estoqueFactory.create(this, extraidorClientesLivres, intervaloMonitoracaoLivres);
     this.estoqueAgendados =
-        estoqueFactory.create(configuracoes, extraidorClientesAgendados,
-            intervaloMonitoracaoAgendados);
-    this.gerenciadorAgentes = gerenciadorAgentesFactory.create(configuracoes);
-    this.gerenciadorFatorK = gerenciadorFatorKFactory.create(configuracoes);
-    this.gerenciadorLigacoes = gerenciadorLigacoesFactory.create(configuracoes, gerenciadorFatorK);
-    this.jdial =
-        jdialFactory.create(configuracoes, gerenciadorAgentes, gerenciadorLigacoes, estoqueLivres,
-            estoqueAgendados, gerenciadorFatorK);
+        estoqueFactory.create(this, extraidorClientesAgendados, intervaloMonitoracaoAgendados);
+    this.gerenciadorAgentes = gerenciadorAgentesFactory.create(this);
+    this.gerenciadorFatorK = gerenciadorFatorKFactory.create(this);
+    this.gerenciadorLigacoes = gerenciadorLigacoesFactory.create(this);
+    this.jdial = jdialFactory.create(this);
   }
 
   @Override

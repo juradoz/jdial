@@ -1,12 +1,12 @@
 package al.jdi.core.gerenciadorfatork;
 
 import al.jdi.common.Service;
-import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 
 public interface GerenciadorFatorK extends Service {
 
   public interface Factory {
-    GerenciadorFatorK create(Configuracoes configuracoes);
+    GerenciadorFatorK create(Tenant tenant);
   }
 
   void chamadaIniciada();

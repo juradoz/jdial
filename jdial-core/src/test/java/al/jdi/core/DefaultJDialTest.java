@@ -29,6 +29,7 @@ import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.dao.beans.CampanhaDao;
@@ -93,6 +94,8 @@ public class DefaultJDialTest {
   private DialerCtiManager dialerCtiManager;
   @Mock
   private ProviderEvent event;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
@@ -126,16 +129,22 @@ public class DefaultJDialTest {
 
     when(discavelFactory.create(configuracoes, cliente)).thenReturn(discavel);
 
+    when(tenant.getCampanha()).thenReturn(campanha);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
+    when(tenant.getEstoqueAgendados()).thenReturn(estoqueAgendados);
+    when(tenant.getEstoqueLivres()).thenReturn(estoqueLivres);
+    when(tenant.getGerenciadorAgentes()).thenReturn(gerenciadorAgentes);
+    when(tenant.getGerenciadorFatorK()).thenReturn(gerenciadorFatorK);
+    when(tenant.getGerenciadorLigacoes()).thenReturn(gerenciadorLigacoes);
+
     jDial =
-        new DefaultJDial(configuracoes, engineFactory, versao, gerenciadorAgentes,
-            gerenciadorLigacoes, estoqueLivres, estoqueAgendados, discavelFactory,
-            daoFactoryProvider, tratadorEspecificoClienteFactory, gerenciadorFatorK,
-            dialerCtiManager);
+        new DefaultJDial(engineFactory, versao, discavelFactory, daoFactoryProvider,
+            tratadorEspecificoClienteFactory, dialerCtiManager, tenant);
   }
 
   @Test
   public void limpaReservaDeveriaLimar() throws Exception {
-    jDial.limpaReservas(configuracoes, daoFactoryProvider, tratadorEspecificoClienteFactory);
+    jDial.limpaReservas();
     verify(clienteDao, times(2)).limpaReservas(campanha, NOME_BASE_DADOS, NOME_BASE, OPERADOR);
   }
 

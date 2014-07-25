@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 
 import al.jdi.common.Engine;
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
 
 public class DefaultGerenciadorFatorKTest {
@@ -35,6 +36,8 @@ public class DefaultGerenciadorFatorKTest {
   private Engine engine;
   @Mock
   private DaoFactory daoFactory;
+  @Mock
+  private Tenant tenant;
 
   @Before
   public void setUp() throws Exception {
@@ -46,9 +49,9 @@ public class DefaultGerenciadorFatorKTest {
     when(
         engineFactory.create(Mockito.any(Runnable.class), Mockito.any(Period.class),
             Mockito.anyBoolean(), Mockito.anyBoolean())).thenReturn(engine);
+    when(tenant.getConfiguracoes()).thenReturn(configuracoes);
 
-    gerenciadorFatorKImpl =
-        new DefaultGerenciadorFatorK(configuracoes, daoFactoryProvider, engineFactory);
+    gerenciadorFatorKImpl = new DefaultGerenciadorFatorK(tenant, daoFactoryProvider, engineFactory);
   }
 
   @Test

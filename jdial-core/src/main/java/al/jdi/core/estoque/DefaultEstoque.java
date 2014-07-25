@@ -24,7 +24,6 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
 import al.jdi.core.filter.TelefoneFilter;
 import al.jdi.core.modelo.Discavel;
@@ -35,6 +34,7 @@ import al.jdi.core.modelo.Providencia.Codigo;
 import al.jdi.core.modelo.Providencia.NaoPodeReiniciarRodadaTelefoneException;
 import al.jdi.core.modelo.Providencia.SemProximoTelefoneException;
 import al.jdi.core.modelo.Providencia.SomenteCelularException;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.core.tratadorespecificocliente.TratadorEspecificoCliente;
 import al.jdi.dao.beans.Dao;
 import al.jdi.dao.beans.DaoFactory;
@@ -65,9 +65,9 @@ class DefaultEstoque implements Estoque, Runnable {
     private TelefoneFilter telefoneFilter;
 
     @Override
-    public Estoque create(Configuracoes configuracoes, ExtraidorClientes extraidorClientes,
+    public Estoque create(Tenant tenant, ExtraidorClientes extraidorClientes,
         Period intervaloMonitoracao) {
-      return new DefaultEstoque(configuracoes, daoFactoryProvider, devolveRegistro,
+      return new DefaultEstoque(tenant, daoFactoryProvider, devolveRegistro,
           tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
           extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
     }
@@ -83,7 +83,6 @@ class DefaultEstoque implements Estoque, Runnable {
 
   private static final Logger logger = getLogger(DefaultEstoque.class);
 
-  private final Configuracoes configuracoes;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final DevolveRegistro devolveRegistro;
   private final TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory;
@@ -94,17 +93,18 @@ class DefaultEstoque implements Estoque, Runnable {
   private final Period intervaloMonitoracao;
   private final Map<Providencia.Codigo, Providencia> providencias;
   private final TelefoneFilter telefoneFilter;
+  private final Tenant tenant;
 
   private Engine engine;
   private DateTime ultimaLimpezaTemporaria = new DateTime();
 
-  DefaultEstoque(Configuracoes configuracoes, Provider<DaoFactory> daoFactoryProvider,
+  DefaultEstoque(Tenant tenant, Provider<DaoFactory> daoFactoryProvider,
       DevolveRegistro devolveRegistro,
       TratadorEspecificoCliente.Factory tratadorEspecificoClienteFactory,
       Discavel.Factory discavelFactory, Engine.Factory engineFactory, Collection<Registro> estoque,
       ExtraidorClientes extraidorClientes, Period intervaloMonitoracao,
       Map<Providencia.Codigo, Providencia> providencias, TelefoneFilter telefoneFilter) {
-    this.configuracoes = configuracoes;
+    this.tenant = tenant;
     this.daoFactoryProvider = daoFactoryProvider;
     this.devolveRegistro = devolveRegistro;
     this.tratadorEspecificoClienteFactory = tratadorEspecificoClienteFactory;
@@ -132,10 +132,10 @@ class DefaultEstoque implements Estoque, Runnable {
 
   private void devolveCliente(DateTime instante, Cliente cliente, MotivoSistema motivoSistema) {
     Ligacao ligacao =
-        new Ligacao.Builder(discavelFactory.create(configuracoes, cliente), instante)
+        new Ligacao.Builder(discavelFactory.create(tenant.getConfiguracoes(), cliente), instante)
             .setInicio(instante).setTermino(instante)
             .setMotivoFinalizacao(motivoSistema.getCodigo()).build();
-    devolveRegistro.devolveLigacao(configuracoes, ligacao);
+    devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
   }
 
   @Override
@@ -160,14 +160,14 @@ class DefaultEstoque implements Estoque, Runnable {
       return;
 
     ultimaLimpezaTemporaria = new DateTime();
-    Campanha campanha = daoFactory.getCampanhaDao().procura(configuracoes.getNomeCampanha());
+    Campanha campanha = daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha());
     logger.info("Limpeza temporaria para campanha {}", campanha);
     int registrosLimpos =
         tratadorEspecificoClienteFactory
-            .create(configuracoes, daoFactory)
+            .create(tenant.getConfiguracoes(), daoFactory)
             .obtemClienteDao()
-            .limpezaTemporaria(campanha, configuracoes.getNomeBaseDados(),
-                configuracoes.getNomeBase());
+            .limpezaTemporaria(campanha, tenant.getConfiguracoes().getNomeBaseDados(),
+                tenant.getConfiguracoes().getNomeBase());
     logger.info("Foram limpos {} registros", registrosLimpos);
   }
 
@@ -187,7 +187,7 @@ class DefaultEstoque implements Estoque, Runnable {
 
   void removeRegistrosVencidos(DaoFactory daoFactory) {
 
-    Period timeout = Period.minutes(configuracoes.getTempoMaximoRegistroEmMemoria());
+    Period timeout = Period.minutes(tenant.getConfiguracoes().getTempoMaximoRegistroEmMemoria());
     DateTime instante = daoFactory.getDataBanco();
     synchronized (estoque) {
       for (Iterator<Registro> it = estoque.iterator(); it.hasNext();) {
@@ -212,12 +212,12 @@ class DefaultEstoque implements Estoque, Runnable {
     Providencia.Codigo codigo =
         Providencia.Codigo.fromValue(cliente.getInformacaoCliente().getProvidenciaTelefone());
     Providencia providencia = providencias.get(codigo);
-    cliente.setTelefone(providencia.getTelefone(configuracoes, daoFactory, cliente));
+    cliente.setTelefone(providencia.getTelefone(tenant.getConfiguracoes(), daoFactory, cliente));
 
     cliente.getInformacaoCliente().setProvidenciaTelefone(
         Providencia.Codigo.MANTEM_ATUAL.getCodigo());
 
-    if (tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).isDnc(cliente))
+    if (tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).isDnc(cliente))
       throw new DncException();
 
     boolean isConurbada = daoFactory.getAreaAreaDao().isConurbada(cliente.getTelefone());
@@ -225,17 +225,17 @@ class DefaultEstoque implements Estoque, Runnable {
     cliente.getTelefone().setConurbada(isConurbada);
 
     String digitoSaida =
-        configuracoes.isDigitoSaidaDoBanco() ? tratadorEspecificoClienteFactory
-            .create(configuracoes, daoFactory).obtemClienteDao().getDigitoSaida(cliente) : EMPTY;
+        tenant.getConfiguracoes().isDigitoSaidaDoBanco() ? tratadorEspecificoClienteFactory
+            .create(tenant.getConfiguracoes(), daoFactory).obtemClienteDao().getDigitoSaida(cliente) : EMPTY;
 
     cliente.setDigitoSaida(digitoSaida);
 
     EstadoCliente estadoCliente =
         daoFactory.getEstadoClienteDao().procura("Reservado pelo Discador");
     cliente.setEstadoCliente(estadoCliente);
-    tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).obtemClienteDao()
+    tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).obtemClienteDao()
         .atualiza(cliente);
-    if (!tratadorEspecificoClienteFactory.create(configuracoes, daoFactory).reservaNaBaseDoCliente(
+    if (!tratadorEspecificoClienteFactory.create(tenant.getConfiguracoes(), daoFactory).reservaNaBaseDoCliente(
         cliente))
       throw new ClienteJaEmUsoException();
     logger.debug("Cliente {} reservado!", cliente);
@@ -249,7 +249,7 @@ class DefaultEstoque implements Estoque, Runnable {
       removeRegistrosVencidos(daoFactory);
       limpaMemoriaPorSolicitacao(daoFactory);
       filtraTelefonesInuteis(daoFactory);
-      if (!configuracoes.getSistemaAtivo())
+      if (!tenant.getConfiguracoes().getSistemaAtivo())
         return;
       verificaEstoques(daoFactory);
     } finally {
@@ -263,7 +263,7 @@ class DefaultEstoque implements Estoque, Runnable {
       for (Iterator<Registro> it = estoque.iterator(); it.hasNext();) {
         Cliente cliente = it.next().getCliente();
         Telefone telefone = cliente.getTelefone();
-        List<Telefone> telefonesFiltrados = telefoneFilter.filter(configuracoes, asList(telefone));
+        List<Telefone> telefonesFiltrados = telefoneFilter.filter(tenant.getConfiguracoes(), asList(telefone));
         if (!telefonesFiltrados.isEmpty()) {
           logger.debug("Telefone ainda bom na memoria {} {}", telefone, cliente);
           continue;
@@ -277,7 +277,7 @@ class DefaultEstoque implements Estoque, Runnable {
 
   void limpaMemoriaPorSolicitacao(DaoFactory daoFactory) {
     Dao<Campanha> campanhaDao = daoFactory.getCampanhaDao();
-    Campanha campanha = campanhaDao.procura(configuracoes.getNomeCampanha());
+    Campanha campanha = campanhaDao.procura(tenant.getConfiguracoes().getNomeCampanha());
     if (!campanha.isLimpaMemoria()) {
       logger.debug("Limpeza de memoria nao solicitada.");
       return;
@@ -330,13 +330,13 @@ class DefaultEstoque implements Estoque, Runnable {
     }
 
     logger.info("Em estoque para {}: {}", extraidorClientes, size);
-    if (size >= configuracoes.getMinimoEstoque())
+    if (size >= tenant.getConfiguracoes().getMinimoEstoque())
       return;
-    int quantidade = configuracoes.getMaximoEstoque() - size;
+    int quantidade = tenant.getConfiguracoes().getMaximoEstoque() - size;
 
     try {
       Collection<Cliente> clientesDoBanco =
-          extraidorClientes.extrai(configuracoes, daoFactory, quantidade);
+          extraidorClientes.extrai(tenant.getConfiguracoes(), daoFactory, quantidade);
       for (Cliente cliente : clientesDoBanco) {
         try {
           daoFactory.beginTransaction();

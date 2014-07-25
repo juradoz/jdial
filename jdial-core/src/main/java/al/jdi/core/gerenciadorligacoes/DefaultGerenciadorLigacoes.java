@@ -21,11 +21,10 @@ import org.joda.time.Period;
 import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
-import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.devolveregistro.DevolveRegistro;
-import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoesModule.PredictiveListenerFactory;
 import al.jdi.core.modelo.Ligacao;
+import al.jdi.core.tenant.Tenant;
 import al.jdi.cti.DialerCtiManager;
 import al.jdi.cti.PredictiveListener;
 import al.jdi.cti.TratamentoSecretariaEletronica;
@@ -50,10 +49,9 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
     private Engine.Factory engineFactory;
 
     @Override
-    public GerenciadorLigacoes create(Configuracoes configuracoes,
-        GerenciadorFatorK gerenciadorFatorK) {
-      return new DefaultGerenciadorLigacoes(daoFactoryProvider, configuracoes, dialerCtiManager,
-          ligacoes, predictiveListenerFactory, devolveRegistro, engineFactory, gerenciadorFatorK);
+    public GerenciadorLigacoes create(Tenant tenant) {
+      return new DefaultGerenciadorLigacoes(daoFactoryProvider, dialerCtiManager, ligacoes,
+          predictiveListenerFactory, devolveRegistro, engineFactory, tenant);
     }
 
   }
@@ -61,28 +59,27 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
   private static final Logger logger = getLogger(DefaultGerenciadorLigacoes.class);
 
   private final Provider<DaoFactory> daoFactoryProvider;
-  private final Configuracoes configuracoes;
   private final DialerCtiManager dialerCtiManager;
   private final DevolveRegistro devolveRegistro;
   private final Map<PredictiveListener, Ligacao> ligacoes;
   private final PredictiveListenerFactory predictiveListenerFactory;
   private final Engine.Factory engineFactory;
-  private final GerenciadorFatorK gerenciadorFatorK;
+  private final Tenant tenant;
 
   private Engine engine;
 
-  DefaultGerenciadorLigacoes(Provider<DaoFactory> daoFactoryProvider, Configuracoes configuracoes,
+  DefaultGerenciadorLigacoes(Provider<DaoFactory> daoFactoryProvider,
       DialerCtiManager dialerCtiManager, Map<PredictiveListener, Ligacao> ligacoes,
       PredictiveListenerFactory predictiveListenerFactory, DevolveRegistro devolveRegistro,
-      Engine.Factory engineFactory, GerenciadorFatorK gerenciadorFatorK) {
+      Engine.Factory engineFactory, Tenant tenant) {
     this.daoFactoryProvider = daoFactoryProvider;
-    this.configuracoes = configuracoes;
     this.dialerCtiManager = dialerCtiManager;
     this.ligacoes = ligacoes;
     this.predictiveListenerFactory = predictiveListenerFactory;
     this.devolveRegistro = devolveRegistro;
     this.engineFactory = engineFactory;
-    this.gerenciadorFatorK = gerenciadorFatorK;
+    this.tenant = tenant;
+
     logger.debug("Iniciando {}...", this);
   }
 
@@ -101,7 +98,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
         .getCliente());
 
     if (!ligacao.isAtendida())
-      gerenciadorFatorK.chamadaAtendida();
+      tenant.getGerenciadorFatorK().chamadaAtendida();
 
     DateTime dataBanco;
     DaoFactory daoFactory = daoFactoryProvider.get();
@@ -152,7 +149,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
     }
     ligacao.setTermino(dataBanco);
     ligacao.setMotivoFinalizacao(causa);
-    devolveRegistro.devolveLigacao(configuracoes, ligacao);
+    devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
   }
 
   void chamadaErro(PredictiveListener listener, Exception e) {
@@ -177,7 +174,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       daoFactory.close();
     }
     ligacao.setTermino(dataBanco);
-    devolveRegistro.devolveLigacao(configuracoes, ligacao);
+    devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
   }
 
   void chamadaIniciada(PredictiveListener listener, int callId) {
@@ -191,7 +188,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       return;
     }
 
-    gerenciadorFatorK.chamadaIniciada();
+    tenant.getGerenciadorFatorK().chamadaIniciada();
     logger.info("Chamada iniciada. callId: {} cliente: {}", callId, ligacao.getDiscavel()
         .getCliente());
   }
@@ -219,7 +216,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
     }
     ligacao.setTermino(dataBanco);
     ligacao.setMotivoFinalizacao(causa);
-    devolveRegistro.devolveLigacao(configuracoes, ligacao);
+    devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
   }
 
   void chamadaNoAgente(PredictiveListener listener, int callId, String agente) {
@@ -247,7 +244,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
     String destino = ligacao.getDiscavel().getDestino();
 
-    int maxRings = configuracoes.getMaxRings();
+    int maxRings = tenant.getConfiguracoes().getMaxRings();
 
     TratamentoSecretariaEletronica tratamentoSecretariaEletronica =
         getTratamentoSecretariaEletronica(ligacao.getDiscavel().getCliente().getTelefone());
@@ -269,8 +266,8 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
   }
 
   TratamentoSecretariaEletronica getTratamentoSecretariaEletronica(Telefone telefone) {
-    if (!configuracoes.isDetectaCaixaPostalPeloTelefone())
-      return configuracoes.getTratamentoSecretariaEletronica();
+    if (!tenant.getConfiguracoes().isDetectaCaixaPostalPeloTelefone())
+      return tenant.getConfiguracoes().getTratamentoSecretariaEletronica();
 
     return telefone.isDetectaCaixaPostal() ? TratamentoSecretariaEletronica.DESLIGAR
         : TratamentoSecretariaEletronica.TRANSFERIR;
@@ -285,7 +282,8 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
   @Override
   public void run() {
-    Period timeout = Period.minutes(configuracoes.getMinutosExpiracaoChamadasNaoAtendidas());
+    Period timeout =
+        Period.minutes(tenant.getConfiguracoes().getMinutosExpiracaoChamadasNaoAtendidas());
     HashSet<Ligacao> expiradas = new HashSet<Ligacao>();
     synchronized (ligacoes) {
       for (Iterator<Ligacao> it = ligacoes.values().iterator(); it.hasNext();) {
@@ -308,7 +306,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
           .getDiscavel().getCliente(), new Duration(ligacao.getCriacao(), new DateTime())
           .getStandardSeconds());
       ligacao.setMotivoFinalizacao(0);
-      devolveRegistro.devolveLigacao(configuracoes, ligacao);
+      devolveRegistro.devolveLigacao(tenant.getConfiguracoes(), ligacao);
     }
   }
 
