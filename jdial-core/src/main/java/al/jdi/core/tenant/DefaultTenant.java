@@ -1,9 +1,11 @@
 package al.jdi.core.tenant;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import org.joda.time.Period;
 
+import al.jdi.common.Engine;
 import al.jdi.core.JDial;
 import al.jdi.core.configuracoes.Configuracoes;
 import al.jdi.core.estoque.Estoque;
@@ -13,19 +15,16 @@ import al.jdi.core.estoque.ExtraidorClientes;
 import al.jdi.core.gerenciadoragentes.GerenciadorAgentes;
 import al.jdi.core.gerenciadorfatork.GerenciadorFatorK;
 import al.jdi.core.gerenciadorligacoes.GerenciadorLigacoes;
+import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 
-class DefaultTenant implements Tenant {
-  private final Campanha campanha;
-  private final Configuracoes configuracoes;
-  private final Estoque estoqueLivres;
-  private final Estoque estoqueAgendados;
-  private final GerenciadorAgentes gerenciadorAgentes;
-  private final GerenciadorLigacoes gerenciadorLigacoes;
-  private final GerenciadorFatorK gerenciadorFatorK;
-  private final JDial jdial;
+class DefaultTenant implements Tenant, Runnable {
 
   static class DefaultTenantFactory implements Tenant.Factory {
+    @Inject
+    private Provider<DaoFactory> daoFactoryProvider;
+    @Inject
+    private Engine.Factory engineFactory;
     @Inject
     private Configuracoes.Factory configuracoesFactory;
     @Inject
@@ -53,20 +52,37 @@ class DefaultTenant implements Tenant {
 
     @Override
     public Tenant create(Campanha campanha) {
-      return new DefaultTenant(campanha, configuracoesFactory, extraidorClientesLivres,
-          intervaloMonitoracaoLivres, extraidorClientesAgendados, intervaloMonitoracaoAgendados,
-          estoqueFactory, gerenciadorAgentesFactory, gerenciadorFatorKFactory,
-          gerenciadorLigacoesFactory, jdialFactory);
+      return new DefaultTenant(daoFactoryProvider, engineFactory, configuracoesFactory,
+          extraidorClientesLivres, intervaloMonitoracaoLivres, extraidorClientesAgendados,
+          intervaloMonitoracaoAgendados, estoqueFactory, gerenciadorAgentesFactory,
+          gerenciadorFatorKFactory, gerenciadorLigacoesFactory, jdialFactory, campanha);
     }
   }
 
-  DefaultTenant(Campanha campanha, Configuracoes.Factory configuracoesFactory,
-      ExtraidorClientes extraidorClientesLivres, Period intervaloMonitoracaoLivres,
-      ExtraidorClientes extraidorClientesAgendados, Period intervaloMonitoracaoAgendados,
-      Estoque.Factory estoqueFactory, GerenciadorAgentes.Factory gerenciadorAgentesFactory,
+  private final Provider<DaoFactory> daoFactoryProvider;
+  private final Engine.Factory engineFactory;
+  private final Configuracoes configuracoes;
+  private final Estoque estoqueLivres;
+  private final Estoque estoqueAgendados;
+  private final GerenciadorAgentes gerenciadorAgentes;
+  private final GerenciadorLigacoes gerenciadorLigacoes;
+  private final GerenciadorFatorK gerenciadorFatorK;
+  private final JDial jdial;
+
+  private Engine engine;
+  private Campanha campanha;
+
+  DefaultTenant(Provider<DaoFactory> daoFactoryProvider, Engine.Factory engineFactory,
+      Configuracoes.Factory configuracoesFactory, ExtraidorClientes extraidorClientesLivres,
+      Period intervaloMonitoracaoLivres, ExtraidorClientes extraidorClientesAgendados,
+      Period intervaloMonitoracaoAgendados, Estoque.Factory estoqueFactory,
+      GerenciadorAgentes.Factory gerenciadorAgentesFactory,
       GerenciadorFatorK.Factory gerenciadorFatorKFactory,
-      GerenciadorLigacoes.Factory gerenciadorLigacoesFactory, JDial.Factory jdialFactory) {
+      GerenciadorLigacoes.Factory gerenciadorLigacoesFactory, JDial.Factory jdialFactory,
+      Campanha campanha) {
     this.campanha = campanha.clone();
+    this.daoFactoryProvider = daoFactoryProvider;
+    this.engineFactory = engineFactory;
     this.configuracoes = configuracoesFactory.create(campanha.getNome());
     this.estoqueLivres =
         estoqueFactory.create(this, extraidorClientesLivres, intervaloMonitoracaoLivres);
@@ -120,6 +136,8 @@ class DefaultTenant implements Tenant {
 
   @Override
   public void start() {
+    if (engine != null)
+      throw new IllegalStateException("Already started!");
     configuracoes.start();
     estoqueLivres.start();
     estoqueAgendados.start();
@@ -127,10 +145,13 @@ class DefaultTenant implements Tenant {
     gerenciadorAgentes.start();
     gerenciadorFatorK.start();
     jdial.start();
+    engine = engineFactory.create(this, Period.minutes(5), true, true);
   }
 
   @Override
   public void stop() {
+    if (engine == null)
+      throw new IllegalStateException("Already stopped!");
     jdial.stop();
     gerenciadorFatorK.stop();
     gerenciadorAgentes.stop();
@@ -138,5 +159,17 @@ class DefaultTenant implements Tenant {
     estoqueAgendados.stop();
     estoqueLivres.stop();
     configuracoes.stop();
+    engine.stop();
+    engine = null;
+  }
+
+  @Override
+  public void run() {
+    DaoFactory daoFactory = daoFactoryProvider.get();
+    try {
+      this.campanha = daoFactory.getCampanhaDao().procura(this.campanha.getId()).clone();
+    } finally {
+      daoFactory.close();
+    }
   }
 }
