@@ -78,7 +78,10 @@ class RestricaoHorarioUtil implements TelefoneUtil {
       DateTime horaInicio = getHoraInicio(agora, restricaoHorario);
       DateTime horaFinal = getHoraFinal(agora, restricaoHorario);
 
-      return !(agora.isAfter(horaInicio) && agora.isBefore(horaFinal));
+      boolean after = agora.isAfter(horaInicio);
+      boolean before = agora.isBefore(horaFinal);
+
+      return after && before;
     } finally {
       daoFactory.close();
     }

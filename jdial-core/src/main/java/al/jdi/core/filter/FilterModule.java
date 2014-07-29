@@ -45,8 +45,10 @@ public class FilterModule {
 
   @Produces
   @SomenteCelularFilter
-  public TelefoneFilter getTelefoneFilterSomenteCelular(BloqueioCelularUtil bloqueiaCelular) {
-    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) bloqueiaCelular)));
+  public TelefoneFilter getTelefoneFilterSomenteCelular(BloqueioCelularUtil bloqueiaCelular,
+      RestricaoHorarioUtil restricaoHorarioUtil) {
+    return new DefaultTelefoneFilter(new HashSet<>(asList((TelefoneUtil) bloqueiaCelular,
+        (TelefoneUtil) restricaoHorarioUtil)));
   }
 
 }

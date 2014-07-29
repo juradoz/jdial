@@ -21,8 +21,6 @@ import org.joda.time.DateTime;
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"idCliente"})}, indexes = {
     @Index(name = "IX_agendamento_idCliente_agendamento", columnList = "idCliente, agendamento"),
-    @Index(name = "IX_agendamento_agente_agendamento", columnList = "idAgente, agendamento"),
-    @Index(name = "IX_agendamento_agente", columnList = "idAgente"),
     @Index(name = "IX_agendamento_agendamento", columnList = "agendamento")})
 public class Agendamento implements DaoObject {
   @Id
