@@ -66,6 +66,7 @@ public class CampanhaController {
 
   @LogAcesso
   public void edit(Campanha campanha) {
+    campanha.setLimpaMemoria(true);
     daoFactoryRequest.get().getCampanhaDao().atualiza(campanha);
     result.use(Results.logic()).redirectTo(CampanhaController.class).list();
   }

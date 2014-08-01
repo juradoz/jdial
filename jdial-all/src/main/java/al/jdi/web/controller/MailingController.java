@@ -52,8 +52,10 @@ public class MailingController {
 
   @LogAcesso
   public void add(Mailing mailing) {
-    mailing.setCampanha(daoFactoryRequest.get().getCampanhaDao()
-        .procura(mailing.getCampanha().getId()));
+    Campanha campanha =
+        daoFactoryRequest.get().getCampanhaDao().procura(mailing.getCampanha().getId());
+    campanha.setLimpaMemoria(true);
+    daoFactoryRequest.get().getCampanhaDao().atualiza(campanha);
     daoFactoryRequest.get().getMailingDao().adiciona(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
@@ -69,6 +71,8 @@ public class MailingController {
   public void ajaxAtivarDesativar(Mailing mailing) {
     mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
     mailing.setAtivo(!mailing.isAtivo());
+    mailing.getCampanha().setLimpaMemoria(true);
+    daoFactoryRequest.get().getCampanhaDao().atualiza(mailing.getCampanha());
     daoFactoryRequest.get().getMailingDao().atualiza(mailing);
     if (mailing.isAtivo())
       result.forwardTo(this).ativado();
@@ -88,6 +92,8 @@ public class MailingController {
   @Path("/mailing/{mailing.id}")
   public void delete(Mailing mailing) {
     mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
+    mailing.getCampanha().setLimpaMemoria(true);
+    daoFactoryRequest.get().getCampanhaDao().atualiza(mailing.getCampanha());
     daoFactoryRequest.get().getMailingDao().remove(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
@@ -97,6 +103,10 @@ public class MailingController {
 
   @LogAcesso
   public void edit(Mailing mailing) {
+    Campanha campanha =
+        daoFactoryRequest.get().getCampanhaDao().procura(mailing.getCampanha().getId());
+    campanha.setLimpaMemoria(true);
+    daoFactoryRequest.get().getCampanhaDao().atualiza(campanha);
     daoFactoryRequest.get().getMailingDao().atualiza(mailing);
     result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
   }
@@ -192,6 +202,8 @@ public class MailingController {
       errors.add("Total nao encontrados: " + qtdNaoEncontrados);
       errors.add("Total Erros: " + qtdErros);
       result.include("errors", errors);
+      mailing.getCampanha().setLimpaMemoria(true);
+      daoFactoryRequest.get().getCampanhaDao().atualiza(mailing.getCampanha());
       result.forwardTo(MailingController.class).formularioPurge(mailing);
     } finally {
       bw.close();

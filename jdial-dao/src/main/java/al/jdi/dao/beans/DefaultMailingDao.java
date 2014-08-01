@@ -48,20 +48,11 @@ class DefaultMailingDao implements MailingDao {
     dao.getSession().createSQLQuery("delete from Telefone where idCliente = 0").executeUpdate();
     dao.getSession().createSQLQuery("delete from Cliente where idMailing = :idMailing")
         .setLong("idMailing", t.getId()).executeUpdate();
-
-    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
-    Campanha campanha = campanhaDao.procura(t.getCampanha().getId());
-    campanha.setLimpaMemoria(true);
-    campanhaDao.atualiza(campanha);
     dao.remove(t);
   }
 
   @Override
   public void atualiza(Mailing t) {
-    DefaultCampanhaDao campanhaDao = new DefaultCampanhaDao(dao.getSession());
-    Campanha campanha = campanhaDao.procura(t.getCampanha().getId());
-    campanha.setLimpaMemoria(true);
-    campanhaDao.atualiza(campanha);
     dao.atualiza(t);
   }
 
