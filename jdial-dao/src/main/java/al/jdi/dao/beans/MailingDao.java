@@ -11,5 +11,7 @@ public interface MailingDao extends Dao<Mailing> {
   Collection<Mailing> listaAtivos();
 
   List<Mailing> listaTudo(Campanha campanha);
+  
+  void limpaTelefoneAtual(Mailing mailing);
 
 }

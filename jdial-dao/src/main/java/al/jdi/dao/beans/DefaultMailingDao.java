@@ -71,4 +71,10 @@ class DefaultMailingDao implements MailingDao {
     return dao.procura(s);
   }
 
+  @Override
+  public void limpaTelefoneAtual(Mailing mailing) {
+    dao.getSession().createSQLQuery("update Cliente set idTelefone = null where idMailing = :id")
+        .setLong("id", mailing.getId()).executeUpdate();
+  }
+
 }
