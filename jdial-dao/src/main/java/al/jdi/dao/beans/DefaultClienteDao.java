@@ -1,10 +1,10 @@
 package al.jdi.dao.beans;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +19,75 @@ import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.EstadoCliente;
 
 class DefaultClienteDao implements ClienteDao {
+
+  public static final String LivresSemFiltro =
+      normalizeSpace("select distinct Cliente.idCliente from Cliente "
+          + "  inner join Mailing on Mailing.idMailing = Cliente.idMailing "
+          + "  inner join Campanha on Campanha.idCampanha = Mailing.idCampanha "
+          + "  inner join InformacaoCliente on InformacaoCliente.idCliente = Cliente.idCliente "
+          + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
+          + "  left join Agendamento on Cliente.idCliente = Agendamento.idCliente " + "where "
+          + "  Campanha.idCampanha = :idCampanha And " + "  Agendamento.idAgendamento is null And "
+          + "  Mailing.ativo = 1 And "
+          + "  (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) And "
+          + "  (Mailing.dataFinal is null or Mailing.dataFinal >= Now()) And "
+          + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) And "
+          + "  Cliente.idEstadoCliente = 1 And "
+          + "  Operador.DetCampanha.OperadorCtt in (0, 3) And "
+          + "  Operador.DetCampanha.Situacao <= 1 "
+          + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit");
+
+  public static final String LivresComFiltro =
+      normalizeSpace("select distinct Cliente.idCliente from Cliente "
+          + "  inner join Mailing on Mailing.idMailing = Cliente.idMailing "
+          + "  inner join Operador.FiltrosDet on Operador.FiltrosDet.idCliente = Cliente.idCliente "
+          + "  inner join InformacaoCliente on InformacaoCliente.idCliente = Cliente.idCliente "
+          + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
+          + "  left join Agendamento on Cliente.idCliente = Agendamento.idCliente " + "where "
+          + "  Operador.FiltrosDet.Filtro = :codigoFiltro And "
+          + "  Agendamento.idAgendamento is null And " + "  Mailing.ativo = 1 And "
+          + "  (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) And "
+          + "  (Mailing.dataFinal is null or Mailing.dataFinal >= Now()) And "
+          + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) And "
+          + "  Cliente.idEstadoCliente = 1 And "
+          + "  Operador.DetCampanha.OperadorCtt in (0, 3) And "
+          + "  Operador.DetCampanha.Situacao <= 1 "
+          + "order by Cliente.ordemDaFila asc , FiltrosDet.ordem asc " + "limit :limit");
+
+  public static final String AgendadosSemFiltro =
+      normalizeSpace("select distinct Cliente.idCliente from Cliente "
+          + "  inner join Mailing on Mailing.idMailing = Cliente.idMailing "
+          + "  inner join Campanha on Campanha.idCampanha = Mailing.idCampanha "
+          + "  inner join InformacaoCliente on InformacaoCliente.idCliente = Cliente.idCliente "
+          + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
+          + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente " + "Where "
+          + "  Campanha.idCampanha = :idCampanha And " + "  InformacaoCliente.nomeBase = '' And "
+          + "  Agendamento.agendamento <= Now() And " + "  Mailing.ativo = 1 And "
+          + "  (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) And "
+          + "  (Mailing.dataFinal is null or Mailing.dataFinal >= Now()) And "
+          + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) And "
+          + "  Cliente.idEstadoCliente = 1 And "
+          + "  Operador.DetCampanha.OperadorCtt in (0, 3) And "
+          + "  Operador.DetCampanha.Situacao in (0, 1, 8) "
+          + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit");
+
+  public static final String AgendadosComFiltro =
+      normalizeSpace("select distinct Cliente.idCliente from Cliente "
+          + "  inner join Mailing on Mailing.idMailing = Cliente.idMailing "
+          + "  inner join Operador.FiltrosDet on Operador.FiltrosDet.idCliente = Cliente.idCliente "
+          + "  inner join InformacaoCliente on InformacaoCliente.idCliente = Cliente.idCliente "
+          + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
+          + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente " + "Where "
+          + "  Operador.FiltrosDet.Filtro = :codigoFiltro And "
+          + "  InformacaoCliente.nomeBase = '' And " + "  Agendamento.agendamento <= Now() And "
+          + "  Mailing.ativo = 1 And "
+          + "  (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) And "
+          + "  (Mailing.dataFinal is null or Mailing.dataFinal >= Now()) And "
+          + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) And "
+          + "  Cliente.idEstadoCliente = 1 And "
+          + "  Operador.DetCampanha.OperadorCtt in (0, 3) And "
+          + "  Operador.DetCampanha.Situacao in (0, 1, 8) "
+          + "order by Cliente.ordemDaFila asc , FiltrosDet.ordem asc " + "limit :limit");
 
   private static final Logger logger = getLogger(DefaultClienteDao.class);
 
@@ -68,41 +137,19 @@ class DefaultClienteDao implements ClienteDao {
   @Override
   public Collection<Cliente> obtemAGGs(int quantidade, Campanha campanha, String nomeBaseDados,
       String nomeBase, int operadorDiscador) {
-    List<Integer> idMailings = obtemIdMailings(campanha);
+    Query query;
+    if (campanha.isFiltroAtivo()) {
+      logger.info("Query {}: {}", "AgendadosComFiltro", AgendadosComFiltro);
+      query =
+          getSession().createSQLQuery(AgendadosComFiltro).setInteger("codigoFiltro",
+              campanha.getCodigoFiltro());
+    } else {
+      logger.info("Query {}: {}", "AgendadosSemFiltro", AgendadosSemFiltro);
+      query =
+          getSession().createSQLQuery(AgendadosSemFiltro).setLong("idCampanha", campanha.getId());
+    }
 
-    if (idMailings.isEmpty() && !possuiFiltro(campanha))
-      return Collections.<Cliente>emptyList();
-
-    String hql =
-        "select distinct Cliente.idCliente from Cliente "
-            + "  inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente"
-            + "  inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
-            + "  inner join Agendamento on Cliente.idCliente = Agendamento.idCliente "
-            + "  left join Operador.FiltrosDet on Cliente.idCliente = Operador.FiltrosDet.idCliente "
-            + "Where "
-            + "  (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
-            + "  And Cliente.idEstadoCliente = 1 " + "  And InformacaoCliente.nomeBase = '' "
-            + "  And Agendamento.agendamento <= Now() " + "  And Agendamento.idAgente is null "
-            + "  And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "  And Operador.DetCampanha.Situacao in (0, 1, 8) " + "%s " // And Cliente.idMailing
-                                                                          // in (:idMailings) -- Sem
-                                                                          // filtro
-                                                                          // And
-                                                                          // Operador.FiltrosDet.Filtro
-                                                                          // = :codigoFiltro --
-                                                                          // Comfiltro
-            + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
-
-    hql =
-        String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
-            : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
-
-    Query query = dao.getSession().createSQLQuery(hql).setInteger("limit", quantidade);
-
-    if (!possuiFiltro(campanha))
-      query = query.setParameterList("idMailings", idMailings);
-    else
-      query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
+    query = query.setInteger("limit", quantidade);
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
@@ -112,54 +159,21 @@ class DefaultClienteDao implements ClienteDao {
     return result;
   }
 
-  @SuppressWarnings("unchecked")
-  protected List<Integer> obtemIdMailings(Campanha campanha) {
-    String hql =
-        "select Mailing.idMailing from Mailing "
-            + "where idCampanha = :idCampanha and "
-            + "Mailing.ativo = 1 and (Mailing.dataInicial is null or Mailing.dataInicial <= Now()) and "
-            + "(Mailing.dataFinal is null or Mailing.dataFinal >= Now())";
-    Query query = dao.getSession().createSQLQuery(hql);
-    query.setLong("idCampanha", campanha.getId());
-    List<Integer> idMailings = query.list();
-    return idMailings;
-  }
-
   @Override
   public Collection<Cliente> obtemLivres(int quantidade, Campanha campanha, String nomeBaseDados,
       String nomeBase, int operadorDiscador) {
-    List<Integer> idMailings = obtemIdMailings(campanha);
+    Query query;
+    if (campanha.isFiltroAtivo()) {
+      logger.info("Query {}: {}", "LivresComFiltro", LivresComFiltro);
+      query =
+          getSession().createSQLQuery(LivresComFiltro).setInteger("codigoFiltro",
+              campanha.getCodigoFiltro());
+    } else {
+      logger.info("Query {}: {}", "LivresSemFiltro", LivresSemFiltro);
+      query = getSession().createSQLQuery(LivresSemFiltro).setLong("idCampanha", campanha.getId());
+    }
 
-    if (idMailings.isEmpty() && !possuiFiltro(campanha))
-      return Collections.<Cliente>emptyList();
-
-    String hql =
-        "select distinct Cliente.idCliente from Cliente "
-            + "inner join InformacaoCliente on Cliente.idCliente = InformacaoCliente.idCliente "
-            + "left join Agendamento on Cliente.idCliente = Agendamento.idCliente "
-            + "inner join Operador.DetCampanha on InformacaoCliente.chave = Operador.DetCampanha.CodDetCamp "
-            + "left join Operador.FiltrosDet on Cliente.idCliente = Operador.FiltrosDet.idCliente "
-            + "Where " + "Agendamento.idAgendamento is null "
-            + "And (Cliente.disponivelAPartirDe is null or Cliente.disponivelAPartirDe <= Now()) "
-            + "And Cliente.idEstadoCliente = 1 "
-            + "And Operador.DetCampanha.OperadorCtt in (0, 3) "
-            + "And Operador.DetCampanha.Situacao <= 1 " + "%s " // And Cliente.idMailing in
-                                                                // (:idMailings) -- Sem filtro
-                                                                // And Operador.FiltrosDet.Filtro =
-                                                                // :codigoFiltro -- Com
-                                                                // filtro
-            + "order by Cliente.ordemDaFila asc , Cliente.ordem asc " + "limit :limit";
-
-    hql =
-        String.format(hql, !possuiFiltro(campanha) ? "And Cliente.idMailing in (:idMailings) "
-            : "And Operador.FiltrosDet.Filtro = :codigoFiltro ");
-
-    Query query = dao.getSession().createSQLQuery(hql).setInteger("limit", quantidade);
-
-    if (!possuiFiltro(campanha))
-      query = query.setParameterList("idMailings", idMailings);
-    else
-      query = query.setInteger("codigoFiltro", campanha.getCodigoFiltro());
+    query = query.setInteger("limit", quantidade);
 
     DateTime inicio = new DateTime();
     LinkedList<Cliente> result = new LinkedList<Cliente>();
