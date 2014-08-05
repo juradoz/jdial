@@ -169,11 +169,6 @@ class DefaultDaoFactory implements DaoFactory {
   }
 
   @Override
-  public ClienteDaoTsa getClienteDaoTsaCRM() {
-    return new DefaultClienteDaoTsaCRM(session);
-  }
-
-  @Override
   public AreaAreaDao getAreaAreaDao() {
     return new DefaultAreaAreaDao(session);
   }

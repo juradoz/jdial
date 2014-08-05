@@ -32,8 +32,6 @@ public interface DaoFactory {
 
   ClienteDaoTsa getClienteDaoTsa();
 
-  ClienteDaoTsa getClienteDaoTsaCRM();
-
   DateTime getDataBanco();
 
   DefinicaoDao getDefinicaoDao();
