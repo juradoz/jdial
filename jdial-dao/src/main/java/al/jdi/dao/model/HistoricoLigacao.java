@@ -10,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -57,7 +56,6 @@ public class HistoricoLigacao implements DaoObject {
 
   private String descricao;
 
-  @Transient
   private String agente;
 
   public DateTime getAtendimento() {
