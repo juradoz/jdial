@@ -150,6 +150,7 @@ class DefaultGerenciadorFatorK implements GerenciadorFatorK, Runnable {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(tenant.getCampanha())
+        .toString();
   }
 }

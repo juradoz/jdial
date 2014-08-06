@@ -4,11 +4,12 @@ import org.joda.time.Period;
 
 import al.jdi.common.Service;
 import al.jdi.cti.TratamentoSecretariaEletronica;
+import al.jdi.dao.model.Campanha;
 
 public interface Configuracoes extends Service {
 
   public interface Factory {
-    Configuracoes create(String nomeCampanha);
+    Configuracoes create(Campanha campanha);
   }
 
   boolean bloqueiaCelular();

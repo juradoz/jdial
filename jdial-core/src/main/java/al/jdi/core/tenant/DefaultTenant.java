@@ -90,7 +90,7 @@ class DefaultTenant implements Tenant, Runnable {
     this.campanha = campanha.clone();
     this.daoFactoryProvider = daoFactoryProvider;
     this.engineFactory = engineFactory;
-    this.configuracoes = configuracoesFactory.create(campanha.getNome());
+    this.configuracoes = configuracoesFactory.create(campanha);
     this.estoqueLivres =
         estoqueFactory.create(this, extraidorClientesLivres, intervaloMonitoracaoLivres);
     this.estoqueAgendados =

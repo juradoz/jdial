@@ -39,8 +39,8 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
     private SistemaAtivo.Factory sistemaAtivoFactory;
 
     @Override
-    public Configuracoes create(String nomeCampanha) {
-      return new DefaultConfiguracoes(nomeCampanha, engineFactory, daoFactoryProvider,
+    public Configuracoes create(Campanha campanha) {
+      return new DefaultConfiguracoes(campanha, engineFactory, daoFactoryProvider,
           intervaloAtualizacao, definicoes, sistemaAtivoFactory);
     }
   }
@@ -122,7 +122,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   private static final Logger logger = getLogger(DefaultConfiguracoes.class);
 
-  private final String nomeCampanha;
+  private final Campanha campanha;
   private final Engine.Factory engineFactory;
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Period intervaloAtualizacao;
@@ -131,10 +131,10 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   private Engine engine;
 
-  DefaultConfiguracoes(String nomeCampanha, Engine.Factory engineFactory,
+  DefaultConfiguracoes(Campanha campanha, Engine.Factory engineFactory,
       Provider<DaoFactory> daoFactoryProvider, Period intervaloAtualizacao,
       Map<String, Definicao> definicoes, SistemaAtivo.Factory sistemaAtivoFactory) {
-    this.nomeCampanha = nomeCampanha;
+    this.campanha = campanha;
     this.engineFactory = engineFactory;
     this.daoFactoryProvider = daoFactoryProvider;
     this.definicoes = definicoes;
@@ -355,7 +355,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(campanha).toString();
   }
 
   @Override
@@ -377,16 +377,16 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
   public void run() {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
-      Campanha campanha = daoFactory.getCampanhaDao().procura(nomeCampanha);
+      Campanha campanha = daoFactory.getCampanhaDao().procura(this.campanha.getNome());
       if (campanha == null)
-        throw new IllegalArgumentException("Campanha " + nomeCampanha + " nao existe!!!");
+        throw new IllegalArgumentException("Campanha " + campanha + " nao existe!!!");
       List<Definicao> definicoes = daoFactory.getDefinicaoDao().listaTudo(campanha);
       synchronized (this.definicoes) {
         for (Definicao definicao : definicoes) {
           this.definicoes.put(definicao.getPropriedade(), definicao);
         }
       }
-      logger.info("Configuracoes para {} recarregadas!", nomeCampanha);
+      logger.info("Configuracoes para {} recarregadas!", campanha);
     } finally {
       daoFactory.close();
     }
@@ -394,7 +394,7 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
 
   @Override
   public String getNomeCampanha() {
-    return nomeCampanha;
+    return campanha.getNome();
   }
 
   @Override

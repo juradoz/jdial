@@ -92,7 +92,8 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
   int obtemQtdAgentesLivres(DaoFactory daoFactory) {
     String acd =
-        daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha()).getGrupo().getCodigo();
+        daoFactory.getCampanhaDao().procura(tenant.getConfiguracoes().getNomeCampanha()).getGrupo()
+            .getCodigo();
     logger.debug("Vai obter agentes livres de {}", acd);
     DateTime inicio = new DateTime();
     int livres = dialerCtiManager.getAgentesLivres(acd);
@@ -131,7 +132,8 @@ class DefaultGerenciadorAgentes implements GerenciadorAgentes, Runnable, Provide
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(tenant.getCampanha())
+        .toString();
   }
 
   @Override

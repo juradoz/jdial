@@ -139,12 +139,12 @@ class DefaultClienteDao implements ClienteDao {
       String nomeBase, int operadorDiscador) {
     Query query;
     if (campanha.isFiltroAtivo()) {
-      logger.info("Query {}: {}", "AgendadosComFiltro", AgendadosComFiltro);
+      logger.debug("Query {}: {}", "AgendadosComFiltro", AgendadosComFiltro);
       query =
           getSession().createSQLQuery(AgendadosComFiltro).setInteger("codigoFiltro",
               campanha.getCodigoFiltro());
     } else {
-      logger.info("Query {}: {}", "AgendadosSemFiltro", AgendadosSemFiltro);
+      logger.debug("Query {}: {}", "AgendadosSemFiltro", AgendadosSemFiltro);
       query =
           getSession().createSQLQuery(AgendadosSemFiltro).setLong("idCampanha", campanha.getId());
     }
@@ -164,12 +164,12 @@ class DefaultClienteDao implements ClienteDao {
       String nomeBase, int operadorDiscador) {
     Query query;
     if (campanha.isFiltroAtivo()) {
-      logger.info("Query {}: {}", "LivresComFiltro", LivresComFiltro);
+      logger.debug("Query {}: {}", "LivresComFiltro", LivresComFiltro);
       query =
           getSession().createSQLQuery(LivresComFiltro).setInteger("codigoFiltro",
               campanha.getCodigoFiltro());
     } else {
-      logger.info("Query {}: {}", "LivresSemFiltro", LivresSemFiltro);
+      logger.debug("Query {}: {}", "LivresSemFiltro", LivresSemFiltro);
       query = getSession().createSQLQuery(LivresSemFiltro).setLong("idCampanha", campanha.getId());
     }
 

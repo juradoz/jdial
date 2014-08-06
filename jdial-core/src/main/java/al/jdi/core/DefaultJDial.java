@@ -120,9 +120,9 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
     int quantidade = ((int) (livres * fatorK) - quantidadeLigacoesNaoAtendidas);
 
-    logger.info("Rodada {} Livres: {} * fatorK: {} - ligacoes: {} ({} total) = quantidade: {} {}",
+    logger.info("Rodada {} Livres: {} * fatorK: {} - ligacoes: {} ({} total) = quantidade: {}",
         new Object[] {estoque, livres, fatorK, quantidadeLigacoesNaoAtendidas, quantidadeLigacoes,
-            quantidade, tenant.getCampanha()});
+            quantidade});
 
     if (quantidade <= 0)
       return;
@@ -193,7 +193,8 @@ class DefaultJDial implements Runnable, ProviderListener, JDial {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(tenant.getCampanha())
+        .toString();
   }
 
   @Override

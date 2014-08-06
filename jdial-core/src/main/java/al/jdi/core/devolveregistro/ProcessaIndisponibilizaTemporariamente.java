@@ -30,7 +30,7 @@ class ProcessaIndisponibilizaTemporariamente implements ProcessoDevolucao {
   @Override
   public boolean accept(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
       ResultadoLigacao resultadoLigacao) {
-    if (resultadoLigacao.getIntervaloIndisponivel() < 0) {
+    if (resultadoLigacao.getIntervaloIndisponivel() <= 0) {
       logger
           .info("Nao vai indisponibilizar temporariamente {}", ligacao.getDiscavel().getCliente());
       return false;

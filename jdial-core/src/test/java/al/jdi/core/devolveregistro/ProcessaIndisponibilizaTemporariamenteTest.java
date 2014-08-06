@@ -66,9 +66,24 @@ public class ProcessaIndisponibilizaTemporariamenteTest {
   }
 
   @Test
-  public void acceptDeveriaRetornarTrue() throws Exception {
+  public void acceptDeveriaRetornarTrueSeIntervaloMaiorQue0() throws Exception {
+    when(resultadoLigacao.getIntervaloIndisponivel()).thenReturn(1);
     assertThat(processaIndisponibilizaTemporariamente.accept(tenant, daoFactory, ligacao,
         resultadoLigacao), is(true));
+  }
+  
+  @Test
+  public void acceptDeveriaRetornarFalseSeIntervaloMenorQue0() throws Exception {
+    when(resultadoLigacao.getIntervaloIndisponivel()).thenReturn(-1);
+    assertThat(processaIndisponibilizaTemporariamente.accept(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(false));
+  }
+  
+  @Test
+  public void acceptDeveriaRetornarFalseSeIntervaloIgualA0() throws Exception {
+    when(resultadoLigacao.getIntervaloIndisponivel()).thenReturn(0);
+    assertThat(processaIndisponibilizaTemporariamente.accept(tenant, daoFactory, ligacao,
+        resultadoLigacao), is(false));
   }
 
   @Test

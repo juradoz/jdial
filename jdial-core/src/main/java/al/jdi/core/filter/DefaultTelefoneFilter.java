@@ -34,7 +34,7 @@ class DefaultTelefoneFilter implements TelefoneFilter {
       Telefone telefone = it.next();
       for (TelefoneUtil checker : checkers) {
         if (!checker.isUtil(tenant, telefone)) {
-          logger.info("Excluindo telefone inutil {} por {}", telefone, checker);
+          logger.debug("Excluindo telefone inutil {} por {}", telefone, checker);
           it.remove();
           break;
         }

@@ -53,12 +53,11 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
       if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()
           && !tenant.getConfiguracoes().isUraReversa()) {
         logger.info("Nao vai efetivamente notificar tentativa pois isAtendida() para {}", ligacao
-            .getDiscavel().getCliente().getId());
+            .getDiscavel().getCliente());
         return;
       }
 
-      logger.info("Efetivamente notificando tentativa para {}", ligacao.getDiscavel().getCliente()
-          .getId());
+      logger.info("Efetivamente notificando tentativa para {}", ligacao.getDiscavel().getCliente());
       daoFactory.getClienteDaoTsa().insereResultadoTsa(
           cliente,
           resultadoLigacao,
@@ -87,12 +86,12 @@ class TratadorEspecificoClienteTsa implements TratadorEspecificoCliente {
       if (!resultadoLigacao.equals(resultadoSemAgentes) && ligacao.isAtendida()
           && !tenant.getConfiguracoes().isUraReversa()) {
         logger.info("Nao vai efetivamente notificar finalizacao pois isAtendida() para {}", ligacao
-            .getDiscavel().getCliente().getId());
+            .getDiscavel().getCliente());
         return;
       }
 
       logger.info("Efetivamente notificando finalizacao para {}", ligacao.getDiscavel()
-          .getCliente().getId());
+          .getCliente());
       daoFactory.getClienteDaoTsa().insereResultadoTsa(
           cliente,
           resultadoLigacao,
