@@ -28,12 +28,10 @@ public class JDialModule {
   public @interface NomeCampanha {
   }
 
-  private static final String VERSAO = "5.0.0";
-
   @Versao
   @Produces
   public String getVersao() {
-    return VERSAO;
+    return getClass().getPackage().getImplementationVersion();
   }
 
   @NomeCampanha
