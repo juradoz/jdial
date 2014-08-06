@@ -5,5 +5,8 @@
 	version="1.1" bean-discovery-mode="all">
 	<scan>
 		<exclude name="com.google.common.**" />
+		<exclude name="al.jdi.core.**" />
+		<exclude name="al.jdi.cti.**" />
+		<exclude name="al.jdi.web.util.Main" />
 	</scan>
 </beans>

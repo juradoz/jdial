@@ -53,7 +53,6 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       return new DefaultGerenciadorLigacoes(daoFactoryProvider, dialerCtiManager, ligacoes,
           predictiveListenerFactory, devolveRegistro, engineFactory, tenant);
     }
-
   }
 
   private static final Logger logger = getLogger(DefaultGerenciadorLigacoes.class);
@@ -94,8 +93,21 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       return;
     }
 
-    logger.info("Chamada atendida. callId: {} cliente: {}", callId, ligacao.getDiscavel()
-        .getCliente());
+    Duration durationInicio = new Duration(ligacao.getInicioLocal(), new DateTime());
+    Duration durationInicioChamada = new Duration(ligacao.getInicioChamadaLocal(), new DateTime());
+    logger
+        .info(
+            "Chamada atendida. callId: {} cliente: {}, tempoDesdeInicio: {}ms, tempoDesdeInicioChamada: {}ms",
+            callId, ligacao.getDiscavel().getCliente(), durationInicio.getMillis(),
+            durationInicioChamada.getMillis());
+
+    if (durationInicio.isShorterThan(Period.seconds(5).toStandardDuration()))
+      logger.warn("INICIO HA MENOS DE 5 SEGUNDOS!!! {}", ligacao.getDiscavel().getCliente()
+          .getTelefone());
+
+    if (durationInicioChamada.isShorterThan(Period.seconds(5).toStandardDuration()))
+      logger.warn("INICIO CHAMADA HA MENOS DE 5 SEGUNDOS!!! {}", ligacao.getDiscavel().getCliente()
+          .getTelefone());
 
     if (!ligacao.isAtendida())
       tenant.getGerenciadorFatorK().chamadaAtendida();
@@ -187,7 +199,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       logger.debug("Ligacao iniciada nao encontrada. callId: {}", callId);
       return;
     }
-
+    ligacao.setInicioChamadaLocal(new DateTime());
     tenant.getGerenciadorFatorK().chamadaIniciada();
     logger.info("Chamada iniciada. callId: {} cliente: {}", callId, ligacao.getDiscavel()
         .getCliente());
@@ -230,8 +242,20 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
       return;
     }
 
-    logger.info("Chamada no agente. callId: {} agente: {} cliente: {}", new Object[] {callId,
-        agente, ligacao.getDiscavel().getCliente()});
+    Duration durationInicio = new Duration(ligacao.getInicioLocal(), new DateTime());
+    Duration durationInicioChamada = new Duration(ligacao.getInicioChamadaLocal(), new DateTime());
+    logger
+        .info(
+            "Chamada no agente. callId: {} agente: {} cliente: {}, tempoDesdeInicio: {}ms, tempoDesdeInicioChamada: {}ms",
+            callId, agente, ligacao.getDiscavel().getCliente(), durationInicio.getMillis(),
+            durationInicioChamada.getMillis());
+    if (durationInicio.isShorterThan(Period.seconds(5).toStandardDuration()))
+      logger.warn("NO AGENTE COM INICIO HA MENOS DE 5 SEGUNDOS!!! {}", ligacao.getDiscavel()
+          .getCliente().getTelefone());
+    if (durationInicioChamada.isShorterThan(Period.seconds(5).toStandardDuration()))
+      logger.warn("NO AGENTE COM INICIO CHAMADA HA MENOS DE 5 SEGUNDOS!!! {}", ligacao
+          .getDiscavel().getCliente().getTelefone());
+
     ligacao.setAgente(agente);
   }
 

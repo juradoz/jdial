@@ -6,6 +6,7 @@
 
 	<definition name="root">
 		<put-attribute name="title" value="Dialer Web" />
+		<put-attribute name="messages" value="/tiles/messages.jsp" />
 		<put-attribute name="errors" value="/tiles/errors.jsp" />
 	</definition>
 

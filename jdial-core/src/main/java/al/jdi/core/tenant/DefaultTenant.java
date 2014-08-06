@@ -3,6 +3,7 @@ package al.jdi.core.tenant;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.Period;
 
 import al.jdi.common.Engine;
@@ -171,5 +172,10 @@ class DefaultTenant implements Tenant, Runnable {
     } finally {
       daoFactory.close();
     }
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("campanha", campanha).toString();
   }
 }

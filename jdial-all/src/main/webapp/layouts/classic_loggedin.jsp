@@ -34,6 +34,7 @@
 			</div>
 			<div id="sub-conteudo">
 				<tiles:insertAttribute name="conteudo" />
+				<tiles:insertAttribute name="messages" />
 				<tiles:insertAttribute name="errors" />
 			</div>
 		</div>

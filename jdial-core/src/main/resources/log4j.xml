@@ -21,11 +21,7 @@
 		<priority value="error" />
 	</category>
 
-	<category name="org.jboss.weld">
-		<priority value="error" />
-	</category>
-
-	<category name="org.jboss.logging">
+	<category name="org.jboss">
 		<priority value="error" />
 	</category>
 

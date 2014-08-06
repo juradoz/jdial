@@ -36,8 +36,8 @@ public class CtiManagerModule {
     });
   }
 
-  @Produces
   @Named("ctiConfigFileName")
+  @Produces
   public String getFileName() {
     return "cti.properties";
   }

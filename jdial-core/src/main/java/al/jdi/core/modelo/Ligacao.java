@@ -45,6 +45,8 @@ public class Ligacao {
 
   }
 
+  private final DateTime inicioLocal = new DateTime();
+  private DateTime inicioChamadaLocal;
   private final Discavel discavel;
   private int motivoFinalizacao;
   private final DateTime criacao;
@@ -148,6 +150,18 @@ public class Ligacao {
 
   public void setInutilizaComMotivoDiferenciado(boolean inutilizaComMotivoDiferenciado) {
     this.inutilizaComMotivoDiferenciado = inutilizaComMotivoDiferenciado;
+  }
+
+  public DateTime getInicioChamadaLocal() {
+    return inicioChamadaLocal;
+  }
+
+  public void setInicioChamadaLocal(DateTime inicioChamadaLocal) {
+    this.inicioChamadaLocal = inicioChamadaLocal;
+  }
+
+  public DateTime getInicioLocal() {
+    return inicioLocal;
   }
 
 }

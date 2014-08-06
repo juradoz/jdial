@@ -30,6 +30,11 @@
 					action="<c:url value="/mailing/purge/${mailing.id }"/>">
 					<button type="submit">Expurgar</button>
 				</form></td>
+			<td><form action="<c:url value="/mailing/limpaTelefoneAtual"/>"
+					method="post" onsubmit="return confirm('Tem certeza???');">
+					<input type="hidden" name="mailing.id" value="${mailing.id }" />
+					<button type="submit">Limpa tel atual</button>
+				</form></td>
 			<td><form method="post"
 					action="<c:url value="/mailing/${mailing.id }"/>" method="post"
 					onsubmit="return confirm('Tem certeza???');">

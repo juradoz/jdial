@@ -1,5 +1,6 @@
 package al.jdi.dao.model;
 
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -54,12 +55,12 @@ public class Campanha implements DaoObject {
 
   private boolean ativa = false;
 
+  @Inject
   public Campanha() {}
 
   private Campanha(Long id, CriacaoModificacao criacaoModificacao, String nome,
       boolean filtroAtivo, int codigoFiltro, Grupo grupo, Servico servico, String descricao,
       boolean limpaMemoria, boolean ativa) {
-    super();
     this.id = id;
     this.criacaoModificacao = criacaoModificacao;
     this.nome = nome;
@@ -78,11 +79,6 @@ public class Campanha implements DaoObject {
 
   public void setAtiva(boolean ativa) {
     this.ativa = ativa;
-  }
-
-
-  public Campanha(Long idCampanha) {
-    this.id = idCampanha;
   }
 
   @Override

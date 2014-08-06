@@ -25,8 +25,18 @@ public class TenantModule {
   public @interface TenantManagerService {
   }
 
+  public enum TenantType {
+    STANDALONE, MULTI
+  }
+
   @Produces
   public Map<Campanha, Tenant> getTenantCollection() {
     return Collections.synchronizedMap(new HashMap<Campanha, Tenant>());
   }
+
+  @Produces
+  public TenantType getStartupType() {
+    return TenantType.STANDALONE;
+  }
+
 }

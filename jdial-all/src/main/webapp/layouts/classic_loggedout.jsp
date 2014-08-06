@@ -24,6 +24,7 @@
 		<div id="login">
 			<tiles:insertAttribute name="conteudo" />
 		</div>
+		<tiles:insertAttribute name="messages" />
 		<tiles:insertAttribute name="errors" />
 		<div id="rodape">
 			<tiles:insertAttribute name="rodape" />

@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 import javax.enterprise.inject.Produces;
 import javax.inject.Qualifier;
 
+import org.jboss.weld.environment.se.StartMain;
+
 public class JDialModule {
 
   @Retention(RUNTIME)
@@ -20,11 +22,23 @@ public class JDialModule {
   public @interface Versao {
   }
 
+  @Retention(RUNTIME)
+  @Target({METHOD, FIELD, PARAMETER, TYPE})
+  @Qualifier
+  public @interface NomeCampanha {
+  }
+
   private static final String VERSAO = "5.0.0";
 
   @Versao
   @Produces
   public String getVersao() {
     return VERSAO;
+  }
+
+  @NomeCampanha
+  @Produces
+  public String getNomeCampanha() {
+    return StartMain.getParameters()[0];
   }
 }

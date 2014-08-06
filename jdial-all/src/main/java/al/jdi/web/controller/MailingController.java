@@ -210,4 +210,15 @@ public class MailingController {
     }
   }
 
+  @LogAcesso
+  @Post
+  public void limpaTelefoneAtual(Mailing mailing) {
+    mailing = daoFactoryRequest.get().getMailingDao().procura(mailing.getId());
+    daoFactoryRequest.get().getMailingDao().limpaTelefoneAtual(mailing);
+    LinkedList<String> messages = new LinkedList<String>();
+    messages.add("Sucesso!");
+    result.include("messages", messages);
+    result.use(Results.logic()).redirectTo(MailingController.class).list(mailing.getCampanha());
+  }
+
 }

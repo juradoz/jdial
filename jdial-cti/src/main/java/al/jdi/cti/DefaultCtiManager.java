@@ -2,6 +2,7 @@ package al.jdi.cti;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,7 @@ import javax.telephony.Provider;
 import javax.telephony.ProviderEvent;
 import javax.telephony.ProviderListener;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.Period;
@@ -34,6 +36,8 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 
   private static final Logger logger = getLogger(DefaultCtiManager.class);
 
+  private final String login;
+  private final String password;
   private final JtapiPeer jtapiPeer;
   private final Period providerTimeout = Period.seconds(10);
   private final Engine.Factory engineFactory;
@@ -45,23 +49,21 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
   private String providerString;
 
   @Inject
-  DefaultCtiManager(Engine.Factory engineFactory, @Named("serverIp") String serverIp,
-      @Named("port") int port, @Named("service") String service, @Named("login") String login,
+  DefaultCtiManager(Engine.Factory engineFactory, @Named("login") String login,
       @Named("password") String password, @Named("jtapiPeerName") String jtapiPeerName) {
+    this.login = login;
+    this.password = password;
     this.engineFactory = engineFactory;
     try {
       this.jtapiPeer = JtapiPeerFactory.getJtapiPeer(jtapiPeerName);
-      providerString = getStringConexao(serverIp, port, service, login, password);
       logger.debug("Iniciando {}...", this);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
-  String getStringConexao(String serverIp, int port, String service, String login, String password) {
-    String string =
-        String.format("%s;loginID=%s;passwd=%s;servers=%s:%d", service, login, password, serverIp,
-            port);
+  String getStringConexao(String service, String login, String password) {
+    String string = String.format("%s;loginID=%s;passwd=%s", service, login, password);
 
     logger.debug("Vai conectar em {}", string);
 
@@ -190,7 +192,15 @@ class DefaultCtiManager implements CtiManager, ProviderListener, Runnable {
 
   @Override
   public void run() {
+    getServices();
     validaProvider();
+  }
+
+  private void getServices() {
+    if (StringUtils.isBlank(providerString)) {
+      String service = Arrays.asList(jtapiPeer.getServices()).get(0);
+      providerString = getStringConexao(service, login, password);
+    }
   }
 
   public boolean gotProvider() {

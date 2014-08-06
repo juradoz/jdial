@@ -9,13 +9,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 class CtiFileConfigurator {
 
-  private final String serverIp;
-  private final int port;
-  private final String service;
   private final String login;
   private final String password;
   private final String jtapiPeerName;
@@ -46,9 +41,6 @@ class CtiFileConfigurator {
     Properties properties = new Properties(defaults);
     try {
       properties.load(stream);
-      serverIp = properties.getProperty("serverIp");
-      port = NumberUtils.toInt(properties.getProperty("port"), 450);
-      service = properties.getProperty("service");
       login = properties.getProperty("login");
       password = properties.getProperty("password");
       jtapiPeerName = properties.getProperty("jtapiPeerName");
@@ -56,24 +48,6 @@ class CtiFileConfigurator {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Named("serverIp")
-  @Produces
-  public String getServerIp() {
-    return serverIp;
-  }
-
-  @Named("port")
-  @Produces
-  public int getPort() {
-    return port;
-  }
-
-  @Named("service")
-  @Produces
-  public String getService() {
-    return service;
   }
 
   @Named("login")

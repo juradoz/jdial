@@ -8,10 +8,12 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 
+import org.jboss.weld.environment.se.StartMain;
 import org.slf4j.Logger;
 
 import al.jdi.core.tenant.Tenant.Factory;
 import al.jdi.core.tenant.TenantModule.TenantManagerService;
+import al.jdi.core.tenant.TenantModule.TenantType;
 import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 
@@ -21,13 +23,15 @@ class DefaultTenantManager implements TenantManager {
 
   private static final Logger logger = getLogger(DefaultTenantManager.class);
 
+  private final TenantType type;
   private final Map<Campanha, Tenant> tenants;
   private final Tenant.Factory tenantFactory;
   private final Provider<DaoFactory> daoFactoryProvider;
 
   @Inject
-  DefaultTenantManager(Map<Campanha, Tenant> tenants, Factory tenantFactory,
+  DefaultTenantManager(TenantType type, Map<Campanha, Tenant> tenants, Factory tenantFactory,
       Provider<DaoFactory> daoFactoryProvider) {
+    this.type = type;
     this.tenants = tenants;
     this.tenantFactory = tenantFactory;
     this.daoFactoryProvider = daoFactoryProvider;
@@ -38,6 +42,11 @@ class DefaultTenantManager implements TenantManager {
   public void start() {
     DaoFactory daoFactory = daoFactoryProvider.get();
     try {
+      if (type.equals(TenantType.STANDALONE)) {
+        addTenant(daoFactory.getCampanhaDao().procura(StartMain.getParameters()[0]));
+        return;
+      }
+
       for (Campanha campanha : daoFactory.getCampanhaDao().listaAtivas()) {
         addTenant(campanha);
       }
