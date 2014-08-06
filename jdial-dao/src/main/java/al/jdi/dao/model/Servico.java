@@ -103,7 +103,7 @@ public class Servico implements DaoObject {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("nome", nome).toString();
+        .append(nome).toString();
   }
 
   public Servico clone() {

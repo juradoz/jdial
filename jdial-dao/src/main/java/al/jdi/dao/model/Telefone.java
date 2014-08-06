@@ -168,9 +168,8 @@ public class Telefone implements DaoObject, Comparable<Telefone> {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idTelefone", id)
-        .append("chaveTelefone", chaveTelefone).append("ddd", ddd).append("telefone", telefone)
-        .append("idCliente", getCliente().getId()).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
+        .append("telefone", uniqueString()).append(cliente).toString();
   }
 
   String uniqueString() {

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.Period;
 import org.slf4j.Logger;
 
@@ -185,6 +186,6 @@ class DefaultTenant implements Tenant, Runnable {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("campanha", campanha).toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(campanha).toString();
   }
 }

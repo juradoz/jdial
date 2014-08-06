@@ -109,8 +109,7 @@ public class InformacaoCliente implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("chave", chave)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(chave).toString();
   }
 
   public String getNomeBase() {

@@ -91,7 +91,7 @@ public class EstadoCliente implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", nome)
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(nome)
         .toString();
   }
 }

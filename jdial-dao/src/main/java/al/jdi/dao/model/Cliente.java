@@ -214,14 +214,12 @@ public class Cliente implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idCliente", id)
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id).toString();
   }
 
   public String toStringFull() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("idCliente", getId())
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", getId())
         .append("chave", getInformacaoCliente().getChave()).append("telefone", getTelefone())
-        .append("ordemDaFila", getOrdemDaFila())
         .append("providencia", getInformacaoCliente().getProvidenciaTelefone()).toString();
   }
 

@@ -120,6 +120,6 @@ public class Filtro implements DaoObject {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("campanha", campanha).append("nome", nome).append("codigo", codigo).toString();
+        .append(campanha).append(codigo).toString();
   }
 }

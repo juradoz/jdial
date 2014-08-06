@@ -107,7 +107,7 @@ public class Definicao implements DaoObject {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("campanha", campanha).append("propriedade", propriedade).append("valor", valor)
+        .append(campanha).append("propriedade", propriedade).append("valor", valor)
         .toString();
   }
 }

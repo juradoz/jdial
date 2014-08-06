@@ -15,6 +15,8 @@ import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Period;
@@ -112,7 +114,7 @@ class DefaultEstoque implements Estoque, Runnable {
     this.intervaloMonitoracao = intervaloMonitoracao;
     this.providencias = providencias;
     this.telefoneFilter = telefoneFilter;
-    logger.debug("Iniciando {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
+    logger.debug("Iniciando {}...", this);
   }
 
   private void devolveCliente(DaoFactory daoFactory, Cliente cliente, MotivoSistema motivoSistema) {
@@ -186,7 +188,8 @@ class DefaultEstoque implements Estoque, Runnable {
           continue;
 
         logger.warn("Registro expirado: {} Na memoria ha mais de {}s {}", registro.getCliente(),
-            new Duration(registro.getCriacao(), new DateTime()).getStandardSeconds(), tenant.getCampanha());
+            new Duration(registro.getCriacao(), new DateTime()).getStandardSeconds(),
+            tenant.getCampanha());
         devolveCliente(instante, registro.getCliente(), MotivoSistema.NAO_UTILIZADO);
         it.remove();
       }
@@ -253,10 +256,12 @@ class DefaultEstoque implements Estoque, Runnable {
         Telefone telefone = cliente.getTelefone();
         List<Telefone> telefonesFiltrados = telefoneFilter.filter(tenant, asList(telefone));
         if (!telefonesFiltrados.isEmpty()) {
-          logger.debug("Telefone ainda bom na memoria {} {} {}", telefone, cliente, tenant.getCampanha());
+          logger.debug("Telefone ainda bom na memoria {} {} {}", telefone, cliente,
+              tenant.getCampanha());
           continue;
         }
-        logger.warn("Removendo da memoria cliente com telefone {} inutil {} {}", telefone, cliente, tenant.getCampanha());
+        logger.warn("Removendo da memoria cliente com telefone {} inutil {} {}", telefone, cliente,
+            tenant.getCampanha());
         devolveCliente(instante, cliente, MotivoSistema.NAO_UTILIZADO);
         it.remove();
       }
@@ -293,22 +298,21 @@ class DefaultEstoque implements Estoque, Runnable {
     if (engine != null)
       throw new IllegalStateException();
     engine = engineFactory.create(this, intervaloMonitoracao, true, true);
-    logger.info("Iniciado {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
   }
 
   @Override
   public void stop() {
-    logger.debug("Encerrando {} para {} {}...", this, extraidorClientes, tenant.getCampanha());
+    logger.debug("Encerrando {}...", this);
     if (engine == null)
       throw new IllegalStateException("Already stopped");
     engine.stop();
     engine = null;
-    logger.info("Encerrado {} para {} {}", this, extraidorClientes, tenant.getCampanha());
   }
 
   @Override
   public String toString() {
-    return extraidorClientes.toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(extraidorClientes).append(tenant.getCampanha())
+        .toString();
   }
 
   void verificaEstoques(DaoFactory daoFactory) {
@@ -317,7 +321,7 @@ class DefaultEstoque implements Estoque, Runnable {
       size = estoque.size();
     }
 
-    logger.info("Em estoque para {}: {} {}", extraidorClientes, size, tenant.getCampanha());
+    logger.info("Em estoque para {}: {}", this, size);
     if (size >= tenant.getConfiguracoes().getMinimoEstoque())
       return;
     int quantidade = tenant.getConfiguracoes().getMaximoEstoque() - size;
@@ -334,14 +338,12 @@ class DefaultEstoque implements Estoque, Runnable {
             daoFactory.commit();
           }
 
-          logger.info("Armazenando em {}: {} {}", this, cliente.toStringFull(),
-              tenant.getCampanha());
+          logger.info("Armazenando em {}: {}", this, cliente.toStringFull());
           synchronized (estoque) {
             estoque.add(new Registro(cliente));
           }
         } catch (ClienteSemTelefoneException e) {
-          logger.warn("Sem telefones para o cliente {} {}", cliente,
-              tenant.getCampanha());
+          logger.warn("Sem telefones para o cliente {} {}", cliente, tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.SEM_TELEFONES);
         } catch (SomenteCelularException e) {
           logger.warn("Cliente somente com celulares {} {}", cliente, tenant.getCampanha());

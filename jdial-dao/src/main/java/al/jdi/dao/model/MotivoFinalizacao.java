@@ -80,7 +80,6 @@ public class MotivoFinalizacao implements DaoObject {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("nome", getNome())
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(nome).toString();
   }
 }

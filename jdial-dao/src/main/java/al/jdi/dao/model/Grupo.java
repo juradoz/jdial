@@ -115,7 +115,7 @@ public class Grupo implements DaoObject {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("codigo", codigo).toString();
+        .append(codigo).toString();
   }
 
   public Grupo clone() {

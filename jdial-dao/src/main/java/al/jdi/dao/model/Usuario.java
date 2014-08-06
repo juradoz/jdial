@@ -114,7 +114,7 @@ public class Usuario implements DaoObject {
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("id", id)
-        .append("login", login).toString();
+        .append(login).toString();
   }
 
   public String criptografaSenha(String senha) {
