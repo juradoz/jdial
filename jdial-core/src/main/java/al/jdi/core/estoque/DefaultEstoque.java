@@ -340,7 +340,7 @@ class DefaultEstoque implements Estoque, Runnable {
             estoque.add(new Registro(cliente));
           }
         } catch (ClienteSemTelefoneException e) {
-          logger.warn("Erro na obtencao de telefone para o cliente {} {}", cliente,
+          logger.warn("Sem telefones para o cliente {} {}", cliente,
               tenant.getCampanha());
           devolveCliente(daoFactory, cliente, MotivoSistema.SEM_TELEFONES);
         } catch (SomenteCelularException e) {
