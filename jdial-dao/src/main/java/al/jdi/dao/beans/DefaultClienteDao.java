@@ -94,7 +94,7 @@ class DefaultClienteDao implements ClienteDao {
   private final DefaultDao<Cliente> dao;
 
   DefaultClienteDao(Session session) {
-    this.dao = new DefaultDao<>(session, Cliente.class);
+    this.dao = new DefaultDao<Cliente>(session, Cliente.class);
   }
 
   @Override

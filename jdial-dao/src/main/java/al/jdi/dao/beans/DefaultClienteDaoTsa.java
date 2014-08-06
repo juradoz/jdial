@@ -142,7 +142,7 @@ class DefaultClienteDaoTsa implements ClienteDaoTsa {
         .setInteger("situacao", situacao.getCodigo())
         .setInteger("motivo", motivo)
         .setInteger("operador", operadorDiscador)
-        .setBoolean("celular", telefone.isCelular())
+        .setBoolean("celular", telefone == null ? false : telefone.isCelular())
         .setInteger("origem", origem)
         .setInteger("filtro",
             cliente.getMailing().getCampanha().isFiltroAtivo() ? cliente.getFiltro() : 0)
@@ -156,7 +156,7 @@ class DefaultClienteDaoTsa implements ClienteDaoTsa {
     hql =
         "update Operador.Telefones set dataHora = Now(), finaliza = 20 where codigo = :codTelefone";
     query = dao.getSession().createSQLQuery(hql);
-    query.setLong("codTelefone", telefone.getChaveTelefone());
+    query.setLong("codTelefone", telefone == null ? 0l : telefone.getChaveTelefone());
     logger.debug("Update Telefones para {}...", cliente);
     query.executeUpdate();
     logger.debug("Update Telefones para {} com sucesso!", cliente);
@@ -164,7 +164,7 @@ class DefaultClienteDaoTsa implements ClienteDaoTsa {
     hql =
         "insert into Operador.Chamadas (finaliza, telefone, operador, cliente, dataHora, detCliente, campanha, inicioDiscagem, Power) values (20, :codTelefone, :operador, :codCliente, Now(), :id, :codCampanha, :inicioDiscagem, 0)";
     query = dao.getSession().createSQLQuery(hql);
-    query.setLong("codTelefone", telefone.getChaveTelefone());
+    query.setLong("codTelefone", telefone==null?0:telefone.getChaveTelefone());
     query.setInteger("operador", operadorDiscador);
     query.setInteger("codCliente", codCliente);
     query.setInteger("id", id.intValue());

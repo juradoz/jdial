@@ -1,10 +1,13 @@
 package al.jdi.core.tenant;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.joda.time.Period;
+import org.slf4j.Logger;
 
 import al.jdi.common.Engine;
 import al.jdi.core.JDial;
@@ -59,6 +62,8 @@ class DefaultTenant implements Tenant, Runnable {
           gerenciadorFatorKFactory, gerenciadorLigacoesFactory, jdialFactory, campanha);
     }
   }
+
+  private static final Logger logger = getLogger(DefaultTenant.class);
 
   private final Provider<DaoFactory> daoFactoryProvider;
   private final Engine.Factory engineFactory;
@@ -139,6 +144,7 @@ class DefaultTenant implements Tenant, Runnable {
   public void start() {
     if (engine != null)
       throw new IllegalStateException("Already started!");
+    logger.info("Starting {}...", this);
     configuracoes.start();
     estoqueLivres.start();
     estoqueAgendados.start();
@@ -147,12 +153,14 @@ class DefaultTenant implements Tenant, Runnable {
     gerenciadorFatorK.start();
     jdial.start();
     engine = engineFactory.create(this, Period.minutes(5), true, true);
+    logger.info("Started {}.", this);
   }
 
   @Override
   public void stop() {
     if (engine == null)
       throw new IllegalStateException("Already stopped!");
+    logger.info("Stopping {}...", this);
     jdial.stop();
     gerenciadorFatorK.stop();
     gerenciadorAgentes.stop();
@@ -162,6 +170,7 @@ class DefaultTenant implements Tenant, Runnable {
     configuracoes.stop();
     engine.stop();
     engine = null;
+    logger.info("Stopped {}.", this);
   }
 
   @Override

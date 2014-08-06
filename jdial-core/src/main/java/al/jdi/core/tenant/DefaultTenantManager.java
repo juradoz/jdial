@@ -59,7 +59,9 @@ class DefaultTenantManager implements TenantManager {
   public void stop() {
     synchronized (tenants.keySet()) {
       for (Campanha campanha : tenants.keySet()) {
+        logger.info("Stopping tenant for {}...", campanha);
         tenants.get(campanha).stop();
+        logger.info("Stopped tenant for {}.", campanha);
       }
     }
   }

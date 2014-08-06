@@ -25,6 +25,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
 import al.jdi.dao.model.ResultadoLigacao;
+import al.jdi.dao.model.Telefone;
 
 @Default
 @Singleton
@@ -79,15 +80,15 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
     ligacoes.offer(new Bean(tenant, ligacao));
   }
 
-  private void localDevolveLigacao(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
-      Cliente cliente) {
+  private void localDevolveLigacao(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao) {
 
     Campanha campanha =
-        daoFactory.getCampanhaDao().procura(cliente.getMailing().getCampanha().getId());
+        daoFactory.getCampanhaDao().procura(
+            ligacao.getDiscavel().getCliente().getMailing().getCampanha().getId());
 
     int motivoFinalizacao = ligacao.getMotivoFinalizacao();
 
-    logger.debug("Procurando resultado {}", cliente);
+    logger.debug("Procurando resultado {}", ligacao.getDiscavel().getCliente());
     ResultadoLigacao resultadoLigacao =
         daoFactory.getResultadoLigacaoDao().procura(motivoFinalizacao, campanha);
 
@@ -98,7 +99,8 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
 
     resultadoLigacao = modificadorResultado.modifica(tenant, daoFactory, ligacao, resultadoLigacao);
 
-    logger.info("Devolvendo com motivo {} {}", resultadoLigacao, cliente);
+    logger
+        .info("Devolvendo com motivo {} {}", resultadoLigacao, ligacao.getDiscavel().getCliente());
 
     for (ProcessoDevolucao processo : processosDevolucao) {
       if (!processo.accept(tenant, daoFactory, ligacao, resultadoLigacao)) {
@@ -129,14 +131,22 @@ class DefaultDevolveRegistro implements DevolveRegistro, Runnable, Service {
       }
 
       Long idCliente = bean.getLigacao().getDiscavel().getCliente().getId();
+      Long idTelefoneOriginal =
+          bean.getLigacao().getTelefoneOriginal() == null ? null : bean.getLigacao()
+              .getTelefoneOriginal().getId();
 
       DaoFactory daoFactory = daoFactoryProvider.get();
       try {
         daoFactory.beginTransaction();
         Cliente cliente = daoFactory.getClienteDao().procura(idCliente);
+        Telefone telefoneOriginal =
+            idTelefoneOriginal == null ? null : daoFactory.getTelefoneDao().procura(
+                idTelefoneOriginal);
+        bean.getLigacao().setTelefoneOriginal(telefoneOriginal);
+        bean.getLigacao().getDiscavel().setCliente(cliente);
         logger.info("Devolvendo ligacao motivo {} {}", bean.getLigacao().getMotivoFinalizacao(),
             cliente);
-        localDevolveLigacao(bean.getTenant(), daoFactory, bean.getLigacao(), cliente);
+        localDevolveLigacao(bean.getTenant(), daoFactory, bean.getLigacao());
         daoFactory.commit();
       } catch (Throwable e) {
         logger.error("Erro na devolucao de {}:{}", new Object[] {idCliente, e.getMessage()}, e);

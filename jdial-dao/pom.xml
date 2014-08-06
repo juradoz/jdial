@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>al.jdi</groupId>
 		<artifactId>jdial-parent</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>${jdial.version}</version>
 	</parent>
 
 	<artifactId>jdial-dao</artifactId>
@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>al.jdi</groupId>
 			<artifactId>jdial-common</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>${jdial.version}</version>
 		</dependency>
 	</dependencies>
 
