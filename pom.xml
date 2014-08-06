@@ -5,7 +5,7 @@
 
 	<groupId>al.jdi</groupId>
 	<artifactId>jdial-parent</artifactId>
-	<version>${jdial.version}</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>jdial-parent</name>
@@ -13,7 +13,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdial.version>5.0.0-SNAPSHOT</jdial.version>
 		<weld.version>2.2.3.Final</weld.version>
 	</properties>
 
