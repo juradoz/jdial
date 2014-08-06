@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.devolveregistro.ModificadorResultado.ResultadosConhecidos;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tenant.Tenant;
@@ -18,6 +19,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
+import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoInexistenteFakeTest {
@@ -51,8 +53,8 @@ public class ModificadorResultadoInexistenteFakeTest {
   public void setUp() throws Exception {
     initMocks(this);
     when(daoFactory.getResultadoLigacaoDao()).thenReturn(resultadoLigacaoDao);
-    when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
-    when(resultadoLigacaoDao.procura(13, campanha)).thenReturn(resultadoLigacaoInexistente);
+    when(resultadoLigacaoDao.procura(MotivoSistema.ATENDIDA.getCodigo(), campanha)).thenReturn(resultadoLigacaoAtendida);
+    when(resultadoLigacaoDao.procura(ResultadosConhecidos.INEXISTENTE.getCodigo(), campanha)).thenReturn(resultadoLigacaoInexistente);
     when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     when(tenant.getCampanha()).thenReturn(campanha);
     when(ligacao.getDiscavel()).thenReturn(discavel);

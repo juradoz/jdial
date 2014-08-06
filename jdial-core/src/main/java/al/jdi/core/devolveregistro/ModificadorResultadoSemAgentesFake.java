@@ -4,9 +4,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import org.slf4j.Logger;
 
+import al.jdi.core.devolveregistro.ModificadorResultado.ResultadosConhecidos;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tenant.Tenant;
 import al.jdi.dao.beans.DaoFactory;
+import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
@@ -19,15 +21,17 @@ class ModificadorResultadoSemAgentesFake implements ModificadorResultadoFilter {
     if (tenant.getConfiguracoes().isUraReversa())
       return false;
     ResultadoLigacao resultadoLigacaoAtendida =
-        daoFactory.getResultadoLigacaoDao().procura(-1, tenant.getCampanha());
+        daoFactory.getResultadoLigacaoDao().procura(MotivoSistema.ATENDIDA.getCodigo(),
+            tenant.getCampanha());
     return resultadoLigacao.equals(resultadoLigacaoAtendida) && !ligacao.isNoAgente();
   }
 
   @Override
-  public ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
+  public ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
     logger.info("Alterando resultado por semAgentesFake {}", ligacao.getDiscavel().getCliente());
-    return daoFactory.getResultadoLigacaoDao().procura(23, tenant.getCampanha());
+    return daoFactory.getResultadoLigacaoDao().procura(
+        ResultadosConhecidos.SEM_AGENTES.getCodigo(), tenant.getCampanha());
   }
 
 }

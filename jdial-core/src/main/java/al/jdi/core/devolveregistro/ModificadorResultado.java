@@ -15,6 +15,21 @@ import al.jdi.dao.model.ResultadoLigacao;
 
 class ModificadorResultado {
 
+  public enum ResultadosConhecidos {
+
+    INEXISTENTE(13), SEM_AGENTES(23);
+
+    private ResultadosConhecidos(int codigo) {
+      this.codigo = codigo;
+    }
+
+    private final int codigo;
+
+    public int getCodigo() {
+      return codigo;
+    }
+  }
+
   private static final Logger logger = getLogger(ModificadorResultado.class);
 
   private final Instance<ModificadorResultadoFilter> filters;
@@ -24,8 +39,8 @@ class ModificadorResultado {
     this.filters = filters;
   }
 
-  ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory,
-      Ligacao ligacao, ResultadoLigacao resultadoLigacao) {
+  ResultadoLigacao modifica(Tenant tenant, DaoFactory daoFactory, Ligacao ligacao,
+      ResultadoLigacao resultadoLigacao) {
 
     for (ModificadorResultadoFilter filter : filters) {
       logger.debug("Avaliando {}...", filter);

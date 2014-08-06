@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import al.jdi.core.configuracoes.Configuracoes;
+import al.jdi.core.devolveregistro.ModificadorResultado.ResultadosConhecidos;
 import al.jdi.core.modelo.Discavel;
 import al.jdi.core.modelo.Ligacao;
 import al.jdi.core.tenant.Tenant;
@@ -18,6 +19,7 @@ import al.jdi.dao.beans.DaoFactory;
 import al.jdi.dao.beans.ResultadoLigacaoDao;
 import al.jdi.dao.model.Campanha;
 import al.jdi.dao.model.Cliente;
+import al.jdi.dao.model.MotivoSistema;
 import al.jdi.dao.model.ResultadoLigacao;
 
 public class ModificadorResultadoUraReversaTest {
@@ -56,10 +58,14 @@ public class ModificadorResultadoUraReversaTest {
     initMocks(this);
     when(configuracoes.isUraReversa()).thenReturn(true);
     when(daoFactory.getResultadoLigacaoDao()).thenReturn(resultadoLigacaoDao);
-    when(resultadoLigacaoDao.procura(-1, campanha)).thenReturn(resultadoLigacaoAtendida);
-    when(resultadoLigacaoDao.procura(23, campanha)).thenReturn(resultadoLigacaoSemAgentes);
-    when(resultadoLigacaoDao.procura(-10, campanha)).thenReturn(resultadoLigacaoAbandonou);
-    when(resultadoLigacaoDao.procura(-11, campanha)).thenReturn(resultadoLigacaoSemInteresse);
+    when(resultadoLigacaoDao.procura(MotivoSistema.ATENDIDA.getCodigo(), campanha)).thenReturn(
+        resultadoLigacaoAtendida);
+    when(resultadoLigacaoDao.procura(ResultadosConhecidos.SEM_AGENTES.getCodigo(), campanha))
+        .thenReturn(resultadoLigacaoSemAgentes);
+    when(resultadoLigacaoDao.procura(MotivoSistema.ABANDONO_URA.getCodigo(), campanha)).thenReturn(
+        resultadoLigacaoAbandonou);
+    when(resultadoLigacaoDao.procura(MotivoSistema.SEM_INTERESSE_URA.getCodigo(), campanha))
+        .thenReturn(resultadoLigacaoSemInteresse);
     when(tenant.getConfiguracoes()).thenReturn(configuracoes);
     when(tenant.getCampanha()).thenReturn(campanha);
     when(ligacao.getDiscavel()).thenReturn(discavel);
@@ -69,8 +75,8 @@ public class ModificadorResultadoUraReversaTest {
 
   @Test
   public void acceptDeveriaRetornarTrueSemAgentes() throws Exception {
-    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory,
-        ligacao, resultadoLigacaoSemAgentes), is(true));
+    assertThat(modificadorResultadoUraReversa.accept(tenant, daoFactory, ligacao,
+        resultadoLigacaoSemAgentes), is(true));
   }
 
   @Test
