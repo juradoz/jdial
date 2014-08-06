@@ -8,11 +8,10 @@
 		<artifactId>jdial-parent</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<groupId>al.jdi</groupId>
+	
 	<artifactId>jdial-common</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<name>jdial-common</name>
-	<url>http://maven.apache.org</url>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

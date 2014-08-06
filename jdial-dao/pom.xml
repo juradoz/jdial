@@ -11,8 +11,6 @@
 	</parent>
 
 	<artifactId>jdial-dao</artifactId>
-	<name>jdial-dao</name>
-	<url>http://danieljurado.net</url>
 
 	<dependencies>
 		<!-- hibernate -->
