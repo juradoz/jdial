@@ -20,7 +20,7 @@
 			<td>${resultadoLigacao.motivo }</td>
 			<td><form
 					action="<c:url value="/resultadoLigacao/${resultadoLigacao.id}"/>">
-					<input type="submit" value="Editar" />
+					<button type="submit">Editar</button>
 				</form></td>
 		</tr>
 	</c:forEach>

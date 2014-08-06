@@ -11,7 +11,7 @@
 		</tr>
 	</thead>
 	<c:forEach var="usuario" items="${usuarioList }" varStatus="loopStatus">
-		<tr>
+		<tr class="${loopStatus.index % 2 == 0 ? 'even' : 'odd'}">
 			<td>${usuario.login }</td>
 			<td>${usuario.nome }</td>
 			<td>${usuario.tipoPerfil }</td>

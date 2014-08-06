@@ -14,7 +14,7 @@ Selecione uma campanha para visualizar seus resultados
 			<td>${campanha.descricao }</td>
 			<td><form
 					action="<c:url value="/resultadoLigacao/campanha/${campanha.id}"/>">
-					<input type="submit" value="Ver Resultados..." />
+					<button type="submit">Ver Resultados...</button>
 				</form></td>
 		</tr>
 	</c:forEach>
