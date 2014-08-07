@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -57,7 +58,7 @@ class DefaultEstoque implements Estoque, Runnable {
     @Inject
     private Engine.Factory engineFactory;
     @Inject
-    private Collection<Registro> estoque;
+    private Instance<Collection<Registro>> estoque;
     @Inject
     private Map<Codigo, Providencia> providencias;
     @Inject
@@ -67,7 +68,7 @@ class DefaultEstoque implements Estoque, Runnable {
     public Estoque create(Tenant tenant, ExtraidorClientes extraidorClientes,
         Period intervaloMonitoracao) {
       return new DefaultEstoque(tenant, daoFactoryProvider, devolveRegistro,
-          tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque,
+          tratadorEspecificoClienteFactory, discavelFactory, engineFactory, estoque.get(),
           extraidorClientes, intervaloMonitoracao, providencias, telefoneFilter);
     }
   }
@@ -311,8 +312,8 @@ class DefaultEstoque implements Estoque, Runnable {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(extraidorClientes).append(tenant.getCampanha())
-        .toString();
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append(extraidorClientes)
+        .append(tenant.getCampanha()).toString();
   }
 
   void verificaEstoques(DaoFactory daoFactory) {

@@ -7,6 +7,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -34,14 +35,14 @@ class DefaultConfiguracoes implements Configuracoes, Runnable {
     @IntervaloAtualizacao
     private Period intervaloAtualizacao;
     @Inject
-    private Map<String, Definicao> definicoes;
+    private Instance<Map<String, Definicao>> definicoes;
     @Inject
     private SistemaAtivo.Factory sistemaAtivoFactory;
 
     @Override
     public Configuracoes create(Campanha campanha) {
       return new DefaultConfiguracoes(campanha, engineFactory, daoFactoryProvider,
-          intervaloAtualizacao, definicoes, sistemaAtivoFactory);
+          intervaloAtualizacao, definicoes.get(), sistemaAtivoFactory);
     }
   }
 
