@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
@@ -40,7 +41,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
     @Inject
     private DialerCtiManager dialerCtiManager;
     @Inject
-    private Map<PredictiveListener, Ligacao> ligacoes;
+    private Instance<Map<PredictiveListener, Ligacao>> ligacoes;
     @Inject
     private PredictiveListenerFactory predictiveListenerFactory;
     @Inject
@@ -50,7 +51,7 @@ class DefaultGerenciadorLigacoes implements GerenciadorLigacoes, Runnable {
 
     @Override
     public GerenciadorLigacoes create(Tenant tenant) {
-      return new DefaultGerenciadorLigacoes(daoFactoryProvider, dialerCtiManager, ligacoes,
+      return new DefaultGerenciadorLigacoes(daoFactoryProvider, dialerCtiManager, ligacoes.get(),
           predictiveListenerFactory, devolveRegistro, engineFactory, tenant);
     }
   }
